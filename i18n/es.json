@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact",
+    "playground": "Playground"
+  },
+  "ctaScroll": "Scroll to discover",
+  "hero": {
+    "title": "Hola, soy Zula.",
+    "subtitle": "Desarrollo aplicaciones reales listas para producción con Angular, .NET y Electron. Arquitectura limpia, interfaces claras y software que funciona sin complicaciones.",
+    "ctaProjects": "Explorar proyectos",
+    "ctaGithub": "GitHub",
+    "ctaCv": "Descargar CV"
+  },
+  "whatIDo": {
+    "title": "Lo que hago",
+    "lead": "Desarrollo software real en producción usando Angular, .NET y Electron, con enfoque en claridad, arquitectura limpia e integraciones fiables.",
+    "items": [
+      {
+        "title": "Aplicaciones Web (Angular)",
+        "desc": "Componentes modulares, formularios avanzados, patrones de estado, i18n, UI limpia y accesible. Experiencia en paneles, datatables, dashboards e interfaces empresariales."
+      },
+      {
+        "title": "APIs y Backends con .NET / C#",
+        "desc": "APIs REST con validación robusta, Entity Framework, seguridad básica, arquitectura por capas y servicios separados. Integración con bases de datos SQL reales."
+      },
+      {
+        "title": "Aplicaciones de Escritorio (Electron)",
+        "desc": "Angular + Electron, integración con SO, control de multimedia, drag & drop, persistencia local y entregas listas para producción."
+      },
+      {
+        "title": "Integraciones y Servicios Externos",
+        "desc": "MQTT con dispositivos (cámaras, barreras, sensores), Redsys (firma 3DES), Google APIs, SendGrid y APIs de terceros en entornos reales."
+      },
+      {
+        "title": "Bases de Datos & Consultas",
+        "desc": "SQL Server, PL/SQL, modelos de datos, migraciones, consultas optimizadas y gestión de datos para web y escritorio."
+      },
+      {
+        "title": "DevOps & Flujo de Trabajo",
+        "desc": "Docker, entornos de prueba, control de versiones, CI/CD básico, ramas limpias, PRs claros y colaboración con buenas prácticas."
+      }
+    ]
+  },
+  "projects": {
+    "title": "Proyectos destacados",
+    "lead": "Soluciones reales enfocadas en casos de uso, no solo en tecnologías.",
+    "cards": [
+      {
+        "title": "KeyPing",
+        "desc": "Gestor de contraseñas con análisis de patrones y sincronización segura.",
+        "cta": "Ver proyecto"
+      },
+      {
+        "title": "Saica Conductores",
+        "desc": "Panel empresarial para gestión de personal y cumplimiento operativo.",
+        "cta": "Ver proyecto"
+      },
+      {
+        "title": "App MQTT para dispositivos",
+        "desc": "Control y monitorización de barreras y cámaras con integraciones reales.",
+        "cta": "Ver proyecto"
+      },
+      {
+        "title": "Reproductor Multimedia Dual",
+        "desc": "Control simultáneo de dos pistas, efectos y drag & drop intuitivo.",
+        "cta": "Ver proyecto"
+      },
+      {
+        "title": "Proyecto adicional",
+        "desc": "Espacio para añadir más proyectos y experimentos.",
+        "cta": "Ver proyecto"
+      }
+    ]
+  },
+  "workflow": {
+    "title": "Cómo trabajo",
+    "items": [
+      { "title": "Enfoque", "desc": "Comprensión del problema, arquitectura clara y iteración rápida." },
+      { "title": "Código", "desc": "Mantenibilidad, capas bien definidas y estándares consistentes." },
+      { "title": "Colaboración", "desc": "Trabajo en equipo, revisiones de código y documentación precisa." },
+      { "title": "Entrega", "desc": "Prototipos rápidos, ciclos cortos y mejoras basadas en feedback." }
+    ]
+  },
+  "stack": {
+    "title": "Tech Stack",
+    "lead": "Tecnologías que utilizo a diario."
+  },
+  "aboutMini": {
+    "title": "Sobre mí",
+    "desc": "Soy Unax, desarrollador de software de Bilbao. Trabajo con Angular, .NET y Electron creando software real en producción y aplicaciones personales enfocadas en utilidad y claridad. Me gusta resolver problemas con arquitectura limpia y ofrecer interfaces intuitivas.",
+    "cta": "Ver más",
+    "collabTitle": "¿Quieres colaborar en un proyecto o contratarme?",
+    "collabLead": "Hablemos.",
+    "collabCta": "Contactar"
+  },
+  "footer": "© 2025 Zula. Portafolio."
+}

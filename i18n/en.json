@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact",
+    "playground": "Playground"
+  },
+  "ctaScroll": "Scroll to discover",
+  "hero": {
+    "title": "Hi, I'm Zula.",
+    "subtitle": "I build production-ready apps with Angular, .NET and Electron. Clean architecture, clear interfaces and software that simply works.",
+    "ctaProjects": "View projects",
+    "ctaGithub": "GitHub",
+    "ctaCv": "Download CV"
+  },
+  "whatIDo": {
+    "title": "What I do",
+    "lead": "I build real-world software with Angular, .NET and Electron, focusing on clarity, clean architecture and reliable integrations.",
+    "items": [
+      {
+        "title": "Web Apps (Angular)",
+        "desc": "Modular components, advanced forms, state patterns, i18n, clean and accessible UI. Hands-on with panels, datatables, dashboards and enterprise interfaces."
+      },
+      {
+        "title": "APIs & Backends with .NET / C#",
+        "desc": "REST APIs with solid validation, Entity Framework, basic security, layered architecture and separated services. Integration with real SQL databases."
+      },
+      {
+        "title": "Desktop Apps (Electron)",
+        "desc": "Angular + Electron, OS integration, media control, drag & drop, local persistence and production-ready deliveries."
+      },
+      {
+        "title": "Integrations & External Services",
+        "desc": "MQTT with devices (cameras, barriers, sensors), Redsys (3DES signing), Google APIs, SendGrid and third-party APIs in real environments."
+      },
+      {
+        "title": "Databases & Queries",
+        "desc": "SQL Server, PL/SQL, data models, migrations, optimized queries and data management for web and desktop."
+      },
+      {
+        "title": "DevOps & Workflow",
+        "desc": "Docker, test environments, version control, basic CI/CD, clean branches, clear PRs and collaborative best practices."
+      }
+    ]
+  },
+  "projects": {
+    "title": "Featured projects",
+    "lead": "Real solutions focused on use cases, not just technologies.",
+    "cards": [
+      {
+        "title": "KeyPing",
+        "desc": "Password manager with pattern analysis and secure sync.",
+        "cta": "View project"
+      },
+      {
+        "title": "Saica Conductores",
+        "desc": "Enterprise panel for workforce management and compliance.",
+        "cta": "View project"
+      },
+      {
+        "title": "MQTT device app",
+        "desc": "Control and monitoring of barriers and cameras with real integrations.",
+        "cta": "View project"
+      },
+      {
+        "title": "Dual Media Player",
+        "desc": "Dual-track control, effects and intuitive drag & drop.",
+        "cta": "View project"
+      },
+      {
+        "title": "Additional project",
+        "desc": "Space to add more projects and experiments.",
+        "cta": "View project"
+      }
+    ]
+  },
+  "workflow": {
+    "title": "How I work",
+    "items": [
+      { "title": "Approach", "desc": "Understand the problem, clear architecture and fast iteration." },
+      { "title": "Code", "desc": "Maintainability, well-defined layers and consistent standards." },
+      { "title": "Collaboration", "desc": "Teamwork, code reviews and precise documentation." },
+      { "title": "Delivery", "desc": "Quick prototypes, short cycles and feedback-driven improvements." }
+    ]
+  },
+  "stack": {
+    "title": "Tech Stack",
+    "lead": "Technologies I use every day."
+  },
+  "aboutMini": {
+    "title": "About me",
+    "desc": "I’m Unax, a software developer from Bilbao. I work with Angular, .NET and Electron building production software and personal apps focused on utility and clarity. I like solving problems with clean architecture and delivering intuitive interfaces.",
+    "cta": "Learn more",
+    "collabTitle": "Want to collaborate on a project or hire me?",
+    "collabLead": "Let’s talk.",
+    "collabCta": "Contact"
+  },
+  "footer": "© 2025 Zula. Portfolio."
+}

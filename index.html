@@ -1,1 +1,253 @@
-<p>Web Test</p>
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zula | Full Stack Developer</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">Z</div>
+        <span>Zula</span>
+      </div>
+      <nav class="nav">
+        <a class="active" href="index.html" data-i18n="nav.home">Home</a>
+        <a href="projects.html" data-i18n="nav.projects">Projects</a>
+        <a href="about.html" data-i18n="nav.about">About</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+        <a href="playground.html" data-i18n="nav.playground">Playground</a>
+        <div class="lang-switch">
+          <button class="lang-toggle" aria-haspopup="listbox" aria-expanded="false">
+            <span class="flag"><img data-flag-current src="https://flagicons.lipis.dev/flags/4x3/es.svg" alt="ES"></span>
+            <span class="lang-label" data-lang-label>ES</span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="lang-menu" role="listbox">
+            <button class="lang-option" role="option" data-lang="es" data-flag-src="https://flagicons.lipis.dev/flags/4x3/es.svg">
+              <span class="flag"><img src="https://flagicons.lipis.dev/flags/4x3/es.svg" alt="ES"></span>
+              <span>ES</span>
+            </button>
+            <button class="lang-option" role="option" data-lang="en" data-flag-src="https://flagicons.lipis.dev/flags/4x3/gb.svg">
+              <span class="flag"><img src="https://flagicons.lipis.dev/flags/4x3/gb.svg" alt="EN"></span>
+              <span>EN</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero fade snap">
+      <div>
+        <div class="hero-badge">
+          <span class="tag">Full Stack</span>
+          <span class="tag">Angular / .NET</span>
+          <span class="tag">Electron</span>
+        </div>
+        <h1 data-i18n="hero.title">Hola, soy <span class="accent">Zula.</span></h1>
+        <p data-i18n="hero.subtitle">Desarrollo aplicaciones reales listas para producción con Angular, .NET y Electron. Arquitectura limpia, interfaces claras y software que funciona sin complicaciones.</p>
+        <div class="hero-actions">
+          <a class="btn" href="projects.html" data-i18n="hero.ctaProjects">Explorar proyectos</a>
+          <a class="btn secondary" href="https://github.com/Unax-Zulaika-Fuente" target="_blank" data-i18n="hero.ctaGithub">GitHub</a>
+          <a class="btn ghost" href="cv.pdf" download data-i18n="hero.ctaCv">Descargar CV</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="visual">
+          <img src="Zula.png" alt="Mockup Zula" onerror="this.replaceWith(Object.assign(document.createElement('div'), {className:'placeholder-img', textContent:'Mockup'}));">
+        </div>
+      </div>
+    </section>
+
+    <div class="scroll-indicator" data-scroll="#what-i-do">
+      <span data-i18n="ctaScroll">Scroll to discover</span>
+      <div class="arrow"></div>
+    </div>
+
+    <section class="section fade snap" id="what-i-do">
+      <h2 data-i18n="whatIDo.title">Lo que hago</h2>
+      <p class="lead" data-i18n="whatIDo.lead">Desarrollo software real en producción usando Angular, .NET y Electron, con enfoque en claridad, arquitectura limpia e integraciones fiables.</p>
+      <div class="service-grid">
+        <div class="service-card">
+
+      <div class="pill-grid">
+        <div class="pill">
+          <strong data-i18n="whatIDo.items.0.title">Aplicaciones Web (Angular)</strong>
+          <span class="small" data-i18n="whatIDo.items.0.desc">Componentes modulares, formularios avanzados, patrones de estado, i18n, UI limpia y accesible. Experiencia en paneles, datatables, dashboards e interfaces empresariales.</span>
+        </div>
+        <div class="pill">
+          <strong data-i18n="whatIDo.items.1.title">APIs y Backends con .NET / C#</strong>
+          <span class="small" data-i18n="whatIDo.items.1.desc">APIs REST con validación robusta, Entity Framework, seguridad básica, arquitectura por capas y servicios separados. Integración con bases de datos SQL reales.</span>
+        </div>
+        <div class="pill">
+          <strong data-i18n="whatIDo.items.2.title">Aplicaciones de Escritorio (Electron)</strong>
+          <span class="small" data-i18n="whatIDo.items.2.desc">Angular + Electron, integración con SO, control de multimedia, drag & drop, persistencia local y entregas listas para producción.</span>
+        </div>
+        <div class="pill">
+          <strong data-i18n="whatIDo.items.3.title">Integraciones y Servicios Externos</strong>
+          <span class="small" data-i18n="whatIDo.items.3.desc">MQTT con dispositivos (cámaras, barreras, sensores), Redsys (firma 3DES), Google APIs, SendGrid y APIs de terceros en entornos reales.</span>
+        </div>
+        <div class="pill">
+          <strong data-i18n="whatIDo.items.4.title">Bases de Datos & Consultas</strong>
+          <span class="small" data-i18n="whatIDo.items.4.desc">SQL Server, PL/SQL, modelos de datos, migraciones, consultas optimizadas y gestión de datos para web y escritorio.</span>
+        </div>
+        <div class="pill">
+          <strong data-i18n="whatIDo.items.5.title">DevOps & Flujo de Trabajo</strong>
+          <span class="small" data-i18n="whatIDo.items.5.desc">Docker, entornos de prueba, control de versiones, CI/CD básico, ramas limpias, PRs claros y colaboración con buenas prácticas.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade snap" id="projects">
+      <h2 data-i18n="projects.title">Proyectos destacados</h2>
+      <p class="lead" data-i18n="projects.lead">Soluciones reales enfocadas en casos de uso, no solo en tecnologías.</p>
+
+      <div class="carousel-3d" data-carousel-3d>
+        <div class="carousel-3d-stage" data-stage>
+          <article class="card project-card" data-card>
+            <div class="project-media">
+              <div class="placeholder-img">KeyPing</div>
+            </div>
+            <h3 class="project-title" data-i18n="projects.cards.0.title">KeyPing</h3>
+            <p class="small" data-i18n="projects.cards.0.desc">Gestor de contraseñas con análisis de patrones y sincronización segura.</p>
+            <div class="chips">
+              <span class="chip">Angular</span>
+              <span class="chip">Electron</span>
+            </div>
+            <a class="btn ghost" href="project-keyping.html" data-i18n="projects.cards.0.cta">Ver proyecto</a>
+          </article>
+          <article class="card project-card" data-card>
+            <div class="project-media">
+              <div class="placeholder-img">Saica</div>
+            </div>
+            <h3 class="project-title" data-i18n="projects.cards.1.title">Saica Conductores</h3>
+            <p class="small" data-i18n="projects.cards.1.desc">Panel empresarial para gestión de personal y cumplimiento operativo.</p>
+            <div class="chips">
+              <span class="chip">Angular</span>
+              <span class="chip">.NET</span>
+              <span class="chip">SQL</span>
+              <span class="chip">i18n</span>
+            </div>
+            <a class="btn ghost" href="project-keyping.html" data-i18n="projects.cards.1.cta">Ver proyecto</a>
+          </article>
+          <article class="card project-card" data-card>
+            <div class="project-media">
+              <div class="placeholder-img">MQTT</div>
+            </div>
+            <h3 class="project-title" data-i18n="projects.cards.2.title">App MQTT para dispositivos</h3>
+            <p class="small" data-i18n="projects.cards.2.desc">Control y monitorización de barreras y cámaras con integraciones reales.</p>
+            <div class="chips">
+              <span class="chip">C#</span>
+              <span class="chip">MQTT</span>
+              <span class="chip">Docker</span>
+            </div>
+            <a class="btn ghost" href="project-keyping.html" data-i18n="projects.cards.2.cta">Ver proyecto</a>
+          </article>
+          <article class="card project-card" data-card>
+            <div class="project-media">
+              <div class="placeholder-img">Dual Player</div>
+            </div>
+            <h3 class="project-title" data-i18n="projects.cards.3.title">Reproductor Multimedia Dual</h3>
+            <p class="small" data-i18n="projects.cards.3.desc">Control simultáneo de dos pistas, efectos y drag & drop intuitivo.</p>
+            <div class="chips">
+              <span class="chip">Electron</span>
+              <span class="chip">Angular</span>
+            </div>
+            <a class="btn ghost" href="project-keyping.html" data-i18n="projects.cards.3.cta">Ver proyecto</a>
+          </article>
+          <article class="card project-card" data-card>
+            <div class="project-media">
+              <div class="placeholder-img">Extra</div>
+            </div>
+            <h3 class="project-title" data-i18n="projects.cards.4.title">Proyecto adicional</h3>
+            <p class="small" data-i18n="projects.cards.4.desc">Espacio para añadir más proyectos y experimentos.</p>
+            <div class="chips">
+              <span class="chip">Próximamente</span>
+            </div>
+            <a class="btn ghost" href="project-keyping.html" data-i18n="projects.cards.4.cta">Ver proyecto</a>
+          </article>
+        </div>
+        <div class="carousel-3d-dots" data-dots-3d></div>
+        <div class="carousel-3d-controls">
+          <button class="btn ghost" type="button" data-prev-3d aria-label="Anterior">‹</button>
+          <button class="btn ghost" type="button" data-next-3d aria-label="Siguiente">›</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade snap">
+      <h2 data-i18n="workflow.title">Cómo trabajo</h2>
+      <div class="workflow">
+        <div class="card">
+          <div class="icon">E</div>
+          <div>
+            <strong data-i18n="workflow.items.0.title">Enfoque</strong>
+            <p class="small" data-i18n="workflow.items.0.desc">Comprensión del problema, arquitectura clara y iteración rápida.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">C</div>
+          <div>
+            <strong data-i18n="workflow.items.1.title">Código</strong>
+            <p class="small" data-i18n="workflow.items.1.desc">Mantenibilidad, capas bien definidas y estándares consistentes.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">Co</div>
+          <div>
+            <strong data-i18n="workflow.items.2.title">Colaboración</strong>
+            <p class="small" data-i18n="workflow.items.2.desc">Trabajo en equipo, revisiones de código y documentación precisa.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">D</div>
+          <div>
+            <strong data-i18n="workflow.items.3.title">Entrega</strong>
+            <p class="small" data-i18n="workflow.items.3.desc">Prototipos rápidos, ciclos cortos y mejoras basadas en feedback.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade snap">
+      <h2 data-i18n="stack.title">Tech Stack</h2>
+      <p class="lead" data-i18n="stack.lead">Tecnologías que utilizo a diario.</p>
+      <div class="stack-grid">
+        <div class="stack-item"><div class="icon">NG</div> <span>Angular</span></div>
+        <div class="stack-item"><div class="icon">TS</div> <span>TypeScript</span></div>
+        <div class="stack-item"><div class="icon">UI</div> <span>HTML / CSS / Bootstrap</span></div>
+        <div class="stack-item"><div class="icon">.NET</div> <span>.NET C#</span></div>
+        <div class="stack-item"><div class="icon">EF</div> <span>Entity Framework</span></div>
+        <div class="stack-item"><div class="icon">SQL</div> <span>SQL</span></div>
+        <div class="stack-item"><div class="icon">EL</div> <span>Electron</span></div>
+        <div class="stack-item"><div class="icon">MQ</div> <span>MQTT</span></div>
+        <div class="stack-item"><div class="icon">DK</div> <span>Docker</span></div>
+        <div class="stack-item"><div class="icon">G</div> <span>Google APIs</span></div>
+        <div class="stack-item"><div class="icon">R</div> <span>Redsys</span></div>
+      </div>
+    </section>
+
+    <section class="section fade snap snap-final">
+      <h2 data-i18n="aboutMini.title">Sobre mí</h2>
+      <div class="two-col">
+        <div class="card">
+          <p data-i18n="aboutMini.desc">Soy Unax, desarrollador de software de Bilbao. Trabajo con Angular, .NET y Electron creando software real en producción y aplicaciones personales enfocadas en utilidad y claridad. Me gusta resolver problemas con arquitectura limpia y ofrecer interfaces intuitivas.</p>
+          <a class="btn ghost" href="about.html" data-i18n="aboutMini.cta">Ver más</a>
+        </div>
+        <div class="card cta-block">
+          <strong data-i18n="aboutMini.collabTitle">¿Quieres colaborar en un proyecto o contratarme?</strong>
+          <span data-i18n="aboutMini.collabLead">Hablemos.</span>
+          <a class="btn secondary" href="contact.html" data-i18n="aboutMini.collabCta">Contactar</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span data-i18n="footer">© 2025 Zula. Portafolio.</span>
+    </footer>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
