@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="keyping.css" />
 </head>
 <body class="keyping-page">
   <div class="backdrop" aria-hidden="true"></div>
@@ -36,44 +36,225 @@
       </header>
 
       <div class="core-stage keyping-stage">
-        <a href="index.html?from=keyping" class="back-button keyping-back" id="back-to-core-link" data-i18n="back">Back to Core</a>
+        <nav class="keyping-crumbbar" aria-label="Screen path">
+          <a href="index.html?from=keyping" class="back-button keyping-back" id="back-to-core-link">
+            <span class="keyping-back__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M15 5L8 12L15 19" />
+              </svg>
+            </span>
+          </a>
+          <p class="keyping-crumbs">
+            <span class="keyping-crumbs__sep" aria-hidden="true">/</span>
+            <span data-i18n="crumb.core">Core</span>
+            <span class="keyping-crumbs__sep" aria-hidden="true">/</span>
+            <span data-i18n="crumb.keyping">KeyPing</span>
+          </p>
+        </nav>
 
-        <section class="keyping-module-shell" aria-label="KeyPing internals module">
+        <div class="keyping-scroll">
+          <section class="keyping-module-shell" aria-label="KeyPing internals module">
           <div class="keyping-header">
-            <div class="keyping-mark" aria-hidden="true"><span>K</span></div>
+            <div class="keyping-mark" aria-hidden="true">
+              <img src="keyping-logo.png" alt="" loading="eager" />
+            </div>
             <div class="keyping-title">
               <p class="eyebrow" data-i18n="header.eyebrow">FLAGSHIP MODULE // KP-01</p>
               <h2 data-i18n="header.title">KeyPing</h2>
-              <p class="keyping-tagline" data-i18n="header.tagline">Desktop credential hygiene system engineered for local trust.</p>
+              <p class="keyping-tagline" data-i18n="header.tagline">Local-first password security system.</p>
+              <p class="keyping-punchline" data-i18n="header.punchline">Detect weak credentials, enforce hygiene and keep your vault fully offline.</p>
             </div>
             <div class="keyping-health" aria-label="Module health">
               <p class="keyping-health__label" data-i18n="health.label">Module Health</p>
-              <p class="keyping-health__state" data-i18n="health.state">Secure / Local / Active</p>
+              <p class="keyping-health__state" data-i18n="health.state">Active development / Stable core / Daily use</p>
             </div>
           </div>
 
-          <div class="keyping-grid">
-            <article class="keyping-card">
-              <h3 data-i18n="cards.boundary.title">Process Boundary Map</h3>
-              <p data-i18n="cards.boundary.copy">Renderer, preload and main process lanes are isolated and validated through typed IPC contracts.</p>
-            </article>
-            <article class="keyping-card">
-              <h3 data-i18n="cards.vault.title">Credential Vault Engine</h3>
-              <p data-i18n="cards.vault.copy">Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies.</p>
-            </article>
-            <article class="keyping-card">
-              <h3 data-i18n="cards.runtime.title">Runtime Safeguards</h3>
-              <p data-i18n="cards.runtime.copy">Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy.</p>
-            </article>
-            <article class="keyping-card">
-              <h3 data-i18n="cards.release.title">Release Integrity Pipeline</h3>
-              <p data-i18n="cards.release.copy">Artifacts are distributed with checksums and signature verification to preserve trust from build to install.</p>
-            </article>
+          <div class="keyping-pills" aria-label="Product highlights">
+            <span class="keyping-pill" data-i18n="pills.privacy">Privacy-first</span>
+            <span class="keyping-pill" data-i18n="pills.offline">Fully offline</span>
+            <span class="keyping-pill" data-i18n="pills.local">Local encrypted vault</span>
+            <span class="keyping-pill" data-i18n="pills.cross">Windows / Linux / macOS</span>
           </div>
-        </section>
+
+          <section class="keyping-section">
+            <h3 data-i18n="overview.title">What KeyPing is</h3>
+            <p data-i18n="overview.lead">KeyPing is a desktop password manager that focuses on password hygiene: detecting weak, reused and risky credentials while keeping all data local and offline.</p>
+            <p data-i18n="overview.copy">This is not a concept demo. It is an actively developed product with stable core features, production-style release discipline, and security controls designed for real usage.</p>
+            <div class="keyping-actions">
+              <a class="keyping-action keyping-action--download" href="https://github.com/Unax-Zulaika-Fuente/KeyPing/releases" target="_blank" rel="noopener noreferrer">
+                <span class="keyping-action__eyebrow" data-i18n="actions.downloadEyebrow">Get KeyPing</span>
+                <span class="keyping-action__title" data-i18n="actions.download">Download Latest Release</span>
+              </a>
+              <a class="keyping-action keyping-action--github" href="https://github.com/Unax-Zulaika-Fuente/KeyPing" target="_blank" rel="noopener noreferrer">
+                <span class="keyping-action__eyebrow" data-i18n="actions.githubEyebrow">Source Code</span>
+                <span class="keyping-action__title" data-i18n="actions.github">Open on GitHub</span>
+              </a>
+            </div>
+          </section>
+
+          <section class="keyping-section keyping-why">
+            <h3 data-i18n="why.title">Why I Built KeyPing</h3>
+            <p class="keyping-why__subtitle" data-i18n="why.subtitle">Why this project exists</p>
+            <p data-i18n="why.lead">KeyPing was built to solve real password pain under real pressure, not just to store entries in a vault.</p>
+            <div class="keyping-why-grid">
+              <article class="keyping-why-card">
+                <h4 data-i18n="why.cards.reuse.title">Password reuse</h4>
+                <p data-i18n="why.cards.reuse.copy">Reused credentials multiply risk across services. One leaked password can compromise several accounts.</p>
+              </article>
+              <article class="keyping-why-card">
+                <h4 data-i18n="why.cards.weak.title">Weak passwords</h4>
+                <p data-i18n="why.cards.weak.copy">Weak patterns are still common. Users need clear signals, not vague warnings, to improve hygiene quickly.</p>
+              </article>
+              <article class="keyping-why-card">
+                <h4 data-i18n="why.cards.cloud.title">Cloud dependency</h4>
+                <p data-i18n="why.cards.cloud.copy">Many managers require cloud trust by default. KeyPing is designed for local-first control.</p>
+              </article>
+              <article class="keyping-why-card">
+                <h4 data-i18n="why.cards.privacy.title">Privacy under stress</h4>
+                <p data-i18n="why.cards.privacy.copy">When incidents happen, privacy and response speed matter at the same time.</p>
+              </article>
+            </div>
+            <div class="keyping-why-focus">
+              <h4 data-i18n="why.focus.title">Critical response feature</h4>
+              <p data-i18n="why.focus.copy">Each credential can store a direct password-change URL. In a breach situation, that one-click path reduces friction and reaction time exactly when stress is highest.</p>
+            </div>
+          </section>
+
+          <section class="keyping-section keyping-metrics">
+            <h3 data-i18n="metrics.title">Engineering Proof</h3>
+            <p class="keyping-metrics__subtitle" data-i18n="metrics.subtitle">Real build signals</p>
+            <ul class="keyping-metrics-grid" data-i18n-list="metrics.items"></ul>
+            <p class="keyping-metrics__statement" data-i18n="metrics.statement">Built as a real desktop product with security boundaries between renderer, preload and main process.</p>
+          </section>
+
+          <section class="keyping-section keyping-visuals">
+            <h3 data-i18n="visuals.title">Product in action</h3>
+            <p data-i18n="visuals.lead">Real screens from the app flow: create, generate, inspect and improve password quality.</p>
+            <div class="keyping-media-grid">
+              <figure class="keyping-media keyping-media--hero" tabindex="0" role="button" aria-label="Open media">
+                <video autoplay muted loop playsinline preload="metadata" aria-label="KeyPing password creation and generator flow">
+                  <source src="keyping-password-generator-flow.mp4" type="video/mp4" />
+                </video>
+                <figcaption data-i18n="visuals.captions.flow">Password creation flow with generator and final result</figcaption>
+              </figure>
+              <div class="keyping-media-rail">
+                <figure class="keyping-media" tabindex="0" role="button" aria-label="Open media">
+                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/dashboard.png" alt="KeyPing initial dashboard view" loading="lazy" />
+                  <figcaption data-i18n="visuals.captions.dashboard">Initial dashboard with key metrics and quick actions</figcaption>
+                </figure>
+                <figure class="keyping-media" tabindex="0" role="button" aria-label="Open media">
+                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/password-list.png" alt="KeyPing password list and details panel" loading="lazy" />
+                  <figcaption data-i18n="visuals.captions.list">Password list with detail view and filters</figcaption>
+                </figure>
+                <figure class="keyping-media keyping-media--composite keyping-media--more" tabindex="0" role="button" aria-label="Open media">
+                  <div class="keyping-media-composite">
+                    <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/password-health.png" alt="KeyPing password health dashboard" loading="lazy" />
+                    <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/password-health2.png" alt="KeyPing password health secondary panel" loading="lazy" />
+                  </div>
+                  <span class="keyping-media-more-badge" data-i18n="visuals.moreBadge">+3 more</span>
+                  <figcaption data-i18n="visuals.captions.healthCombo">Password health overview and extended details</figcaption>
+                </figure>
+              </div>
+
+              <div class="keyping-media-hidden" aria-hidden="true">
+                <figure class="keyping-media keyping-media--compact" tabindex="-1" role="button" aria-label="Open media">
+                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/generator.png" alt="KeyPing password generator panel" loading="lazy" />
+                  <figcaption data-i18n="visuals.captions.generator">Password generator controls and output</figcaption>
+                </figure>
+                <figure class="keyping-media" tabindex="-1" role="button" aria-label="Open media">
+                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/settings.png" alt="KeyPing settings panel" loading="lazy" />
+                  <figcaption data-i18n="visuals.captions.settings">Security and runtime settings</figcaption>
+                </figure>
+                <figure class="keyping-media" tabindex="-1" role="button" aria-label="Open media">
+                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/settings2.png" alt="KeyPing advanced settings panel" loading="lazy" />
+                  <figcaption data-i18n="visuals.captions.settings2">Additional settings and configuration options</figcaption>
+                </figure>
+              </div>
+            </div>
+          </section>
+
+          <div class="keyping-grid">
+            <section class="keyping-section keyping-card">
+              <h3 data-i18n="features.title">Core features</h3>
+              <ul class="keyping-list" data-i18n-list="features.items"></ul>
+            </section>
+
+            <section class="keyping-section keyping-card">
+              <h3 data-i18n="security.title">Security model</h3>
+              <ul class="keyping-list" data-i18n-list="security.items"></ul>
+            </section>
+
+            <section class="keyping-section keyping-card">
+              <h3 data-i18n="architecture.title">Architecture</h3>
+              <p class="keyping-stack-line">
+                <span data-i18n="architecture.stack.frontend.label">Frontend</span>
+                <strong data-i18n="architecture.stack.frontend.value">Angular standalone components</strong>
+              </p>
+              <p class="keyping-stack-line">
+                <span data-i18n="architecture.stack.runtime.label">Runtime</span>
+                <strong data-i18n="architecture.stack.runtime.value">Electron</strong>
+              </p>
+              <p class="keyping-stack-line">
+                <span data-i18n="architecture.stack.bridge.label">IPC bridge</span>
+                <strong data-i18n="architecture.stack.bridge.value">Secure preload API with contextIsolation enabled</strong>
+              </p>
+              <p class="keyping-stack-line">
+                <span data-i18n="architecture.stack.vault.label">Vault</span>
+                <strong data-i18n="architecture.stack.vault.value">Encrypted local file managed by Electron main process</strong>
+              </p>
+              <ol class="keyping-flow" data-i18n-list="architecture.flow"></ol>
+            </section>
+
+            <section class="keyping-section keyping-card">
+              <h3 data-i18n="integrity.title">Release integrity</h3>
+              <p data-i18n="integrity.copy">Each release ships with checksums and detached signature files.</p>
+              <ul class="keyping-list" data-i18n-list="integrity.files"></ul>
+              <p class="keyping-fingerprint-label" data-i18n="integrity.fingerprintLabel">Signing key fingerprint</p>
+              <code class="keyping-fingerprint">D70937B0AD7411A9E6A66337A5F10A1A37AAEBE9</code>
+              <p class="keyping-cmd-label" data-i18n="integrity.verifySig">Verify signature:</p>
+              <pre class="keyping-code"><code>gpg --verify SHA256SUMS.txt.asc SHA256SUMS.txt</code></pre>
+              <p class="keyping-cmd-label" data-i18n="integrity.verifySha">Verify checksums:</p>
+              <pre class="keyping-code"><code>sha256sum -c SHA256SUMS.txt</code></pre>
+            </section>
+          </div>
+
+          <section class="keyping-section keyping-section--roadmap">
+            <h3 data-i18n="roadmap.title">Roadmap</h3>
+            <ul class="keyping-list" data-i18n-list="roadmap.items"></ul>
+          </section>
+          </section>
+        </div>
       </div>
     </section>
   </main>
+
+  <aside class="keyping-lightbox" id="keyping-lightbox" aria-hidden="true">
+    <div class="keyping-lightbox__backdrop" data-lightbox-close></div>
+    <div class="keyping-lightbox__dialog" role="dialog" aria-modal="true" aria-label="Media viewer">
+      <button type="button" class="keyping-lightbox__close" id="keyping-lightbox-close" data-lightbox-close aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M6 6L18 18M18 6L6 18" />
+        </svg>
+      </button>
+      <button type="button" class="keyping-lightbox__nav keyping-lightbox__nav--prev" id="keyping-lightbox-prev" aria-label="Previous">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M15 5L8 12L15 19" />
+        </svg>
+      </button>
+      <figure class="keyping-lightbox__figure">
+        <img id="keyping-lightbox-image" src="" alt="" />
+        <img id="keyping-lightbox-image-secondary" src="" alt="" />
+        <video id="keyping-lightbox-video" controls preload="metadata" playsinline></video>
+        <figcaption id="keyping-lightbox-caption"></figcaption>
+      </figure>
+      <button type="button" class="keyping-lightbox__nav keyping-lightbox__nav--next" id="keyping-lightbox-next" aria-label="Next">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M9 5L16 12L9 19" />
+        </svg>
+      </button>
+    </div>
+  </aside>
 
   <script src="keyping.js"></script>
 </body>

@@ -881,19 +881,88 @@ body.is-leaving-keyping .keyping-stage {
   opacity: 1;
 }
 
+.keyping-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.keyping-pill {
+  border: 1px solid rgba(140, 188, 216, 0.34);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(10, 24, 35, 0.6);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  color: #cbe4f4;
+}
+
+.keyping-section {
+  border: 1px solid rgba(134, 175, 201, 0.2);
+  border-radius: 14px;
+  background:
+    linear-gradient(156deg, rgba(10, 22, 33, 0.84), rgba(8, 18, 27, 0.74));
+  padding: 14px;
+}
+
+.keyping-section h3 {
+  margin: 0 0 10px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+}
+
+.keyping-section p {
+  margin: 0;
+  color: #bed2e2;
+  line-height: 1.5;
+}
+
+.keyping-section p + p {
+  margin-top: 10px;
+}
+
+.keyping-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.keyping-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(129, 173, 201, 0.34);
+  border-radius: 999px;
+  padding: 9px 14px;
+  color: #d8ebf8;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: 0.04em;
+  background: rgba(9, 21, 31, 0.68);
+}
+
+.keyping-action--primary {
+  border-color: rgba(99, 201, 227, 0.54);
+  background: linear-gradient(140deg, rgba(26, 78, 104, 0.86), rgba(16, 48, 67, 0.78));
+}
+
+.keyping-action:hover,
+.keyping-action:focus-visible {
+  border-color: rgba(142, 230, 255, 0.72);
+  box-shadow: 0 0 0 1px rgba(139, 226, 255, 0.22), 0 12px 22px rgba(7, 30, 45, 0.45);
+}
+
 .keyping-grid {
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
-  margin-top: 6px;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  margin-top: 14px;
 }
 
 .keyping-card {
-  border: 1px solid rgba(136, 172, 198, 0.22);
-  border-radius: 14px;
-  background:
-    linear-gradient(150deg, rgba(12, 24, 36, 0.86), rgba(8, 17, 26, 0.7));
-  padding: 14px 14px 15px;
   position: relative;
   overflow: hidden;
 }
@@ -909,15 +978,104 @@ body.is-leaving-keyping .keyping-stage {
 }
 
 .keyping-card h3 {
-  margin: 0 0 8px;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1rem;
+  padding-right: 10px;
 }
 
-.keyping-card p {
+.keyping-list {
   margin: 0;
-  color: #bdd0e0;
-  line-height: 1.5;
+  padding-left: 18px;
+  display: grid;
+  gap: 7px;
+}
+
+.keyping-list li {
+  color: #c5d8e7;
+  line-height: 1.45;
+}
+
+.keyping-flow {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.keyping-flow li {
+  color: #c5d8e7;
+  line-height: 1.45;
+}
+
+.keyping-stack-line {
+  display: grid;
+  gap: 3px;
+  margin-top: 10px !important;
+}
+
+.keyping-stack-line:first-of-type {
+  margin-top: 0 !important;
+}
+
+.keyping-stack-line span {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8db5d2;
+}
+
+.keyping-stack-line strong {
+  color: #d6e8f6;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.keyping-fingerprint-label,
+.keyping-cmd-label {
+  margin-top: 12px !important;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8fb8d2;
+}
+
+.keyping-fingerprint {
+  display: inline-block;
+  margin-top: 6px;
+  border: 1px solid rgba(140, 183, 210, 0.28);
+  border-radius: 10px;
+  background: rgba(6, 16, 24, 0.72);
+  padding: 8px 10px;
+  color: #d7ecf8;
+  font-family: "Consolas", "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.82rem;
+}
+
+.keyping-code {
+  margin: 7px 0 0;
+  border: 1px solid rgba(130, 170, 194, 0.24);
+  border-radius: 10px;
+  background: rgba(4, 11, 17, 0.9);
+  padding: 10px;
+  color: #c3deee;
+  font-family: "Consolas", "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.78rem;
+  overflow-x: auto;
+}
+
+.keyping-section--roadmap {
+  margin-top: 14px;
+}
+
+.keyping-section--roadmap .keyping-list {
+  margin-top: 8px;
+}
+
+body.is-leaving-keyping .keyping-section,
+body.is-leaving-keyping .keyping-pill {
+  border-color: rgba(156, 190, 212, 0.24);
+}
+
+body.is-leaving-keyping .keyping-action {
+  filter: saturate(0.86);
 }
 
 body.is-transitioning .core-stage {
@@ -1070,6 +1228,15 @@ body.intro-step-6 .mobile-modules {
   .keyping-grid {
     grid-template-columns: 1fr;
     padding-bottom: 22px;
+  }
+
+  .keyping-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .keyping-action {
+    width: 100%;
   }
 
   .startup-gate__panel {
