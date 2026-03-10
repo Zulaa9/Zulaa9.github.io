@@ -1,407 +1,785 @@
-document.addEventListener('DOMContentLoaded', () => {
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
+﻿const THREE = window.THREE;
+
+if (!THREE) {
+  const infoTitle = document.getElementById("dock-title");
+  const infoCopy = document.getElementById("dock-copy");
+  if (infoTitle) {
+    infoTitle.textContent = "Three.js load error";
   }
-  window.scrollTo({ top: 0, behavior: 'auto' });
+  if (infoCopy) {
+    infoCopy.textContent = "Could not load 3D engine. Check internet connection or use a local server.";
+  }
+  throw new Error("Three.js was not loaded.");
+}
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.25 }
-  );
+const body = document.body;
+const stage = document.getElementById("core-stage");
+const canvas = document.getElementById("core-canvas");
+const linksSvg = document.getElementById("node-links");
+const coreCenter = document.getElementById("core-center");
+const infoTitle = document.getElementById("dock-title");
+const infoCopy = document.getElementById("dock-copy");
+const bootSequence = document.getElementById("boot-sequence");
+const bootLog = document.getElementById("boot-log");
+const bootProgressFill = document.getElementById("boot-progress-fill");
+const bootProgressText = document.getElementById("boot-progress-text");
+const meteorLayer = document.getElementById("meteor-layer");
+const BOOT_SEEN_KEY = "system_core_boot_seen";
+const urlParams = new URLSearchParams(window.location.search);
+const returningFromKeyping = urlParams.get("from") === "keyping";
 
-  document.querySelectorAll('.fade').forEach((el) => observer.observe(el));
+const desktopNodes = [...document.querySelectorAll(".module-node")];
+const moduleTriggers = [...document.querySelectorAll(".module-trigger")];
 
-  const filterButtons = document.querySelectorAll('[data-filter]');
-  const projectCards = document.querySelectorAll('[data-type]');
-  const langOptions = document.querySelectorAll('.lang-option');
-  const langToggle = document.querySelector('.lang-toggle');
-  const langLabel = document.querySelector('[data-lang-label]');
-  const langFlag = document.querySelector('[data-flag-current]');
-  const langMenu = document.querySelector('.lang-menu');
-  const translationsCache = {};
-  let currentLang = localStorage.getItem('lang') || 'es';
+const modules = {
+  keyping: {
+    title: "KeyPing",
+    copy: "Primary module. Open dedicated product view.",
+  },
+  about: {
+    title: "About",
+    copy: "Engineer focused on practical software architecture, security boundaries and maintainable delivery.",
+  },
+  capabilities: {
+    title: "Capabilities",
+    copy: "Electron desktop architecture, Angular frontend systems, secure local storage flows and build automation.",
+  },
+  projects: {
+    title: "Projects",
+    copy: "Selected real builds with product intent, operational constraints and technical ownership.",
+  },
+  contact: {
+    title: "Contact",
+    copy: "Direct technical conversations and collaboration opportunities.",
+  },
+  future: {
+    title: "Future Builds",
+    copy: "Locked modules reserved for upcoming systems currently in development.",
+  },
+};
 
-  const fallbackTranslations = {
-    es: {
-      nav: { home: 'Home', projects: 'Projects', about: 'About', contact: 'Contact', playground: 'Playground' },
-      ctaScroll: 'Scroll to discover',
-      hero: {
-        title: 'Hola, soy Zula.',
-        subtitle: 'Desarrollo aplicaciones reales listas para producción con Angular, .NET y Electron. Arquitectura limpia, interfaces claras y software que funciona sin complicaciones.',
-        ctaProjects: 'Explorar proyectos',
-        ctaGithub: 'GitHub',
-        ctaCv: 'Descargar CV'
-      },
-      whatIDo: {
-        title: 'Lo que hago',
-        lead: 'Desarrollo software real en producción usando Angular, .NET y Electron, con enfoque en claridad, arquitectura limpia e integraciones fiables.',
-        items: [
-          { title: 'Aplicaciones Web (Angular)', desc: 'Componentes modulares, formularios avanzados, patrones de estado, i18n, UI limpia y accesible. Experiencia en paneles, datatables, dashboards e interfaces empresariales.' },
-          { title: 'APIs y Backends con .NET / C#', desc: 'APIs REST con validación robusta, Entity Framework, seguridad básica, arquitectura por capas y servicios separados. Integración con bases de datos SQL reales.' },
-          { title: 'Aplicaciones de Escritorio (Electron)', desc: 'Angular + Electron, integración con SO, control de multimedia, drag & drop, persistencia local y entregas listas para producción.' },
-          { title: 'Integraciones y Servicios Externos', desc: 'MQTT con dispositivos (cámaras, barreras, sensores), Redsys (firma 3DES), Google APIs, SendGrid y APIs de terceros en entornos reales.' },
-          { title: 'Bases de Datos & Consultas', desc: 'SQL Server, PL/SQL, modelos de datos, migraciones, consultas optimizadas y gestión de datos para web y escritorio.' },
-          { title: 'DevOps & Flujo de Trabajo', desc: 'Docker, entornos de prueba, control de versiones, CI/CD básico, ramas limpias, PRs claros y colaboración con buenas prácticas.' }
-        ]
-      },
-      projects: {
-        title: 'Proyectos destacados',
-        lead: 'Soluciones reales enfocadas en casos de uso, no solo en tecnologías.',
-        cards: [
-          { title: 'KeyPing', desc: 'Gestor de contraseñas con análisis de patrones y sincronización segura.', cta: 'Ver proyecto' },
-          { title: 'Saica Conductores', desc: 'Panel empresarial para gestión de personal y cumplimiento operativo.', cta: 'Ver proyecto' },
-          { title: 'App MQTT para dispositivos', desc: 'Control y monitorización de barreras y cámaras con integraciones reales.', cta: 'Ver proyecto' },
-          { title: 'Reproductor Multimedia Dual', desc: 'Control simultáneo de dos pistas, efectos y drag & drop intuitivo.', cta: 'Ver proyecto' },
-          { title: 'Proyecto adicional', desc: 'Espacio para añadir más proyectos y experimentos.', cta: 'Ver proyecto' }
-        ]
-      },
-      workflow: {
-        title: 'Cómo trabajo',
-        items: [
-          { title: 'Enfoque', desc: 'Comprensión del problema, arquitectura clara y iteración rápida.' },
-          { title: 'Código', desc: 'Mantenibilidad, capas bien definidas y estándares consistentes.' },
-          { title: 'Colaboración', desc: 'Trabajo en equipo, revisiones de código y documentación precisa.' },
-          { title: 'Entrega', desc: 'Prototipos rápidos, ciclos cortos y mejoras basadas en feedback.' }
-        ]
-      },
-      stack: { title: 'Tech Stack', lead: 'Tecnologías que utilizo a diario.' },
-      aboutMini: {
-        title: 'Sobre mí',
-        desc: 'Soy Unax, desarrollador de software de Bilbao. Trabajo con Angular, .NET y Electron creando software real en producción y aplicaciones personales enfocadas en utilidad y claridad. Me gusta resolver problemas con arquitectura limpia y ofrecer interfaces intuitivas.',
-        cta: 'Ver más',
-        collabTitle: '¿Quieres colaborar en un proyecto o contratarme?',
-        collabLead: 'Hablemos.',
-        collabCta: 'Contactar'
-      },
-      footer: '© 2025 Zula. Portafolio.'
-    },
-    en: {
-      nav: { home: 'Home', projects: 'Projects', about: 'About', contact: 'Contact', playground: 'Playground' },
-      ctaScroll: 'Scroll to discover',
-      hero: {
-        title: "Hi, I'm Zula.",
-        subtitle: 'I build production-ready apps with Angular, .NET and Electron. Clean architecture, clear interfaces and software that simply works.',
-        ctaProjects: 'View projects',
-        ctaGithub: 'GitHub',
-        ctaCv: 'Download CV'
-      },
-      whatIDo: {
-        title: 'What I do',
-        lead: 'I build real-world software with Angular, .NET and Electron, focusing on clarity, clean architecture and reliable integrations.',
-        items: [
-          { title: 'Web Apps (Angular)', desc: 'Modular components, advanced forms, state patterns, i18n, clean and accessible UI. Hands-on with panels, datatables, dashboards and enterprise interfaces.' },
-          { title: 'APIs & Backends with .NET / C#', desc: 'REST APIs with solid validation, Entity Framework, basic security, layered architecture and separated services. Integration with real SQL databases.' },
-          { title: 'Desktop Apps (Electron)', desc: 'Angular + Electron, OS integration, media control, drag & drop, local persistence and production-ready deliveries.' },
-          { title: 'Integrations & External Services', desc: 'MQTT with devices (cameras, barriers, sensors), Redsys (3DES signing), Google APIs, SendGrid and third-party APIs in real environments.' },
-          { title: 'Databases & Queries', desc: 'SQL Server, PL/SQL, data models, migrations, optimized queries and data management for web and desktop.' },
-          { title: 'DevOps & Workflow', desc: 'Docker, test environments, version control, basic CI/CD, clean branches, clear PRs and collaborative best practices.' }
-        ]
-      },
-      projects: {
-        title: 'Featured projects',
-        lead: 'Real solutions focused on use cases, not just technologies.',
-        cards: [
-          { title: 'KeyPing', desc: 'Password manager with pattern analysis and secure sync.', cta: 'View project' },
-          { title: 'Saica Conductores', desc: 'Enterprise panel for workforce management and compliance.', cta: 'View project' },
-          { title: 'MQTT device app', desc: 'Control and monitoring of barriers and cameras with real integrations.', cta: 'View project' },
-          { title: 'Dual Media Player', desc: 'Dual-track control, effects and intuitive drag & drop.', cta: 'View project' },
-          { title: 'Additional project', desc: 'Space to add more projects and experiments.', cta: 'View project' }
-        ]
-      },
-      workflow: {
-        title: 'How I work',
-        items: [
-          { title: 'Approach', desc: 'Understand the problem, clear architecture and fast iteration.' },
-          { title: 'Code', desc: 'Maintainability, well-defined layers and consistent standards.' },
-          { title: 'Collaboration', desc: 'Teamwork, code reviews and precise documentation.' },
-          { title: 'Delivery', desc: 'Quick prototypes, short cycles and feedback-driven improvements.' }
-        ]
-      },
-      stack: { title: 'Tech Stack', lead: 'Technologies I use every day.' },
-      aboutMini: {
-        title: 'About me',
-        desc: 'I’m Unax, a software developer from Bilbao. I work with Angular, .NET and Electron building production software and personal apps focused on utility and clarity. I like solving problems with clean architecture and delivering intuitive interfaces.',
-        cta: 'Learn more',
-        collabTitle: 'Want to collaborate on a project or hire me?',
-        collabLead: 'Let’s talk.',
-        collabCta: 'Contact'
-      },
-      footer: '© 2025 Zula. Portfolio.'
+const nodePositions = {
+  keyping: { x: 0.72, y: 0.46 },
+  about: { x: 0.2, y: 0.24 },
+  capabilities: { x: 0.8, y: 0.2 },
+  projects: { x: 0.2, y: 0.52 },
+  contact: { x: 0.34, y: 0.68 },
+  future: { x: 0.78, y: 0.66 },
+};
+
+const state = {
+  pointerX: 0,
+  pointerY: 0,
+  parallaxX: 0,
+  parallaxY: 0,
+  active: "",
+  isTransitioning: false,
+  transitionStart: 0,
+  transitionDir: 0,
+  introStep: 0,
+  introComplete: false,
+  hasDrawnIntroLinks: false,
+  introStartTime: 0,
+  introDurationMs: 3440,
+  spinX: 0,
+  spinY: 0,
+  coreHovering: false,
+  coreHoverTime: 0,
+  spinCooldown: 0,
+  spinBurstTime: 0,
+  coreImpulse: 0,
+  isReturnTransition: false,
+  returnStartTime: 0,
+  returnDurationMs: 760,
+};
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x06090e, 6, 13);
+
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+camera.position.set(0, 0.06, 2.25);
+
+const coreGroup = new THREE.Group();
+coreGroup.scale.setScalar(0.05);
+scene.add(coreGroup);
+
+const outer = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(0.84, 2),
+  new THREE.MeshPhysicalMaterial({
+    color: 0x2e5f76,
+    emissive: 0x1f89aa,
+    emissiveIntensity: 0.45,
+    roughness: 0.32,
+    metalness: 0.56,
+    transparent: true,
+    opacity: 0,
+  })
+);
+
+const inner = new THREE.Mesh(
+  new THREE.OctahedronGeometry(0.4, 1),
+  new THREE.MeshStandardMaterial({
+    color: 0x90ddff,
+    emissive: 0x5bcbe2,
+    emissiveIntensity: 0,
+    roughness: 0.26,
+    metalness: 0.12,
+    transparent: true,
+    opacity: 0,
+  })
+);
+
+const shellWire = new THREE.LineSegments(
+  new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.98, 1)),
+  new THREE.LineBasicMaterial({ color: 0x66d8ff, transparent: true, opacity: 0 })
+);
+
+coreGroup.add(outer, inner, shellWire);
+
+const ambient = new THREE.AmbientLight(0x8cb6cf, 0.4);
+const key = new THREE.PointLight(0x68d5ff, 4.2, 16, 1.7);
+key.position.set(0, 0, 2.8);
+const rim = new THREE.PointLight(0x4d80ad, 1.8, 16, 1.8);
+rim.position.set(-2.8, -1.2, -1.8);
+scene.add(ambient, key, rim);
+
+const starsGeo = new THREE.BufferGeometry();
+const stars = [];
+for (let i = 0; i < 120; i += 1) {
+  stars.push((Math.random() - 0.5) * 12, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8 - 1.5);
+}
+starsGeo.setAttribute("position", new THREE.Float32BufferAttribute(stars, 3));
+const starsMesh = new THREE.Points(
+  starsGeo,
+  new THREE.PointsMaterial({
+    color: 0x93d8f8,
+    size: 0.02,
+    transparent: true,
+    opacity: 0.48,
+  })
+);
+scene.add(starsMesh);
+
+const linesByNode = new Map();
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function smoothstep(t) {
+  const x = clamp(t, 0, 1);
+  return x * x * (3 - 2 * x);
+}
+
+function smootherstep(t) {
+  const x = clamp(t, 0, 1);
+  return x * x * x * (x * (x * 6 - 15) + 10);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function randomRange(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+async function runBootSequence() {
+  if (!bootSequence || !bootLog || !bootProgressFill || !bootProgressText) {
+    return;
+  }
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    bootSequence.remove();
+    body.classList.remove("booting");
+    return;
+  }
+
+  body.classList.add("booting");
+
+  const bootLines = [
+    "[sys] initializing core context",
+    "[io] probing local environment",
+    "[sec] validating entropy source",
+    "[pkg] loading module map",
+    "[core] handshake complete",
+    "[core] system architecture online"
+  ];
+
+  for (let i = 0; i < bootLines.length; i += 1) {
+    const line = document.createElement("li");
+    line.textContent = bootLines[i];
+    bootLog.appendChild(line);
+
+    if (bootLog.children.length > 8) {
+      bootLog.removeChild(bootLog.children[0]);
     }
-  };
 
-  const getNested = (obj, path) =>
-    path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+    const progress = Math.round(((i + 1) / bootLines.length) * 100);
+    bootProgressFill.style.width = `${progress}%`;
+    bootProgressText.textContent = `${progress}%`;
+    await sleep(180 + i * 24);
+  }
 
-  const applyTranslations = (data) => {
-    document.querySelectorAll('[data-i18n]').forEach((el) => {
-      const key = el.dataset.i18n;
-      const val = getNested(data, key);
-      if (val !== undefined) {
-        el.innerHTML = val;
+  await sleep(340);
+  body.classList.add("boot-unfold");
+  await sleep(820);
+
+  bootSequence.remove();
+  body.classList.remove("booting");
+}
+
+function spawnMeteor() {
+  if (!meteorLayer) {
+    return;
+  }
+  const meteor = document.createElement("span");
+  meteor.className = "meteor";
+
+  const startX = randomRange(48, 108);
+  const startY = randomRange(-20, 22);
+  const dx = randomRange(-980, -560);
+  const dy = randomRange(360, 640);
+  const dur = randomRange(1700, 2900);
+  const len = randomRange(110, 180);
+  const moveAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+  const trailAngle = moveAngle + 180;
+
+  meteor.style.left = `${startX}%`;
+  meteor.style.top = `${startY}%`;
+  meteor.style.setProperty("--meteor-dx", `${dx.toFixed(1)}px`);
+  meteor.style.setProperty("--meteor-dy", `${dy.toFixed(1)}px`);
+  meteor.style.setProperty("--meteor-dur", `${dur.toFixed(0)}ms`);
+  meteor.style.setProperty("--meteor-angle", `${trailAngle.toFixed(1)}deg`);
+  meteor.style.setProperty("--meteor-len", `${len.toFixed(0)}px`);
+  meteorLayer.appendChild(meteor);
+
+  meteor.addEventListener("animationend", () => {
+    meteor.remove();
+  });
+}
+
+function runMeteorLoop() {
+  if (!meteorLayer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const schedule = () => {
+    const waitMs = randomRange(3600, 9800);
+    window.setTimeout(() => {
+      spawnMeteor();
+      if (Math.random() < 0.22) {
+        window.setTimeout(spawnMeteor, randomRange(120, 340));
       }
-    });
+      schedule();
+    }, waitMs);
   };
 
-  const setLangActive = (lang) => {
-    langOptions.forEach((btn) => btn.classList.toggle('active', btn.dataset.lang === lang));
-    if (langLabel) langLabel.textContent = lang.toUpperCase();
-    if (langFlag) {
-      const activeBtn = Array.from(langOptions).find((btn) => btn.dataset.lang === lang);
-      const src = activeBtn?.dataset.flagSrc || (lang === 'en' ? 'https://flagcdn.com/w24/gb.png' : 'https://flagcdn.com/w24/es.png');
-      langFlag.src = src;
-      langFlag.alt = lang.toUpperCase();
-    }
-  };
+  schedule();
+}
 
-  const loadLang = async (lang) => {
-    if (translationsCache[lang]) {
-      applyTranslations(translationsCache[lang]);
-      setLangActive(lang);
-      currentLang = lang;
-      localStorage.setItem('lang', lang);
+function placeNodeWithBounds(node, pos, rect, offsetX = 0, offsetY = 0) {
+  const pad = 18;
+  const bottomSafe = 170;
+  const nodeWidth = node.offsetWidth;
+  const nodeHeight = node.offsetHeight;
+
+  const rawX = pos.x * rect.width - nodeWidth / 2 + offsetX;
+  const rawY = pos.y * rect.height - nodeHeight / 2 + offsetY;
+
+  const x = clamp(rawX, pad, rect.width - nodeWidth - pad);
+  const y = clamp(rawY, pad, rect.height - nodeHeight - bottomSafe);
+
+  node.style.left = `${x}px`;
+  node.style.top = `${y}px`;
+}
+
+function updateStageSize() {
+  const bounds = stage.getBoundingClientRect();
+  renderer.setSize(bounds.width, bounds.height, false);
+  camera.aspect = bounds.width / bounds.height;
+  camera.updateProjectionMatrix();
+  linksSvg.setAttribute("viewBox", `0 0 ${bounds.width} ${bounds.height}`);
+  linksSvg.setAttribute("width", `${bounds.width}`);
+  linksSvg.setAttribute("height", `${bounds.height}`);
+  placeNodes();
+  updateLinks();
+}
+
+function placeNodes() {
+  const stageRect = stage.getBoundingClientRect();
+  const width = stageRect.width;
+  const height = stageRect.height;
+
+  desktopNodes.forEach((node) => {
+    const target = node.dataset.target;
+    const pos = nodePositions[target];
+    if (!pos) {
       return;
     }
-    try {
-      const res = await fetch(`i18n/${lang}.json`);
-      if (!res.ok) throw new Error('fetch failed');
-      const json = await res.json();
-      translationsCache[lang] = json;
-      applyTranslations(json);
-      setLangActive(lang);
-      currentLang = lang;
-      localStorage.setItem('lang', lang);
-    } catch (err) {
-      const fallback = fallbackTranslations[lang];
-      if (fallback) {
-        translationsCache[lang] = fallback;
-        applyTranslations(fallback);
-        setLangActive(lang);
-        currentLang = lang;
-        localStorage.setItem('lang', lang);
-      }
-      console.error('Error loading language', err);
-    }
-  };
 
-  langOptions.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const lang = btn.dataset.lang;
-      if (lang && lang !== currentLang) {
-        loadLang(lang);
-      } else {
-        setLangActive(lang);
-      }
-      langMenu?.classList.remove('open');
-      langToggle?.setAttribute('aria-expanded', 'false');
+    placeNodeWithBounds(node, pos, { width, height });
+  });
+
+  if (!linesByNode.size) {
+    createLinks();
+  }
+  updateLinks();
+}
+
+function createLinks() {
+  const centerRect = coreCenter.getBoundingClientRect();
+  const stageRect = stage.getBoundingClientRect();
+  const cx = centerRect.left - stageRect.left + centerRect.width / 2;
+  const cy = centerRect.top - stageRect.top + centerRect.height / 2;
+
+  desktopNodes.forEach((node) => {
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", `${cx}`);
+    line.setAttribute("y1", `${cy}`);
+    line.setAttribute("x2", `${cx}`);
+    line.setAttribute("y2", `${cy}`);
+    line.setAttribute("class", "link-line");
+
+    const particle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    particle.setAttribute("r", "2.1");
+    particle.setAttribute("cx", `${cx}`);
+    particle.setAttribute("cy", `${cy}`);
+    particle.setAttribute("class", "link-particle");
+
+    linksSvg.appendChild(line);
+    linksSvg.appendChild(particle);
+    linesByNode.set(node.dataset.target, {
+      line,
+      particle,
+      progress: Math.random(),
+      speed: 0.22 + Math.random() * 0.3,
     });
   });
+}
 
-  langToggle?.addEventListener('click', () => {
-    const isOpen = langMenu?.classList.toggle('open');
-    langToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  });
+function updateLinks(animate = false) {
+  const centerRect = coreCenter.getBoundingClientRect();
+  const stageRect = stage.getBoundingClientRect();
+  const cx = centerRect.left - stageRect.left + centerRect.width / 2;
+  const cy = centerRect.top - stageRect.top + centerRect.height / 2;
 
-  document.addEventListener('click', (e) => {
-    if (!langMenu || !langToggle) return;
-    if (!langMenu.contains(e.target) && !langToggle.contains(e.target)) {
-      langMenu.classList.remove('open');
-      langToggle.setAttribute('aria-expanded', 'false');
+  desktopNodes.forEach((node) => {
+    const entry = linesByNode.get(node.dataset.target);
+    if (!entry) {
+      return;
     }
-  });
+    const { line } = entry;
+    const rect = node.getBoundingClientRect();
+    const nx = rect.left - stageRect.left + rect.width / 2;
+    const ny = rect.top - stageRect.top + rect.height / 2;
+    line.setAttribute("x1", `${cx}`);
+    line.setAttribute("y1", `${cy}`);
+    line.setAttribute("x2", `${nx}`);
+    line.setAttribute("y2", `${ny}`);
 
-  loadLang(currentLang);
-
-  filterButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterButtons.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      const type = btn.dataset.filter;
-
-      projectCards.forEach((card) => {
-        card.style.display = type === 'all' || card.dataset.type === type ? '' : 'none';
+    if (animate) {
+      const length = Math.hypot(nx - cx, ny - cy);
+      line.style.strokeDasharray = `${length}`;
+      line.style.strokeDashoffset = `${length}`;
+      requestAnimationFrame(() => {
+        line.style.transition = "stroke-dashoffset 680ms cubic-bezier(0.22, 1, 0.36, 1)";
+        line.style.strokeDashoffset = "0";
       });
-    });
+    } else {
+      line.style.strokeDasharray = "";
+      line.style.strokeDashoffset = "";
+      line.style.transition = "";
+    }
   });
 
-  const scrollIndicator = document.querySelector('.scroll-indicator');
-  const snapSections = Array.from(document.querySelectorAll('.snap'));
-  let snapLock = false;
-  let snapTimeout;
+  setActive(state.active || "keyping");
+}
 
-  const currentSnapIndex = () => {
-    const viewCenter = window.scrollY + window.innerHeight / 2;
-    let idx = 0;
-    let bestDist = Infinity;
-    snapSections.forEach((sec, i) => {
-      const rect = sec.getBoundingClientRect();
-      const center = window.scrollY + rect.top + rect.height / 2;
-      const dist = Math.abs(center - viewCenter);
-      if (dist < bestDist) {
-        bestDist = dist;
-        idx = i;
-      }
-    });
-    return idx;
-  };
+function setIntroStep(step) {
+  state.introStep = step;
+  body.classList.add(`intro-step-${step}`);
 
-  const goToSnap = (target) => {
-    if (target < 0 || target >= snapSections.length) return;
-    snapLock = true;
-    clearTimeout(snapTimeout);
-    const top = target === 0 ? 0 : snapSections[target].offsetTop;
-    window.scrollTo({ top, behavior: 'smooth' });
-    snapTimeout = setTimeout(() => {
-      snapLock = false;
-      window.scrollTo({ top, behavior: 'auto' });
-      updateIndicator(target);
-    }, 750);
-  };
-
-  const scrollToNext = () => {
-    const current = currentSnapIndex();
-    goToSnap(Math.min(current + 1, snapSections.length - 1));
-  };
-
-  const updateIndicator = (idx) => {
-    if (!scrollIndicator) return;
-    scrollIndicator.classList.remove('hidden');
-  };
-
-  if (scrollIndicator) {
-    scrollIndicator.addEventListener('click', scrollToNext);
+  if (step === 5) {
+    if (!state.hasDrawnIntroLinks) {
+      state.hasDrawnIntroLinks = true;
+      updateLinks(true);
+    }
   }
 
-  snapSections.forEach((sec) => {
-    sec.addEventListener(
-      'wheel',
-      (e) => {
-        e.preventDefault();
-        if (snapLock) return;
-        const dir = e.deltaY > 0 ? 1 : -1;
-        const current = currentSnapIndex();
-        const target = Math.min(Math.max(current + dir, 0), snapSections.length - 1);
-        if (target !== current) {
-          goToSnap(target);
-        }
-      },
-      { passive: false }
-    );
+  if (step === 6) {
+    state.introComplete = true;
+    body.classList.remove("intro-running");
+    body.classList.add("intro-complete");
+  }
+}
+
+function runIntro() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    setIntroStep(1);
+    setIntroStep(2);
+    setIntroStep(3);
+    setIntroStep(4);
+    setIntroStep(5);
+    setIntroStep(6);
+    return;
+  }
+
+  body.classList.add("intro-running");
+  state.introStartTime = performance.now() + 80;
+  const timeline = [
+    { step: 1, at: 80 },
+    { step: 2, at: 980 },
+    { step: 3, at: 1580 },
+    { step: 4, at: 2200 },
+    { step: 5, at: 2820 },
+    { step: 6, at: 3440 },
+  ];
+
+  timeline.forEach((entry) => {
+    window.setTimeout(() => setIntroStep(entry.step), entry.at);
+  });
+}
+
+function fastForwardToReadyState() {
+  if (bootSequence) {
+    bootSequence.remove();
+  }
+  body.classList.remove("booting", "boot-unfold", "intro-running");
+  for (let step = 1; step <= 6; step += 1) {
+    body.classList.add(`intro-step-${step}`);
+  }
+  body.classList.add("intro-complete");
+
+  state.introStep = 6;
+  state.introComplete = true;
+  state.hasDrawnIntroLinks = true;
+  state.introStartTime = performance.now() - state.introDurationMs;
+
+  camera.position.set(0, 0.15, 5.2);
+  coreGroup.scale.setScalar(1);
+  outer.material.opacity = 0.8;
+  inner.material.opacity = 1;
+  inner.material.emissiveIntensity = 1.2;
+  shellWire.material.opacity = 0.22;
+  key.intensity = 4;
+
+  updateLinks(false);
+}
+
+function beginReturnTransition() {
+  state.isReturnTransition = true;
+  state.returnStartTime = performance.now();
+  camera.position.set(0.25, -0.05, 2.55);
+  coreGroup.scale.setScalar(1.35);
+  body.classList.add("is-returning-from-keyping");
+}
+
+function hasSeenBootSequence() {
+  try {
+    return sessionStorage.getItem(BOOT_SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markBootSequenceSeen() {
+  try {
+    sessionStorage.setItem(BOOT_SEEN_KEY, "1");
+  } catch {
+    // Ignore unavailable sessionStorage and allow replay.
+  }
+}
+
+function setActive(target) {
+  const changed = state.active !== target;
+  state.active = target;
+  const module = modules[target];
+
+  if (module) {
+    infoTitle.textContent = module.title;
+    infoCopy.textContent = module.copy;
+  }
+
+  desktopNodes.forEach((node) => {
+    node.classList.toggle("is-active", node.dataset.target === target);
   });
 
-  window.addEventListener(
-    'scroll',
-    () => {
-      if (snapLock) return;
-      updateIndicator(currentSnapIndex());
-    },
-    { passive: true }
-  );
+  linesByNode.forEach((line, key) => {
+    line.line.classList.toggle("active", key === target);
+    line.particle.classList.toggle("active", key === target);
+  });
 
-  updateIndicator(0);
+  if (changed && state.introComplete && !state.isTransitioning) {
+    state.coreImpulse = 1;
+  }
+}
 
-  const carousels3d = document.querySelectorAll('[data-carousel-3d]');
-  carousels3d.forEach((carousel) => {
-    const stage = carousel.querySelector('[data-stage]');
-    const cards = Array.from(carousel.querySelectorAll('[data-card]'));
-    const prev = carousel.querySelector('[data-prev-3d]');
-    const next = carousel.querySelector('[data-next-3d]');
-    const dotsContainer = carousel.querySelector('[data-dots-3d]');
-    let current = 0;
-
-    if (dotsContainer) {
-      dotsContainer.innerHTML = '';
-      cards.forEach((_, idx) => {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.setAttribute('aria-label', `Proyecto ${idx + 1}`);
-        dot.addEventListener('click', () => {
-          current = idx;
-          render();
-        });
-        dotsContainer.appendChild(dot);
-      });
+function updateLinkParticles(dt) {
+  linesByNode.forEach((entry) => {
+    const { line, particle } = entry;
+    const x1 = Number(line.getAttribute("x1"));
+    const y1 = Number(line.getAttribute("y1"));
+    const x2 = Number(line.getAttribute("x2"));
+    const y2 = Number(line.getAttribute("y2"));
+    if (!Number.isFinite(x1) || !Number.isFinite(x2) || !Number.isFinite(y1) || !Number.isFinite(y2)) {
+      return;
     }
 
-    const render = () => {
-      const total = cards.length;
-      const levels = {
-        0: { z: 200, x: 0, scale: 1, opacity: 1, blur: 0, saturate: 1 },
-        1: { z: 90, x: 260, scale: 0.86, opacity: 0.55, blur: 1, saturate: 0.78 },
-        2: { z: -20, x: 340, scale: 0.76, opacity: 0.12, blur: 3, saturate: 0.5 },
-      };
+    entry.progress += dt * entry.speed;
+    if (entry.progress > 1) {
+      entry.progress -= 1;
+    }
 
-      const shortest = (idx) => {
-        let diff = idx - current;
-        const wrapDiff = diff > 0 ? diff - total : diff + total;
-        if (Math.abs(wrapDiff) < Math.abs(diff)) diff = wrapDiff;
-        const dist = Math.min(Math.abs(diff), 2); // cap to 2+
-        const sign = diff === 0 ? 0 : diff > 0 ? 1 : -1;
-        return { dist, sign };
-      };
+    const t = entry.progress;
+    const px = x1 + (x2 - x1) * t;
+    const py = y1 + (y2 - y1) * t;
+    particle.setAttribute("cx", `${px}`);
+    particle.setAttribute("cy", `${py}`);
+  });
+}
 
-      cards.forEach((card, idx) => {
-        const { dist, sign } = shortest(idx);
-        const lvl = levels[dist] || levels[2];
-        const x = lvl.x * (sign === 0 ? 0 : sign);
-        card.style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${lvl.z}px) scale(${lvl.scale})`;
-        card.style.opacity = lvl.opacity;
-        card.style.filter = `blur(${lvl.blur}px) saturate(${lvl.saturate})`;
-        card.style.zIndex = Math.round(lvl.z + 500);
-        card.classList.toggle('is-center', dist === 0);
-      });
-      if (dotsContainer) {
-        Array.from(dotsContainer.children).forEach((dot, idx) => {
-          dot.classList.toggle('active', idx === current);
-        });
-      }
-    };
+function activateKeypingView() {
+  if (state.isTransitioning) {
+    return;
+  }
 
-    const rotate = (delta) => {
-      current = (current + delta + cards.length) % cards.length;
-      render();
-    };
+  state.isTransitioning = true;
+  state.transitionDir = 1;
+  state.transitionStart = performance.now();
+  body.classList.add("is-transitioning");
 
-    prev?.addEventListener('click', () => rotate(-1));
-    next?.addEventListener('click', () => rotate(1));
+  window.setTimeout(() => {
+    window.location.href = "keyping.html";
+  }, 780);
+}
 
-    let dragging = false;
-    let startX = 0;
-    let deltaX = 0;
-    const onDown = (e) => {
-      dragging = true;
-      startX = e.clientX || e.touches?.[0]?.clientX || 0;
-      deltaX = 0;
-      e.preventDefault();
-    };
-    const onMove = (e) => {
-      if (!dragging) return;
-      const x = e.clientX || e.touches?.[0]?.clientX || 0;
-      deltaX = x - startX;
-    };
-    const onUp = () => {
-      if (!dragging) return;
-      dragging = false;
-      if (deltaX > 40) rotate(-1);
-      if (deltaX < -40) rotate(1);
-      deltaX = 0;
-    };
-    stage.addEventListener('mousedown', onDown);
-    stage.addEventListener('mousemove', onMove);
-    stage.addEventListener('mouseup', onUp);
-    stage.addEventListener('mouseleave', onUp);
-    stage.addEventListener('dragstart', (e) => e.preventDefault());
-    stage.addEventListener('touchstart', onDown, { passive: true });
-    stage.addEventListener('touchmove', onMove, { passive: true });
-    stage.addEventListener('touchend', onUp);
+function onTrigger(target) {
+  setActive(target);
 
-    render();
+  if (target === "keyping") {
+    activateKeypingView();
+  }
+}
+
+moduleTriggers.forEach((trigger) => {
+  const target = trigger.dataset.target;
+  if (!target) {
+    return;
+  }
+
+  trigger.addEventListener("mouseenter", () => {
+    if (!state.introComplete) {
+      return;
+    }
+    setActive(target);
+  });
+  trigger.addEventListener("focus", () => {
+    if (!state.introComplete) {
+      return;
+    }
+    setActive(target);
+  });
+  trigger.addEventListener("click", () => {
+    if (!state.introComplete) {
+      return;
+    }
+    onTrigger(target);
   });
 });
+
+document.addEventListener("pointermove", (event) => {
+  const nx = (event.clientX / window.innerWidth - 0.5) * 2;
+  const ny = (event.clientY / window.innerHeight - 0.5) * 2;
+  body.style.setProperty("--bg-parallax-x", `${(nx * 12).toFixed(2)}px`);
+  body.style.setProperty("--bg-parallax-y", `${(ny * 10).toFixed(2)}px`);
+});
+
+stage.addEventListener("pointermove", (event) => {
+  if (!state.introComplete) {
+    return;
+  }
+
+  const rect = stage.getBoundingClientRect();
+  const relX = (event.clientX - rect.left) / rect.width;
+  const relY = (event.clientY - rect.top) / rect.height;
+
+  state.pointerX = relX * 2 - 1;
+  state.pointerY = relY * 2 - 1;
+
+  const coreHitRadius = 0.28;
+  const distToCore = Math.hypot(state.pointerX, state.pointerY);
+  const isInCoreZone = distToCore < coreHitRadius;
+  if (isInCoreZone) {
+    state.coreHoverTime += dtSafe();
+    if (!state.coreHovering) {
+      state.coreHovering = true;
+    }
+  } else {
+    state.coreHovering = false;
+    state.coreHoverTime = 0;
+  }
+});
+
+stage.addEventListener("pointerleave", () => {
+  state.pointerX = 0;
+  state.pointerY = 0;
+  state.coreHovering = false;
+  state.coreHoverTime = 0;
+});
+
+window.addEventListener("resize", updateStageSize);
+
+let lastTime = performance.now();
+let dtSnapshot = 0;
+
+function dtSafe() {
+  return Math.max(0.001, dtSnapshot || 0.016);
+}
+
+function tick(now) {
+  const dt = Math.min(0.033, (now - lastTime) / 1000);
+  lastTime = now;
+  dtSnapshot = dt;
+
+  state.parallaxX += (state.pointerX - state.parallaxX) * 0.04;
+  state.parallaxY += (state.pointerY - state.parallaxY) * 0.04;
+
+  const t = now * 0.001;
+  const pulse = 1 + Math.sin(t * 2.25) * 0.03;
+
+  if (state.isTransitioning) {
+    const elapsed = (now - state.transitionStart) / (state.transitionDir > 0 ? 900 : 760);
+    const eased = smoothstep(elapsed);
+    const blend = state.transitionDir > 0 ? eased : 1 - eased;
+
+    camera.position.z = THREE.MathUtils.lerp(5.2, 2.55, blend);
+    camera.position.x = THREE.MathUtils.lerp(0, 0.25, blend);
+    camera.position.y = THREE.MathUtils.lerp(0.15, -0.05, blend);
+    coreGroup.scale.setScalar(1 + blend * 0.35);
+  } else if (state.isReturnTransition) {
+    const progress = smoothstep((now - state.returnStartTime) / state.returnDurationMs);
+    camera.position.z = THREE.MathUtils.lerp(2.55, 5.2, progress);
+    camera.position.x = THREE.MathUtils.lerp(0.25, 0, progress);
+    camera.position.y = THREE.MathUtils.lerp(-0.05, 0.15, progress);
+    coreGroup.scale.setScalar(THREE.MathUtils.lerp(1.35, 1, progress));
+    if (progress >= 1) {
+      state.isReturnTransition = false;
+      body.classList.remove("is-returning-from-keyping");
+    }
+  } else if (!state.introComplete) {
+    camera.position.z += (5.2 - camera.position.z) * 0.05;
+    camera.position.x += (0 - camera.position.x) * 0.05;
+    camera.position.y += (0.15 - camera.position.y) * 0.05;
+
+    const introElapsed = now - state.introStartTime;
+    const introProgress = smootherstep(introElapsed / state.introDurationMs);
+    const introScale = THREE.MathUtils.lerp(0.05, 1, introProgress);
+    coreGroup.scale.setScalar(introScale);
+  } else {
+    camera.position.z += (5.2 - camera.position.z) * 0.04;
+    camera.position.x += (state.parallaxX * 0.25 - camera.position.x) * 0.04;
+    camera.position.y += (-state.parallaxY * 0.18 + 0.15 - camera.position.y) * 0.04;
+    coreGroup.scale.x += (1 - coreGroup.scale.x) * 0.05;
+    coreGroup.scale.y += (1 - coreGroup.scale.y) * 0.05;
+    coreGroup.scale.z += (1 - coreGroup.scale.z) * 0.05;
+  }
+
+  if (state.introComplete && !state.isTransitioning && !state.isReturnTransition) {
+    const rect = stage.getBoundingClientRect();
+    const intensity = window.matchMedia("(max-width: 860px)").matches ? 5 : 9;
+    desktopNodes.forEach((node) => {
+      const target = node.dataset.target;
+      const pos = nodePositions[target];
+      if (!pos) {
+        return;
+      }
+      const driftX = state.parallaxX * intensity * (0.18 + pos.x);
+      const driftY = state.parallaxY * intensity * (0.12 + pos.y);
+      placeNodeWithBounds(node, pos, rect, driftX, driftY);
+    });
+    updateLinks();
+  }
+
+  if (state.introStep >= 5) {
+    updateLinkParticles(dt);
+  }
+
+  state.spinCooldown = Math.max(0, state.spinCooldown - dt);
+  if (
+    state.introComplete &&
+    !state.isTransitioning &&
+    !state.isReturnTransition &&
+    state.coreHovering &&
+    state.coreHoverTime > 0.09 &&
+    state.spinCooldown <= 0 &&
+    state.spinBurstTime <= 0
+  ) {
+    state.spinBurstTime = 0.22;
+    state.spinCooldown = 0.8;
+  }
+
+  state.spinBurstTime = Math.max(0, state.spinBurstTime - dt);
+  const burstFactor = state.spinBurstTime > 0 ? Math.pow(state.spinBurstTime / 0.22, 0.75) : 0;
+  const burstY = 2.8 * burstFactor;
+  const burstX = 0.9 * burstFactor;
+  state.spinY += dt * (0.22 + burstY);
+  state.spinX += dt * (0.08 + burstX);
+  state.coreImpulse += (0 - state.coreImpulse) * 0.1;
+  const tiltY = state.parallaxX * 0.28;
+  const tiltX = -state.parallaxY * 0.2;
+  coreGroup.rotation.y = state.spinY + tiltY;
+  coreGroup.rotation.x = state.spinX + tiltX;
+  coreGroup.position.x += ((state.parallaxX * 0.16) - coreGroup.position.x) * 0.06;
+  coreGroup.position.y += ((-state.parallaxY * 0.12) - coreGroup.position.y) * 0.06;
+  inner.rotation.y -= dt * 0.42;
+  outer.rotation.x -= dt * 0.12;
+  const coreImpulseBoost = 1 + state.coreImpulse * 0.055;
+  outer.scale.setScalar((state.introStep >= 2 ? pulse : 1) * coreImpulseBoost);
+  inner.scale.setScalar(coreImpulseBoost * (1 + state.coreImpulse * 0.02));
+  shellWire.rotation.y -= dt * 0.28;
+  const wirePulse = 0.22 + Math.sin(t * 1.6) * 0.05;
+  const wireTarget = state.introStep >= 4 ? wirePulse : 0;
+  shellWire.material.opacity += (wireTarget - shellWire.material.opacity) * 0.08;
+
+  const outerTarget = state.introStep >= 2 ? 0.8 : 0;
+  outer.material.opacity += (outerTarget - outer.material.opacity) * 0.08;
+  const innerTarget = state.introStep >= 3 ? 1 : 0;
+  inner.material.opacity += (innerTarget - inner.material.opacity) * 0.1;
+  const emissiveTarget = state.introStep >= 3 ? 1.2 : 0;
+  inner.material.emissiveIntensity += (emissiveTarget - inner.material.emissiveIntensity) * 0.1;
+
+  key.intensity = state.introStep >= 3 ? 4 + Math.sin(t * 2.1) * 0.45 + state.coreImpulse * 0.55 : 0;
+  starsMesh.rotation.y += dt * 0.015;
+
+  camera.lookAt(0, 0, 0);
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+
+updateStageSize();
+setActive("keyping");
+requestAnimationFrame(tick);
+
+if (returningFromKeyping) {
+  try {
+    window.history.replaceState({}, "", window.location.pathname);
+  } catch {
+    // Ignore history replace issues.
+  }
+  markBootSequenceSeen();
+  fastForwardToReadyState();
+  beginReturnTransition();
+} else if (hasSeenBootSequence()) {
+  fastForwardToReadyState();
+} else {
+  markBootSequenceSeen();
+  runBootSequence().then(() => {
+    runIntro();
+  });
+}
+
+runMeteorLoop();

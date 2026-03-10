@@ -1,0 +1,68 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="KeyPing dedicated product view." />
+  <title>KeyPing | System Core</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body class="keyping-page">
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--far" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--near" aria-hidden="true"></div>
+  <div class="meteor-layer" id="meteor-layer" aria-hidden="true"></div>
+
+  <main class="app" id="app">
+    <section class="system-shell" aria-label="KeyPing System View">
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity__name">UNAX ZULAIKA FUENTE</span>
+          <span class="identity__role">Software Systems Engineer</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span class="status-text">SYSTEM CORE ONLINE</span>
+        </div>
+      </header>
+
+      <div class="core-stage keyping-stage">
+        <a href="index.html?from=keyping" class="back-button keyping-back" id="back-to-core-link">Back to Core</a>
+
+        <div class="keyping-header">
+          <div class="keyping-mark" aria-hidden="true"><span>K</span></div>
+          <div>
+            <p class="eyebrow">FLAGSHIP MODULE</p>
+            <h2>KeyPing</h2>
+            <p class="keyping-tagline">Desktop credential hygiene system engineered for local trust.</p>
+          </div>
+        </div>
+
+        <div class="keyping-grid">
+          <article class="keyping-card">
+            <h3>Architecture</h3>
+            <p>Electron + Angular runtime with strict renderer/preload/main process boundaries.</p>
+          </article>
+          <article class="keyping-card">
+            <h3>Security Core</h3>
+            <p>Local encrypted vault using AES-256-GCM + PBKDF2, autolock policy and secure clipboard controls.</p>
+          </article>
+          <article class="keyping-card">
+            <h3>Hardening</h3>
+            <p>Anti brute-force mechanisms, deterministic lock states and offline-first execution model.</p>
+          </article>
+          <article class="keyping-card">
+            <h3>Delivery</h3>
+            <p>Distribution pipeline with integrity checks, checksums and GPG signing for release trust.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="keyping.js"></script>
+</body>
+</html>
