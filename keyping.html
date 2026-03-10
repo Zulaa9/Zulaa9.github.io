@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KeyPing dedicated product view." />
-  <title>KeyPing | System Core</title>
+  <meta name="description" id="page-description" content="KeyPing dedicated product view." />
+  <title id="page-title">KeyPing | System Core</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -21,47 +21,53 @@
       <header class="topbar">
         <div class="identity">
           <span class="identity__name">UNAX ZULAIKA FUENTE</span>
-          <span class="identity__role">Software Systems Engineer</span>
+          <span class="identity__role" data-i18n="identity.role">Software Systems Engineer</span>
         </div>
-        <div class="status-chip">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span class="status-text">SYSTEM CORE ONLINE</span>
+        <div class="topbar-controls">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-switch__btn" data-lang-switch="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-switch__btn" data-lang-switch="es" aria-pressed="false">ES</button>
+          </div>
+          <div class="status-chip">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-text" id="core-status-text">SYSTEM CORE ONLINE</span>
+          </div>
         </div>
       </header>
 
       <div class="core-stage keyping-stage">
-        <a href="index.html?from=keyping" class="back-button keyping-back" id="back-to-core-link">Back to Core</a>
+        <a href="index.html?from=keyping" class="back-button keyping-back" id="back-to-core-link" data-i18n="back">Back to Core</a>
 
         <section class="keyping-module-shell" aria-label="KeyPing internals module">
           <div class="keyping-header">
             <div class="keyping-mark" aria-hidden="true"><span>K</span></div>
             <div class="keyping-title">
-              <p class="eyebrow">FLAGSHIP MODULE // KP-01</p>
-              <h2>KeyPing</h2>
-              <p class="keyping-tagline">Desktop credential hygiene system engineered for local trust.</p>
+              <p class="eyebrow" data-i18n="header.eyebrow">FLAGSHIP MODULE // KP-01</p>
+              <h2 data-i18n="header.title">KeyPing</h2>
+              <p class="keyping-tagline" data-i18n="header.tagline">Desktop credential hygiene system engineered for local trust.</p>
             </div>
             <div class="keyping-health" aria-label="Module health">
-              <p class="keyping-health__label">Module Health</p>
-              <p class="keyping-health__state">Secure / Local / Active</p>
+              <p class="keyping-health__label" data-i18n="health.label">Module Health</p>
+              <p class="keyping-health__state" data-i18n="health.state">Secure / Local / Active</p>
             </div>
           </div>
 
           <div class="keyping-grid">
             <article class="keyping-card">
-              <h3>Process Boundary Map</h3>
-              <p>Renderer, preload and main process lanes are isolated and validated through typed IPC contracts.</p>
+              <h3 data-i18n="cards.boundary.title">Process Boundary Map</h3>
+              <p data-i18n="cards.boundary.copy">Renderer, preload and main process lanes are isolated and validated through typed IPC contracts.</p>
             </article>
             <article class="keyping-card">
-              <h3>Credential Vault Engine</h3>
-              <p>Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies.</p>
+              <h3 data-i18n="cards.vault.title">Credential Vault Engine</h3>
+              <p data-i18n="cards.vault.copy">Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies.</p>
             </article>
             <article class="keyping-card">
-              <h3>Runtime Safeguards</h3>
-              <p>Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy.</p>
+              <h3 data-i18n="cards.runtime.title">Runtime Safeguards</h3>
+              <p data-i18n="cards.runtime.copy">Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy.</p>
             </article>
             <article class="keyping-card">
-              <h3>Release Integrity Pipeline</h3>
-              <p>Artifacts are distributed with checksums and signature verification to preserve trust from build to install.</p>
+              <h3 data-i18n="cards.release.title">Release Integrity Pipeline</h3>
+              <p data-i18n="cards.release.copy">Artifacts are distributed with checksums and signature verification to preserve trust from build to install.</p>
             </article>
           </div>
         </section>

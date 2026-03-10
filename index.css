@@ -338,6 +338,44 @@ body.core-offline .meteor-layer {
   margin-bottom: 20px;
 }
 
+.topbar-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(130, 171, 207, 0.28);
+  border-radius: 999px;
+  background: rgba(8, 16, 24, 0.66);
+}
+
+.lang-switch__btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: #b5cada;
+  background: transparent;
+  cursor: pointer;
+}
+
+.lang-switch__btn.is-active {
+  color: #e9f5ff;
+  background: rgba(79, 154, 197, 0.35);
+}
+
+.lang-switch__btn:focus-visible {
+  outline: 1px solid rgba(139, 226, 255, 0.74);
+  outline-offset: 1px;
+}
+
 .identity {
   display: flex;
   flex-direction: column;
@@ -962,6 +1000,13 @@ body.intro-step-6 .mobile-modules {
 
   .topbar {
     margin-bottom: 10px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .topbar-controls {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .core-stage {

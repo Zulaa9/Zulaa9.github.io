@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="System Core interface for Unax Zulaika Fuente portfolio and KeyPing flagship." />
-  <title>Unax Zulaika | System Core</title>
+  <meta name="description" id="page-description" content="System Core interface for Unax Zulaika Fuente portfolio and KeyPing flagship." />
+  <title id="page-title">Unax Zulaika | System Core</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -21,21 +21,27 @@
       <header class="topbar">
         <div class="identity">
           <span class="identity__name">UNAX ZULAIKA FUENTE</span>
-          <span class="identity__role">Software Systems Engineer</span>
+          <span class="identity__role" data-i18n="identity.role">Software Systems Engineer</span>
         </div>
-        <div class="status-chip">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span class="status-text" id="core-status-text">SYSTEM CORE ONLINE</span>
+        <div class="topbar-controls">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-switch__btn" data-lang-switch="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-switch__btn" data-lang-switch="es" aria-pressed="false">ES</button>
+          </div>
+          <div class="status-chip">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-text" id="core-status-text">SYSTEM CORE ONLINE</span>
+          </div>
         </div>
       </header>
 
       <div class="core-stage" id="core-stage">
         <section class="startup-gate" id="startup-gate" aria-label="System startup gate">
           <div class="startup-gate__panel">
-            <p class="eyebrow">SYSTEM CORE // OFFLINE</p>
-            <h2>Manual startup required</h2>
-            <p>Initialize the core runtime and load module graph.</p>
-            <button class="startup-gate__button" id="start-core-button" type="button">Start System</button>
+            <p class="eyebrow" data-i18n="startup.eyebrow">SYSTEM CORE // OFFLINE</p>
+            <h2 data-i18n="startup.title">Manual startup required</h2>
+            <p data-i18n="startup.copy">Initialize the core runtime and load module graph.</p>
+            <button class="startup-gate__button" id="start-core-button" type="button" data-i18n="startup.cta">Start System</button>
           </div>
         </section>
 
@@ -43,7 +49,7 @@
           <div class="boot-door boot-door--top" aria-hidden="true"></div>
           <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
           <div class="boot-terminal">
-            <p class="boot-terminal__eyebrow">SYSTEM CORE // INIT</p>
+            <p class="boot-terminal__eyebrow" data-i18n="boot.eyebrow">SYSTEM CORE // INIT</p>
             <div class="boot-terminal__screen">
               <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
               <div class="boot-progress">
@@ -63,54 +69,54 @@
 
         <div class="node-layer" id="node-layer" aria-label="Primary modules">
           <button class="module-node module-trigger module-node--keyping" data-target="keyping" data-label="KeyPing">
-            <span class="node-title">KeyPing</span>
-            <span class="node-meta">Flagship</span>
+            <span class="node-title" data-i18n="nodes.keyping.title">KeyPing</span>
+            <span class="node-meta" data-i18n="nodes.keyping.meta">Flagship</span>
           </button>
           <button class="module-node module-trigger" data-target="about" data-label="About">
-            <span class="node-title">About</span>
-            <span class="node-meta">Identity</span>
+            <span class="node-title" data-i18n="nodes.about.title">About</span>
+            <span class="node-meta" data-i18n="nodes.about.meta">Identity</span>
           </button>
           <button class="module-node module-trigger" data-target="capabilities" data-label="Capabilities">
-            <span class="node-title">Capabilities</span>
-            <span class="node-meta">Stack</span>
+            <span class="node-title" data-i18n="nodes.capabilities.title">Capabilities</span>
+            <span class="node-meta" data-i18n="nodes.capabilities.meta">Stack</span>
           </button>
           <button class="module-node module-trigger" data-target="projects" data-label="Projects">
-            <span class="node-title">Projects</span>
-            <span class="node-meta">Builds</span>
+            <span class="node-title" data-i18n="nodes.projects.title">Projects</span>
+            <span class="node-meta" data-i18n="nodes.projects.meta">Builds</span>
           </button>
           <button class="module-node module-trigger" data-target="contact" data-label="Contact">
-            <span class="node-title">Contact</span>
-            <span class="node-meta">Channel</span>
+            <span class="node-title" data-i18n="nodes.contact.title">Contact</span>
+            <span class="node-meta" data-i18n="nodes.contact.meta">Channel</span>
           </button>
           <button class="module-node module-trigger module-node--locked" data-target="future" data-label="Future Builds">
-            <span class="node-title">Future Builds</span>
-            <span class="node-meta">Locked</span>
+            <span class="node-title" data-i18n="nodes.future.title">Future Builds</span>
+            <span class="node-meta" data-i18n="nodes.future.meta">Locked</span>
           </button>
         </div>
 
         <article class="core-copy">
-          <p class="eyebrow">SYSTEM ENTRY</p>
-          <h1>Interactive architecture view built around a real product core.</h1>
-          <p>
+          <p class="eyebrow" data-i18n="copy.eyebrow">SYSTEM ENTRY</p>
+          <h1 data-i18n="copy.title">Interactive architecture view built around a real product core.</h1>
+          <p data-i18n-html="copy.body">
             This interface is not a static portfolio shell. It is a live system map where
             <strong>KeyPing</strong> acts as the primary operational node.
           </p>
         </article>
 
         <aside class="info-dock" id="info-dock" aria-live="polite">
-          <p class="info-dock__label">Module</p>
-          <h2 id="dock-title">Select a node</h2>
-          <p id="dock-copy">Hover or tap any module to inspect system context.</p>
+          <p class="info-dock__label" data-i18n="dock.label">Module</p>
+          <h2 id="dock-title" data-i18n="dock.defaultTitle">Select a node</h2>
+          <p id="dock-copy" data-i18n="dock.defaultCopy">Hover or tap any module to inspect system context.</p>
         </aside>
       </div>
 
       <nav class="mobile-modules" aria-label="Modules">
-        <button class="mobile-modules__item module-trigger" data-target="keyping">KeyPing</button>
-        <button class="mobile-modules__item module-trigger" data-target="about">About</button>
-        <button class="mobile-modules__item module-trigger" data-target="capabilities">Capabilities</button>
-        <button class="mobile-modules__item module-trigger" data-target="projects">Projects</button>
-        <button class="mobile-modules__item module-trigger" data-target="contact">Contact</button>
-        <button class="mobile-modules__item module-trigger" data-target="future">Future</button>
+        <button class="mobile-modules__item module-trigger" data-target="keyping" data-i18n="mobile.keyping">KeyPing</button>
+        <button class="mobile-modules__item module-trigger" data-target="about" data-i18n="mobile.about">About</button>
+        <button class="mobile-modules__item module-trigger" data-target="capabilities" data-i18n="mobile.capabilities">Capabilities</button>
+        <button class="mobile-modules__item module-trigger" data-target="projects" data-i18n="mobile.projects">Projects</button>
+        <button class="mobile-modules__item module-trigger" data-target="contact" data-i18n="mobile.contact">Contact</button>
+        <button class="mobile-modules__item module-trigger" data-target="future" data-i18n="mobile.future">Future</button>
       </nav>
     </section>
   </main>
