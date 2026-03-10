@@ -29,6 +29,7 @@ const FALLBACK_LOCALES = {
       back: "Back to Core",
       crumb: {
         core: "Core",
+        projects: "Projects",
         keyping: "KeyPing",
       },
       header: {
@@ -207,6 +208,7 @@ const FALLBACK_LOCALES = {
       back: "Volver al Core",
       crumb: {
         core: "Core",
+        projects: "Proyectos",
         keyping: "KeyPing",
       },
       header: {

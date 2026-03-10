@@ -554,10 +554,19 @@ body.awaiting-start .startup-gate {
   transition: stroke 240ms ease, stroke-width 240ms ease, opacity 240ms ease;
 }
 
+.link-line--primary {
+  stroke-width: 2.8;
+  opacity: 0.96;
+}
+
 .link-line.active {
   stroke: var(--line-active);
   stroke-width: 1.9;
   opacity: 1;
+}
+
+.link-line--primary.active {
+  stroke-width: 3.4;
 }
 
 .link-particle {

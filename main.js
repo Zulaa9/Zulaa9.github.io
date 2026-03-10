@@ -27,7 +27,7 @@ const coreStatusText = document.getElementById("core-status-text");
 const startCoreButton = document.getElementById("start-core-button");
 const meteorLayer = document.getElementById("meteor-layer");
 const urlParams = new URLSearchParams(window.location.search);
-const returningFromKeyping = urlParams.get("from") === "keyping";
+const returningFromModule = ["keyping", "about", "contact"].includes((urlParams.get("from") || "").toLowerCase());
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 const FALLBACK_LOCALES = {
@@ -176,12 +176,19 @@ const localeCache = {
 };
 
 const nodePositions = {
-  keyping: { x: 0.72, y: 0.46 },
-  about: { x: 0.2, y: 0.24 },
-  capabilities: { x: 0.8, y: 0.2 },
-  projects: { x: 0.2, y: 0.52 },
-  contact: { x: 0.34, y: 0.68 },
-  future: { x: 0.78, y: 0.66 },
+  about: { x: 0.22, y: 0.24 },
+  capabilities: { x: 0.2, y: 0.45 },
+  contact: { x: 0.31, y: 0.64 },
+  projects: { x: 0.78, y: 0.28 },
+  keyping: { x: 0.74, y: 0.48 },
+  future: { x: 0.8, y: 0.66 },
+};
+
+const nodeParents = {
+  capabilities: "about",
+  contact: "about",
+  keyping: "projects",
+  future: "projects",
 };
 
 const state = {
@@ -660,6 +667,9 @@ function createLinks() {
     line.setAttribute("x2", `${cx}`);
     line.setAttribute("y2", `${cy}`);
     line.setAttribute("class", "link-line");
+    if (node.dataset.target === "about" || node.dataset.target === "projects") {
+      line.classList.add("link-line--primary");
+    }
 
     const particle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     particle.setAttribute("r", "2.1");
@@ -678,11 +688,25 @@ function createLinks() {
   });
 }
 
+function nodeCenterByTarget(target, stageRect) {
+  const node = desktopNodes.find((entry) => entry.dataset.target === target);
+  if (!node) {
+    return null;
+  }
+  const rect = node.getBoundingClientRect();
+  return {
+    x: rect.left - stageRect.left + rect.width / 2,
+    y: rect.top - stageRect.top + rect.height / 2,
+  };
+}
+
 function updateLinks(animate = false) {
   const centerRect = coreCenter.getBoundingClientRect();
   const stageRect = stage.getBoundingClientRect();
   const cx = centerRect.left - stageRect.left + centerRect.width / 2;
   const cy = centerRect.top - stageRect.top + centerRect.height / 2;
+  const aboutCenter = nodeCenterByTarget("about", stageRect);
+  const projectsCenter = nodeCenterByTarget("projects", stageRect);
 
   desktopNodes.forEach((node) => {
     const entry = linesByNode.get(node.dataset.target);
@@ -693,13 +717,34 @@ function updateLinks(animate = false) {
     const rect = node.getBoundingClientRect();
     const nx = rect.left - stageRect.left + rect.width / 2;
     const ny = rect.top - stageRect.top + rect.height / 2;
-    line.setAttribute("x1", `${cx}`);
-    line.setAttribute("y1", `${cy}`);
+
+    const startX =
+      node.dataset.target === "contact" && aboutCenter
+        ? aboutCenter.x
+        : node.dataset.target === "capabilities" && aboutCenter
+          ? aboutCenter.x
+        : node.dataset.target === "keyping" && projectsCenter
+          ? projectsCenter.x
+          : node.dataset.target === "future" && projectsCenter
+            ? projectsCenter.x
+          : cx;
+    const startY =
+      node.dataset.target === "contact" && aboutCenter
+        ? aboutCenter.y
+        : node.dataset.target === "capabilities" && aboutCenter
+          ? aboutCenter.y
+        : node.dataset.target === "keyping" && projectsCenter
+          ? projectsCenter.y
+          : node.dataset.target === "future" && projectsCenter
+            ? projectsCenter.y
+          : cy;
+    line.setAttribute("x1", `${startX}`);
+    line.setAttribute("y1", `${startY}`);
     line.setAttribute("x2", `${nx}`);
     line.setAttribute("y2", `${ny}`);
 
     if (animate) {
-      const length = Math.hypot(nx - cx, ny - cy);
+      const length = Math.hypot(nx - startX, ny - startY);
       line.style.strokeDasharray = `${length}`;
       line.style.strokeDashoffset = `${length}`;
       requestAnimationFrame(() => {
@@ -802,6 +847,11 @@ function setActive(target) {
   const changed = state.active !== target;
   state.active = target;
   const module = localizedValue(`modules.${target}`);
+  const parent = nodeParents[target] || null;
+  const activeLineTargets = new Set([target]);
+  if (parent) {
+    activeLineTargets.add(parent);
+  }
 
   if (module) {
     infoTitle.textContent = module.title;
@@ -813,8 +863,9 @@ function setActive(target) {
   });
 
   linesByNode.forEach((line, key) => {
-    line.line.classList.toggle("active", key === target);
-    line.particle.classList.toggle("active", key === target);
+    const isActiveLine = activeLineTargets.has(key);
+    line.line.classList.toggle("active", isActiveLine);
+    line.particle.classList.toggle("active", isActiveLine);
   });
 
   if (changed && state.introComplete && !state.isTransitioning) {
@@ -861,11 +912,51 @@ function activateKeypingView() {
   }, 780);
 }
 
+function activateAboutView() {
+  if (state.isTransitioning) {
+    return;
+  }
+
+  state.isTransitioning = true;
+  state.transitionDir = 1;
+  state.transitionStart = performance.now();
+  body.classList.add("is-transitioning");
+
+  window.setTimeout(() => {
+    window.location.href = `about.html?lang=${state.lang}`;
+  }, 780);
+}
+
+function activateContactView() {
+  if (state.isTransitioning) {
+    return;
+  }
+
+  state.isTransitioning = true;
+  state.transitionDir = 1;
+  state.transitionStart = performance.now();
+  body.classList.add("is-transitioning");
+
+  window.setTimeout(() => {
+    window.location.href = `contact.html?lang=${state.lang}&from=core`;
+  }, 780);
+}
+
 function onTrigger(target) {
   setActive(target);
 
   if (target === "keyping") {
     activateKeypingView();
+    return;
+  }
+
+  if (target === "about") {
+    activateAboutView();
+    return;
+  }
+
+  if (target === "contact") {
+    activateContactView();
   }
 }
 
@@ -1066,7 +1157,7 @@ function tick(now) {
 
 updateStageSize();
 state.lang = getInitialLang();
-state.statusKey = returningFromKeyping ? "status.online" : "status.offline";
+state.statusKey = returningFromModule ? "status.online" : "status.offline";
 setupLanguageSwitch();
 requestAnimationFrame(tick);
 
@@ -1080,7 +1171,7 @@ requestAnimationFrame(tick);
   }
 })();
 
-if (returningFromKeyping) {
+if (returningFromModule) {
   try {
     window.history.replaceState({}, "", window.location.pathname);
   } catch {
