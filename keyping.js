@@ -5,81 +5,90 @@ const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
 const LANG_STORAGE_KEY = "system_core_lang";
-let isLeaving = false;
-
-const i18n = {
+const DEFAULT_LANG = "en";
+const FALLBACK_LOCALES = {
   en: {
-    page: {
-      title: "KeyPing | System Core",
-      description: "KeyPing dedicated product view.",
-    },
-    identity: { role: "Software Systems Engineer" },
-    status: { online: "SYSTEM CORE ONLINE" },
-    back: "Back to Core",
-    header: {
-      eyebrow: "FLAGSHIP MODULE // KP-01",
-      title: "KeyPing",
-      tagline: "Desktop credential hygiene system engineered for local trust.",
-    },
-    health: {
-      label: "Module Health",
-      state: "Secure / Local / Active",
-    },
-    cards: {
-      boundary: {
-        title: "Process Boundary Map",
-        copy: "Renderer, preload and main process lanes are isolated and validated through typed IPC contracts.",
+    keyping: {
+      page: {
+        title: "KeyPing | System Core",
+        description: "KeyPing dedicated product view.",
       },
-      vault: {
-        title: "Credential Vault Engine",
-        copy: "Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies.",
+      identity: { role: "Software Systems Engineer" },
+      status: { online: "SYSTEM CORE ONLINE" },
+      back: "Back to Core",
+      header: {
+        eyebrow: "FLAGSHIP MODULE // KP-01",
+        title: "KeyPing",
+        tagline: "Desktop credential hygiene system engineered for local trust.",
       },
-      runtime: {
-        title: "Runtime Safeguards",
-        copy: "Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy.",
+      health: {
+        label: "Module Health",
+        state: "Secure / Local / Active",
       },
-      release: {
-        title: "Release Integrity Pipeline",
-        copy: "Artifacts are distributed with checksums and signature verification to preserve trust from build to install.",
+      cards: {
+        boundary: {
+          title: "Process Boundary Map",
+          copy: "Renderer, preload and main process lanes are isolated and validated through typed IPC contracts.",
+        },
+        vault: {
+          title: "Credential Vault Engine",
+          copy: "Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies.",
+        },
+        runtime: {
+          title: "Runtime Safeguards",
+          copy: "Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy.",
+        },
+        release: {
+          title: "Release Integrity Pipeline",
+          copy: "Artifacts are distributed with checksums and signature verification to preserve trust from build to install.",
+        },
       },
     },
   },
   es: {
-    page: {
-      title: "KeyPing | Nucleo del Sistema",
-      description: "Vista dedicada del producto KeyPing.",
-    },
-    identity: { role: "Ingeniero de Sistemas de Software" },
-    status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-    back: "Volver al Core",
-    header: {
-      eyebrow: "MODULO PRINCIPAL // KP-01",
-      title: "KeyPing",
-      tagline: "Sistema desktop de higiene de credenciales disenado para confianza local.",
-    },
-    health: {
-      label: "Salud del Modulo",
-      state: "Seguro / Local / Activo",
-    },
-    cards: {
-      boundary: {
-        title: "Mapa de Limites de Proceso",
-        copy: "Los canales renderer, preload y main process estan aislados y validados mediante contratos IPC tipados.",
+    keyping: {
+      page: {
+        title: "KeyPing | Nucleo del Sistema",
+        description: "Vista dedicada del producto KeyPing.",
       },
-      vault: {
-        title: "Motor del Vault de Credenciales",
-        copy: "Los registros locales del vault se cifran con AES-256-GCM + PBKDF2 y politicas deterministas de bloqueo y timeout.",
+      identity: { role: "Ingeniero de Sistemas de Software" },
+      status: { online: "NUCLEO DEL SISTEMA ONLINE" },
+      back: "Volver al Core",
+      header: {
+        eyebrow: "MODULO PRINCIPAL // KP-01",
+        title: "KeyPing",
+        tagline: "Sistema desktop de higiene de credenciales disenado para confianza local.",
       },
-      runtime: {
-        title: "Salvaguardas de Runtime",
-        copy: "Las ventanas de exposicion del clipboard, la proteccion anti brute-force y las restricciones offline se aplican por politica.",
+      health: {
+        label: "Salud del Modulo",
+        state: "Seguro / Local / Activo",
       },
-      release: {
-        title: "Pipeline de Integridad de Release",
-        copy: "Los artefactos se distribuyen con checksums y verificacion de firma para preservar la confianza desde build hasta instalacion.",
+      cards: {
+        boundary: {
+          title: "Mapa de Limites de Proceso",
+          copy: "Los canales renderer, preload y main process estan aislados y validados mediante contratos IPC tipados.",
+        },
+        vault: {
+          title: "Motor del Vault de Credenciales",
+          copy: "Los registros locales del vault se cifran con AES-256-GCM + PBKDF2 y politicas deterministas de bloqueo y timeout.",
+        },
+        runtime: {
+          title: "Salvaguardas de Runtime",
+          copy: "Las ventanas de exposicion del clipboard, la proteccion anti brute-force y las restricciones offline se aplican por politica.",
+        },
+        release: {
+          title: "Pipeline de Integridad de Release",
+          copy: "Los artefactos se distribuyen con checksums y verificacion de firma para preservar la confianza desde build hasta instalacion.",
+        },
       },
     },
   },
+};
+let isLeaving = false;
+
+const localeCache = {
+  en: null,
+  es: null,
 };
 
 function randomRange(min, max) {
@@ -109,8 +118,30 @@ function textByPath(obj, path) {
   return path.split(".").reduce((acc, key) => (acc && acc[key] != null ? acc[key] : null), obj);
 }
 
+async function loadLocale(lang) {
+  const normalized = lang === "es" ? "es" : "en";
+  if (localeCache[normalized]) {
+    return localeCache[normalized];
+  }
+
+  try {
+    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Failed to load locale file: ${normalized}`);
+    }
+    const data = await response.json();
+    localeCache[normalized] = data;
+    return data;
+  } catch {
+    localeCache[normalized] = FALLBACK_LOCALES[normalized];
+    return localeCache[normalized];
+  }
+}
+
 function t(lang, path) {
-  return textByPath(i18n[lang] || i18n.en, path) ?? textByPath(i18n.en, path) ?? "";
+  const active = localeCache[lang] && localeCache[lang].keyping ? localeCache[lang].keyping : null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].keyping ? localeCache[DEFAULT_LANG].keyping : null;
+  return textByPath(active, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function applyTranslations(lang) {
@@ -209,28 +240,47 @@ window.requestAnimationFrame(() => {
 });
 
 let currentLang = getInitialLang();
-applyTranslations(currentLang);
-try {
-  localStorage.setItem(LANG_STORAGE_KEY, currentLang);
-} catch {
-  // Ignore storage access errors.
-}
 
-langSwitchButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const nextLang = button.getAttribute("data-lang-switch");
-    if (!nextLang || nextLang === currentLang) {
-      return;
-    }
-    currentLang = nextLang;
-    applyTranslations(currentLang);
+async function applyLanguage(nextLang, persist = true) {
+  const normalized = nextLang === "es" ? "es" : "en";
+  await loadLocale(normalized);
+  if (normalized !== DEFAULT_LANG && !localeCache[DEFAULT_LANG]) {
+    await loadLocale(DEFAULT_LANG);
+  }
+  currentLang = normalized;
+  applyTranslations(currentLang);
+  if (persist) {
     try {
       localStorage.setItem(LANG_STORAGE_KEY, currentLang);
     } catch {
       // Ignore storage access errors.
     }
+  }
+}
+
+langSwitchButtons.forEach((button) => {
+  button.addEventListener("click", async () => {
+    const nextLang = button.getAttribute("data-lang-switch");
+    if (!nextLang || nextLang === currentLang) {
+      return;
+    }
+    try {
+      await applyLanguage(nextLang, true);
+    } catch (error) {
+      console.error("Could not switch language:", error);
+    }
   });
 });
+
+(async () => {
+  try {
+    await loadLocale(DEFAULT_LANG);
+    await applyLanguage(currentLang, true);
+  } catch (error) {
+    console.error("Could not initialize locales from i18n JSON files:", error);
+    currentLang = DEFAULT_LANG;
+  }
+})();
 
 if (backToCoreLink) {
   backToCoreLink.addEventListener("click", (event) => {

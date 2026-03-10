@@ -29,181 +29,150 @@ const meteorLayer = document.getElementById("meteor-layer");
 const urlParams = new URLSearchParams(window.location.search);
 const returningFromKeyping = urlParams.get("from") === "keyping";
 const LANG_STORAGE_KEY = "system_core_lang";
-
-const desktopNodes = [...document.querySelectorAll(".module-node")];
-const moduleTriggers = [...document.querySelectorAll(".module-trigger")];
-const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
-
-const modulesByLang = {
+const DEFAULT_LANG = "en";
+const FALLBACK_LOCALES = {
   en: {
-    keyping: {
-      title: "KeyPing",
-      copy: "Primary module. Open dedicated product view.",
-    },
-    about: {
-      title: "About",
-      copy: "Engineer focused on practical software architecture, security boundaries and maintainable delivery.",
-    },
-    capabilities: {
-      title: "Capabilities",
-      copy: "Electron desktop architecture, Angular frontend systems, secure local storage flows and build automation.",
-    },
-    projects: {
-      title: "Projects",
-      copy: "Selected real builds with product intent, operational constraints and technical ownership.",
-    },
-    contact: {
-      title: "Contact",
-      copy: "Direct technical conversations and collaboration opportunities.",
-    },
-    future: {
-      title: "Future Builds",
-      copy: "Locked modules reserved for upcoming systems currently in development.",
+    systemCore: {
+      page: {
+        title: "Unax Zulaika | System Core",
+        description: "System Core interface for Unax Zulaika Fuente portfolio and KeyPing flagship.",
+      },
+      identity: { role: "Software Systems Engineer" },
+      startup: {
+        eyebrow: "SYSTEM CORE // OFFLINE",
+        title: "Manual startup required",
+        copy: "Initialize the core runtime and load module graph.",
+        cta: "Start System",
+      },
+      boot: {
+        eyebrow: "SYSTEM CORE // INIT",
+        lines: [
+          "[sys] initializing core context",
+          "[io] probing local environment",
+          "[sec] validating entropy source",
+          "[pkg] loading module map",
+          "[core] handshake complete",
+          "[core] system architecture online",
+        ],
+      },
+      nodes: {
+        keyping: { title: "KeyPing", meta: "Flagship" },
+        about: { title: "About", meta: "Identity" },
+        capabilities: { title: "Capabilities", meta: "Stack" },
+        projects: { title: "Projects", meta: "Builds" },
+        contact: { title: "Contact", meta: "Channel" },
+        future: { title: "Future Builds", meta: "Locked" },
+      },
+      copy: {
+        eyebrow: "SYSTEM ENTRY",
+        title: "Interactive architecture view built around a real product core.",
+        body: "This interface is not a static portfolio shell. It is a live system map where <strong>KeyPing</strong> acts as the primary operational node.",
+      },
+      dock: {
+        label: "Module",
+        defaultTitle: "Select a node",
+        defaultCopy: "Hover or tap any module to inspect system context.",
+      },
+      mobile: {
+        keyping: "KeyPing",
+        about: "About",
+        capabilities: "Capabilities",
+        projects: "Projects",
+        contact: "Contact",
+        future: "Future",
+      },
+      modules: {
+        keyping: { title: "KeyPing", copy: "Primary module. Open dedicated product view." },
+        about: { title: "About", copy: "Engineer focused on practical software architecture, security boundaries and maintainable delivery." },
+        capabilities: { title: "Capabilities", copy: "Electron desktop architecture, Angular frontend systems, secure local storage flows and build automation." },
+        projects: { title: "Projects", copy: "Selected real builds with product intent, operational constraints and technical ownership." },
+        contact: { title: "Contact", copy: "Direct technical conversations and collaboration opportunities." },
+        future: { title: "Future Builds", copy: "Locked modules reserved for upcoming systems currently in development." },
+      },
+      status: {
+        online: "SYSTEM CORE ONLINE",
+        offline: "SYSTEM CORE OFFLINE",
+        booting: "SYSTEM CORE BOOTING",
+        loading: "SYSTEM CORE LOADING {progress}%",
+        syncing: "SYSTEM CORE SYNCING VISUAL LAYER",
+      },
     },
   },
   es: {
-    keyping: {
-      title: "KeyPing",
-      copy: "Modulo principal. Abre la vista dedicada del producto.",
-    },
-    about: {
-      title: "Sobre mi",
-      copy: "Ingeniero centrado en arquitectura de software practica, limites de seguridad y entrega mantenible.",
-    },
-    capabilities: {
-      title: "Capacidades",
-      copy: "Arquitectura desktop con Electron, sistemas frontend con Angular, flujos de almacenamiento seguro y automatizacion de builds.",
-    },
-    projects: {
-      title: "Proyectos",
-      copy: "Construcciones reales seleccionadas con intencion de producto, restricciones operativas y ownership tecnico.",
-    },
-    contact: {
-      title: "Contacto",
-      copy: "Conversaciones tecnicas directas y oportunidades de colaboracion.",
-    },
-    future: {
-      title: "Futuros Builds",
-      copy: "Modulos bloqueados reservados para sistemas proximos en desarrollo.",
+    systemCore: {
+      page: {
+        title: "Unax Zulaika | Nucleo del Sistema",
+        description: "Interfaz de Nucleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing.",
+      },
+      identity: { role: "Ingeniero de Sistemas de Software" },
+      startup: {
+        eyebrow: "NUCLEO DEL SISTEMA // APAGADO",
+        title: "Arranque manual requerido",
+        copy: "Inicializa el runtime del core y carga el grafo de modulos.",
+        cta: "Iniciar Sistema",
+      },
+      boot: {
+        eyebrow: "NUCLEO DEL SISTEMA // INICIO",
+        lines: [
+          "[sys] inicializando contexto del core",
+          "[io] sondeando entorno local",
+          "[sec] validando fuente de entropia",
+          "[pkg] cargando mapa de modulos",
+          "[core] handshake completado",
+          "[core] arquitectura del sistema online",
+        ],
+      },
+      nodes: {
+        keyping: { title: "KeyPing", meta: "Principal" },
+        about: { title: "Sobre mi", meta: "Identidad" },
+        capabilities: { title: "Capacidades", meta: "Stack" },
+        projects: { title: "Proyectos", meta: "Builds" },
+        contact: { title: "Contacto", meta: "Canal" },
+        future: { title: "Futuros Builds", meta: "Bloqueado" },
+      },
+      copy: {
+        eyebrow: "ENTRADA DEL SISTEMA",
+        title: "Vista de arquitectura interactiva construida alrededor de un core de producto real.",
+        body: "Esta interfaz no es una portada estatica. Es un mapa de sistema vivo donde <strong>KeyPing</strong> actua como nodo operativo principal.",
+      },
+      dock: {
+        label: "Modulo",
+        defaultTitle: "Selecciona un nodo",
+        defaultCopy: "Pasa el raton o toca cualquier modulo para inspeccionar su contexto.",
+      },
+      mobile: {
+        keyping: "KeyPing",
+        about: "Sobre mi",
+        capabilities: "Capacidades",
+        projects: "Proyectos",
+        contact: "Contacto",
+        future: "Futuro",
+      },
+      modules: {
+        keyping: { title: "KeyPing", copy: "Modulo principal. Abre la vista dedicada del producto." },
+        about: { title: "Sobre mi", copy: "Ingeniero centrado en arquitectura de software practica, limites de seguridad y entrega mantenible." },
+        capabilities: { title: "Capacidades", copy: "Arquitectura desktop con Electron, sistemas frontend con Angular, flujos de almacenamiento seguro y automatizacion de builds." },
+        projects: { title: "Proyectos", copy: "Construcciones reales seleccionadas con intencion de producto, restricciones operativas y ownership tecnico." },
+        contact: { title: "Contacto", copy: "Conversaciones tecnicas directas y oportunidades de colaboracion." },
+        future: { title: "Futuros Builds", copy: "Modulos bloqueados reservados para sistemas proximos en desarrollo." },
+      },
+      status: {
+        online: "NUCLEO DEL SISTEMA ONLINE",
+        offline: "NUCLEO DEL SISTEMA APAGADO",
+        booting: "ARRANCANDO NUCLEO DEL SISTEMA",
+        loading: "CARGANDO NUCLEO DEL SISTEMA {progress}%",
+        syncing: "SINCRONIZANDO CAPA VISUAL DEL NUCLEO DEL SISTEMA",
+      },
     },
   },
 };
 
-const i18n = {
-  en: {
-    page: {
-      title: "Unax Zulaika | System Core",
-      description: "System Core interface for Unax Zulaika Fuente portfolio and KeyPing flagship.",
-    },
-    identity: { role: "Software Systems Engineer" },
-    startup: {
-      eyebrow: "SYSTEM CORE // OFFLINE",
-      title: "Manual startup required",
-      copy: "Initialize the core runtime and load module graph.",
-      cta: "Start System",
-    },
-    boot: {
-      eyebrow: "SYSTEM CORE // INIT",
-      lines: [
-        "[sys] initializing core context",
-        "[io] probing local environment",
-        "[sec] validating entropy source",
-        "[pkg] loading module map",
-        "[core] handshake complete",
-        "[core] system architecture online",
-      ],
-    },
-    nodes: {
-      keyping: { title: "KeyPing", meta: "Flagship" },
-      about: { title: "About", meta: "Identity" },
-      capabilities: { title: "Capabilities", meta: "Stack" },
-      projects: { title: "Projects", meta: "Builds" },
-      contact: { title: "Contact", meta: "Channel" },
-      future: { title: "Future Builds", meta: "Locked" },
-    },
-    copy: {
-      eyebrow: "SYSTEM ENTRY",
-      title: "Interactive architecture view built around a real product core.",
-      body: "This interface is not a static portfolio shell. It is a live system map where <strong>KeyPing</strong> acts as the primary operational node.",
-    },
-    dock: {
-      label: "Module",
-      defaultTitle: "Select a node",
-      defaultCopy: "Hover or tap any module to inspect system context.",
-    },
-    mobile: {
-      keyping: "KeyPing",
-      about: "About",
-      capabilities: "Capabilities",
-      projects: "Projects",
-      contact: "Contact",
-      future: "Future",
-    },
-    status: {
-      online: "SYSTEM CORE ONLINE",
-      offline: "SYSTEM CORE OFFLINE",
-      booting: "SYSTEM CORE BOOTING",
-      loading: "SYSTEM CORE LOADING {progress}%",
-      syncing: "SYSTEM CORE SYNCING VISUAL LAYER",
-    },
-  },
-  es: {
-    page: {
-      title: "Unax Zulaika | Nucleo del Sistema",
-      description: "Interfaz de Nucleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing.",
-    },
-    identity: { role: "Ingeniero de Sistemas de Software" },
-    startup: {
-      eyebrow: "NUCLEO DEL SISTEMA // APAGADO",
-      title: "Arranque manual requerido",
-      copy: "Inicializa el runtime del core y carga el grafo de modulos.",
-      cta: "Iniciar Sistema",
-    },
-    boot: {
-      eyebrow: "NUCLEO DEL SISTEMA // INICIO",
-      lines: [
-        "[sys] inicializando contexto del core",
-        "[io] sondeando entorno local",
-        "[sec] validando fuente de entropia",
-        "[pkg] cargando mapa de modulos",
-        "[core] handshake completado",
-        "[core] arquitectura del sistema online",
-      ],
-    },
-    nodes: {
-      keyping: { title: "KeyPing", meta: "Principal" },
-      about: { title: "Sobre mi", meta: "Identidad" },
-      capabilities: { title: "Capacidades", meta: "Stack" },
-      projects: { title: "Proyectos", meta: "Builds" },
-      contact: { title: "Contacto", meta: "Canal" },
-      future: { title: "Futuros Builds", meta: "Bloqueado" },
-    },
-    copy: {
-      eyebrow: "ENTRADA DEL SISTEMA",
-      title: "Vista de arquitectura interactiva construida alrededor de un core de producto real.",
-      body: "Esta interfaz no es una portada estatica. Es un mapa de sistema vivo donde <strong>KeyPing</strong> actua como nodo operativo principal.",
-    },
-    dock: {
-      label: "Modulo",
-      defaultTitle: "Selecciona un nodo",
-      defaultCopy: "Pasa el raton o toca cualquier modulo para inspeccionar su contexto.",
-    },
-    mobile: {
-      keyping: "KeyPing",
-      about: "Sobre mi",
-      capabilities: "Capacidades",
-      projects: "Proyectos",
-      contact: "Contacto",
-      future: "Futuro",
-    },
-    status: {
-      online: "NUCLEO DEL SISTEMA ONLINE",
-      offline: "NUCLEO DEL SISTEMA APAGADO",
-      booting: "ARRANCANDO NUCLEO DEL SISTEMA",
-      loading: "CARGANDO NUCLEO DEL SISTEMA {progress}%",
-      syncing: "SINCRONIZANDO CAPA VISUAL DEL NUCLEO DEL SISTEMA",
-    },
-  },
+const desktopNodes = [...document.querySelectorAll(".module-node")];
+const moduleTriggers = [...document.querySelectorAll(".module-trigger")];
+const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
+const localeCache = {
+  en: null,
+  es: null,
 };
 
 const nodePositions = {
@@ -363,10 +332,39 @@ function textByPath(obj, path) {
   return path.split(".").reduce((acc, key) => (acc && acc[key] != null ? acc[key] : null), obj);
 }
 
+async function loadLocale(lang) {
+  const normalized = lang === "es" ? "es" : "en";
+  if (localeCache[normalized]) {
+    return localeCache[normalized];
+  }
+
+  try {
+    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Failed to load locale file: ${normalized}`);
+    }
+    const data = await response.json();
+    localeCache[normalized] = data;
+    return data;
+  } catch {
+    localeCache[normalized] = FALLBACK_LOCALES[normalized];
+    return localeCache[normalized];
+  }
+}
+
+function getLocaleScope(lang) {
+  const active = localeCache[lang] && localeCache[lang].systemCore ? localeCache[lang].systemCore : null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].systemCore ? localeCache[DEFAULT_LANG].systemCore : null;
+  return { active, fallback };
+}
+
+function localizedValue(path) {
+  const { active, fallback } = getLocaleScope(state.lang);
+  return textByPath(active, path) ?? textByPath(fallback, path) ?? null;
+}
+
 function t(path, params = {}) {
-  const active = i18n[state.lang] || i18n.en;
-  const fallback = i18n.en;
-  const raw = textByPath(active, path) ?? textByPath(fallback, path);
+  const raw = localizedValue(path);
   if (typeof raw !== "string") {
     return "";
   }
@@ -419,8 +417,12 @@ function refreshCoreStatus() {
   setCoreStatus(state.statusKey);
 }
 
-function setLanguage(nextLang, persist = true) {
+async function setLanguage(nextLang, persist = true) {
   const normalized = nextLang === "es" ? "es" : "en";
+  await loadLocale(normalized);
+  if (normalized !== DEFAULT_LANG && !localeCache[DEFAULT_LANG]) {
+    await loadLocale(DEFAULT_LANG);
+  }
   state.lang = normalized;
   applyStaticTranslations();
   refreshLangButtons();
@@ -438,12 +440,16 @@ function setLanguage(nextLang, persist = true) {
 
 function setupLanguageSwitch() {
   langSwitchButtons.forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       const nextLang = button.getAttribute("data-lang-switch");
       if (!nextLang || nextLang === state.lang) {
         return;
       }
-      setLanguage(nextLang, true);
+      try {
+        await setLanguage(nextLang, true);
+      } catch (error) {
+        console.error("Could not switch language:", error);
+      }
     });
   });
 }
@@ -482,18 +488,21 @@ async function runBootSequence() {
   body.classList.add("boot-loading");
   setCoreStatus("status.booting");
 
-  const bootLines = textByPath(i18n[state.lang] || i18n.en, "boot.lines") || textByPath(i18n.en, "boot.lines") || [];
+  const bootLines = localizedValue("boot.lines");
+  const lines = Array.isArray(bootLines) && bootLines.length
+    ? bootLines
+    : FALLBACK_LOCALES[state.lang].systemCore.boot.lines;
 
-  for (let i = 0; i < bootLines.length; i += 1) {
+  for (let i = 0; i < lines.length; i += 1) {
     const line = document.createElement("li");
-    line.textContent = bootLines[i];
+    line.textContent = lines[i];
     bootLog.appendChild(line);
 
     if (bootLog.children.length > 8) {
       bootLog.removeChild(bootLog.children[0]);
     }
 
-    const progress = Math.round(((i + 1) / bootLines.length) * 100);
+    const progress = Math.round(((i + 1) / lines.length) * 100);
     bootProgressFill.style.width = `${progress}%`;
     bootProgressText.textContent = `${progress}%`;
     setCoreStatus("status.loading", progress);
@@ -792,8 +801,7 @@ function beginReturnTransition() {
 function setActive(target) {
   const changed = state.active !== target;
   state.active = target;
-  const moduleSet = modulesByLang[state.lang] || modulesByLang.en;
-  const module = moduleSet[target];
+  const module = localizedValue(`modules.${target}`);
 
   if (module) {
     infoTitle.textContent = module.title;
@@ -1060,8 +1068,17 @@ updateStageSize();
 state.lang = getInitialLang();
 state.statusKey = returningFromKeyping ? "status.online" : "status.offline";
 setupLanguageSwitch();
-setLanguage(state.lang, true);
 requestAnimationFrame(tick);
+
+(async () => {
+  try {
+    await loadLocale(DEFAULT_LANG);
+    await setLanguage(state.lang, true);
+  } catch (error) {
+    console.error("Could not initialize locales from i18n JSON files:", error);
+    state.lang = DEFAULT_LANG;
+  }
+})();
 
 if (returningFromKeyping) {
   try {

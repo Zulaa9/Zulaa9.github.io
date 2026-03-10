@@ -1,4 +1,4 @@
-{
+﻿{
   "nav": {
     "home": "Home",
     "projects": "Projects",
@@ -6,95 +6,247 @@
     "contact": "Contact",
     "playground": "Playground"
   },
-  "ctaScroll": "Scroll to discover",
-  "hero": {
-    "title": "Hi, I'm Zula.",
-    "subtitle": "I build production-ready apps with Angular, .NET and Electron. Clean architecture, clear interfaces and software that simply works.",
-    "ctaProjects": "View projects",
-    "ctaGithub": "GitHub",
-    "ctaCv": "Download CV"
+  "header": {
+    "github": "GitHub"
   },
-  "whatIDo": {
-    "title": "What I do",
-    "lead": "I build real-world software with Angular, .NET and Electron, focusing on clarity, clean architecture and reliable integrations.",
-    "items": [
+  "hero": {
+    "kicker": "Full stack product engineering",
+    "title": "I build real software products.",
+    "subtitle": "End-to-end software: interfaces, backend systems and production delivery.",
+    "ctaPrimary": "See flagship project",
+    "ctaSecondary": "View selected work",
+    "signals": [
+      "End-to-end ownership",
+      "Architecture + UX + delivery",
+      "Security mindset by default"
+    ],
+    "proofKicker": "Execution proof",
+    "proofTitle": "Built with production constraints in mind",
+    "proofItems": [
+      "Desktop architecture with clear boundaries: renderer, preload and main process.",
+      "Security controls implemented in real product flows, not just listed in slides.",
+      "Distribution pipeline with releases, checksums and signed artifacts."
+    ],
+    "proofFoot": "Software meant to be used, audited and shipped with confidence."
+  },
+  "flagship": {
+    "kicker": "Flagship project",
+    "title": "KeyPing: a desktop security product built with real-world standards.",
+    "lead": "Offline-first credential hygiene app with local encrypted vault, strict process boundaries and a release workflow ready for production.",
+    "points": [
       {
-        "title": "Web Apps (Angular)",
-        "desc": "Modular components, advanced forms, state patterns, i18n, clean and accessible UI. Hands-on with panels, datatables, dashboards and enterprise interfaces."
+        "title": "Offline by design",
+        "desc": "No mandatory account, no cloud dependency, encrypted local vault."
       },
       {
-        "title": "APIs & Backends with .NET / C#",
-        "desc": "REST APIs with solid validation, Entity Framework, basic security, layered architecture and separated services. Integration with real SQL databases."
+        "title": "Security in depth",
+        "desc": "Master lock, autolock, guarded clipboard, brute-force cooldown and integrity checks."
       },
       {
-        "title": "Desktop Apps (Electron)",
-        "desc": "Angular + Electron, OS integration, media control, drag & drop, local persistence and production-ready deliveries."
-      },
-      {
-        "title": "Integrations & External Services",
-        "desc": "MQTT with devices (cameras, barriers, sensors), Redsys (3DES signing), Google APIs, SendGrid and third-party APIs in real environments."
-      },
-      {
-        "title": "Databases & Queries",
-        "desc": "SQL Server, PL/SQL, data models, migrations, optimized queries and data management for web and desktop."
-      },
-      {
-        "title": "DevOps & Workflow",
-        "desc": "Docker, test environments, version control, basic CI/CD, clean branches, clear PRs and collaborative best practices."
+        "title": "Shippable product",
+        "desc": "Auto-update flow, packaging, import/export robustness, checksums and release signing."
       }
-    ]
+    ],
+    "ctaPrimary": "Explore KeyPing",
+    "ctaSecondary": "View repository",
+    "visualTitle": "System architecture signal",
+    "visual": {
+      "renderer": "Renderer UI",
+      "bridge": "Preload bridge",
+      "core": "Main process + Vault",
+      "release": "Release pipeline"
+    }
   },
   "projects": {
-    "title": "Featured projects",
-    "lead": "Real solutions focused on use cases, not just technologies.",
-    "cards": [
+    "kicker": "Upcoming projects",
+    "title": "Next builds in queue.",
+    "more": "See full project list",
+    "items": [
       {
-        "title": "KeyPing",
-        "desc": "Password manager with pattern analysis and secure sync.",
-        "cta": "View project"
+        "type": "Future project",
+        "title": "Project 1",
+        "desc": "??????"
       },
       {
-        "title": "Saica Conductores",
-        "desc": "Enterprise panel for workforce management and compliance.",
-        "cta": "View project"
+        "type": "Future project",
+        "title": "Project 2",
+        "desc": "??????"
       },
       {
-        "title": "MQTT device app",
-        "desc": "Control and monitoring of barriers and cameras with real integrations.",
-        "cta": "View project"
-      },
-      {
-        "title": "Dual Media Player",
-        "desc": "Dual-track control, effects and intuitive drag & drop.",
-        "cta": "View project"
-      },
-      {
-        "title": "Additional project",
-        "desc": "Space to add more projects and experiments.",
-        "cta": "View project"
+        "type": "Future project",
+        "title": "Project 3",
+        "desc": "??????"
       }
     ]
   },
-  "workflow": {
-    "title": "How I work",
+  "capabilities": {
+    "kicker": "Engineering capabilities",
+    "title": "Range to cover the full product, depth where risk is highest.",
     "items": [
-      { "title": "Approach", "desc": "Understand the problem, clear architecture and fast iteration." },
-      { "title": "Code", "desc": "Maintainability, well-defined layers and consistent standards." },
-      { "title": "Collaboration", "desc": "Teamwork, code reviews and precise documentation." },
-      { "title": "Delivery", "desc": "Quick prototypes, short cycles and feedback-driven improvements." }
+      {
+        "title": "Product interfaces",
+        "desc": "Decision-heavy UI for operational contexts, not decorative screens."
+      },
+      {
+        "title": "Desktop applications",
+        "desc": "Permission-aware desktop systems with clear runtime boundaries."
+      },
+      {
+        "title": "Backend systems and integrations",
+        "desc": "Reliable business logic, contracts and third-party integration resilience."
+      },
+      {
+        "title": "Security, architecture and delivery",
+        "desc": "Risk-aware design, maintainable structure and disciplined release execution."
+      }
     ]
   },
-  "stack": {
-    "title": "Tech Stack",
-    "lead": "Technologies I use every day."
+  "mindset": {
+    "kicker": "How I think / how I build",
+    "title": "I optimize for software that still works when real usage starts.",
+    "items": [
+      "Think in constraints before choosing tools.",
+      "Design explicit boundaries between layers.",
+      "Validate with real usage, not ideal scenarios.",
+      "Ship with discipline, observability and iteration loops."
+    ]
   },
-  "aboutMini": {
-    "title": "About me",
-    "desc": "I’m Unax, a software developer from Bilbao. I work with Angular, .NET and Electron building production software and personal apps focused on utility and clarity. I like solving problems with clean architecture and delivering intuitive interfaces.",
-    "cta": "Learn more",
-    "collabTitle": "Want to collaborate on a project or hire me?",
-    "collabLead": "Let’s talk.",
-    "collabCta": "Contact"
+  "footprint": {
+    "kicker": "Compact tech footprint",
+    "title": "Tools are means, product outcomes are the goal."
   },
-  "footer": "© 2025 Zula. Portfolio."
+  "final": {
+    "kicker": "Final CTA",
+    "title": "If you need software that must work in production, let's talk.",
+    "desc": "I build end-to-end products with product judgment, technical rigor and delivery discipline.",
+    "ctaPrimary": "Start a conversation",
+    "ctaSecondary": "More about me"
+  },
+  "footer": "&copy; 2026 Zula. Portfolio.",
+  "systemCore": {
+    "page": {
+      "title": "Unax Zulaika | System Core",
+      "description": "System Core interface for Unax Zulaika Fuente portfolio and KeyPing flagship."
+    },
+    "identity": {
+      "role": "Software Systems Engineer"
+    },
+    "startup": {
+      "eyebrow": "SYSTEM CORE // OFFLINE",
+      "title": "Manual startup required",
+      "copy": "Initialize the core runtime and load module graph.",
+      "cta": "Start System"
+    },
+    "boot": {
+      "eyebrow": "SYSTEM CORE // INIT",
+      "lines": [
+        "[sys] initializing core context",
+        "[io] probing local environment",
+        "[sec] validating entropy source",
+        "[pkg] loading module map",
+        "[core] handshake complete",
+        "[core] system architecture online"
+      ]
+    },
+    "nodes": {
+      "keyping": { "title": "KeyPing", "meta": "Flagship" },
+      "about": { "title": "About", "meta": "Identity" },
+      "capabilities": { "title": "Capabilities", "meta": "Stack" },
+      "projects": { "title": "Projects", "meta": "Builds" },
+      "contact": { "title": "Contact", "meta": "Channel" },
+      "future": { "title": "Future Builds", "meta": "Locked" }
+    },
+    "copy": {
+      "eyebrow": "SYSTEM ENTRY",
+      "title": "Interactive architecture view built around a real product core.",
+      "body": "This interface is not a static portfolio shell. It is a live system map where <strong>KeyPing</strong> acts as the primary operational node."
+    },
+    "dock": {
+      "label": "Module",
+      "defaultTitle": "Select a node",
+      "defaultCopy": "Hover or tap any module to inspect system context."
+    },
+    "mobile": {
+      "keyping": "KeyPing",
+      "about": "About",
+      "capabilities": "Capabilities",
+      "projects": "Projects",
+      "contact": "Contact",
+      "future": "Future"
+    },
+    "modules": {
+      "keyping": {
+        "title": "KeyPing",
+        "copy": "Primary module. Open dedicated product view."
+      },
+      "about": {
+        "title": "About",
+        "copy": "Engineer focused on practical software architecture, security boundaries and maintainable delivery."
+      },
+      "capabilities": {
+        "title": "Capabilities",
+        "copy": "Electron desktop architecture, Angular frontend systems, secure local storage flows and build automation."
+      },
+      "projects": {
+        "title": "Projects",
+        "copy": "Selected real builds with product intent, operational constraints and technical ownership."
+      },
+      "contact": {
+        "title": "Contact",
+        "copy": "Direct technical conversations and collaboration opportunities."
+      },
+      "future": {
+        "title": "Future Builds",
+        "copy": "Locked modules reserved for upcoming systems currently in development."
+      }
+    },
+    "status": {
+      "online": "SYSTEM CORE ONLINE",
+      "offline": "SYSTEM CORE OFFLINE",
+      "booting": "SYSTEM CORE BOOTING",
+      "loading": "SYSTEM CORE LOADING {progress}%",
+      "syncing": "SYSTEM CORE SYNCING VISUAL LAYER"
+    }
+  },
+  "keyping": {
+    "page": {
+      "title": "KeyPing | System Core",
+      "description": "KeyPing dedicated product view."
+    },
+    "identity": {
+      "role": "Software Systems Engineer"
+    },
+    "status": {
+      "online": "SYSTEM CORE ONLINE"
+    },
+    "back": "Back to Core",
+    "header": {
+      "eyebrow": "FLAGSHIP MODULE // KP-01",
+      "title": "KeyPing",
+      "tagline": "Desktop credential hygiene system engineered for local trust."
+    },
+    "health": {
+      "label": "Module Health",
+      "state": "Secure / Local / Active"
+    },
+    "cards": {
+      "boundary": {
+        "title": "Process Boundary Map",
+        "copy": "Renderer, preload and main process lanes are isolated and validated through typed IPC contracts."
+      },
+      "vault": {
+        "title": "Credential Vault Engine",
+        "copy": "Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies."
+      },
+      "runtime": {
+        "title": "Runtime Safeguards",
+        "copy": "Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy."
+      },
+      "release": {
+        "title": "Release Integrity Pipeline",
+        "copy": "Artifacts are distributed with checksums and signature verification to preserve trust from build to install."
+      }
+    }
+  }
 }
+
