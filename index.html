@@ -15,22 +15,6 @@
   <div class="bg-starfield bg-starfield--far" aria-hidden="true"></div>
   <div class="bg-starfield bg-starfield--near" aria-hidden="true"></div>
   <div class="meteor-layer" id="meteor-layer" aria-hidden="true"></div>
-  <section class="boot-sequence" id="boot-sequence" aria-label="Boot sequence">
-    <div class="boot-door boot-door--top" aria-hidden="true"></div>
-    <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
-    <div class="boot-terminal">
-      <p class="boot-terminal__eyebrow">SYSTEM CORE // INIT</p>
-      <div class="boot-terminal__screen">
-        <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
-        <div class="boot-progress">
-          <div class="boot-progress__bar">
-            <span id="boot-progress-fill"></span>
-          </div>
-          <span class="boot-progress__text" id="boot-progress-text">0%</span>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <main class="app" id="app">
     <section class="system-shell" id="system-shell" aria-label="System Core">
@@ -41,11 +25,37 @@
         </div>
         <div class="status-chip">
           <span class="status-dot" aria-hidden="true"></span>
-          <span class="status-text">SYSTEM CORE ONLINE</span>
+          <span class="status-text" id="core-status-text">SYSTEM CORE ONLINE</span>
         </div>
       </header>
 
       <div class="core-stage" id="core-stage">
+        <section class="startup-gate" id="startup-gate" aria-label="System startup gate">
+          <div class="startup-gate__panel">
+            <p class="eyebrow">SYSTEM CORE // OFFLINE</p>
+            <h2>Manual startup required</h2>
+            <p>Initialize the core runtime and load module graph.</p>
+            <button class="startup-gate__button" id="start-core-button" type="button">Start System</button>
+          </div>
+        </section>
+
+        <section class="boot-sequence" id="boot-sequence" aria-label="Boot sequence">
+          <div class="boot-door boot-door--top" aria-hidden="true"></div>
+          <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
+          <div class="boot-terminal">
+            <p class="boot-terminal__eyebrow">SYSTEM CORE // INIT</p>
+            <div class="boot-terminal__screen">
+              <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
+              <div class="boot-progress">
+                <div class="boot-progress__bar">
+                  <span id="boot-progress-fill"></span>
+                </div>
+                <span class="boot-progress__text" id="boot-progress-text">0%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <canvas id="core-canvas" aria-label="System Core visualization"></canvas>
         <svg id="node-links" class="node-links" aria-hidden="true"></svg>
 

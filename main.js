@@ -23,8 +23,9 @@ const bootSequence = document.getElementById("boot-sequence");
 const bootLog = document.getElementById("boot-log");
 const bootProgressFill = document.getElementById("boot-progress-fill");
 const bootProgressText = document.getElementById("boot-progress-text");
+const coreStatusText = document.getElementById("core-status-text");
+const startCoreButton = document.getElementById("start-core-button");
 const meteorLayer = document.getElementById("meteor-layer");
-const BOOT_SEEN_KEY = "system_core_boot_seen";
 const urlParams = new URLSearchParams(window.location.search);
 const returningFromKeyping = urlParams.get("from") === "keyping";
 
@@ -91,6 +92,8 @@ const state = {
   isReturnTransition: false,
   returnStartTime: 0,
   returnDurationMs: 760,
+  hasManualStart: false,
+  meteorLoopStarted: false,
 };
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -187,18 +190,33 @@ function randomRange(min, max) {
   return min + Math.random() * (max - min);
 }
 
+function setCoreStatus(text) {
+  if (coreStatusText) {
+    coreStatusText.textContent = text;
+  }
+}
+
 async function runBootSequence() {
   if (!bootSequence || !bootLog || !bootProgressFill || !bootProgressText) {
     return;
   }
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    starsMesh.visible = true;
     bootSequence.remove();
     body.classList.remove("booting");
     return;
   }
 
-  body.classList.add("booting");
+  body.classList.remove("awaiting-start", "core-offline");
+  body.classList.add("booting", "boot-offline");
+  starsMesh.visible = true;
+  runMeteorLoop();
+  setCoreStatus("SYSTEM CORE OFFLINE");
+  await sleep(220);
+  body.classList.remove("boot-offline");
+  body.classList.add("boot-loading");
+  setCoreStatus("SYSTEM CORE BOOTING");
 
   const bootLines = [
     "[sys] initializing core context",
@@ -221,6 +239,7 @@ async function runBootSequence() {
     const progress = Math.round(((i + 1) / bootLines.length) * 100);
     bootProgressFill.style.width = `${progress}%`;
     bootProgressText.textContent = `${progress}%`;
+    setCoreStatus(`SYSTEM CORE LOADING ${progress}%`);
     await sleep(180 + i * 24);
   }
 
@@ -229,7 +248,38 @@ async function runBootSequence() {
   await sleep(820);
 
   bootSequence.remove();
-  body.classList.remove("booting");
+  body.classList.remove("booting", "boot-offline", "boot-loading");
+  body.classList.add("core-syncing");
+  setCoreStatus("SYSTEM CORE SYNCING VISUAL LAYER");
+}
+
+function beginSystemStartup() {
+  if (state.hasManualStart) {
+    return;
+  }
+
+  state.hasManualStart = true;
+  body.classList.remove("awaiting-start", "core-offline");
+  if (startCoreButton) {
+    startCoreButton.disabled = true;
+    startCoreButton.setAttribute("aria-busy", "true");
+  }
+
+  runBootSequence().then(() => {
+    runIntro();
+  });
+}
+
+function enterAwaitingStart() {
+  body.classList.add("awaiting-start", "core-offline");
+  setCoreStatus("SYSTEM CORE OFFLINE");
+  starsMesh.visible = false;
+
+  if (startCoreButton) {
+    startCoreButton.disabled = false;
+    startCoreButton.removeAttribute("aria-busy");
+    startCoreButton.addEventListener("click", beginSystemStartup, { once: true });
+  }
 }
 
 function spawnMeteor() {
@@ -263,9 +313,10 @@ function spawnMeteor() {
 }
 
 function runMeteorLoop() {
-  if (!meteorLayer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (state.meteorLoopStarted || !meteorLayer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return;
   }
+  state.meteorLoopStarted = true;
 
   const schedule = () => {
     const waitMs = randomRange(3600, 9800);
@@ -414,6 +465,8 @@ function setIntroStep(step) {
     state.introComplete = true;
     body.classList.remove("intro-running");
     body.classList.add("intro-complete");
+    body.classList.remove("core-syncing");
+    setCoreStatus("SYSTEM CORE ONLINE");
   }
 }
 
@@ -448,11 +501,12 @@ function fastForwardToReadyState() {
   if (bootSequence) {
     bootSequence.remove();
   }
-  body.classList.remove("booting", "boot-unfold", "intro-running");
+  body.classList.remove("booting", "boot-offline", "boot-loading", "boot-unfold", "intro-running", "core-syncing", "core-offline", "awaiting-start");
   for (let step = 1; step <= 6; step += 1) {
     body.classList.add(`intro-step-${step}`);
   }
   body.classList.add("intro-complete");
+  setCoreStatus("SYSTEM CORE ONLINE");
 
   state.introStep = 6;
   state.introComplete = true;
@@ -476,22 +530,6 @@ function beginReturnTransition() {
   camera.position.set(0.25, -0.05, 2.55);
   coreGroup.scale.setScalar(1.35);
   body.classList.add("is-returning-from-keyping");
-}
-
-function hasSeenBootSequence() {
-  try {
-    return sessionStorage.getItem(BOOT_SEEN_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function markBootSequenceSeen() {
-  try {
-    sessionStorage.setItem(BOOT_SEEN_KEY, "1");
-  } catch {
-    // Ignore unavailable sessionStorage and allow replay.
-  }
 }
 
 function setActive(target) {
@@ -770,16 +808,10 @@ if (returningFromKeyping) {
   } catch {
     // Ignore history replace issues.
   }
-  markBootSequenceSeen();
+  starsMesh.visible = true;
+  runMeteorLoop();
   fastForwardToReadyState();
   beginReturnTransition();
-} else if (hasSeenBootSequence()) {
-  fastForwardToReadyState();
 } else {
-  markBootSequenceSeen();
-  runBootSequence().then(() => {
-    runIntro();
-  });
+  enterAwaitingStart();
 }
-
-runMeteorLoop();

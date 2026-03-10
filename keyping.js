@@ -1,6 +1,7 @@
 const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
+let isLeaving = false;
 
 function randomRange(min, max) {
   return min + Math.random() * (max - min);
@@ -64,13 +65,22 @@ document.addEventListener("pointermove", (event) => {
 });
 
 runMeteorLoop();
+window.requestAnimationFrame(() => {
+  body.classList.add("is-keyping-ready");
+});
 
 if (backToCoreLink) {
   backToCoreLink.addEventListener("click", (event) => {
+    if (isLeaving) {
+      event.preventDefault();
+      return;
+    }
+
     event.preventDefault();
+    isLeaving = true;
     body.classList.add("is-leaving-keyping");
     window.setTimeout(() => {
-      window.location.href = backToCoreLink.href;
-    }, 260);
+      window.location.assign(backToCoreLink.href);
+    }, 420);
   });
 }

@@ -32,33 +32,39 @@
       <div class="core-stage keyping-stage">
         <a href="index.html?from=keyping" class="back-button keyping-back" id="back-to-core-link">Back to Core</a>
 
-        <div class="keyping-header">
-          <div class="keyping-mark" aria-hidden="true"><span>K</span></div>
-          <div>
-            <p class="eyebrow">FLAGSHIP MODULE</p>
-            <h2>KeyPing</h2>
-            <p class="keyping-tagline">Desktop credential hygiene system engineered for local trust.</p>
+        <section class="keyping-module-shell" aria-label="KeyPing internals module">
+          <div class="keyping-header">
+            <div class="keyping-mark" aria-hidden="true"><span>K</span></div>
+            <div class="keyping-title">
+              <p class="eyebrow">FLAGSHIP MODULE // KP-01</p>
+              <h2>KeyPing</h2>
+              <p class="keyping-tagline">Desktop credential hygiene system engineered for local trust.</p>
+            </div>
+            <div class="keyping-health" aria-label="Module health">
+              <p class="keyping-health__label">Module Health</p>
+              <p class="keyping-health__state">Secure / Local / Active</p>
+            </div>
           </div>
-        </div>
 
-        <div class="keyping-grid">
-          <article class="keyping-card">
-            <h3>Architecture</h3>
-            <p>Electron + Angular runtime with strict renderer/preload/main process boundaries.</p>
-          </article>
-          <article class="keyping-card">
-            <h3>Security Core</h3>
-            <p>Local encrypted vault using AES-256-GCM + PBKDF2, autolock policy and secure clipboard controls.</p>
-          </article>
-          <article class="keyping-card">
-            <h3>Hardening</h3>
-            <p>Anti brute-force mechanisms, deterministic lock states and offline-first execution model.</p>
-          </article>
-          <article class="keyping-card">
-            <h3>Delivery</h3>
-            <p>Distribution pipeline with integrity checks, checksums and GPG signing for release trust.</p>
-          </article>
-        </div>
+          <div class="keyping-grid">
+            <article class="keyping-card">
+              <h3>Process Boundary Map</h3>
+              <p>Renderer, preload and main process lanes are isolated and validated through typed IPC contracts.</p>
+            </article>
+            <article class="keyping-card">
+              <h3>Credential Vault Engine</h3>
+              <p>Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies.</p>
+            </article>
+            <article class="keyping-card">
+              <h3>Runtime Safeguards</h3>
+              <p>Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy.</p>
+            </article>
+            <article class="keyping-card">
+              <h3>Release Integrity Pipeline</h3>
+              <p>Artifacts are distributed with checksums and signature verification to preserve trust from build to install.</p>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
   </main>
