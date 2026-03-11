@@ -215,6 +215,13 @@ body {
 }
 
 .projects-crumbs__sep { color: #79a9c6; }
+.projects-crumbs a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+.projects-crumbs a:hover,
+.projects-crumbs a:focus-visible { color: #e7f6ff; }
 
 .projects-scroll {
   flex: 1;
@@ -305,10 +312,14 @@ body {
 }
 
 .project-card__media--portfolio {
-  background:
+  background-image:
+    url("portfolio-core.png"),
     radial-gradient(circle at 80% 20%, rgba(54, 165, 211, 0.2), transparent 46%),
     radial-gradient(circle at 20% 70%, rgba(93, 139, 185, 0.16), transparent 54%),
     linear-gradient(160deg, rgba(8, 19, 30, 0.96), rgba(8, 14, 22, 0.88));
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: center center, 80% 20%, 20% 70%, center;
+  background-size: cover, auto, auto, auto;
 }
 
 .project-card__media--portfolio::before {
@@ -318,7 +329,7 @@ body {
   background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 28px 28px;
-  opacity: 0.34;
+  opacity: 0.2;
 }
 
 .project-card__media-label {
@@ -405,12 +416,14 @@ body {
 }
 
 body.is-leaving-projects .projects-shell {
+  transition-duration: 160ms;
   transform: translateY(-6px) scale(0.992);
   opacity: 0.9;
 }
 
 body.is-leaving-projects .projects-stage {
-  filter: blur(4px) saturate(1.08);
+  transition-duration: 160ms;
+  filter: saturate(1.04);
   opacity: 0.72;
   transform: scale(0.985) translateY(-10px);
 }

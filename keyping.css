@@ -365,6 +365,13 @@ body {
 .keyping-crumbs__sep {
   color: #79a9c6;
 }
+.keyping-crumbs a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+.keyping-crumbs a:hover,
+.keyping-crumbs a:focus-visible { color: #e7f6ff; }
 
 .keyping-back__icon {
   display: inline-flex;
@@ -410,7 +417,8 @@ body {
 }
 
 body.is-leaving-keyping .keyping-stage {
-  filter: blur(4px) saturate(1.08);
+  transition-duration: 160ms;
+  filter: saturate(1.04);
   opacity: 0.72;
   transform: scale(0.985) translateY(-10px);
 }
@@ -1103,10 +1111,12 @@ body.is-lightbox-open {
 
 body.is-leaving-keyping .keyping-section,
 body.is-leaving-keyping .keyping-pill {
+  transition-duration: 160ms;
   border-color: rgba(156, 190, 212, 0.24);
 }
 
 body.is-leaving-keyping .keyping-action {
+  transition-duration: 160ms;
   filter: saturate(0.86);
 }
 

@@ -246,6 +246,13 @@ body {
 }
 
 .about-crumbs__sep { color: #79a9c6; }
+.about-crumbs a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+.about-crumbs a:hover,
+.about-crumbs a:focus-visible { color: #e7f6ff; }
 
 .about-scroll {
   flex: 1;
@@ -441,12 +448,14 @@ body {
 }
 
 body.is-leaving-about .about-shell {
+  transition-duration: 160ms;
   transform: translateY(-6px) scale(0.992);
   opacity: 0.9;
 }
 
 body.is-leaving-about .about-stage {
-  filter: blur(4px) saturate(1.08);
+  transition-duration: 160ms;
+  filter: saturate(1.04);
   opacity: 0.72;
   transform: scale(0.985) translateY(-10px);
 }
