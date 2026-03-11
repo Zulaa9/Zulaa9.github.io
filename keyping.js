@@ -15,6 +15,7 @@ const lightboxClose = document.getElementById("keyping-lightbox-close");
 const lightboxCloseTargets = [...document.querySelectorAll("[data-lightbox-close]")];
 const lightboxFigure = document.querySelector(".keyping-lightbox__figure");
 const urlParams = new URLSearchParams(window.location.search);
+const entrySource = (urlParams.get("from") || "").toLowerCase();
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 const FALLBACK_LOCALES = {
@@ -488,7 +489,7 @@ function applyTranslations(lang) {
   });
 
   if (backToCoreLink) {
-    backToCoreLink.href = `index.html?from=keyping&lang=${lang}`;
+    backToCoreLink.href = resolveBackHref(lang);
   }
   if (lightboxPrev) {
     lightboxPrev.setAttribute("aria-label", t(lang, "lightbox.prev"));
@@ -722,6 +723,13 @@ function setupLightbox() {
 let currentLang = getInitialLang();
 setupLightbox();
 
+function resolveBackHref(lang) {
+  if (entrySource === "projects") {
+    return `projects.html?from=keyping&lang=${lang}`;
+  }
+  return `index.html?from=keyping&lang=${lang}`;
+}
+
 async function applyLanguage(nextLang, persist = true) {
   const normalized = nextLang === "es" ? "es" : "en";
   await loadLocale(normalized);
@@ -774,7 +782,7 @@ if (backToCoreLink) {
     isLeaving = true;
     body.classList.add("is-leaving-keyping");
     window.setTimeout(() => {
-      window.location.assign(`index.html?from=keyping&lang=${currentLang}`);
+      window.location.assign(resolveBackHref(currentLang));
     }, 420);
   });
 }

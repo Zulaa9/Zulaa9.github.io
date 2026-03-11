@@ -27,7 +27,7 @@ const coreStatusText = document.getElementById("core-status-text");
 const startCoreButton = document.getElementById("start-core-button");
 const meteorLayer = document.getElementById("meteor-layer");
 const urlParams = new URLSearchParams(window.location.search);
-const returningFromModule = ["keyping", "about", "contact"].includes((urlParams.get("from") || "").toLowerCase());
+const returningFromModule = ["keyping", "about", "contact", "projects"].includes((urlParams.get("from") || "").toLowerCase());
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 const FALLBACK_LOCALES = {
@@ -942,6 +942,21 @@ function activateContactView() {
   }, 780);
 }
 
+function activateProjectsView() {
+  if (state.isTransitioning) {
+    return;
+  }
+
+  state.isTransitioning = true;
+  state.transitionDir = 1;
+  state.transitionStart = performance.now();
+  body.classList.add("is-transitioning");
+
+  window.setTimeout(() => {
+    window.location.href = `projects.html?lang=${state.lang}`;
+  }, 780);
+}
+
 function onTrigger(target) {
   setActive(target);
 
@@ -952,6 +967,11 @@ function onTrigger(target) {
 
   if (target === "about") {
     activateAboutView();
+    return;
+  }
+
+  if (target === "projects") {
+    activateProjectsView();
     return;
   }
 
