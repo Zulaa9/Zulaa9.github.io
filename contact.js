@@ -1,6 +1,9 @@
 ﻿const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
+const contactCrumbCoreLink = document.getElementById("contact-crumb-core-link");
+const contactCrumbAboutLink = document.getElementById("contact-crumb-about-link");
+const contactCrumbSelfLink = document.getElementById("contact-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
@@ -66,6 +69,11 @@ function resolveBackHref(lang) {
   return `index.html?from=contact&lang=${lang}`;
 }
 
+function resolveContactSelfHref(lang) {
+  const from = entrySource || "core";
+  return `contact.html?lang=${lang}&from=${from}`;
+}
+
 function randomRange(min, max) {
   return min + Math.random() * (max - min);
 }
@@ -129,6 +137,9 @@ function applyTranslations(lang) {
   });
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
+  if (contactCrumbCoreLink) contactCrumbCoreLink.href = `index.html?from=contact&lang=${lang}`;
+  if (contactCrumbAboutLink) contactCrumbAboutLink.href = `about.html?lang=${lang}&from=contact`;
+  if (contactCrumbSelfLink) contactCrumbSelfLink.href = resolveContactSelfHref(lang);
 }
 
 async function applyLanguage(nextLang, persist = true) {
@@ -208,11 +219,17 @@ if (backToCoreLink) {
       return;
     }
     event.preventDefault();
+    const targetHref = resolveBackHref(currentLang);
+    const goesToCore = targetHref.startsWith("index.html");
+    if (!goesToCore) {
+      window.location.assign(targetHref);
+      return;
+    }
     isLeaving = true;
     body.classList.add("is-leaving-contact");
     window.setTimeout(() => {
-      window.location.assign(resolveBackHref(currentLang));
-    }, 420);
+      window.location.assign(targetHref);
+    }, 140);
   });
 }
 
@@ -229,3 +246,4 @@ window.requestAnimationFrame(() => body.classList.add("is-contact-ready"));
     currentLang = DEFAULT_LANG;
   }
 })();
+

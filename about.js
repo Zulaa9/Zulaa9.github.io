@@ -1,10 +1,13 @@
-const body = document.body;
+﻿const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
 const contactModuleLink = document.getElementById("contact-module-link");
+const aboutCrumbCoreLink = document.getElementById("about-crumb-core-link");
+const aboutCrumbSelfLink = document.getElementById("about-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
+const entrySource = (urlParams.get("from") || "").toLowerCase();
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 
@@ -29,12 +32,12 @@ const FALLBACK_LOCALES = {
       },
       experience: {
         title: "Experience",
-        role: "Integra Tecnología — Software Developer",
-        date: "2024 — Present",
+        role: "Integra TecnologÃ­a â€” Software Developer",
+        date: "2024 â€” Present",
         copy: "Working mainly with Angular and .NET on enterprise software systems, contributing to application development, system integration and internal tools.",
         current: {
           label: "Current position",
-          value: "Software Developer @ Integra Tecnología · Stack: Angular / .NET",
+          value: "Software Developer @ Integra TecnologÃ­a Â· Stack: Angular / .NET",
         },
       },
       focus: {
@@ -78,12 +81,12 @@ const FALLBACK_LOCALES = {
       },
       experience: {
         title: "Experiencia",
-        role: "Integra Tecnologia — Software Developer",
-        date: "2024 — Actualidad",
+        role: "Integra Tecnologia â€” Software Developer",
+        date: "2024 â€” Actualidad",
         copy: "Trabajo principalmente con Angular y .NET en sistemas enterprise, contribuyendo a desarrollo de aplicaciones, integracion de sistemas y herramientas internas.",
         current: {
           label: "Posicion actual",
-          value: "Software Developer @ Integra Tecnologia · Stack: Angular / .NET",
+          value: "Software Developer @ Integra Tecnologia Â· Stack: Angular / .NET",
         },
       },
       focus: {
@@ -112,6 +115,13 @@ const FALLBACK_LOCALES = {
 const localeCache = { en: null, es: null };
 let currentLang = "en";
 let isLeaving = false;
+
+function resolveBackHref(lang) {
+  if (entrySource === "contact") {
+    return `contact.html?lang=${lang}&from=about`;
+  }
+  return `index.html?from=about&lang=${lang}`;
+}
 
 function randomRange(min, max) {
   return min + Math.random() * (max - min);
@@ -193,7 +203,9 @@ function applyTranslations(lang) {
     button.setAttribute("aria-pressed", active ? "true" : "false");
   });
 
-  if (backToCoreLink) backToCoreLink.href = `index.html?from=about&lang=${lang}`;
+  if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
+  if (aboutCrumbCoreLink) aboutCrumbCoreLink.href = `index.html?from=about&lang=${lang}`;
+  if (aboutCrumbSelfLink) aboutCrumbSelfLink.href = `about.html?lang=${lang}&from=${entrySource || "core"}`;
   if (contactModuleLink) contactModuleLink.href = `contact.html?lang=${lang}&from=about`;
 }
 
@@ -274,11 +286,17 @@ if (backToCoreLink) {
       return;
     }
     event.preventDefault();
+    const targetHref = resolveBackHref(currentLang);
+    const goesToCore = targetHref.startsWith("index.html");
+    if (!goesToCore) {
+      window.location.assign(targetHref);
+      return;
+    }
     isLeaving = true;
     body.classList.add("is-leaving-about");
     window.setTimeout(() => {
-      window.location.assign(`index.html?from=about&lang=${currentLang}`);
-    }, 420);
+      window.location.assign(targetHref);
+    }, 140);
   });
 }
 
@@ -295,3 +313,4 @@ window.requestAnimationFrame(() => body.classList.add("is-about-ready"));
     currentLang = DEFAULT_LANG;
   }
 })();
+

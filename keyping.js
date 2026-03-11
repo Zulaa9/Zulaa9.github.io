@@ -1,6 +1,9 @@
-const body = document.body;
+﻿const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
+const keypingCrumbCoreLink = document.getElementById("keyping-crumb-core-link");
+const keypingCrumbProjectsLink = document.getElementById("keyping-crumb-projects-link");
+const keypingCrumbSelfLink = document.getElementById("keyping-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const mediaFigures = [...document.querySelectorAll(".keyping-media")];
@@ -491,6 +494,9 @@ function applyTranslations(lang) {
   if (backToCoreLink) {
     backToCoreLink.href = resolveBackHref(lang);
   }
+  if (keypingCrumbCoreLink) keypingCrumbCoreLink.href = `index.html?from=keyping&lang=${lang}`;
+  if (keypingCrumbProjectsLink) keypingCrumbProjectsLink.href = `projects.html?from=keyping&lang=${lang}`;
+  if (keypingCrumbSelfLink) keypingCrumbSelfLink.href = resolveKeypingSelfHref(lang);
   if (lightboxPrev) {
     lightboxPrev.setAttribute("aria-label", t(lang, "lightbox.prev"));
   }
@@ -730,6 +736,11 @@ function resolveBackHref(lang) {
   return `index.html?from=keyping&lang=${lang}`;
 }
 
+function resolveKeypingSelfHref(lang) {
+  const from = entrySource || "core";
+  return `keyping.html?lang=${lang}&from=${from}`;
+}
+
 async function applyLanguage(nextLang, persist = true) {
   const normalized = nextLang === "es" ? "es" : "en";
   await loadLocale(normalized);
@@ -779,10 +790,21 @@ if (backToCoreLink) {
     }
 
     event.preventDefault();
+    const targetHref = resolveBackHref(currentLang);
+    const goesToCore = targetHref.startsWith("index.html");
+    if (!goesToCore) {
+      window.location.assign(targetHref);
+      return;
+    }
     isLeaving = true;
     body.classList.add("is-leaving-keyping");
     window.setTimeout(() => {
-      window.location.assign(resolveBackHref(currentLang));
-    }, 420);
+      window.location.assign(targetHref);
+    }, 140);
   });
 }
+
+
+
+
+
