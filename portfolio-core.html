@@ -1,0 +1,99 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" id="page-description" content="Portfolio Core dedicated project view." />
+  <title id="page-title">Portfolio Core | System Core</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portfolio-core.css" />
+</head>
+<body class="portfolio-core-page">
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--far" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--near" aria-hidden="true"></div>
+  <div class="meteor-layer" id="meteor-layer" aria-hidden="true"></div>
+
+  <main class="app" id="app">
+    <section class="system-shell" aria-label="Portfolio Core module view">
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity__name">UNAX ZULAIKA FUENTE</span>
+          <span class="identity__role" data-i18n="identity.role">Software Systems Engineer</span>
+        </div>
+        <div class="topbar-controls">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-switch__btn" data-lang-switch="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-switch__btn" data-lang-switch="es" aria-pressed="false">ES</button>
+          </div>
+          <div class="status-chip">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-text" id="core-status-text">SYSTEM CORE ONLINE</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="core-stage portfolio-stage">
+        <nav class="portfolio-crumbbar" aria-label="Screen path">
+          <a href="index.html?from=portfolio" class="back-button portfolio-back" id="back-to-core-link" aria-label="Back">
+            <span class="portfolio-back__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M15 5L8 12L15 19" /></svg>
+            </span>
+          </a>
+          <p class="portfolio-crumbs">
+            <span class="portfolio-crumbs__sep" aria-hidden="true">/</span>
+            <a id="portfolio-crumb-core-link" href="index.html"><span data-i18n="crumb.core">Core</span></a>
+            <span class="portfolio-crumbs__sep" aria-hidden="true">/</span>
+            <a id="portfolio-crumb-projects-link" href="projects.html"><span data-i18n="crumb.projects">Projects</span></a>
+            <span class="portfolio-crumbs__sep" aria-hidden="true">/</span>
+            <span aria-current="page" data-i18n="crumb.portfolio">Portfolio Core</span>
+          </p>
+        </nav>
+
+        <div class="portfolio-scroll">
+          <section class="portfolio-shell" aria-label="Portfolio Core project content">
+            <header class="portfolio-header">
+              <p class="eyebrow" data-i18n="header.eyebrow">PROJECT MODULE // PC-01</p>
+              <h1 data-i18n="header.title">Portfolio Core</h1>
+              <p class="portfolio-lead" data-i18n="header.lead">Interactive system-style portfolio built as a real frontend product, not a static landing page.</p>
+            </header>
+
+            <section class="portfolio-section portfolio-section--hero">
+              <div class="portfolio-hero-media" role="img" aria-label="Portfolio Core logo preview"></div>
+              <div class="portfolio-hero-copy">
+                <h2 data-i18n="overview.title">What this project is</h2>
+                <p data-i18n="overview.lead">This exact website is the project itself. You are currently navigating Portfolio Core.</p>
+                <p data-i18n="overview.copy">It is built as an engineered interface: navigable module graph, dedicated views, transition choreography, language state and contextual routing composed as a system.</p>
+                <div class="portfolio-actions">
+                  <a class="portfolio-btn" href="https://github.com/Unax-Zulaika-Fuente/Unax-Zulaika-Fuente.github.io" target="_blank" rel="noopener noreferrer" data-i18n="actions.github">GitHub</a>
+                </div>
+              </div>
+            </section>
+
+            <section class="portfolio-section">
+              <h2 data-i18n="stack.title">Stack</h2>
+              <ul class="chip-list" data-i18n-list="stack.items"></ul>
+            </section>
+
+            <section class="portfolio-grid">
+              <article class="portfolio-section">
+                <h2 data-i18n="architecture.title">Architecture highlights</h2>
+                <ul class="text-list" data-i18n-list="architecture.items"></ul>
+              </article>
+
+              <article class="portfolio-section">
+                <h2 data-i18n="engineering.title">Engineering focus</h2>
+                <ul class="text-list" data-i18n-list="engineering.items"></ul>
+              </article>
+            </section>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="portfolio-core.js"></script>
+</body>
+</html>
