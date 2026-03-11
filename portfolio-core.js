@@ -1,11 +1,10 @@
 ﻿const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
-const projectsCrumbCoreLink = document.getElementById("projects-crumb-core-link");
-const projectsCrumbSelfLink = document.getElementById("projects-crumb-self-link");
+const portfolioCrumbCoreLink = document.getElementById("portfolio-crumb-core-link");
+const portfolioCrumbProjectsLink = document.getElementById("portfolio-crumb-projects-link");
+const portfolioCrumbSelfLink = document.getElementById("portfolio-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
-const keypingOpenBtn = document.getElementById("keyping-open-btn");
-const portfolioOpenBtn = document.getElementById("portfolio-open-btn");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
 const entrySource = (urlParams.get("from") || "").toLowerCase();
@@ -14,58 +13,78 @@ const DEFAULT_LANG = "en";
 
 const FALLBACK_LOCALES = {
   en: {
-    projects: {
-      page: { title: "Projects | System Core", description: "Project gallery for Unax Zulaika Fuente." },
+    portfolioCore: {
+      page: { title: "Portfolio Core | System Core", description: "Portfolio Core dedicated project view." },
       identity: { role: "Software Systems Engineer" },
       status: { online: "SYSTEM CORE ONLINE" },
-      crumb: { core: "Core", projects: "Projects" },
+      crumb: { core: "Core", projects: "Projects", portfolio: "Portfolio Core" },
       header: {
-        eyebrow: "PROJECTS",
-        title: "Projects",
-        lead: "Selected software products built with real architecture, constraints and delivery quality.",
+        eyebrow: "PROJECT MODULE // PC-01",
+        title: "Portfolio Core",
+        lead: "Interactive system-style portfolio built as a real frontend product, not a static landing page.",
       },
-      cards: {
-        actions: { enter: "Enter project", github: "GitHub" },
-        keyping: {
-          eyebrow: "FLAGSHIP PRODUCT",
-          title: "KeyPing",
-          desc: "Local-first password security desktop app focused on credential hygiene, encrypted vault workflows and practical hardening controls.",
-          stack: ["Electron", "Angular", "TypeScript", "Node.js", "SQLite", "GPG"],
-        },
-        portfolio: {
-          eyebrow: "SYSTEM INTERFACE",
-          title: "Portfolio Core",
-          desc: "Interactive portfolio built as a system concept with Three.js rendering, UI architecture, motion layers, state-driven navigation and module transitions.",
-          stack: ["Three.js", "JavaScript", "CSS", "UI Architecture", "State", "Animation"],
-        },
+      overview: {
+        title: "What this project is",
+        lead: "This exact website is the project itself. You are currently navigating Portfolio Core.",
+        copy: "It is built as an engineered interface: navigable module graph, dedicated views, transition choreography, language state and contextual routing composed as a system.",
+      },
+      actions: { github: "GitHub" },
+      stack: { title: "Stack", items: ["Three.js", "JavaScript", "CSS", "UI Architecture", "State", "Animation"] },
+      architecture: {
+        title: "Architecture highlights",
+        items: [
+          "Interactive Core graph with parent-child node relationships",
+          "Dedicated module pages with shared system visual language",
+          "Context-aware back navigation between modules",
+          "Language propagation through module links",
+        ],
+      },
+      engineering: {
+        title: "Engineering focus",
+        items: [
+          "Intentional motion and transition timing across views",
+          "Readable structure and reusable layout patterns",
+          "Separation of concerns per module (HTML/CSS/JS)",
+          "Consistent accessibility labels and keyboard-friendly controls",
+        ],
       },
     },
   },
   es: {
-    projects: {
-      page: { title: "Proyectos | Nucleo del Sistema", description: "Galeria de proyectos de Unax Zulaika Fuente." },
+    portfolioCore: {
+      page: { title: "Portfolio Core | Nucleo del Sistema", description: "Vista dedicada del proyecto Portfolio Core." },
       identity: { role: "Ingeniero de Sistemas de Software" },
       status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-      crumb: { core: "Core", projects: "Proyectos" },
+      crumb: { core: "Core", projects: "Proyectos", portfolio: "Portfolio Core" },
       header: {
-        eyebrow: "PROYECTOS",
-        title: "Proyectos",
-        lead: "Productos de software seleccionados, construidos con arquitectura real, restricciones y calidad de entrega.",
+        eyebrow: "MODULO DE PROYECTO // PC-01",
+        title: "Portfolio Core",
+        lead: "Portfolio interactivo con estilo de sistema, construido como producto frontend real y no como landing estatica.",
       },
-      cards: {
-        actions: { enter: "Entrar al proyecto", github: "GitHub" },
-        keyping: {
-          eyebrow: "PRODUCTO PRINCIPAL",
-          title: "KeyPing",
-          desc: "App desktop de seguridad de contrasenas local-first, centrada en higiene de credenciales, vault cifrado y controles practicos de hardening.",
-          stack: ["Electron", "Angular", "TypeScript", "Node.js", "SQLite", "GPG"],
-        },
-        portfolio: {
-          eyebrow: "INTERFAZ DE SISTEMA",
-          title: "Portfolio Core",
-          desc: "Portfolio interactivo construido como concepto de sistema con renderizado Three.js, arquitectura UI, capas de animacion, estado y transiciones entre modulos.",
-          stack: ["Three.js", "JavaScript", "CSS", "Arquitectura UI", "Estado", "Animacion"],
-        },
+      overview: {
+        title: "Que es este proyecto",
+        lead: "Esta web exacta es el propio proyecto. Ahora mismo estas navegando Portfolio Core.",
+        copy: "Esta construido como interfaz de ingenieria: grafo navegable de modulos, vistas dedicadas, coreografia de transiciones, estado de idioma y routing contextual compuesto como sistema.",
+      },
+      actions: { github: "GitHub" },
+      stack: { title: "Stack", items: ["Three.js", "JavaScript", "CSS", "Arquitectura UI", "Estado", "Animacion"] },
+      architecture: {
+        title: "Puntos de arquitectura",
+        items: [
+          "Grafo interactivo del Core con relaciones padre-hijo",
+          "Paginas de modulo dedicadas con lenguaje visual compartido",
+          "Navegacion de vuelta contextual entre modulos",
+          "Propagacion de idioma en los enlaces entre modulos",
+        ],
+      },
+      engineering: {
+        title: "Foco de ingenieria",
+        items: [
+          "Movimiento intencional y timing de transiciones entre vistas",
+          "Estructura legible y patrones de layout reutilizables",
+          "Separacion de responsabilidades por modulo (HTML/CSS/JS)",
+          "Etiquetas de accesibilidad consistentes y controles keyboard-friendly",
+        ],
       },
     },
   },
@@ -75,19 +94,7 @@ const localeCache = { en: null, es: null };
 let currentLang = "en";
 let isLeaving = false;
 
-function resolveBackHref(lang) {
-  if (entrySource === "keyping") {
-    return `keyping.html?lang=${lang}&from=projects`;
-  }
-  if (entrySource === "portfolio") {
-    return `portfolio-core.html?lang=${lang}&from=projects`;
-  }
-  return `index.html?from=projects&lang=${lang}`;
-}
-
-function randomRange(min, max) {
-  return min + Math.random() * (max - min);
-}
+function randomRange(min, max) { return min + Math.random() * (max - min); }
 
 function getInitialLang() {
   const queryLang = (urlParams.get("lang") || "").toLowerCase();
@@ -102,8 +109,18 @@ function getInitialLang() {
   return navLang.startsWith("es") ? "es" : "en";
 }
 
-function textByPath(obj, path) {
-  return path.split(".").reduce((acc, key) => (acc && acc[key] != null ? acc[key] : null), obj);
+function textByPath(obj, path) { return path.split(".").reduce((acc, key) => (acc && acc[key] != null ? acc[key] : null), obj); }
+
+function resolveBackHref(lang) {
+  if (entrySource === "projects") {
+    return `projects.html?from=portfolio&lang=${lang}`;
+  }
+  return `index.html?from=portfolio&lang=${lang}`;
+}
+
+function resolvePortfolioSelfHref(lang) {
+  const from = entrySource || "core";
+  return `portfolio-core.html?lang=${lang}&from=${from}`;
 }
 
 async function loadLocale(lang) {
@@ -122,16 +139,16 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
-  const active = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].projects ? FALLBACK_LOCALES[DEFAULT_LANG].projects : null;
+  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
+  const active = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
+  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore ? FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore : null;
   return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
-  const active = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].projects ? FALLBACK_LOCALES[DEFAULT_LANG].projects : null;
+  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
+  const active = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
+  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore ? FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore : null;
   return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? null;
 }
 
@@ -166,10 +183,9 @@ function applyTranslations(lang) {
   });
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
-  if (projectsCrumbCoreLink) projectsCrumbCoreLink.href = `index.html?from=projects&lang=${lang}`;
-  if (projectsCrumbSelfLink) projectsCrumbSelfLink.href = `projects.html?lang=${lang}&from=${entrySource || "core"}`;
-  if (keypingOpenBtn) keypingOpenBtn.href = `keyping.html?lang=${lang}&from=projects`;
-  if (portfolioOpenBtn) portfolioOpenBtn.href = `portfolio-core.html?lang=${lang}&from=projects`;
+  if (portfolioCrumbCoreLink) portfolioCrumbCoreLink.href = `index.html?from=portfolio&lang=${lang}`;
+  if (portfolioCrumbProjectsLink) portfolioCrumbProjectsLink.href = `projects.html?from=portfolio&lang=${lang}`;
+  if (portfolioCrumbSelfLink) portfolioCrumbSelfLink.href = resolvePortfolioSelfHref(lang);
 }
 
 async function applyLanguage(nextLang, persist = true) {
@@ -256,7 +272,7 @@ if (backToCoreLink) {
       return;
     }
     isLeaving = true;
-    body.classList.add("is-leaving-projects");
+    body.classList.add("is-leaving-portfolio");
     window.setTimeout(() => {
       window.location.assign(targetHref);
     }, 140);
@@ -264,7 +280,7 @@ if (backToCoreLink) {
 }
 
 runMeteorLoop();
-window.requestAnimationFrame(() => body.classList.add("is-projects-ready"));
+window.requestAnimationFrame(() => body.classList.add("is-portfolio-ready"));
 
 (async () => {
   currentLang = getInitialLang();
