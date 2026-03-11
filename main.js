@@ -27,7 +27,7 @@ const coreStatusText = document.getElementById("core-status-text");
 const startCoreButton = document.getElementById("start-core-button");
 const meteorLayer = document.getElementById("meteor-layer");
 const urlParams = new URLSearchParams(window.location.search);
-const returningFromModule = ["keyping", "about", "contact", "projects"].includes((urlParams.get("from") || "").toLowerCase());
+const returningFromModule = ["keyping", "about", "contact", "projects", "portfolio"].includes((urlParams.get("from") || "").toLowerCase());
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 const FALLBACK_LOCALES = {
@@ -61,7 +61,7 @@ const FALLBACK_LOCALES = {
         capabilities: { title: "Capabilities", meta: "Stack" },
         projects: { title: "Projects", meta: "Builds" },
         contact: { title: "Contact", meta: "Channel" },
-        future: { title: "Future Builds", meta: "Locked" },
+        portfolio: { title: "Portfolio Core", meta: "Project" },
       },
       copy: {
         eyebrow: "SYSTEM ENTRY",
@@ -79,7 +79,7 @@ const FALLBACK_LOCALES = {
         capabilities: "Capabilities",
         projects: "Projects",
         contact: "Contact",
-        future: "Future",
+        portfolio: "Portfolio",
       },
       modules: {
         keyping: { title: "KeyPing", copy: "Primary module. Open dedicated product view." },
@@ -87,7 +87,7 @@ const FALLBACK_LOCALES = {
         capabilities: { title: "Capabilities", copy: "Electron desktop architecture, Angular frontend systems, secure local storage flows and build automation." },
         projects: { title: "Projects", copy: "Selected real builds with product intent, operational constraints and technical ownership." },
         contact: { title: "Contact", copy: "Direct technical conversations and collaboration opportunities." },
-        future: { title: "Future Builds", copy: "Locked modules reserved for upcoming systems currently in development." },
+        portfolio: { title: "Portfolio Core", copy: "Dedicated module for this portfolio project: UI architecture, stateful navigation and engineered frontend systems." },
       },
       status: {
         online: "SYSTEM CORE ONLINE",
@@ -128,7 +128,7 @@ const FALLBACK_LOCALES = {
         capabilities: { title: "Capacidades", meta: "Stack" },
         projects: { title: "Proyectos", meta: "Builds" },
         contact: { title: "Contacto", meta: "Canal" },
-        future: { title: "Futuros Builds", meta: "Bloqueado" },
+        portfolio: { title: "Portfolio Core", meta: "Proyecto" },
       },
       copy: {
         eyebrow: "ENTRADA DEL SISTEMA",
@@ -146,7 +146,7 @@ const FALLBACK_LOCALES = {
         capabilities: "Capacidades",
         projects: "Proyectos",
         contact: "Contacto",
-        future: "Futuro",
+        portfolio: "Portfolio",
       },
       modules: {
         keyping: { title: "KeyPing", copy: "Modulo principal. Abre la vista dedicada del producto." },
@@ -154,7 +154,7 @@ const FALLBACK_LOCALES = {
         capabilities: { title: "Capacidades", copy: "Arquitectura desktop con Electron, sistemas frontend con Angular, flujos de almacenamiento seguro y automatizacion de builds." },
         projects: { title: "Proyectos", copy: "Construcciones reales seleccionadas con intencion de producto, restricciones operativas y ownership tecnico." },
         contact: { title: "Contacto", copy: "Conversaciones tecnicas directas y oportunidades de colaboracion." },
-        future: { title: "Futuros Builds", copy: "Modulos bloqueados reservados para sistemas proximos en desarrollo." },
+        portfolio: { title: "Portfolio Core", copy: "Modulo dedicado a este propio portfolio: arquitectura UI, navegacion con estado y capas de interaccion." },
       },
       status: {
         online: "NUCLEO DEL SISTEMA ONLINE",
@@ -181,14 +181,14 @@ const nodePositions = {
   contact: { x: 0.31, y: 0.64 },
   projects: { x: 0.78, y: 0.28 },
   keyping: { x: 0.74, y: 0.48 },
-  future: { x: 0.8, y: 0.66 },
+  portfolio: { x: 0.86, y: 0.66 },
 };
 
 const nodeParents = {
   capabilities: "about",
   contact: "about",
   keyping: "projects",
-  future: "projects",
+  portfolio: "projects",
 };
 
 const state = {
@@ -718,26 +718,15 @@ function updateLinks(animate = false) {
     const nx = rect.left - stageRect.left + rect.width / 2;
     const ny = rect.top - stageRect.top + rect.height / 2;
 
-    const startX =
-      node.dataset.target === "contact" && aboutCenter
-        ? aboutCenter.x
-        : node.dataset.target === "capabilities" && aboutCenter
-          ? aboutCenter.x
-        : node.dataset.target === "keyping" && projectsCenter
-          ? projectsCenter.x
-          : node.dataset.target === "future" && projectsCenter
-            ? projectsCenter.x
-          : cx;
-    const startY =
-      node.dataset.target === "contact" && aboutCenter
-        ? aboutCenter.y
-        : node.dataset.target === "capabilities" && aboutCenter
-          ? aboutCenter.y
-        : node.dataset.target === "keyping" && projectsCenter
-          ? projectsCenter.y
-          : node.dataset.target === "future" && projectsCenter
-            ? projectsCenter.y
-          : cy;
+    const parentTarget = nodeParents[node.dataset.target];
+    const parentCenter =
+      parentTarget === "about"
+        ? aboutCenter
+        : parentTarget === "projects"
+          ? projectsCenter
+          : null;
+    const startX = parentCenter ? parentCenter.x : cx;
+    const startY = parentCenter ? parentCenter.y : cy;
     line.setAttribute("x1", `${startX}`);
     line.setAttribute("y1", `${startY}`);
     line.setAttribute("x2", `${nx}`);
@@ -957,6 +946,21 @@ function activateProjectsView() {
   }, 780);
 }
 
+function activatePortfolioView() {
+  if (state.isTransitioning) {
+    return;
+  }
+
+  state.isTransitioning = true;
+  state.transitionDir = 1;
+  state.transitionStart = performance.now();
+  body.classList.add("is-transitioning");
+
+  window.setTimeout(() => {
+    window.location.href = `portfolio-core.html?lang=${state.lang}&from=core`;
+  }, 780);
+}
+
 function onTrigger(target) {
   setActive(target);
 
@@ -972,6 +976,11 @@ function onTrigger(target) {
 
   if (target === "projects") {
     activateProjectsView();
+    return;
+  }
+
+  if (target === "portfolio") {
+    activatePortfolioView();
     return;
   }
 
