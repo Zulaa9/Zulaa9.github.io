@@ -151,7 +151,7 @@
     "nodes": {
       "keyping": { "title": "KeyPing", "meta": "Flagship" },
       "about": { "title": "About", "meta": "Identity" },
-      "capabilities": { "title": "Capabilities", "meta": "Stack" },
+      "capabilities": { "title": "Capabilities", "meta": "Engineering" },
       "projects": { "title": "Projects", "meta": "Builds" },
       "contact": { "title": "Contact", "meta": "Channel" },
       "future": { "title": "Future Builds", "meta": "Locked" }
@@ -185,7 +185,7 @@
       },
       "capabilities": {
         "title": "Capabilities",
-        "copy": "Electron desktop architecture, Angular frontend systems, secure local storage flows and build automation."
+        "copy": "Engineering-level strengths across system architecture, product delivery, security design and cross-layer integration."
       },
       "projects": {
         "title": "Projects",

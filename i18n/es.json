@@ -151,7 +151,7 @@
     "nodes": {
       "keyping": { "title": "KeyPing", "meta": "Principal" },
       "about": { "title": "Sobre mi", "meta": "Identidad" },
-      "capabilities": { "title": "Capacidades", "meta": "Stack" },
+      "capabilities": { "title": "Capacidades", "meta": "Ingenieria" },
       "projects": { "title": "Proyectos", "meta": "Builds" },
       "contact": { "title": "Contacto", "meta": "Canal" },
       "future": { "title": "Futuros Builds", "meta": "Bloqueado" }
@@ -185,7 +185,7 @@
       },
       "capabilities": {
         "title": "Capacidades",
-        "copy": "Arquitectura desktop con Electron, sistemas frontend con Angular, flujos de almacenamiento seguro y automatizacion de builds."
+        "copy": "Fortalezas de ingenieria en arquitectura de sistemas, entrega de producto, diseno seguro e integracion entre capas."
       },
       "projects": {
         "title": "Proyectos",

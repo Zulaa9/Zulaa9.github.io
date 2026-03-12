@@ -27,7 +27,7 @@ const coreStatusText = document.getElementById("core-status-text");
 const startCoreButton = document.getElementById("start-core-button");
 const meteorLayer = document.getElementById("meteor-layer");
 const urlParams = new URLSearchParams(window.location.search);
-const returningFromModule = ["keyping", "about", "contact", "projects", "portfolio"].includes((urlParams.get("from") || "").toLowerCase());
+const returningFromModule = ["keyping", "about", "capabilities", "contact", "projects", "portfolio"].includes((urlParams.get("from") || "").toLowerCase());
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 const FALLBACK_LOCALES = {
@@ -58,7 +58,7 @@ const FALLBACK_LOCALES = {
       nodes: {
         keyping: { title: "KeyPing", meta: "Flagship" },
         about: { title: "About", meta: "Identity" },
-        capabilities: { title: "Capabilities", meta: "Stack" },
+        capabilities: { title: "Capabilities", meta: "Engineering" },
         projects: { title: "Projects", meta: "Builds" },
         contact: { title: "Contact", meta: "Channel" },
         portfolio: { title: "Portfolio Core", meta: "Project" },
@@ -84,7 +84,7 @@ const FALLBACK_LOCALES = {
       modules: {
         keyping: { title: "KeyPing", copy: "Primary module. Open dedicated product view." },
         about: { title: "About", copy: "Engineer focused on practical software architecture, security boundaries and maintainable delivery." },
-        capabilities: { title: "Capabilities", copy: "Electron desktop architecture, Angular frontend systems, secure local storage flows and build automation." },
+        capabilities: { title: "Capabilities", copy: "Engineering-level strengths across system architecture, product delivery, security design and cross-layer integration." },
         projects: { title: "Projects", copy: "Selected real builds with product intent, operational constraints and technical ownership." },
         contact: { title: "Contact", copy: "Direct technical conversations and collaboration opportunities." },
         portfolio: { title: "Portfolio Core", copy: "Dedicated module for this portfolio project: UI architecture, stateful navigation and engineered frontend systems." },
@@ -125,7 +125,7 @@ const FALLBACK_LOCALES = {
       nodes: {
         keyping: { title: "KeyPing", meta: "Principal" },
         about: { title: "Sobre mi", meta: "Identidad" },
-        capabilities: { title: "Capacidades", meta: "Stack" },
+        capabilities: { title: "Capacidades", meta: "Ingenieria" },
         projects: { title: "Proyectos", meta: "Builds" },
         contact: { title: "Contacto", meta: "Canal" },
         portfolio: { title: "Portfolio Core", meta: "Proyecto" },
@@ -151,7 +151,7 @@ const FALLBACK_LOCALES = {
       modules: {
         keyping: { title: "KeyPing", copy: "Modulo principal. Abre la vista dedicada del producto." },
         about: { title: "Sobre mi", copy: "Ingeniero centrado en arquitectura de software practica, limites de seguridad y entrega mantenible." },
-        capabilities: { title: "Capacidades", copy: "Arquitectura desktop con Electron, sistemas frontend con Angular, flujos de almacenamiento seguro y automatizacion de builds." },
+        capabilities: { title: "Capacidades", copy: "Fortalezas de ingenieria en arquitectura de sistemas, entrega de producto, diseno seguro e integracion entre capas." },
         projects: { title: "Proyectos", copy: "Construcciones reales seleccionadas con intencion de producto, restricciones operativas y ownership tecnico." },
         contact: { title: "Contacto", copy: "Conversaciones tecnicas directas y oportunidades de colaboracion." },
         portfolio: { title: "Portfolio Core", copy: "Modulo dedicado a este propio portfolio: arquitectura UI, navegacion con estado y capas de interaccion." },
@@ -916,6 +916,21 @@ function activateAboutView() {
   }, 780);
 }
 
+function activateCapabilitiesView() {
+  if (state.isTransitioning) {
+    return;
+  }
+
+  state.isTransitioning = true;
+  state.transitionDir = 1;
+  state.transitionStart = performance.now();
+  body.classList.add("is-transitioning");
+
+  window.setTimeout(() => {
+    window.location.href = `capabilities.html?lang=${state.lang}&from=core`;
+  }, 780);
+}
+
 function activateContactView() {
   if (state.isTransitioning) {
     return;
@@ -971,6 +986,11 @@ function onTrigger(target) {
 
   if (target === "about") {
     activateAboutView();
+    return;
+  }
+
+  if (target === "capabilities") {
+    activateCapabilitiesView();
     return;
   }
 
