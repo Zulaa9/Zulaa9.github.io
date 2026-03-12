@@ -3,7 +3,6 @@ const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
 const keypingCrumbCoreLink = document.getElementById("keyping-crumb-core-link");
 const keypingCrumbProjectsLink = document.getElementById("keyping-crumb-projects-link");
-const keypingCrumbSelfLink = document.getElementById("keyping-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const mediaFigures = [...document.querySelectorAll(".keyping-media")];
@@ -218,28 +217,28 @@ const FALLBACK_LOCALES = {
       header: {
         eyebrow: "MODULO PRINCIPAL // KP-01",
         title: "KeyPing",
-        tagline: "Sistema local-first de seguridad de contrasenas.",
-        punchline: "Detecta credenciales debiles, refuerza la higiene y manten tu vault totalmente offline.",
+        tagline: "Sistema local de seguridad de contrasenas.",
+        punchline: "Detecta credenciales debiles, refuerza la higiene y manten tu boveda totalmente offline.",
       },
       health: {
         label: "Salud del Modulo",
         state: "Desarrollo activo / Core estable / Uso diario",
       },
       pills: {
-        privacy: "Privacy-first",
+        privacy: "Privacidad primero",
         offline: "Totalmente offline",
         local: "Boveda local cifrada",
         cross: "Windows / Linux / macOS",
       },
       overview: {
         title: "Que es KeyPing",
-        lead: "KeyPing es un gestor de contrasenas de escritorio centrado en higiene de credenciales: detecta contrasenas debiles, reutilizadas y riesgosas manteniendo todos los datos en local y offline.",
-        copy: "No es una demo conceptual. Es un producto en desarrollo activo, con funcionalidades core estables, disciplina de release tipo produccion y controles de seguridad pensados para uso real.",
+        lead: "KeyPing es un gestor de contrasenas de escritorio centrado en higiene de credenciales: detecta contrasenas debiles, reutilizadas y de riesgo manteniendo todos los datos en local y offline.",
+        copy: "No es una demo conceptual. Es un producto en desarrollo activo, con funcionalidades core estables, disciplina de versionado de nivel de produccion y controles de seguridad pensados para uso real.",
       },
       why: {
         title: "Por que construi KeyPing",
         subtitle: "Por que existe este proyecto",
-        lead: "KeyPing nace para resolver problemas reales de contrasenas bajo presion real, no solo para guardar entradas en una boveda.",
+        lead: "KeyPing nace para resolver problemas reales de contrasenas bajo presion, no solo para guardar entradas en una boveda.",
         cards: {
           reuse: {
             title: "Reutilizacion de contrasenas",
@@ -251,7 +250,7 @@ const FALLBACK_LOCALES = {
           },
           cloud: {
             title: "Dependencia cloud",
-            copy: "Muchos gestores exigen confianza en la nube por defecto. KeyPing esta pensado para control local-first.",
+            copy: "Muchos gestores exigen confianza en la nube por defecto. KeyPing esta pensado para control local.",
           },
           privacy: {
             title: "Privacidad bajo estres",
@@ -265,7 +264,7 @@ const FALLBACK_LOCALES = {
       },
       metrics: {
         title: "Prueba de Ingenieria",
-        subtitle: "Senales reales de construccion",
+        subtitle: "Indicadores reales de construccion",
         items: [
           "15.5k+ lineas de codigo",
           "74 commits",
@@ -274,11 +273,11 @@ const FALLBACK_LOCALES = {
           "Boveda cifrada offline-first",
           "Releases firmadas (SHA256 + GPG)",
         ],
-        statement: "Construido como producto desktop real con limites de seguridad entre renderer, preload y main process.",
+        statement: "Construido como producto de escritorio real con limites de seguridad entre renderer, preload y proceso principal.",
       },
       actions: {
         downloadEyebrow: "Consigue KeyPing",
-        download: "Descargar Ultima Release",
+        download: "Descargar ultima version",
         githubEyebrow: "Codigo Fuente",
         github: "Abrir en GitHub",
       },
@@ -341,22 +340,22 @@ const FALLBACK_LOCALES = {
           },
           vault: {
             label: "Boveda",
-            value: "Archivo local cifrado gestionado por el main process de Electron",
+            value: "Archivo local cifrado gestionado por el proceso principal de Electron",
           },
         },
         flow: [
           "La UI solicita operaciones a traves del IPC del preload",
-          "El proceso principal valida y ejecuta operaciones seguras",
+          "El proceso principal valida y ejecuta operaciones de forma segura",
           "El modulo de boveda cifra/descifra almacenamiento local",
           "La UI recibe metadatos saneados y estado de operacion",
         ],
       },
       integrity: {
-        title: "Integridad de releases",
-        copy: "Cada release incluye checksums y archivos de firma detached.",
+        title: "Integridad de las publicaciones",
+        copy: "Cada publicacion incluye checksums y archivos de firma separados.",
         files: [
           "SHA256SUMS.txt",
-          "SHA256SUMS.txt.asc (firma GPG detached en formato ASCII-armored)",
+          "SHA256SUMS.txt.asc (firma GPG separada en formato ASCII-armored)",
         ],
         fingerprintLabel: "Fingerprint de la clave de firma",
         verifySig: "Verificar firma:",
@@ -365,7 +364,7 @@ const FALLBACK_LOCALES = {
       roadmap: {
         title: "Roadmap",
         items: [
-          "Integraciones opcionales de breach-check con enfoque de privacidad",
+          "Integraciones opcionales de comprobacion de filtraciones con enfoque de privacidad",
           "Mayor cobertura de tests automaticos en IPC y boveda",
           "Mejor UX para resolucion de conflictos de importacion",
           "Pipeline de firma y notarizacion en macOS",
@@ -437,17 +436,17 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].keyping ? FALLBACK_LOCALES[lang].keyping : null;
-  const active = localeCache[lang] && localeCache[lang].keyping ? localeCache[lang].keyping : null;
+  const preferred = localeCache[lang] && localeCache[lang].keyping ? localeCache[lang].keyping : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].keyping ? FALLBACK_LOCALES[lang].keyping : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].keyping ? FALLBACK_LOCALES[DEFAULT_LANG].keyping : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? "";
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].keyping ? FALLBACK_LOCALES[lang].keyping : null;
-  const active = localeCache[lang] && localeCache[lang].keyping ? localeCache[lang].keyping : null;
+  const preferred = localeCache[lang] && localeCache[lang].keyping ? localeCache[lang].keyping : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].keyping ? FALLBACK_LOCALES[lang].keyping : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].keyping ? FALLBACK_LOCALES[DEFAULT_LANG].keyping : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? null;
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {
@@ -496,7 +495,6 @@ function applyTranslations(lang) {
   }
   if (keypingCrumbCoreLink) keypingCrumbCoreLink.href = `index.html?from=keyping&lang=${lang}`;
   if (keypingCrumbProjectsLink) keypingCrumbProjectsLink.href = `projects.html?from=keyping&lang=${lang}`;
-  if (keypingCrumbSelfLink) keypingCrumbSelfLink.href = resolveKeypingSelfHref(lang);
   if (lightboxPrev) {
     lightboxPrev.setAttribute("aria-label", t(lang, "lightbox.prev"));
   }
@@ -734,11 +732,6 @@ function resolveBackHref(lang) {
     return `projects.html?from=keyping&lang=${lang}`;
   }
   return `index.html?from=keyping&lang=${lang}`;
-}
-
-function resolveKeypingSelfHref(lang) {
-  const from = entrySource || "core";
-  return `keyping.html?lang=${lang}&from=${from}`;
 }
 
 async function applyLanguage(nextLang, persist = true) {
