@@ -149,12 +149,12 @@
       ]
     },
     "nodes": {
-      "keyping": { "title": "KeyPing", "meta": "Flagship" },
+      "keyping": { "title": "KeyPing", "meta": "Flagship Product" },
       "about": { "title": "About", "meta": "Identity" },
       "capabilities": { "title": "Capabilities", "meta": "Engineering" },
-      "projects": { "title": "Projects", "meta": "Builds" },
+      "projects": { "title": "Projects", "meta": "Projects" },
       "contact": { "title": "Contact", "meta": "Channel" },
-      "future": { "title": "Future Builds", "meta": "Locked" }
+      "portfolio": { "title": "Portfolio Core", "meta": "Project" }
     },
     "copy": {
       "eyebrow": "SYSTEM ENTRY",
@@ -172,12 +172,12 @@
       "capabilities": "Capabilities",
       "projects": "Projects",
       "contact": "Contact",
-      "future": "Future"
+      "portfolio": "Portfolio Core"
     },
     "modules": {
       "keyping": {
         "title": "KeyPing",
-        "copy": "Primary module. Open dedicated product view."
+        "copy": "Flagship product module. Primary production version with security-focused desktop architecture."
       },
       "about": {
         "title": "About",
@@ -189,15 +189,15 @@
       },
       "projects": {
         "title": "Projects",
-        "copy": "Selected real builds with product intent, operational constraints and technical ownership."
+        "copy": "Project gallery centered on KeyPing as the primary product, with supporting system projects."
       },
       "contact": {
         "title": "Contact",
         "copy": "Direct technical conversations and collaboration opportunities."
       },
-      "future": {
-        "title": "Future Builds",
-        "copy": "Locked modules reserved for upcoming systems currently in development."
+      "portfolio": {
+        "title": "Portfolio Core",
+        "copy": "Supporting project module for this portfolio system: UI architecture, stateful navigation and engineered frontend systems."
       }
     },
     "status": {

@@ -56,10 +56,10 @@ const FALLBACK_LOCALES = {
         ],
       },
       nodes: {
-        keyping: { title: "KeyPing", meta: "Flagship" },
+        keyping: { title: "KeyPing", meta: "Flagship Product" },
         about: { title: "About", meta: "Identity" },
         capabilities: { title: "Capabilities", meta: "Engineering" },
-        projects: { title: "Projects", meta: "Builds" },
+        projects: { title: "Projects", meta: "Projects" },
         contact: { title: "Contact", meta: "Channel" },
         portfolio: { title: "Portfolio Core", meta: "Project" },
       },
@@ -79,15 +79,15 @@ const FALLBACK_LOCALES = {
         capabilities: "Capabilities",
         projects: "Projects",
         contact: "Contact",
-        portfolio: "Portfolio",
+        portfolio: "Portfolio Core",
       },
       modules: {
-        keyping: { title: "KeyPing", copy: "Primary module. Open dedicated product view." },
+        keyping: { title: "KeyPing", copy: "Flagship product module. Primary production version with security-focused desktop architecture." },
         about: { title: "About", copy: "Engineer focused on practical software architecture, security boundaries and maintainable delivery." },
         capabilities: { title: "Capabilities", copy: "Engineering-level strengths across system architecture, product delivery, security design and cross-layer integration." },
-        projects: { title: "Projects", copy: "Selected real builds with product intent, operational constraints and technical ownership." },
+        projects: { title: "Projects", copy: "Project gallery centered on KeyPing as the primary product build, with supporting system projects." },
         contact: { title: "Contact", copy: "Direct technical conversations and collaboration opportunities." },
-        portfolio: { title: "Portfolio Core", copy: "Dedicated module for this portfolio project: UI architecture, stateful navigation and engineered frontend systems." },
+        portfolio: { title: "Portfolio Core", copy: "Supporting project module for this portfolio system: UI architecture, stateful navigation and engineered frontend systems." },
       },
       status: {
         online: "SYSTEM CORE ONLINE",
@@ -123,17 +123,17 @@ const FALLBACK_LOCALES = {
         ],
       },
       nodes: {
-        keyping: { title: "KeyPing", meta: "Principal" },
+        keyping: { title: "KeyPing", meta: "Producto principal" },
         about: { title: "Sobre mi", meta: "Identidad" },
         capabilities: { title: "Capacidades", meta: "Ingenieria" },
-        projects: { title: "Proyectos", meta: "Builds" },
+        projects: { title: "Proyectos", meta: "Proyectos" },
         contact: { title: "Contacto", meta: "Canal" },
         portfolio: { title: "Portfolio Core", meta: "Proyecto" },
       },
       copy: {
         eyebrow: "ENTRADA DEL SISTEMA",
         title: "Portfolio de ingenieria de producto y sistemas construido como un core de software operativo.",
-        body: "Esto es un mapa de sistema de software ingenierizado, no una portada estatica. <strong>KeyPing</strong> es el nodo de producto flagship, respaldado por modulos de arquitectura, capacidades y ejecucion.",
+        body: "Esto es un mapa de sistema de software ingenierizado, no una portada estatica. <strong>KeyPing</strong> es el nodo de producto principal, respaldado por modulos de arquitectura, capacidades y ejecucion.",
       },
       dock: {
         label: "Modulo",
@@ -146,15 +146,15 @@ const FALLBACK_LOCALES = {
         capabilities: "Capacidades",
         projects: "Proyectos",
         contact: "Contacto",
-        portfolio: "Portfolio",
+        portfolio: "Portfolio Core",
       },
       modules: {
-        keyping: { title: "KeyPing", copy: "Modulo principal. Abre la vista dedicada del producto." },
+        keyping: { title: "KeyPing", copy: "Modulo principal del producto. Version de produccion con arquitectura de escritorio orientada a seguridad." },
         about: { title: "Sobre mi", copy: "Ingeniero centrado en arquitectura de software practica, limites de seguridad y entrega mantenible." },
         capabilities: { title: "Capacidades", copy: "Fortalezas de ingenieria en arquitectura de sistemas, entrega de producto, diseno seguro e integracion entre capas." },
-        projects: { title: "Proyectos", copy: "Construcciones reales seleccionadas con intencion de producto, restricciones operativas y ownership tecnico." },
+        projects: { title: "Proyectos", copy: "Galeria de proyectos centrada en KeyPing como producto principal, con proyectos de soporte." },
         contact: { title: "Contacto", copy: "Conversaciones tecnicas directas y oportunidades de colaboracion." },
-        portfolio: { title: "Portfolio Core", copy: "Modulo dedicado a este propio portfolio: arquitectura UI, navegacion con estado y capas de interaccion." },
+        portfolio: { title: "Portfolio Core", copy: "Modulo de soporte para este sistema de portfolio: arquitectura UI, navegacion con estado y capas de interaccion." },
       },
       status: {
         online: "NUCLEO DEL SISTEMA ONLINE",
@@ -897,7 +897,7 @@ function activateKeypingView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `keyping.html?lang=${state.lang}`;
+    window.location.href = `keyping.html?lang=${state.lang}&from=core`;
   }, 780);
 }
 
@@ -912,7 +912,7 @@ function activateAboutView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `about.html?lang=${state.lang}`;
+    window.location.href = `about.html?lang=${state.lang}&from=core`;
   }, 780);
 }
 
@@ -957,7 +957,7 @@ function activateProjectsView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `projects.html?lang=${state.lang}`;
+    window.location.href = `projects.html?lang=${state.lang}&from=core`;
   }, 780);
 }
 

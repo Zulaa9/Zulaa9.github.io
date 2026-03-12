@@ -149,17 +149,17 @@
       ]
     },
     "nodes": {
-      "keyping": { "title": "KeyPing", "meta": "Principal" },
+      "keyping": { "title": "KeyPing", "meta": "Producto principal" },
       "about": { "title": "Sobre mi", "meta": "Identidad" },
       "capabilities": { "title": "Capacidades", "meta": "Ingenieria" },
-      "projects": { "title": "Proyectos", "meta": "Builds" },
+      "projects": { "title": "Proyectos", "meta": "Proyectos" },
       "contact": { "title": "Contacto", "meta": "Canal" },
-      "future": { "title": "Futuros Builds", "meta": "Bloqueado" }
+      "portfolio": { "title": "Portfolio Core", "meta": "Proyecto" }
     },
     "copy": {
       "eyebrow": "ENTRADA DEL SISTEMA",
       "title": "Portfolio de ingenieria de producto y sistemas construido como un core de software operativo.",
-      "body": "Esto es un mapa de sistema de software ingenierizado, no una portada estatica. <strong>KeyPing</strong> es el nodo de producto flagship, respaldado por modulos de arquitectura, capacidades y ejecucion."
+      "body": "Esto es un mapa de sistema de software ingenierizado, no una portada estatica. <strong>KeyPing</strong> es el nodo de producto principal, respaldado por modulos de arquitectura, capacidades y ejecucion."
     },
     "dock": {
       "label": "Modulo",
@@ -172,12 +172,12 @@
       "capabilities": "Capacidades",
       "projects": "Proyectos",
       "contact": "Contacto",
-      "future": "Futuro"
+      "portfolio": "Portfolio Core"
     },
     "modules": {
       "keyping": {
         "title": "KeyPing",
-        "copy": "Modulo principal. Abre la vista dedicada del producto."
+        "copy": "Modulo principal del producto. Version de produccion con arquitectura de escritorio orientada a seguridad."
       },
       "about": {
         "title": "Sobre mi",
@@ -189,15 +189,15 @@
       },
       "projects": {
         "title": "Proyectos",
-        "copy": "Construcciones reales seleccionadas con intencion de producto, restricciones operativas y ownership tecnico."
+        "copy": "Galeria de proyectos centrada en KeyPing como producto principal, con proyectos de soporte."
       },
       "contact": {
         "title": "Contacto",
         "copy": "Conversaciones tecnicas directas y oportunidades de colaboracion."
       },
-      "future": {
-        "title": "Futuros Builds",
-        "copy": "Modulos bloqueados reservados para sistemas proximos en desarrollo."
+      "portfolio": {
+        "title": "Portfolio Core",
+        "copy": "Modulo de soporte para este sistema de portfolio: arquitectura UI, navegacion con estado y capas de interaccion."
       }
     },
     "status": {
@@ -223,7 +223,7 @@
     "header": {
       "eyebrow": "MODULO PRINCIPAL // KP-01",
       "title": "KeyPing",
-      "tagline": "Sistema desktop de higiene de credenciales disenado para confianza local."
+      "tagline": "Sistema de higiene de credenciales disenado para confianza local."
     },
     "health": {
       "label": "Salud del Modulo",
@@ -232,11 +232,11 @@
     "cards": {
       "boundary": {
         "title": "Mapa de Limites de Proceso",
-        "copy": "Los canales renderer, preload y main process estan aislados y validados mediante contratos IPC tipados."
+        "copy": "Los canales renderer, preload y proceso principal estan aislados y validados mediante contratos IPC tipados."
       },
       "vault": {
         "title": "Motor del Vault de Credenciales",
-        "copy": "Los registros locales del vault se cifran con AES-256-GCM + PBKDF2 y politicas deterministas de bloqueo y timeout."
+        "copy": "Los registros locales de la boveda se cifran con AES-256-GCM + PBKDF2 y politicas deterministas de bloqueo y tiempo de espera."
       },
       "runtime": {
         "title": "Salvaguardas de Runtime",
@@ -244,7 +244,7 @@
       },
       "release": {
         "title": "Pipeline de Integridad de Release",
-        "copy": "Los artefactos se distribuyen con checksums y verificacion de firma para preservar la confianza desde build hasta instalacion."
+        "copy": "Los artefactos se distribuyen con checksums y verificacion de firma para preservar la confianza desde la construccion hasta la instalacion."
       }
     }
   }
