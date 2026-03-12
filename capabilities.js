@@ -2,6 +2,7 @@ const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
 const capabilitiesCrumbCoreLink = document.getElementById("capabilities-crumb-core-link");
+const capabilitiesCrumbAboutLink = document.getElementById("capabilities-crumb-about-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
@@ -15,7 +16,7 @@ const FALLBACK_LOCALES = {
       page: { title: "Capabilities | System Core", description: "Engineering capabilities module for Unax Zulaika Fuente." },
       identity: { role: "Software Systems Engineer" },
       status: { online: "SYSTEM CORE ONLINE" },
-      crumb: { core: "Core", capabilities: "Capabilities" },
+      crumb: { core: "Core", about: "About", capabilities: "Capabilities" },
       header: {
         eyebrow: "CAPABILITIES",
         title: "Engineering capabilities",
@@ -97,7 +98,7 @@ const FALLBACK_LOCALES = {
       page: { title: "Capacidades | Nucleo del Sistema", description: "Modulo de capacidades de ingenieria de Unax Zulaika Fuente." },
       identity: { role: "Ingeniero de Sistemas de Software" },
       status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-      crumb: { core: "Core", capabilities: "Capacidades" },
+      crumb: { core: "Core", about: "Sobre mi", capabilities: "Capacidades" },
       header: {
         eyebrow: "CAPACIDADES",
         title: "Capacidades de ingenieria",
@@ -106,7 +107,7 @@ const FALLBACK_LOCALES = {
       cards: {
         system: {
           tag: "Modulo de arquitectura",
-          title: "System Engineering",
+          title: "Ingenieria de sistemas",
           desc: "Diseno sistemas de software modulares con limites claros, interfaces estables y mantenibilidad a largo plazo.",
           points: [
             "Arquitectura modular con fronteras de dominio explicitas",
@@ -117,18 +118,18 @@ const FALLBACK_LOCALES = {
         },
         desktop: {
           tag: "Modulo de entrega",
-          title: "Desktop & Product Engineering",
+          title: "Ingenieria desktop y de producto",
           desc: "Construyo productos desktop como software real de produccion, no como demos desechables.",
           points: [
-            "Aplicaciones Electron con restricciones reales de runtime",
+            "Aplicaciones Electron con restricciones reales de ejecucion",
             "Comportamiento offline-first y fiabilidad local por diseno",
-            "Ownership end-to-end desde interfaz hasta empaquetado",
+            "Responsabilidad end-to-end desde la interfaz hasta el empaquetado",
             "Entrega orientada a incrementos de producto utilizables",
           ],
         },
         security: {
           tag: "Modulo de confianza",
-          title: "Security-Oriented Development",
+          title: "Desarrollo orientado a seguridad",
           desc: "Trato la seguridad como una propiedad del sistema: limites, proteccion de datos y modelo de confianza predecible.",
           points: [
             "Controles de seguridad integrados en decisiones de arquitectura",
@@ -139,7 +140,7 @@ const FALLBACK_LOCALES = {
         },
         ux: {
           tag: "Modulo de interfaz",
-          title: "Technical UX",
+          title: "UX tecnica",
           desc: "Convierto herramientas tecnicas en experiencias comprensibles mediante flujos estructurados, visibilidad de estado y diseno usable.",
           points: [
             "Flujos complejos reducidos a acciones claras para el operador",
@@ -150,23 +151,23 @@ const FALLBACK_LOCALES = {
         },
         ai: {
           tag: "Modulo de aceleracion",
-          title: "AI-Assisted Engineering",
+          title: "Ingenieria asistida por IA",
           desc: "Uso IA como multiplicador de ingenieria para velocidad, exploracion y calidad de implementacion.",
           points: [
             "Exploracion rapida de alternativas de arquitectura",
             "Prototipado e iteracion mas rapidos",
             "Refactor asistido con validacion tecnica explicita",
-            "IA integrada como parte del toolchain, no como ruido",
+            "IA integrada como parte del flujo de herramientas, no como ruido",
           ],
         },
         integration: {
           tag: "Modulo de integracion",
-          title: "Full Stack / Integration Thinking",
+          title: "Vision full stack e integracion",
           desc: "Conecto frontend, backend y runtime en una arquitectura de producto coherente.",
           points: [
             "Responsabilidades de frontend, backend y runtime alineadas",
             "API y logica de aplicacion disenadas como un solo sistema",
-            "Resolucion de problemas cross-layer con contexto de producto",
+            "Resolucion de problemas entre capas con contexto de producto",
             "Decisiones de implementacion conectadas al comportamiento operativo",
           ],
         },
@@ -226,17 +227,17 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].capabilities ? FALLBACK_LOCALES[lang].capabilities : null;
-  const active = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
+  const preferred = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].capabilities ? FALLBACK_LOCALES[lang].capabilities : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].capabilities ? FALLBACK_LOCALES[DEFAULT_LANG].capabilities : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? "";
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].capabilities ? FALLBACK_LOCALES[lang].capabilities : null;
-  const active = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
+  const preferred = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].capabilities ? FALLBACK_LOCALES[lang].capabilities : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].capabilities ? FALLBACK_LOCALES[DEFAULT_LANG].capabilities : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? null;
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {
@@ -271,6 +272,7 @@ function applyTranslations(lang) {
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
   if (capabilitiesCrumbCoreLink) capabilitiesCrumbCoreLink.href = `index.html?from=capabilities&lang=${lang}`;
+  if (capabilitiesCrumbAboutLink) capabilitiesCrumbAboutLink.href = `about.html?lang=${lang}&from=capabilities`;
 }
 
 async function applyLanguage(nextLang, persist = true) {

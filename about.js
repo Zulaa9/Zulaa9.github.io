@@ -3,7 +3,6 @@ const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
 const contactModuleLink = document.getElementById("contact-module-link");
 const aboutCrumbCoreLink = document.getElementById("about-crumb-core-link");
-const aboutCrumbSelfLink = document.getElementById("about-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
@@ -23,21 +22,21 @@ const FALLBACK_LOCALES = {
         title: "About",
         lead: "Software developer focused on building real software products.",
         copy1: "I enjoy designing practical systems, desktop applications and security-oriented tools.",
-        copy2: "Currently developing independent projects and exploring new ideas around software architecture and AI-assisted development.",
+        copy2: "Focused on product architecture, maintainable engineering and independent software builds.",
       },
       links: {
-        title: "Links",
-        contact: "Contact",
+        title: "Next step",
+        contact: "Open Contact",
         cv: "Download CV",
       },
       experience: {
         title: "Experience",
-        role: "Integra TecnologÃ­a â€” Software Developer",
-        date: "2024 â€” Present",
+        role: "Integra Tecnologia - Software Developer",
+        date: "2024 - Present",
         copy: "Working mainly with Angular and .NET on enterprise software systems, contributing to application development, system integration and internal tools.",
         current: {
           label: "Current position",
-          value: "Software Developer @ Integra TecnologÃ­a Â· Stack: Angular / .NET",
+          value: "Software Developer @ Integra Tecnologia - Stack: Angular / .NET",
         },
       },
       focus: {
@@ -58,7 +57,7 @@ const FALLBACK_LOCALES = {
         title: "Also worked with",
         items: ["Unity", "Java", "C#", "HTML / CSS", "REST APIs", "Git"],
       },
-      closing: "Currently focused on building independent software products and expanding my engineering toolkit.",
+      closing: "Engineering profile focused on product execution, system design and long-term maintainability.",
     },
   },
   es: {
@@ -72,21 +71,21 @@ const FALLBACK_LOCALES = {
         title: "Sobre mi",
         lead: "Desarrollador de software centrado en construir productos reales.",
         copy1: "Disfruto disenando sistemas practicos, aplicaciones desktop y herramientas orientadas a seguridad.",
-        copy2: "Actualmente desarrollo proyectos independientes y exploro ideas en arquitectura de software y desarrollo asistido por IA.",
+        copy2: "Enfocado en arquitectura de producto, ingenieria mantenible y desarrollo de software independiente.",
       },
       links: {
-        title: "Enlaces",
-        contact: "Contacto",
+        title: "Siguiente paso",
+        contact: "Abrir contacto",
         cv: "Descargar CV",
       },
       experience: {
         title: "Experiencia",
-        role: "Integra Tecnologia â€” Software Developer",
-        date: "2024 â€” Actualidad",
-        copy: "Trabajo principalmente con Angular y .NET en sistemas enterprise, contribuyendo a desarrollo de aplicaciones, integracion de sistemas y herramientas internas.",
+        role: "Integra Tecnologia - Software Developer",
+        date: "2024 - Actualidad",
+        copy: "Trabajo principalmente con Angular y .NET en entornos empresariales, contribuyendo al desarrollo de aplicaciones, la integracion de sistemas y herramientas internas.",
         current: {
           label: "Posicion actual",
-          value: "Software Developer @ Integra Tecnologia Â· Stack: Angular / .NET",
+          value: "Software Developer @ Integra Tecnologia - Stack: Angular / .NET",
         },
       },
       focus: {
@@ -107,7 +106,7 @@ const FALLBACK_LOCALES = {
         title: "Tambien he trabajado con",
         items: ["Unity", "Java", "C#", "HTML / CSS", "REST APIs", "Git"],
       },
-      closing: "Actualmente enfocado en construir productos de software independientes y ampliar mi toolkit de ingenieria.",
+      closing: "Perfil de ingenieria centrado en ejecucion de producto, diseno de sistemas y mantenibilidad a largo plazo.",
     },
   },
 };
@@ -160,17 +159,17 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].about ? FALLBACK_LOCALES[lang].about : null;
-  const active = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
+  const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].about ? FALLBACK_LOCALES[lang].about : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].about ? FALLBACK_LOCALES[DEFAULT_LANG].about : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? "";
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].about ? FALLBACK_LOCALES[lang].about : null;
-  const active = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
+  const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].about ? FALLBACK_LOCALES[lang].about : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].about ? FALLBACK_LOCALES[DEFAULT_LANG].about : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? null;
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {
@@ -205,7 +204,6 @@ function applyTranslations(lang) {
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
   if (aboutCrumbCoreLink) aboutCrumbCoreLink.href = `index.html?from=about&lang=${lang}`;
-  if (aboutCrumbSelfLink) aboutCrumbSelfLink.href = `about.html?lang=${lang}&from=${entrySource || "core"}`;
   if (contactModuleLink) contactModuleLink.href = `contact.html?lang=${lang}&from=about`;
 }
 

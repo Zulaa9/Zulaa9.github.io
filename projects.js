@@ -2,7 +2,6 @@
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
 const projectsCrumbCoreLink = document.getElementById("projects-crumb-core-link");
-const projectsCrumbSelfLink = document.getElementById("projects-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const keypingOpenBtn = document.getElementById("keyping-open-btn");
 const portfolioOpenBtn = document.getElementById("portfolio-open-btn");
@@ -22,20 +21,22 @@ const FALLBACK_LOCALES = {
       header: {
         eyebrow: "PROJECTS",
         title: "Projects",
-        lead: "Selected software products built with real architecture, constraints and delivery quality.",
+        lead: "Product work centered on KeyPing as the flagship product, plus supporting system projects.",
       },
       cards: {
-        actions: { enter: "Enter project", github: "GitHub" },
+        actions: { github: "GitHub" },
         keyping: {
-          eyebrow: "FLAGSHIP PRODUCT",
+          eyebrow: "FLAGSHIP PRODUCT // PRIMARY VERSION",
           title: "KeyPing",
-          desc: "Local-first password security desktop app focused on credential hygiene, encrypted vault workflows and practical hardening controls.",
+          enter: "Open flagship product",
+          desc: "Primary desktop product focused on local-first credential security, encrypted vault workflows and practical hardening controls.",
           stack: ["Electron", "Angular", "TypeScript", "Node.js", "SQLite", "GPG"],
         },
         portfolio: {
-          eyebrow: "SYSTEM INTERFACE",
+          eyebrow: "SUPPORTING SYSTEM PROJECT",
           title: "Portfolio Core",
-          desc: "Interactive portfolio built as a system concept with Three.js rendering, UI architecture, motion layers, state-driven navigation and module transitions.",
+          enter: "Open supporting project",
+          desc: "Supporting system project that powers this portfolio experience: Three.js rendering, UI architecture, state-driven navigation and module transitions.",
           stack: ["Three.js", "JavaScript", "CSS", "UI Architecture", "State", "Animation"],
         },
       },
@@ -50,20 +51,22 @@ const FALLBACK_LOCALES = {
       header: {
         eyebrow: "PROYECTOS",
         title: "Proyectos",
-        lead: "Productos de software seleccionados, construidos con arquitectura real, restricciones y calidad de entrega.",
+        lead: "Trabajo de producto centrado en KeyPing como producto principal y complementado con proyectos de soporte.",
       },
       cards: {
-        actions: { enter: "Entrar al proyecto", github: "GitHub" },
+        actions: { github: "GitHub" },
         keyping: {
-          eyebrow: "PRODUCTO PRINCIPAL",
+          eyebrow: "PRODUCTO PRINCIPAL // VERSION DE REFERENCIA",
           title: "KeyPing",
-          desc: "App desktop de seguridad de contrasenas local-first, centrada en higiene de credenciales, vault cifrado y controles practicos de hardening.",
+          enter: "Abrir producto principal",
+          desc: "Producto de escritorio principal centrado en seguridad local de credenciales, boveda cifrada y controles practicos de endurecimiento.",
           stack: ["Electron", "Angular", "TypeScript", "Node.js", "SQLite", "GPG"],
         },
         portfolio: {
-          eyebrow: "INTERFAZ DE SISTEMA",
+          eyebrow: "PROYECTO DE SISTEMA DE SOPORTE",
           title: "Portfolio Core",
-          desc: "Portfolio interactivo construido como concepto de sistema con renderizado Three.js, arquitectura UI, capas de animacion, estado y transiciones entre modulos.",
+          enter: "Abrir proyecto de soporte",
+          desc: "Proyecto de soporte que impulsa esta experiencia de portafolio: renderizado con Three.js, arquitectura UI, estado y transiciones entre modulos.",
           stack: ["Three.js", "JavaScript", "CSS", "Arquitectura UI", "Estado", "Animacion"],
         },
       },
@@ -122,17 +125,17 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
-  const active = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
+  const preferred = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].projects ? FALLBACK_LOCALES[DEFAULT_LANG].projects : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? "";
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
-  const active = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
+  const preferred = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].projects ? FALLBACK_LOCALES[DEFAULT_LANG].projects : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? null;
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {
@@ -167,7 +170,6 @@ function applyTranslations(lang) {
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
   if (projectsCrumbCoreLink) projectsCrumbCoreLink.href = `index.html?from=projects&lang=${lang}`;
-  if (projectsCrumbSelfLink) projectsCrumbSelfLink.href = `projects.html?lang=${lang}&from=${entrySource || "core"}`;
   if (keypingOpenBtn) keypingOpenBtn.href = `keyping.html?lang=${lang}&from=projects`;
   if (portfolioOpenBtn) portfolioOpenBtn.href = `portfolio-core.html?lang=${lang}&from=projects`;
 }

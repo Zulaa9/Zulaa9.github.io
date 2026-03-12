@@ -3,7 +3,6 @@ const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
 const portfolioCrumbCoreLink = document.getElementById("portfolio-crumb-core-link");
 const portfolioCrumbProjectsLink = document.getElementById("portfolio-crumb-projects-link");
-const portfolioCrumbSelfLink = document.getElementById("portfolio-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
@@ -59,15 +58,15 @@ const FALLBACK_LOCALES = {
       header: {
         eyebrow: "MODULO DE PROYECTO // PC-01",
         title: "Portfolio Core",
-        lead: "Portfolio interactivo con estilo de sistema, construido como producto frontend real y no como landing estatica.",
+        lead: "Portafolio interactivo con estilo de sistema, construido como producto frontend real y no como una landing estatica.",
       },
       overview: {
         title: "Que es este proyecto",
         lead: "Esta web exacta es el propio proyecto. Ahora mismo estas navegando Portfolio Core.",
-        copy: "Esta construido como interfaz de ingenieria: grafo navegable de modulos, vistas dedicadas, coreografia de transiciones, estado de idioma y routing contextual compuesto como sistema.",
+        copy: "Esta construido como interfaz de ingenieria: grafo navegable de modulos, vistas dedicadas, orquestacion de transiciones, estado de idioma y enrutado contextual compuesto como sistema.",
       },
       actions: { github: "GitHub" },
-      stack: { title: "Stack", items: ["Three.js", "JavaScript", "CSS", "Arquitectura UI", "Estado", "Animacion"] },
+      stack: { title: "Tecnologias", items: ["Three.js", "JavaScript", "CSS", "Arquitectura UI", "Estado", "Animacion"] },
       architecture: {
         title: "Puntos de arquitectura",
         items: [
@@ -83,7 +82,7 @@ const FALLBACK_LOCALES = {
           "Movimiento intencional y timing de transiciones entre vistas",
           "Estructura legible y patrones de layout reutilizables",
           "Separacion de responsabilidades por modulo (HTML/CSS/JS)",
-          "Etiquetas de accesibilidad consistentes y controles keyboard-friendly",
+          "Etiquetas de accesibilidad consistentes y controles utilizables con teclado",
         ],
       },
     },
@@ -118,11 +117,6 @@ function resolveBackHref(lang) {
   return `index.html?from=portfolio&lang=${lang}`;
 }
 
-function resolvePortfolioSelfHref(lang) {
-  const from = entrySource || "core";
-  return `portfolio-core.html?lang=${lang}&from=${from}`;
-}
-
 async function loadLocale(lang) {
   const normalized = lang === "es" ? "es" : "en";
   if (localeCache[normalized]) return localeCache[normalized];
@@ -139,17 +133,17 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
-  const active = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
+  const preferred = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore ? FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? "";
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
-  const active = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
+  const preferred = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore ? FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? null;
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {
@@ -185,7 +179,6 @@ function applyTranslations(lang) {
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
   if (portfolioCrumbCoreLink) portfolioCrumbCoreLink.href = `index.html?from=portfolio&lang=${lang}`;
   if (portfolioCrumbProjectsLink) portfolioCrumbProjectsLink.href = `projects.html?from=portfolio&lang=${lang}`;
-  if (portfolioCrumbSelfLink) portfolioCrumbSelfLink.href = resolvePortfolioSelfHref(lang);
 }
 
 async function applyLanguage(nextLang, persist = true) {
