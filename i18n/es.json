@@ -1,174 +1,192 @@
-﻿{
+{
   "nav": {
     "home": "Inicio",
     "projects": "Proyectos",
-    "about": "Sobre mi",
+    "about": "Sobre mí",
     "contact": "Contacto",
-    "playground": "Playground"
+    "playground": "Laboratorio"
   },
   "header": {
     "github": "GitHub"
   },
   "hero": {
-    "kicker": "Ingenieria de producto full stack",
+    "kicker": "Ingeniería de producto de extremo a extremo",
     "title": "Construyo productos de software reales.",
-    "subtitle": "Software end-to-end con criterio de producto: interfaz, logica backend, entorno desktop y entrega en produccion.",
+    "subtitle": "Software de extremo a extremo con criterio de producto: interfaz y lógica de servidor, entorno de escritorio y entrega en producción.",
     "ctaPrimary": "Ver proyecto principal",
     "ctaSecondary": "Ver trabajo seleccionado",
     "signals": [
-      "Responsabilidad end-to-end",
+      "Responsabilidad de extremo a extremo",
       "Arquitectura + UX + entrega",
       "Mentalidad de seguridad por defecto"
     ],
-    "proofKicker": "Prueba de ejecucion",
-    "proofTitle": "Construido con restricciones reales de produccion",
+    "proofKicker": "Prueba de ejecución",
+    "proofTitle": "Construido con restricciones reales de producción",
     "proofItems": [
-      "Arquitectura desktop con limites claros: renderer, preload y main process.",
-      "Controles de seguridad implementados en flujos reales, no solo en un slide.",
-      "Pipeline de distribucion con releases, checksums y artefactos firmados."
+      "Arquitectura de escritorio con límites claros: renderer, preload y proceso principal.",
+      "Controles de seguridad implementados en flujos reales, no solo en una diapositiva.",
+      "Pipeline de distribución con publicaciones, sumas de verificación y artefactos firmados."
     ],
     "proofFoot": "Software pensado para usarse, auditarse y entregarse con confianza."
   },
   "flagship": {
     "kicker": "Proyecto principal",
-    "title": "KeyPing: producto desktop de seguridad construido con estandares reales.",
-    "lead": "Aplicacion offline-first de higiene de credenciales con vault cifrado local, limites de proceso estrictos y workflow de release listo para produccion.",
+    "title": "KeyPing: producto de escritorio de seguridad construido con estándares reales.",
+    "lead": "Aplicación con enfoque offline de higiene de credenciales con bóveda cifrado local, límites de proceso estrictos y flujo de publicación listo para producción.",
     "points": [
       {
-        "title": "Offline por diseno",
-        "desc": "Sin cuenta obligatoria, sin dependencia cloud y vault local cifrado."
+        "title": "Offline por diseño",
+        "desc": "Sin cuenta obligatoria, sin dependencia de la nube y bóveda local cifrado."
       },
       {
         "title": "Seguridad en profundidad",
-        "desc": "Master lock, autolock, clipboard protegido, anti brute-force e integridad del vault."
+        "desc": "bloqueo maestro, autobloqueo, portapapeles protegido, anti fuerza bruta e integridad del bóveda."
       },
       {
         "title": "Producto entregable",
-        "desc": "Auto-updates, empaquetado, import/export robusto, checksums y firma de releases."
+        "desc": "actualizaciones automáticas, empaquetado, importación/exportación robustas, sumas de verificación y firma de publicaciones."
       }
     ],
     "ctaPrimary": "Explorar KeyPing",
     "ctaSecondary": "Ver repositorio",
-    "visualTitle": "Senal de arquitectura",
+    "visualTitle": "Señal de arquitectura",
     "visual": {
-      "renderer": "Interfaz renderer",
-      "bridge": "Puente preload",
-      "core": "Main process + Vault",
-      "release": "Pipeline de release"
+      "renderer": "Interfaz del renderer",
+      "bridge": "Puente de preload",
+      "core": "Proceso principal + bóveda",
+      "release": "Flujo de publicación"
     }
   },
   "projects": {
-    "kicker": "Proximos proyectos",
-    "title": "Proximos proyectos en cola.",
+    "kicker": "Próximos proyectos",
+    "title": "Próximos proyectos en cola.",
     "more": "Ver listado completo",
     "items": [
       {
         "type": "Proyecto futuro",
         "title": "Proyecto 1",
-        "desc": "??????"
+        "desc": "Por definir"
       },
       {
         "type": "Proyecto futuro",
         "title": "Proyecto 2",
-        "desc": "??????"
+        "desc": "Por definir"
       },
       {
         "type": "Proyecto futuro",
         "title": "Proyecto 3",
-        "desc": "??????"
+        "desc": "Por definir"
       }
     ]
   },
   "capabilities": {
-    "kicker": "Capacidades de ingenieria",
+    "kicker": "Capacidades de ingeniería",
     "title": "Rango para cubrir producto completo, profundidad donde el riesgo es mayor.",
     "items": [
       {
         "title": "Interfaces de producto",
-        "desc": "UI orientada a decision y operativa, no pantallas decorativas."
+        "desc": "UI orientada a decisión y operativa, no pantallas decorativas."
       },
       {
-        "title": "Aplicaciones desktop",
-        "desc": "Sistemas desktop con permisos controlados y limites de runtime explicitos."
+        "title": "Aplicaciones de escritorio",
+        "desc": "Sistemas de escritorio con permisos controlados y límites de ejecución explícitos."
       },
       {
         "title": "Backend e integraciones",
-        "desc": "Logica de negocio fiable, contratos claros y resiliencia con terceros."
+        "desc": "Lógica de negocio fiable, contratos claros y resiliencia con terceros."
       },
       {
         "title": "Seguridad, arquitectura y entrega",
-        "desc": "Diseno risk-aware, estructura mantenible y releases disciplinados."
+        "desc": "Diseño orientado al riesgo, estructura mantenible y publicaciones disciplinadas."
       }
     ]
   },
   "mindset": {
-    "kicker": "Como pienso / como construyo",
+    "kicker": "Cómo pienso / cómo construyo",
     "title": "Optimizo para software que sigue funcionando cuando empieza el uso real.",
     "items": [
       "Pienso en restricciones antes de elegir herramientas.",
-      "Diseno limites explicitos entre capas.",
+      "Diseño límites explícitos entre capas.",
       "Valido con uso real, no con escenarios ideales.",
-      "Entrego con disciplina, observabilidad e iteracion."
+      "Entrego con disciplina, observabilidad e iteración."
     ]
   },
   "footprint": {
-    "kicker": "Huella tecnica compacta",
-    "title": "La tecnologia es medio; el objetivo es el resultado de producto."
+    "kicker": "Huella técnica compacta",
+    "title": "La tecnología es medio; el objetivo es el resultado de producto."
   },
   "final": {
     "kicker": "Cierre",
-    "title": "Si necesitas software que funcione en produccion, hablemos.",
-    "desc": "Construyo productos end-to-end con criterio de producto, rigor tecnico y disciplina de entrega.",
-    "ctaPrimary": "Iniciar conversacion",
-    "ctaSecondary": "Mas sobre mi"
+    "title": "Si necesitas software que funcione en producción, hablemos.",
+    "desc": "Construyo productos de extremo a extremo con criterio de producto, rigor técnico y disciplina de entrega.",
+    "ctaPrimary": "Iniciar conversación",
+    "ctaSecondary": "Más sobre mí"
   },
   "footer": "&copy; 2026 Zula. Portfolio.",
   "systemCore": {
     "page": {
-      "title": "Unax Zulaika | Nucleo del Sistema",
-      "description": "Interfaz de Nucleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing."
+      "title": "Unax Zulaika | Núcleo del Sistema",
+      "description": "Interfaz de Núcleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing."
     },
     "identity": {
       "role": "Ingeniero de Sistemas de Software"
     },
     "startup": {
-      "eyebrow": "NUCLEO DEL SISTEMA // APAGADO",
+      "eyebrow": "NÚCLEO DEL SISTEMA // APAGADO",
       "title": "Arranque manual requerido",
-      "copy": "Inicializa el runtime del core y carga el grafo de modulos.",
+      "copy": "Inicializa el entorno de ejecución del core y carga el grafo de módulos.",
       "cta": "Iniciar Sistema"
     },
     "boot": {
-      "eyebrow": "NUCLEO DEL SISTEMA // INICIO",
+      "eyebrow": "NÚCLEO DEL SISTEMA // INICIO",
       "lines": [
         "[sys] inicializando contexto del core",
         "[io] sondeando entorno local",
-        "[sec] validando fuente de entropia",
-        "[pkg] cargando mapa de modulos",
+        "[sec] validando fuente de entropía",
+        "[pkg] cargando mapa de módulos",
         "[core] handshake completado",
         "[core] arquitectura del sistema online"
       ]
     },
     "nodes": {
-      "keyping": { "title": "KeyPing", "meta": "Producto principal" },
-      "about": { "title": "Sobre mi", "meta": "Identidad" },
-      "capabilities": { "title": "Capacidades", "meta": "Ingenieria" },
-      "projects": { "title": "Proyectos", "meta": "Proyectos" },
-      "contact": { "title": "Contacto", "meta": "Canal" },
-      "portfolio": { "title": "Portfolio Core", "meta": "Proyecto" }
+      "keyping": {
+        "title": "KeyPing",
+        "meta": "Producto principal"
+      },
+      "about": {
+        "title": "Sobre mí",
+        "meta": "Identidad"
+      },
+      "capabilities": {
+        "title": "Capacidades",
+        "meta": "Ingeniería"
+      },
+      "projects": {
+        "title": "Proyectos",
+        "meta": "Proyectos"
+      },
+      "contact": {
+        "title": "Contacto",
+        "meta": "Canal"
+      },
+      "portfolio": {
+        "title": "Portfolio Core",
+        "meta": "Proyecto"
+      }
     },
     "copy": {
       "eyebrow": "ENTRADA DEL SISTEMA",
-      "title": "Portfolio de ingenieria de producto y sistemas construido como un core de software operativo.",
-      "body": "Esto es un mapa de sistema de software ingenierizado, no una portada estatica. <strong>KeyPing</strong> es el nodo de producto principal, respaldado por modulos de arquitectura, capacidades y ejecucion."
+      "title": "Portfolio de ingeniería de producto y sistemas construido como un core de software operativo.",
+      "body": "Esto es un mapa de sistema de software ingenierizado, no una portada estática. <strong>KeyPing</strong> es el nodo de producto principal, respaldado por módulos de arquitectura, capacidades y ejecución."
     },
     "dock": {
-      "label": "Modulo",
-      "defaultTitle": "Inspecciona un modulo",
-      "defaultCopy": "Abre cualquier modulo para revisar alcance de ingenieria, decisiones de producto y restricciones del sistema."
+      "label": "Módulo",
+      "defaultTitle": "Inspecciona un módulo",
+      "defaultCopy": "Abre cualquier módulo para revisar alcance de ingeniería, decisiones de producto y restricciones del sistema."
     },
     "mobile": {
       "keyping": "KeyPing",
-      "about": "Sobre mi",
+      "about": "Sobre mí",
       "capabilities": "Capacidades",
       "projects": "Proyectos",
       "contact": "Contacto",
@@ -177,77 +195,75 @@
     "modules": {
       "keyping": {
         "title": "KeyPing",
-        "copy": "Modulo principal del producto. Version de produccion con arquitectura de escritorio orientada a seguridad."
+        "copy": "Módulo principal del producto. Versión de producción con arquitectura de escritorio orientada a seguridad."
       },
       "about": {
-        "title": "Sobre mi",
-        "copy": "Ingeniero centrado en arquitectura de software practica, limites de seguridad y entrega mantenible."
+        "title": "Sobre mí",
+        "copy": "Ingeniero centrado en arquitectura de software práctica, límites de seguridad y entrega mantenible."
       },
       "capabilities": {
         "title": "Capacidades",
-        "copy": "Fortalezas de ingenieria en arquitectura de sistemas, entrega de producto, diseno seguro e integracion entre capas."
+        "copy": "Fortalezas de ingeniería en arquitectura de sistemas, entrega de producto, diseño seguro e integración entre capas."
       },
       "projects": {
         "title": "Proyectos",
-        "copy": "Galeria de proyectos centrada en KeyPing como producto principal, con proyectos de soporte."
+        "copy": "Galería de proyectos centrada en KeyPing como producto principal, con proyectos de soporte."
       },
       "contact": {
         "title": "Contacto",
-        "copy": "Conversaciones tecnicas directas y oportunidades de colaboracion."
+        "copy": "Conversaciones técnicas directas y oportunidades de colaboración."
       },
       "portfolio": {
         "title": "Portfolio Core",
-        "copy": "Modulo de soporte para este sistema de portfolio: arquitectura UI, navegacion con estado y capas de interaccion."
+        "copy": "Módulo de soporte para este sistema de portfolio: arquitectura UI, navegación con estado y capas de interacción."
       }
     },
     "status": {
-      "online": "NUCLEO DEL SISTEMA ONLINE",
-      "offline": "NUCLEO DEL SISTEMA APAGADO",
-      "booting": "ARRANCANDO NUCLEO DEL SISTEMA",
-      "loading": "CARGANDO NUCLEO DEL SISTEMA {progress}%",
-      "syncing": "SINCRONIZANDO CAPA VISUAL DEL NUCLEO DEL SISTEMA"
+      "online": "NÚCLEO DEL SISTEMA ONLINE",
+      "offline": "NÚCLEO DEL SISTEMA APAGADO",
+      "booting": "ARRANCANDO NÚCLEO DEL SISTEMA",
+      "loading": "CARGANDO NÚCLEO DEL SISTEMA {progress}%",
+      "syncing": "SINCRONIZANDO CAPA VISUAL DEL NÚCLEO DEL SISTEMA"
     }
   },
   "keyping": {
     "page": {
-      "title": "KeyPing | Nucleo del Sistema",
+      "title": "KeyPing | Núcleo del Sistema",
       "description": "Vista dedicada del producto KeyPing."
     },
     "identity": {
       "role": "Ingeniero de Sistemas de Software"
     },
     "status": {
-      "online": "NUCLEO DEL SISTEMA ONLINE"
+      "online": "NÚCLEO DEL SISTEMA ONLINE"
     },
     "back": "Volver al Core",
     "header": {
-      "eyebrow": "MODULO PRINCIPAL // KP-01",
+      "eyebrow": "MÓDULO PRINCIPAL // KP-01",
       "title": "KeyPing",
-      "tagline": "Sistema de higiene de credenciales disenado para confianza local."
+      "tagline": "Sistema de higiene de credenciales diseñado para confianza local."
     },
     "health": {
-      "label": "Salud del Modulo",
+      "label": "Salud del Módulo",
       "state": "Seguro / Local / Activo"
     },
     "cards": {
       "boundary": {
-        "title": "Mapa de Limites de Proceso",
-        "copy": "Los canales renderer, preload y proceso principal estan aislados y validados mediante contratos IPC tipados."
+        "title": "Mapa de Límites de Proceso",
+        "copy": "Los canales renderer, preload y proceso principal están aislados y validados mediante contratos IPC tipados."
       },
       "vault": {
-        "title": "Motor del Vault de Credenciales",
-        "copy": "Los registros locales de la boveda se cifran con AES-256-GCM + PBKDF2 y politicas deterministas de bloqueo y tiempo de espera."
+        "title": "Motor de la bóveda de credenciales",
+        "copy": "Los registros locales de la bóveda se cifran con AES-256-GCM + PBKDF2 y políticas deterministas de bloqueo y tiempo de espera."
       },
       "runtime": {
         "title": "Salvaguardas de Runtime",
-        "copy": "Las ventanas de exposicion del clipboard, la proteccion anti brute-force y las restricciones offline se aplican por politica."
+        "copy": "Las ventanas de exposición del portapapeles, la protección anti fuerza bruta y las restricciones offline se aplican por política."
       },
       "release": {
-        "title": "Pipeline de Integridad de Release",
-        "copy": "Los artefactos se distribuyen con checksums y verificacion de firma para preservar la confianza desde la construccion hasta la instalacion."
+        "title": "Pipeline de Integridad de la publicación",
+        "copy": "Los artefactos se distribuyen con sumas de verificación y verificación de firma para preservar la confianza desde la construcción hasta la instalación."
       }
     }
   }
 }
-
-
