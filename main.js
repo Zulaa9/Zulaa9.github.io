@@ -65,13 +65,13 @@ const FALLBACK_LOCALES = {
       },
       copy: {
         eyebrow: "SYSTEM ENTRY",
-        title: "Interactive architecture view built around a real product core.",
-        body: "This interface is not a static portfolio shell. It is a live system map where <strong>KeyPing</strong> acts as the primary operational node.",
+        title: "Product and system engineering portfolio built as an operating software core.",
+        body: "This is an engineered software system map, not a static showcase. <strong>KeyPing</strong> is the flagship product node, supported by architecture, capabilities and delivery modules.",
       },
       dock: {
         label: "Module",
-        defaultTitle: "Select a node",
-        defaultCopy: "Hover or tap any module to inspect system context.",
+        defaultTitle: "Inspect a module",
+        defaultCopy: "Open any module to review engineering scope, product decisions and system constraints.",
       },
       mobile: {
         keyping: "KeyPing",
@@ -132,13 +132,13 @@ const FALLBACK_LOCALES = {
       },
       copy: {
         eyebrow: "ENTRADA DEL SISTEMA",
-        title: "Vista de arquitectura interactiva construida alrededor de un core de producto real.",
-        body: "Esta interfaz no es una portada estatica. Es un mapa de sistema vivo donde <strong>KeyPing</strong> actua como nodo operativo principal.",
+        title: "Portfolio de ingenieria de producto y sistemas construido como un core de software operativo.",
+        body: "Esto es un mapa de sistema de software ingenierizado, no una portada estatica. <strong>KeyPing</strong> es el nodo de producto flagship, respaldado por modulos de arquitectura, capacidades y ejecucion.",
       },
       dock: {
         label: "Modulo",
-        defaultTitle: "Selecciona un nodo",
-        defaultCopy: "Pasa el raton o toca cualquier modulo para inspeccionar su contexto.",
+        defaultTitle: "Inspecciona un modulo",
+        defaultCopy: "Abre cualquier modulo para revisar alcance de ingenieria, decisiones de producto y restricciones del sistema.",
       },
       mobile: {
         keyping: "KeyPing",

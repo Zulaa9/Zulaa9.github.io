@@ -158,13 +158,13 @@
     },
     "copy": {
       "eyebrow": "SYSTEM ENTRY",
-      "title": "Interactive architecture view built around a real product core.",
-      "body": "This interface is not a static portfolio shell. It is a live system map where <strong>KeyPing</strong> acts as the primary operational node."
+      "title": "Product and system engineering portfolio built as an operating software core.",
+      "body": "This is an engineered software system map, not a static showcase. <strong>KeyPing</strong> is the flagship product node, supported by architecture, capabilities and delivery modules."
     },
     "dock": {
       "label": "Module",
-      "defaultTitle": "Select a node",
-      "defaultCopy": "Hover or tap any module to inspect system context."
+      "defaultTitle": "Inspect a module",
+      "defaultCopy": "Open any module to review engineering scope, product decisions and system constraints."
     },
     "mobile": {
       "keyping": "KeyPing",
