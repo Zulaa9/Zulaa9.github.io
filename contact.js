@@ -3,7 +3,6 @@ const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
 const contactCrumbCoreLink = document.getElementById("contact-crumb-core-link");
 const contactCrumbAboutLink = document.getElementById("contact-crumb-about-link");
-const contactCrumbSelfLink = document.getElementById("contact-crumb-self-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
@@ -21,16 +20,16 @@ const FALLBACK_LOCALES = {
       header: {
         eyebrow: "CONTACT",
         title: "Contact",
-        lead: "Interested in collaborating or discussing projects.",
+        lead: "Use this module to start a conversation about collaboration, product work, or engineering opportunities.",
       },
       channels: {
-        email: { title: "Email", subtitle: "Send message" },
-        github: { title: "GitHub", subtitle: "View repositories" },
-        linkedin: { title: "LinkedIn", subtitle: "Professional profile" },
+        email: { title: "Email", subtitle: "Send direct message" },
+        github: { title: "GitHub", subtitle: "Review repositories" },
+        linkedin: { title: "LinkedIn", subtitle: "Open professional profile" },
       },
       presence: {
         location: "Based in Bilbao, Spain",
-        remote: "Open to remote opportunities",
+        remote: "Available for remote collaboration",
       },
     },
   },
@@ -43,16 +42,16 @@ const FALLBACK_LOCALES = {
       header: {
         eyebrow: "CONTACTO",
         title: "Contacto",
-        lead: "Interesado en colaborar o comentar proyectos.",
+        lead: "Usa este modulo para iniciar una conversacion sobre colaboracion, producto u oportunidades de ingenieria.",
       },
       channels: {
-        email: { title: "Email", subtitle: "Enviar mensaje" },
-        github: { title: "GitHub", subtitle: "Ver repositorios" },
-        linkedin: { title: "LinkedIn", subtitle: "Perfil profesional" },
+        email: { title: "Email", subtitle: "Enviar mensaje directo" },
+        github: { title: "GitHub", subtitle: "Revisar repositorios" },
+        linkedin: { title: "LinkedIn", subtitle: "Abrir perfil profesional" },
       },
       presence: {
         location: "Ubicado en Bilbao, Espana",
-        remote: "Abierto a oportunidades en remoto",
+        remote: "Disponible para colaboracion en remoto",
       },
     },
   },
@@ -67,11 +66,6 @@ function resolveBackHref(lang) {
     return `about.html?lang=${lang}`;
   }
   return `index.html?from=contact&lang=${lang}`;
-}
-
-function resolveContactSelfHref(lang) {
-  const from = entrySource || "core";
-  return `contact.html?lang=${lang}&from=${from}`;
 }
 
 function randomRange(min, max) {
@@ -111,10 +105,10 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].contact ? FALLBACK_LOCALES[lang].contact : null;
-  const active = localeCache[lang] && localeCache[lang].contact ? localeCache[lang].contact : null;
+  const preferred = localeCache[lang] && localeCache[lang].contact ? localeCache[lang].contact : null;
+  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].contact ? FALLBACK_LOCALES[lang].contact : null;
   const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].contact ? FALLBACK_LOCALES[DEFAULT_LANG].contact : null;
-  return textByPath(preferred, path) ?? textByPath(active, path) ?? textByPath(fallback, path) ?? "";
+  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function applyTranslations(lang) {
@@ -139,7 +133,6 @@ function applyTranslations(lang) {
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
   if (contactCrumbCoreLink) contactCrumbCoreLink.href = `index.html?from=contact&lang=${lang}`;
   if (contactCrumbAboutLink) contactCrumbAboutLink.href = `about.html?lang=${lang}&from=contact`;
-  if (contactCrumbSelfLink) contactCrumbSelfLink.href = resolveContactSelfHref(lang);
 }
 
 async function applyLanguage(nextLang, persist = true) {
