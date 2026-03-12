@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" id="page-description" content="Engineering capabilities module for Unax Zulaika Fuente." />
+  <title id="page-title">Capabilities | System Core</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="capabilities.css" />
+</head>
+<body class="capabilities-page">
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--far" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--near" aria-hidden="true"></div>
+  <div class="meteor-layer" id="meteor-layer" aria-hidden="true"></div>
+
+  <main class="app" id="app">
+    <section class="system-shell" aria-label="Capabilities System View">
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity__name">UNAX ZULAIKA FUENTE</span>
+          <span class="identity__role" data-i18n="identity.role">Software Systems Engineer</span>
+        </div>
+        <div class="topbar-controls">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-switch__btn" data-lang-switch="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-switch__btn" data-lang-switch="es" aria-pressed="false">ES</button>
+          </div>
+          <div class="status-chip">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-text" id="core-status-text">SYSTEM CORE ONLINE</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="core-stage capabilities-stage">
+        <nav class="capabilities-crumbbar" aria-label="Screen path">
+          <a href="index.html?from=capabilities" class="back-button capabilities-back" id="back-to-core-link" aria-label="Back to core">
+            <span class="capabilities-back__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M15 5L8 12L15 19" /></svg>
+            </span>
+          </a>
+          <p class="capabilities-crumbs">
+            <span class="capabilities-crumbs__sep" aria-hidden="true">/</span>
+            <a id="capabilities-crumb-core-link" href="index.html"><span data-i18n="crumb.core">Core</span></a>
+            <span class="capabilities-crumbs__sep" aria-hidden="true">/</span>
+            <span aria-current="page" data-i18n="crumb.capabilities">Capabilities</span>
+          </p>
+        </nav>
+
+        <div class="capabilities-scroll">
+          <section class="capabilities-shell" aria-label="Capabilities module">
+            <header class="capabilities-header">
+              <p class="eyebrow" data-i18n="header.eyebrow">CAPABILITIES</p>
+              <h1 data-i18n="header.title">Engineering capabilities</h1>
+              <p class="capabilities-lead" data-i18n="header.lead">How I design systems, solve product-level constraints and deliver maintainable software.</p>
+            </header>
+
+            <section class="capabilities-grid" aria-label="Capability modules">
+              <article class="capability-card">
+                <p class="capability-card__tag" data-i18n="cards.system.tag">Architecture module</p>
+                <h2 data-i18n="cards.system.title">System Engineering</h2>
+                <p class="capability-card__desc" data-i18n="cards.system.desc">I design modular software systems with clear boundaries, stable interfaces and long-term maintainability.</p>
+                <ul class="capability-points" data-i18n-list="cards.system.points"></ul>
+              </article>
+
+              <article class="capability-card">
+                <p class="capability-card__tag" data-i18n="cards.desktop.tag">Delivery module</p>
+                <h2 data-i18n="cards.desktop.title">Desktop & Product Engineering</h2>
+                <p class="capability-card__desc" data-i18n="cards.desktop.desc">I build desktop products as production software, not throwaway demos.</p>
+                <ul class="capability-points" data-i18n-list="cards.desktop.points"></ul>
+              </article>
+
+              <article class="capability-card">
+                <p class="capability-card__tag" data-i18n="cards.security.tag">Trust module</p>
+                <h2 data-i18n="cards.security.title">Security-Oriented Development</h2>
+                <p class="capability-card__desc" data-i18n="cards.security.desc">I treat security as a system property: boundaries, data protection and predictable trust models.</p>
+                <ul class="capability-points" data-i18n-list="cards.security.points"></ul>
+              </article>
+
+              <article class="capability-card">
+                <p class="capability-card__tag" data-i18n="cards.ux.tag">Interface module</p>
+                <h2 data-i18n="cards.ux.title">Technical UX</h2>
+                <p class="capability-card__desc" data-i18n="cards.ux.desc">I make technical tools understandable through structured flows, state visibility and usable interaction design.</p>
+                <ul class="capability-points" data-i18n-list="cards.ux.points"></ul>
+              </article>
+
+              <article class="capability-card">
+                <p class="capability-card__tag" data-i18n="cards.ai.tag">Acceleration module</p>
+                <h2 data-i18n="cards.ai.title">AI-Assisted Engineering</h2>
+                <p class="capability-card__desc" data-i18n="cards.ai.desc">I use AI as an engineering multiplier for speed, exploration and implementation quality.</p>
+                <ul class="capability-points" data-i18n-list="cards.ai.points"></ul>
+              </article>
+
+              <article class="capability-card">
+                <p class="capability-card__tag" data-i18n="cards.integration.tag">Integration module</p>
+                <h2 data-i18n="cards.integration.title">Full Stack / Integration Thinking</h2>
+                <p class="capability-card__desc" data-i18n="cards.integration.desc">I connect frontend, backend and runtime concerns into a coherent product architecture.</p>
+                <ul class="capability-points" data-i18n-list="cards.integration.points"></ul>
+              </article>
+            </section>
+
+            <section class="capabilities-closing" aria-label="Closing statement">
+              <p data-i18n="closing">I engineer software as an integrated system: architecture, product constraints, security posture, technical UX and delivery execution.</p>
+            </section>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="capabilities.js"></script>
+</body>
+</html>
