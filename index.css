@@ -640,10 +640,18 @@ body.awaiting-start .startup-gate {
 }
 
 .module-node--keyping {
-  min-width: 170px;
+  min-width: 176px;
   border-color: rgba(83, 198, 224, 0.84);
   background: linear-gradient(140deg, rgba(13, 32, 46, 0.92), rgba(10, 25, 34, 0.72));
   box-shadow: 0 0 0 1px rgba(139, 226, 255, 0.34), 0 18px 48px rgba(13, 53, 73, 0.56);
+}
+
+.module-node--keyping .node-title {
+  color: #edf9ff;
+}
+
+.module-node--keyping .node-meta {
+  color: #b9e7fb;
 }
 
 .module-node--keyping:hover,
