@@ -1185,9 +1185,10 @@ body.intro-step-6 .mobile-modules {
   }
 
   .core-stage {
-    height: 65vh;
-    min-height: 420px;
+    height: auto;
+    min-height: 0;
     border-radius: 18px;
+    padding: 184px 14px 14px;
   }
 
   .node-layer,
@@ -1195,18 +1196,41 @@ body.intro-step-6 .mobile-modules {
     display: none;
   }
 
+  #core-canvas,
+  .core-center {
+    inset: 16px 14px auto;
+    height: 142px;
+  }
+
+  .core-center {
+    display: none;
+  }
+
   .core-copy {
-    left: 14px;
-    right: 14px;
-    width: auto;
-    bottom: 14px;
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin: 0;
   }
 
   .info-dock {
-    right: 14px;
-    left: 14px;
-    width: auto;
-    bottom: 140px;
+    position: relative;
+    right: auto;
+    left: auto;
+    bottom: auto;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .core-copy h1 {
+    font-size: 1.12rem;
+  }
+
+  .core-copy p,
+  .info-dock p {
+    font-size: 0.88rem;
   }
 
   .mobile-modules {

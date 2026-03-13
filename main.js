@@ -87,6 +87,10 @@ const state = {
   meteorLoopStarted: false,
 };
 
+function getCoreBaseScale() {
+  return window.matchMedia("(max-width: 860px)").matches ? 0.52 : 1;
+}
+
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
 
@@ -487,13 +491,17 @@ function placeNodeWithBounds(node, pos, rect, offsetX = 0, offsetY = 0) {
 }
 
 function updateStageSize() {
-  const bounds = stage.getBoundingClientRect();
-  renderer.setSize(bounds.width, bounds.height, false);
-  camera.aspect = bounds.width / bounds.height;
+  const stageBounds = stage.getBoundingClientRect();
+  const canvasBounds = canvas.getBoundingClientRect();
+  const renderWidth = canvasBounds.width || stageBounds.width;
+  const renderHeight = canvasBounds.height || stageBounds.height;
+
+  renderer.setSize(renderWidth, renderHeight, false);
+  camera.aspect = renderWidth / renderHeight;
   camera.updateProjectionMatrix();
-  linksSvg.setAttribute("viewBox", `0 0 ${bounds.width} ${bounds.height}`);
-  linksSvg.setAttribute("width", `${bounds.width}`);
-  linksSvg.setAttribute("height", `${bounds.height}`);
+  linksSvg.setAttribute("viewBox", `0 0 ${stageBounds.width} ${stageBounds.height}`);
+  linksSvg.setAttribute("width", `${stageBounds.width}`);
+  linksSvg.setAttribute("height", `${stageBounds.height}`);
   placeNodes();
   updateLinks();
 }
@@ -679,7 +687,7 @@ function fastForwardToReadyState() {
   state.introStartTime = performance.now() - state.introDurationMs;
 
   camera.position.set(0, 0.15, 5.2);
-  coreGroup.scale.setScalar(1);
+  coreGroup.scale.setScalar(getCoreBaseScale());
   outer.material.opacity = 0.8;
   inner.material.opacity = 1;
   inner.material.emissiveIntensity = 1.2;
@@ -693,7 +701,7 @@ function beginReturnTransition() {
   state.isReturnTransition = true;
   state.returnStartTime = performance.now();
   camera.position.set(0.25, -0.05, 2.55);
-  coreGroup.scale.setScalar(1.35);
+  coreGroup.scale.setScalar(getCoreBaseScale() * 1.35);
   body.classList.add("is-returning-from-keyping");
 }
 
@@ -964,17 +972,19 @@ function tick(now) {
     const elapsed = (now - state.transitionStart) / (state.transitionDir > 0 ? 900 : 760);
     const eased = smoothstep(elapsed);
     const blend = state.transitionDir > 0 ? eased : 1 - eased;
+    const baseScale = getCoreBaseScale();
 
     camera.position.z = THREE.MathUtils.lerp(5.2, 2.55, blend);
     camera.position.x = THREE.MathUtils.lerp(0, 0.25, blend);
     camera.position.y = THREE.MathUtils.lerp(0.15, -0.05, blend);
-    coreGroup.scale.setScalar(1 + blend * 0.35);
+    coreGroup.scale.setScalar(baseScale * (1 + blend * 0.35));
   } else if (state.isReturnTransition) {
     const progress = smoothstep((now - state.returnStartTime) / state.returnDurationMs);
+    const baseScale = getCoreBaseScale();
     camera.position.z = THREE.MathUtils.lerp(2.55, 5.2, progress);
     camera.position.x = THREE.MathUtils.lerp(0.25, 0, progress);
     camera.position.y = THREE.MathUtils.lerp(-0.05, 0.15, progress);
-    coreGroup.scale.setScalar(THREE.MathUtils.lerp(1.35, 1, progress));
+    coreGroup.scale.setScalar(baseScale * THREE.MathUtils.lerp(1.35, 1, progress));
     if (progress >= 1) {
       state.isReturnTransition = false;
       body.classList.remove("is-returning-from-keyping");
@@ -986,15 +996,16 @@ function tick(now) {
 
     const introElapsed = now - state.introStartTime;
     const introProgress = smootherstep(introElapsed / state.introDurationMs);
-    const introScale = THREE.MathUtils.lerp(0.05, 1, introProgress);
+    const introScale = THREE.MathUtils.lerp(0.05, getCoreBaseScale(), introProgress);
     coreGroup.scale.setScalar(introScale);
   } else {
+    const baseScale = getCoreBaseScale();
     camera.position.z += (5.2 - camera.position.z) * 0.04;
     camera.position.x += (state.parallaxX * 0.25 - camera.position.x) * 0.04;
     camera.position.y += (-state.parallaxY * 0.18 + 0.15 - camera.position.y) * 0.04;
-    coreGroup.scale.x += (1 - coreGroup.scale.x) * 0.05;
-    coreGroup.scale.y += (1 - coreGroup.scale.y) * 0.05;
-    coreGroup.scale.z += (1 - coreGroup.scale.z) * 0.05;
+    coreGroup.scale.x += (baseScale - coreGroup.scale.x) * 0.05;
+    coreGroup.scale.y += (baseScale - coreGroup.scale.y) * 0.05;
+    coreGroup.scale.z += (baseScale - coreGroup.scale.z) * 0.05;
   }
 
   if (state.introComplete && !state.isTransitioning && !state.isReturnTransition) {
