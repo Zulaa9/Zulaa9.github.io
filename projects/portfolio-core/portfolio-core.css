@@ -143,7 +143,7 @@ body {
   border: 1px solid rgba(128, 172, 199, 0.28);
   border-radius: 12px;
   background-image:
-    url("portfolio-core.png"),
+    url("/assets/images/portfolio-core.png"),
     radial-gradient(circle at 14% 22%, rgba(82, 153, 201, 0.24), transparent 48%),
     linear-gradient(155deg, rgba(11, 23, 35, 0.9), rgba(8, 18, 27, 0.76));
   background-repeat: no-repeat, no-repeat, no-repeat;

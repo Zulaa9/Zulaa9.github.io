@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="capabilities.css" />
+  <link rel="stylesheet" href="/capabilities/capabilities.css" />
 </head>
 <body class="capabilities-page">
   <div class="backdrop" aria-hidden="true"></div>
@@ -37,16 +37,16 @@
 
       <div class="core-stage capabilities-stage">
         <nav class="capabilities-crumbbar" aria-label="Screen path">
-          <a href="index.html?from=capabilities" class="back-button capabilities-back" id="back-to-core-link" aria-label="Back to core">
+          <a href="/?from=capabilities" class="back-button capabilities-back" id="back-to-core-link" aria-label="Back to core">
             <span class="capabilities-back__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false"><path d="M15 5L8 12L15 19" /></svg>
             </span>
           </a>
           <p class="capabilities-crumbs">
             <span class="capabilities-crumbs__sep" aria-hidden="true">/</span>
-            <a id="capabilities-crumb-core-link" href="index.html"><span data-i18n="crumb.core">Core</span></a>
+            <a id="capabilities-crumb-core-link" href="/"><span data-i18n="crumb.core">Core</span></a>
             <span class="capabilities-crumbs__sep" aria-hidden="true">/</span>
-            <a id="capabilities-crumb-about-link" href="about.html"><span data-i18n="crumb.about">About</span></a>
+            <a id="capabilities-crumb-about-link" href="/about/"><span data-i18n="crumb.about">About</span></a>
             <span class="capabilities-crumbs__sep" aria-hidden="true">/</span>
             <span aria-current="page" data-i18n="crumb.capabilities">Capabilities</span>
           </p>
@@ -113,6 +113,6 @@
     </section>
   </main>
 
-  <script src="capabilities.js"></script>
+  <script src="/capabilities/capabilities.js"></script>
 </body>
 </html>

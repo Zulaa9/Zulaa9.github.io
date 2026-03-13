@@ -1,8 +1,8 @@
-﻿const body = document.body;
+const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
-const contactModuleLink = document.getElementById("contact-module-link");
-const aboutCrumbCoreLink = document.getElementById("about-crumb-core-link");
+const capabilitiesCrumbCoreLink = document.getElementById("capabilities-crumb-core-link");
+const capabilitiesCrumbAboutLink = document.getElementById("capabilities-crumb-about-link");
 const coreStatusText = document.getElementById("core-status-text");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
@@ -17,10 +17,12 @@ let currentLang = "en";
 let isLeaving = false;
 
 function resolveBackHref(lang) {
-  if (entrySource === "contact") {
-    return `contact.html?lang=${lang}&from=about`;
-  }
-  return `index.html?from=about&lang=${lang}`;
+  if (entrySource === "about") return `/about/?lang=${lang}&from=capabilities`;
+  if (entrySource === "contact") return `/contact/?lang=${lang}&from=capabilities`;
+  if (entrySource === "projects") return `/projects/?lang=${lang}&from=capabilities`;
+  if (entrySource === "keyping") return `/projects/keyping/?lang=${lang}&from=capabilities`;
+  if (entrySource === "portfolio") return `/projects/portfolio-core/?lang=${lang}&from=capabilities`;
+  return `/?from=capabilities&lang=${lang}`;
 }
 
 function randomRange(min, max) {
@@ -48,7 +50,7 @@ async function loadLocale(lang) {
   const normalized = lang === "es" ? "es" : "en";
   if (localeCache[normalized]) return localeCache[normalized];
   try {
-    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    const response = await fetch(`/i18n/${normalized}.json`, { cache: "no-store" });
     if (!response.ok) throw new Error(`Failed to load locale file: ${normalized}`);
     const data = await response.json();
     localeCache[normalized] = data;
@@ -60,14 +62,14 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
-  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].about ? localeCache[DEFAULT_LANG].about : null;
+  const preferred = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].capabilities ? localeCache[DEFAULT_LANG].capabilities : null;
   return textByPath(preferred, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
-  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].about ? localeCache[DEFAULT_LANG].about : null;
+  const preferred = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].capabilities ? localeCache[DEFAULT_LANG].capabilities : null;
   return textByPath(preferred, path) ?? textByPath(fallback, path) ?? null;
 }
 
@@ -102,8 +104,8 @@ function applyTranslations(lang) {
   });
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
-  if (aboutCrumbCoreLink) aboutCrumbCoreLink.href = `index.html?from=about&lang=${lang}`;
-  if (contactModuleLink) contactModuleLink.href = `contact.html?lang=${lang}&from=about`;
+  if (capabilitiesCrumbCoreLink) capabilitiesCrumbCoreLink.href = `/?from=capabilities&lang=${lang}`;
+  if (capabilitiesCrumbAboutLink) capabilitiesCrumbAboutLink.href = `/about/?lang=${lang}&from=capabilities`;
 }
 
 async function applyLanguage(nextLang, persist = true) {
@@ -184,13 +186,13 @@ if (backToCoreLink) {
     }
     event.preventDefault();
     const targetHref = resolveBackHref(currentLang);
-    const goesToCore = targetHref.startsWith("index.html");
+    const goesToCore = targetHref.startsWith("/") && !targetHref.startsWith("/about/") && !targetHref.startsWith("/contact/") && !targetHref.startsWith("/capabilities/") && !targetHref.startsWith("/projects/");
     if (!goesToCore) {
       window.location.assign(targetHref);
       return;
     }
     isLeaving = true;
-    body.classList.add("is-leaving-about");
+    body.classList.add("is-leaving-capabilities");
     window.setTimeout(() => {
       window.location.assign(targetHref);
     }, 140);
@@ -198,7 +200,7 @@ if (backToCoreLink) {
 }
 
 runMeteorLoop();
-window.requestAnimationFrame(() => body.classList.add("is-about-ready"));
+window.requestAnimationFrame(() => body.classList.add("is-capabilities-ready"));
 
 (async () => {
   currentLang = getInitialLang();
@@ -210,4 +212,3 @@ window.requestAnimationFrame(() => body.classList.add("is-about-ready"));
     currentLang = DEFAULT_LANG;
   }
 })();
-

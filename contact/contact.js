@@ -18,9 +18,9 @@ let isLeaving = false;
 
 function resolveBackHref(lang) {
   if (entrySource === "about") {
-    return `about.html?lang=${lang}`;
+    return `/about/?lang=${lang}`;
   }
-  return `index.html?from=contact&lang=${lang}`;
+  return `/?from=contact&lang=${lang}`;
 }
 
 function randomRange(min, max) {
@@ -48,7 +48,7 @@ async function loadLocale(lang) {
   const normalized = lang === "es" ? "es" : "en";
   if (localeCache[normalized]) return localeCache[normalized];
   try {
-    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    const response = await fetch(`/i18n/${normalized}.json`, { cache: "no-store" });
     if (!response.ok) throw new Error(`Failed to load locale file: ${normalized}`);
     const data = await response.json();
     localeCache[normalized] = data;
@@ -85,8 +85,8 @@ function applyTranslations(lang) {
   });
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
-  if (contactCrumbCoreLink) contactCrumbCoreLink.href = `index.html?from=contact&lang=${lang}`;
-  if (contactCrumbAboutLink) contactCrumbAboutLink.href = `about.html?lang=${lang}&from=contact`;
+  if (contactCrumbCoreLink) contactCrumbCoreLink.href = `/?from=contact&lang=${lang}`;
+  if (contactCrumbAboutLink) contactCrumbAboutLink.href = `/about/?lang=${lang}&from=contact`;
 }
 
 async function applyLanguage(nextLang, persist = true) {
@@ -167,7 +167,7 @@ if (backToCoreLink) {
     }
     event.preventDefault();
     const targetHref = resolveBackHref(currentLang);
-    const goesToCore = targetHref.startsWith("index.html");
+    const goesToCore = targetHref.startsWith("/") && !targetHref.startsWith("/about/") && !targetHref.startsWith("/contact/") && !targetHref.startsWith("/capabilities/") && !targetHref.startsWith("/projects/");
     if (!goesToCore) {
       window.location.assign(targetHref);
       return;

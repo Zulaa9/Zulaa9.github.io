@@ -63,7 +63,7 @@ async function loadLocale(lang) {
   }
 
   try {
-    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    const response = await fetch(`/i18n/${normalized}.json`, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Failed to load locale file: ${normalized}`);
     }
@@ -132,8 +132,8 @@ function applyTranslations(lang) {
   if (backToCoreLink) {
     backToCoreLink.href = resolveBackHref(lang);
   }
-  if (keypingCrumbCoreLink) keypingCrumbCoreLink.href = `index.html?from=keyping&lang=${lang}`;
-  if (keypingCrumbProjectsLink) keypingCrumbProjectsLink.href = `projects.html?from=keyping&lang=${lang}`;
+  if (keypingCrumbCoreLink) keypingCrumbCoreLink.href = `/?from=keyping&lang=${lang}`;
+  if (keypingCrumbProjectsLink) keypingCrumbProjectsLink.href = `/projects/?from=keyping&lang=${lang}`;
   if (lightboxPrev) {
     lightboxPrev.setAttribute("aria-label", t(lang, "lightbox.prev"));
   }
@@ -368,9 +368,9 @@ setupLightbox();
 
 function resolveBackHref(lang) {
   if (entrySource === "projects") {
-    return `projects.html?from=keyping&lang=${lang}`;
+    return `/projects/?from=keyping&lang=${lang}`;
   }
-  return `index.html?from=keyping&lang=${lang}`;
+  return `/?from=keyping&lang=${lang}`;
 }
 
 async function applyLanguage(nextLang, persist = true) {
@@ -423,7 +423,7 @@ if (backToCoreLink) {
 
     event.preventDefault();
     const targetHref = resolveBackHref(currentLang);
-    const goesToCore = targetHref.startsWith("index.html");
+    const goesToCore = targetHref.startsWith("/") && !targetHref.startsWith("/about/") && !targetHref.startsWith("/contact/") && !targetHref.startsWith("/capabilities/") && !targetHref.startsWith("/projects/");
     if (!goesToCore) {
       window.location.assign(targetHref);
       return;

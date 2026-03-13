@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="keyping.css" />
+  <link rel="stylesheet" href="/projects/keyping/keyping.css" />
 </head>
 <body class="keyping-page">
   <div class="backdrop" aria-hidden="true"></div>
@@ -37,7 +37,7 @@
 
       <div class="core-stage keyping-stage">
         <nav class="keyping-crumbbar" aria-label="Screen path">
-          <a href="index.html?from=keyping" class="back-button keyping-back" id="back-to-core-link" aria-label="Back">
+          <a href="/?from=keyping" class="back-button keyping-back" id="back-to-core-link" aria-label="Back">
             <span class="keyping-back__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false">
                 <path d="M15 5L8 12L15 19" />
@@ -46,9 +46,9 @@
           </a>
           <p class="keyping-crumbs">
             <span class="keyping-crumbs__sep" aria-hidden="true">/</span>
-            <a id="keyping-crumb-core-link" href="index.html"><span data-i18n="crumb.core">Core</span></a>
+            <a id="keyping-crumb-core-link" href="/"><span data-i18n="crumb.core">Core</span></a>
             <span class="keyping-crumbs__sep" aria-hidden="true">/</span>
-            <a id="keyping-crumb-projects-link" href="projects.html"><span data-i18n="crumb.projects">Projects</span></a>
+            <a id="keyping-crumb-projects-link" href="/projects/"><span data-i18n="crumb.projects">Projects</span></a>
             <span class="keyping-crumbs__sep" aria-hidden="true">/</span>
             <span aria-current="page" data-i18n="crumb.keyping">KeyPing</span>
           </p>
@@ -58,7 +58,7 @@
           <section class="keyping-module-shell" aria-label="KeyPing internals module">
           <div class="keyping-header">
             <div class="keyping-mark" aria-hidden="true">
-              <img src="keyping-logo.png" alt="" loading="eager" />
+              <img src="/assets/images/keyping-logo.png" alt="" loading="eager" />
             </div>
             <div class="keyping-title">
               <p class="eyebrow" data-i18n="header.eyebrow">FLAGSHIP MODULE // KP-01</p>
@@ -84,11 +84,11 @@
             <p data-i18n="overview.lead">KeyPing is a desktop password manager that focuses on password hygiene: detecting weak, reused and risky credentials while keeping all data local and offline.</p>
             <p data-i18n="overview.copy">This is not a concept demo. It is an actively developed product with stable core features, production-style release discipline, and security controls designed for real usage.</p>
             <div class="keyping-actions">
-              <a class="keyping-action keyping-action--download" href="https://github.com/Unax-Zulaika-Fuente/KeyPing/releases" target="_blank" rel="noopener noreferrer">
+              <a class="keyping-action keyping-action--download" href="https://github.com/Zulaa9/KeyPing/releases" target="_blank" rel="noopener noreferrer">
                 <span class="keyping-action__eyebrow" data-i18n="actions.downloadEyebrow">Get KeyPing</span>
                 <span class="keyping-action__title" data-i18n="actions.download">Download Latest Release</span>
               </a>
-              <a class="keyping-action keyping-action--github" href="https://github.com/Unax-Zulaika-Fuente/KeyPing" target="_blank" rel="noopener noreferrer">
+              <a class="keyping-action keyping-action--github" href="https://github.com/Zulaa9/KeyPing" target="_blank" rel="noopener noreferrer">
                 <span class="keyping-action__eyebrow" data-i18n="actions.githubEyebrow">Source Code</span>
                 <span class="keyping-action__title" data-i18n="actions.github">Open on GitHub</span>
               </a>
@@ -136,23 +136,23 @@
             <div class="keyping-media-grid">
               <figure class="keyping-media keyping-media--hero" tabindex="0" role="button" aria-label="Open media">
                 <video autoplay muted loop playsinline preload="metadata" aria-label="KeyPing password creation and generator flow">
-                  <source src="keyping-password-generator-flow.mp4" type="video/mp4" />
+                  <source src="/assets/media/keyping-password-generator-flow.mp4" type="video/mp4" />
                 </video>
                 <figcaption data-i18n="visuals.captions.flow">Password creation flow with generator and final result</figcaption>
               </figure>
               <div class="keyping-media-rail">
                 <figure class="keyping-media" tabindex="0" role="button" aria-label="Open media">
-                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/dashboard.png" alt="KeyPing initial dashboard view" loading="lazy" />
+                  <img src="https://raw.githubusercontent.com/Zulaa9/KeyPing/refs/heads/main/docs/screenshots/dashboard.png" alt="KeyPing initial dashboard view" loading="lazy" />
                   <figcaption data-i18n="visuals.captions.dashboard">Initial dashboard with key metrics and quick actions</figcaption>
                 </figure>
                 <figure class="keyping-media" tabindex="0" role="button" aria-label="Open media">
-                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/password-list.png" alt="KeyPing password list and details panel" loading="lazy" />
+                  <img src="https://raw.githubusercontent.com/Zulaa9/KeyPing/refs/heads/main/docs/screenshots/password-list.png" alt="KeyPing password list and details panel" loading="lazy" />
                   <figcaption data-i18n="visuals.captions.list">Password list with detail view and filters</figcaption>
                 </figure>
                 <figure class="keyping-media keyping-media--composite keyping-media--more" tabindex="0" role="button" aria-label="Open media">
                   <div class="keyping-media-composite">
-                    <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/password-health.png" alt="KeyPing password health dashboard" loading="lazy" />
-                    <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/password-health2.png" alt="KeyPing password health secondary panel" loading="lazy" />
+                    <img src="https://raw.githubusercontent.com/Zulaa9/KeyPing/refs/heads/main/docs/screenshots/password-health.png" alt="KeyPing password health dashboard" loading="lazy" />
+                    <img src="https://raw.githubusercontent.com/Zulaa9/KeyPing/refs/heads/main/docs/screenshots/password-health2.png" alt="KeyPing password health secondary panel" loading="lazy" />
                   </div>
                   <span class="keyping-media-more-badge" data-i18n="visuals.moreBadge">+3 more</span>
                   <figcaption data-i18n="visuals.captions.healthCombo">Password health overview and extended details</figcaption>
@@ -161,15 +161,15 @@
 
               <div class="keyping-media-hidden" aria-hidden="true">
                 <figure class="keyping-media keyping-media--compact" tabindex="-1" role="button" aria-label="Open media">
-                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/generator.png" alt="KeyPing password generator panel" loading="lazy" />
+                  <img src="https://raw.githubusercontent.com/Zulaa9/KeyPing/refs/heads/main/docs/screenshots/generator.png" alt="KeyPing password generator panel" loading="lazy" />
                   <figcaption data-i18n="visuals.captions.generator">Password generator controls and output</figcaption>
                 </figure>
                 <figure class="keyping-media" tabindex="-1" role="button" aria-label="Open media">
-                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/settings.png" alt="KeyPing settings panel" loading="lazy" />
+                  <img src="https://raw.githubusercontent.com/Zulaa9/KeyPing/refs/heads/main/docs/screenshots/settings.png" alt="KeyPing settings panel" loading="lazy" />
                   <figcaption data-i18n="visuals.captions.settings">Security and runtime settings</figcaption>
                 </figure>
                 <figure class="keyping-media" tabindex="-1" role="button" aria-label="Open media">
-                  <img src="https://raw.githubusercontent.com/Unax-Zulaika-Fuente/KeyPing/refs/heads/main/docs/screenshots/settings2.png" alt="KeyPing advanced settings panel" loading="lazy" />
+                  <img src="https://raw.githubusercontent.com/Zulaa9/KeyPing/refs/heads/main/docs/screenshots/settings2.png" alt="KeyPing advanced settings panel" loading="lazy" />
                   <figcaption data-i18n="visuals.captions.settings2">Additional settings and configuration options</figcaption>
                 </figure>
               </div>
@@ -258,6 +258,6 @@
     </div>
   </aside>
 
-  <script src="keyping.js"></script>
+  <script src="/projects/keyping/keyping.js"></script>
 </body>
 </html>

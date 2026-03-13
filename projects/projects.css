@@ -314,7 +314,7 @@ body {
 
 .project-card__media--logo {
   background-image:
-    url("keyping-logo.png"),
+    url("/assets/images/keyping-logo.png"),
     radial-gradient(circle at 14% 22%, rgba(82, 153, 201, 0.24), transparent 48%),
     linear-gradient(155deg, rgba(11, 23, 35, 0.9), rgba(8, 18, 27, 0.76));
   background-repeat: no-repeat, no-repeat, no-repeat;
@@ -324,7 +324,7 @@ body {
 
 .project-card__media--portfolio {
   background-image:
-    url("portfolio-core.png"),
+    url("/assets/images/portfolio-core.png"),
     radial-gradient(circle at 80% 20%, rgba(54, 165, 211, 0.2), transparent 46%),
     radial-gradient(circle at 20% 70%, rgba(93, 139, 185, 0.16), transparent 54%),
     linear-gradient(160deg, rgba(8, 19, 30, 0.96), rgba(8, 14, 22, 0.88));

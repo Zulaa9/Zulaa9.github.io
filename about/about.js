@@ -1,10 +1,9 @@
 ﻿const body = document.body;
 const meteorLayer = document.getElementById("meteor-layer");
 const backToCoreLink = document.getElementById("back-to-core-link");
-const projectsCrumbCoreLink = document.getElementById("projects-crumb-core-link");
+const contactModuleLink = document.getElementById("contact-module-link");
+const aboutCrumbCoreLink = document.getElementById("about-crumb-core-link");
 const coreStatusText = document.getElementById("core-status-text");
-const keypingOpenBtn = document.getElementById("keyping-open-btn");
-const portfolioOpenBtn = document.getElementById("portfolio-open-btn");
 const langSwitchButtons = [...document.querySelectorAll("[data-lang-switch]")];
 const urlParams = new URLSearchParams(window.location.search);
 const entrySource = (urlParams.get("from") || "").toLowerCase();
@@ -18,13 +17,10 @@ let currentLang = "en";
 let isLeaving = false;
 
 function resolveBackHref(lang) {
-  if (entrySource === "keyping") {
-    return `keyping.html?lang=${lang}&from=projects`;
+  if (entrySource === "contact") {
+    return `/contact/?lang=${lang}&from=about`;
   }
-  if (entrySource === "portfolio") {
-    return `portfolio-core.html?lang=${lang}&from=projects`;
-  }
-  return `index.html?from=projects&lang=${lang}`;
+  return `/?from=about&lang=${lang}`;
 }
 
 function randomRange(min, max) {
@@ -52,7 +48,7 @@ async function loadLocale(lang) {
   const normalized = lang === "es" ? "es" : "en";
   if (localeCache[normalized]) return localeCache[normalized];
   try {
-    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    const response = await fetch(`/i18n/${normalized}.json`, { cache: "no-store" });
     if (!response.ok) throw new Error(`Failed to load locale file: ${normalized}`);
     const data = await response.json();
     localeCache[normalized] = data;
@@ -64,14 +60,14 @@ async function loadLocale(lang) {
 }
 
 function t(lang, path) {
-  const preferred = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
-  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].projects ? localeCache[DEFAULT_LANG].projects : null;
+  const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].about ? localeCache[DEFAULT_LANG].about : null;
   return textByPath(preferred, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
-  const preferred = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
-  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].projects ? localeCache[DEFAULT_LANG].projects : null;
+  const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].about ? localeCache[DEFAULT_LANG].about : null;
   return textByPath(preferred, path) ?? textByPath(fallback, path) ?? null;
 }
 
@@ -106,9 +102,8 @@ function applyTranslations(lang) {
   });
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
-  if (projectsCrumbCoreLink) projectsCrumbCoreLink.href = `index.html?from=projects&lang=${lang}`;
-  if (keypingOpenBtn) keypingOpenBtn.href = `keyping.html?lang=${lang}&from=projects`;
-  if (portfolioOpenBtn) portfolioOpenBtn.href = `portfolio-core.html?lang=${lang}&from=projects`;
+  if (aboutCrumbCoreLink) aboutCrumbCoreLink.href = `/?from=about&lang=${lang}`;
+  if (contactModuleLink) contactModuleLink.href = `/contact/?lang=${lang}&from=about`;
 }
 
 async function applyLanguage(nextLang, persist = true) {
@@ -189,13 +184,13 @@ if (backToCoreLink) {
     }
     event.preventDefault();
     const targetHref = resolveBackHref(currentLang);
-    const goesToCore = targetHref.startsWith("index.html");
+    const goesToCore = targetHref.startsWith("/") && !targetHref.startsWith("/about/") && !targetHref.startsWith("/contact/") && !targetHref.startsWith("/capabilities/") && !targetHref.startsWith("/projects/");
     if (!goesToCore) {
       window.location.assign(targetHref);
       return;
     }
     isLeaving = true;
-    body.classList.add("is-leaving-projects");
+    body.classList.add("is-leaving-about");
     window.setTimeout(() => {
       window.location.assign(targetHref);
     }, 140);
@@ -203,7 +198,7 @@ if (backToCoreLink) {
 }
 
 runMeteorLoop();
-window.requestAnimationFrame(() => body.classList.add("is-projects-ready"));
+window.requestAnimationFrame(() => body.classList.add("is-about-ready"));
 
 (async () => {
   currentLang = getInitialLang();

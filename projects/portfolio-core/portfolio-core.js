@@ -35,16 +35,16 @@ function textByPath(obj, path) { return path.split(".").reduce((acc, key) => (ac
 
 function resolveBackHref(lang) {
   if (entrySource === "projects") {
-    return `projects.html?from=portfolio&lang=${lang}`;
+    return `/projects/?from=portfolio&lang=${lang}`;
   }
-  return `index.html?from=portfolio&lang=${lang}`;
+  return `/?from=portfolio&lang=${lang}`;
 }
 
 async function loadLocale(lang) {
   const normalized = lang === "es" ? "es" : "en";
   if (localeCache[normalized]) return localeCache[normalized];
   try {
-    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    const response = await fetch(`/i18n/${normalized}.json`, { cache: "no-store" });
     if (!response.ok) throw new Error(`Failed to load locale file: ${normalized}`);
     const data = await response.json();
     localeCache[normalized] = data;
@@ -98,8 +98,8 @@ function applyTranslations(lang) {
   });
 
   if (backToCoreLink) backToCoreLink.href = resolveBackHref(lang);
-  if (portfolioCrumbCoreLink) portfolioCrumbCoreLink.href = `index.html?from=portfolio&lang=${lang}`;
-  if (portfolioCrumbProjectsLink) portfolioCrumbProjectsLink.href = `projects.html?from=portfolio&lang=${lang}`;
+  if (portfolioCrumbCoreLink) portfolioCrumbCoreLink.href = `/?from=portfolio&lang=${lang}`;
+  if (portfolioCrumbProjectsLink) portfolioCrumbProjectsLink.href = `/projects/?from=portfolio&lang=${lang}`;
 }
 
 async function applyLanguage(nextLang, persist = true) {
@@ -180,7 +180,7 @@ if (backToCoreLink) {
     }
     event.preventDefault();
     const targetHref = resolveBackHref(currentLang);
-    const goesToCore = targetHref.startsWith("index.html");
+    const goesToCore = targetHref.startsWith("/") && !targetHref.startsWith("/about/") && !targetHref.startsWith("/contact/") && !targetHref.startsWith("/capabilities/") && !targetHref.startsWith("/projects/");
     if (!goesToCore) {
       window.location.assign(targetHref);
       return;

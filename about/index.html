@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="about.css" />
+  <link rel="stylesheet" href="/about/about.css" />
 </head>
 <body class="about-page">
   <div class="backdrop" aria-hidden="true"></div>
@@ -37,7 +37,7 @@
 
       <div class="core-stage about-stage">
         <nav class="about-crumbbar" aria-label="Screen path">
-          <a href="index.html?from=about" class="back-button about-back" id="back-to-core-link" aria-label="Back">
+          <a href="/?from=about" class="back-button about-back" id="back-to-core-link" aria-label="Back">
             <span class="about-back__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false">
                 <path d="M15 5L8 12L15 19" />
@@ -46,7 +46,7 @@
           </a>
           <p class="about-crumbs">
             <span class="about-crumbs__sep" aria-hidden="true">/</span>
-            <a id="about-crumb-core-link" href="index.html"><span data-i18n="crumb.core">Core</span></a>
+            <a id="about-crumb-core-link" href="/"><span data-i18n="crumb.core">Core</span></a>
             <span class="about-crumbs__sep" aria-hidden="true">/</span>
             <span aria-current="page" data-i18n="crumb.about">About</span>
           </p>
@@ -66,13 +66,13 @@
                   <section class="about-section about-section--links">
                     <h2 data-i18n="links.title">Next step</h2>
                     <div class="about-links">
-                      <a class="about-link" id="contact-module-link" href="contact.html" data-i18n="links.contact">Open Contact</a>
+                      <a class="about-link" id="contact-module-link" href="/contact/" data-i18n="links.contact">Open Contact</a>
                       <button class="about-link is-optional" type="button" aria-disabled="true" disabled data-i18n="links.cv">Download CV</button>
                     </div>
                   </section>
                 </div>
                 <figure class="about-photo">
-                  <img src="Zula.png" alt="Unax Zulaika Fuente profile photo" loading="lazy" />
+                  <img src="/assets/images/Zula.png" alt="Unax Zulaika Fuente profile photo" loading="lazy" />
                 </figure>
               </div>
             </header>
@@ -116,6 +116,6 @@
     </section>
   </main>
 
-  <script src="about.js"></script>
+  <script src="/about/about.js"></script>
 </body>
 </html>

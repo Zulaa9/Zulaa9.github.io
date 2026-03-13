@@ -215,7 +215,7 @@ async function loadLocale(lang) {
   }
 
   try {
-    const response = await fetch(`i18n/${normalized}.json`, { cache: "no-store" });
+    const response = await fetch(`/i18n/${normalized}.json`, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Failed to load locale file: ${normalized}`);
     }
@@ -770,7 +770,7 @@ function activateKeypingView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `keyping.html?lang=${state.lang}&from=core`;
+    window.location.href = `/projects/keyping/?lang=${state.lang}&from=core`;
   }, 780);
 }
 
@@ -785,7 +785,7 @@ function activateAboutView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `about.html?lang=${state.lang}&from=core`;
+    window.location.href = `/about/?lang=${state.lang}&from=core`;
   }, 780);
 }
 
@@ -800,7 +800,7 @@ function activateCapabilitiesView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `capabilities.html?lang=${state.lang}&from=core`;
+    window.location.href = `/capabilities/?lang=${state.lang}&from=core`;
   }, 780);
 }
 
@@ -815,7 +815,7 @@ function activateContactView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `contact.html?lang=${state.lang}&from=core`;
+    window.location.href = `/contact/?lang=${state.lang}&from=core`;
   }, 780);
 }
 
@@ -830,7 +830,7 @@ function activateProjectsView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `projects.html?lang=${state.lang}&from=core`;
+    window.location.href = `/projects/?lang=${state.lang}&from=core`;
   }, 780);
 }
 
@@ -845,7 +845,7 @@ function activatePortfolioView() {
   body.classList.add("is-transitioning");
 
   window.setTimeout(() => {
-    window.location.href = `portfolio-core.html?lang=${state.lang}&from=core`;
+    window.location.href = `/projects/portfolio-core/?lang=${state.lang}&from=core`;
   }, 780);
 }
 
