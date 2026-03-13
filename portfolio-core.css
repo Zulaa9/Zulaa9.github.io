@@ -85,6 +85,7 @@ body {
 .lang-switch__btn.is-active { color: #e9f5ff; background: rgba(79, 154, 197, 0.35); }
 .identity { display: flex; flex-direction: column; gap: 4px; }
 .identity__name { font-family: "Space Grotesk", sans-serif; font-size: 0.9rem; letter-spacing: 0.22em; color: #dce8f4; }
+.identity__accent { font-weight: 700; color: #ffffff; text-shadow: 0 0 10px rgba(139, 226, 255, 0.12); }
 .identity__role { font-size: 0.8rem; color: var(--muted); }
 .status-chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(88, 216, 146, 0.4); border-radius: 999px; padding: 7px 12px; font-size: 0.74rem; color: #cdeeda; background: rgba(6, 20, 14, 0.52); }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 16px rgba(88, 216, 146, 0.72); }

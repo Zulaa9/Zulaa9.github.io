@@ -223,6 +223,12 @@ body {
   color: #dce8f4;
 }
 
+.identity__accent {
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(139, 226, 255, 0.12);
+}
+
 .identity__role {
   font-size: 0.8rem;
   color: var(--muted);
