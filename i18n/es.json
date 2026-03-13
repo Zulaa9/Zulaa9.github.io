@@ -1,135 +1,11 @@
 {
-  "nav": {
-    "home": "Inicio",
-    "projects": "Proyectos",
-    "about": "Sobre mí",
-    "contact": "Contacto",
-    "playground": "Laboratorio"
-  },
-  "header": {
-    "github": "GitHub"
-  },
-  "hero": {
-    "kicker": "Ingeniería de producto de extremo a extremo",
-    "title": "Construyo productos de software reales.",
-    "subtitle": "Software de extremo a extremo con criterio de producto: interfaz y lógica de servidor, entorno de escritorio y entrega en producción.",
-    "ctaPrimary": "Ver proyecto principal",
-    "ctaSecondary": "Ver trabajo seleccionado",
-    "signals": [
-      "Responsabilidad de extremo a extremo",
-      "Arquitectura + UX + entrega",
-      "Mentalidad de seguridad por defecto"
-    ],
-    "proofKicker": "Prueba de ejecución",
-    "proofTitle": "Construido con restricciones reales de producción",
-    "proofItems": [
-      "Arquitectura de escritorio con límites claros: renderer, preload y proceso principal.",
-      "Controles de seguridad implementados en flujos reales, no solo en una diapositiva.",
-      "Pipeline de distribución con publicaciones, sumas de verificación y artefactos firmados."
-    ],
-    "proofFoot": "Software pensado para usarse, auditarse y entregarse con confianza."
-  },
-  "flagship": {
-    "kicker": "Proyecto principal",
-    "title": "KeyPing: producto de escritorio de seguridad construido con estándares reales.",
-    "lead": "Aplicación con enfoque offline de higiene de credenciales con bóveda cifrado local, límites de proceso estrictos y flujo de publicación listo para producción.",
-    "points": [
-      {
-        "title": "Offline por diseño",
-        "desc": "Sin cuenta obligatoria, sin dependencia de la nube y bóveda local cifrado."
-      },
-      {
-        "title": "Seguridad en profundidad",
-        "desc": "bloqueo maestro, autobloqueo, portapapeles protegido, anti fuerza bruta e integridad del bóveda."
-      },
-      {
-        "title": "Producto entregable",
-        "desc": "actualizaciones automáticas, empaquetado, importación/exportación robustas, sumas de verificación y firma de publicaciones."
-      }
-    ],
-    "ctaPrimary": "Explorar KeyPing",
-    "ctaSecondary": "Ver repositorio",
-    "visualTitle": "Señal de arquitectura",
-    "visual": {
-      "renderer": "Interfaz del renderer",
-      "bridge": "Puente de preload",
-      "core": "Proceso principal + bóveda",
-      "release": "Flujo de publicación"
-    }
-  },
-  "projects": {
-    "kicker": "Próximos proyectos",
-    "title": "Próximos proyectos en cola.",
-    "more": "Ver listado completo",
-    "items": [
-      {
-        "type": "Proyecto futuro",
-        "title": "Proyecto 1",
-        "desc": "Por definir"
-      },
-      {
-        "type": "Proyecto futuro",
-        "title": "Proyecto 2",
-        "desc": "Por definir"
-      },
-      {
-        "type": "Proyecto futuro",
-        "title": "Proyecto 3",
-        "desc": "Por definir"
-      }
-    ]
-  },
-  "capabilities": {
-    "kicker": "Capacidades de ingeniería",
-    "title": "Rango para cubrir producto completo, profundidad donde el riesgo es mayor.",
-    "items": [
-      {
-        "title": "Interfaces de producto",
-        "desc": "UI orientada a decisión y operativa, no pantallas decorativas."
-      },
-      {
-        "title": "Aplicaciones de escritorio",
-        "desc": "Sistemas de escritorio con permisos controlados y límites de ejecución explícitos."
-      },
-      {
-        "title": "Backend e integraciones",
-        "desc": "Lógica de negocio fiable, contratos claros y resiliencia con terceros."
-      },
-      {
-        "title": "Seguridad, arquitectura y entrega",
-        "desc": "Diseño orientado al riesgo, estructura mantenible y publicaciones disciplinadas."
-      }
-    ]
-  },
-  "mindset": {
-    "kicker": "Cómo pienso / cómo construyo",
-    "title": "Optimizo para software que sigue funcionando cuando empieza el uso real.",
-    "items": [
-      "Pienso en restricciones antes de elegir herramientas.",
-      "Diseño límites explícitos entre capas.",
-      "Valido con uso real, no con escenarios ideales.",
-      "Entrego con disciplina, observabilidad e iteración."
-    ]
-  },
-  "footprint": {
-    "kicker": "Huella técnica compacta",
-    "title": "La tecnología es medio; el objetivo es el resultado de producto."
-  },
-  "final": {
-    "kicker": "Cierre",
-    "title": "Si necesitas software que funcione en producción, hablemos.",
-    "desc": "Construyo productos de extremo a extremo con criterio de producto, rigor técnico y disciplina de entrega.",
-    "ctaPrimary": "Iniciar conversación",
-    "ctaSecondary": "Más sobre mí"
-  },
-  "footer": "&copy; 2026 Zula. Portfolio.",
   "systemCore": {
     "page": {
       "title": "Unax Zulaika | Núcleo del Sistema",
-      "description": "Interfaz de Núcleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing."
+      "description": "Interfaz de Núcleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing como producto principal."
     },
     "identity": {
-      "role": "Ingeniero de Sistemas de Software"
+      "role": "Ingeniero de software orientado a sistemas"
     },
     "startup": {
       "eyebrow": "NÚCLEO DEL SISTEMA // APAGADO",
@@ -163,7 +39,7 @@
       },
       "projects": {
         "title": "Proyectos",
-        "meta": "Proyectos"
+        "meta": "Entregables"
       },
       "contact": {
         "title": "Contacto",
@@ -176,7 +52,7 @@
     },
     "copy": {
       "eyebrow": "ENTRADA DEL SISTEMA",
-      "title": "Portfolio de ingeniería de producto y sistemas construido como un core de software operativo.",
+      "title": "Portfolio de ingeniería de producto y sistemas construido como un núcleo operativo de software.",
       "body": "Esto es un mapa de sistema de software ingenierizado, no una portada estática. <strong>KeyPing</strong> es el nodo de producto principal, respaldado por módulos de arquitectura, capacidades y ejecución."
     },
     "dock": {
@@ -232,38 +108,495 @@
       "description": "Vista dedicada del producto KeyPing."
     },
     "identity": {
-      "role": "Ingeniero de Sistemas de Software"
+      "role": "Ingeniero de software orientado a sistemas"
     },
     "status": {
       "online": "NÚCLEO DEL SISTEMA ONLINE"
     },
     "back": "Volver al Core",
+    "crumb": {
+      "core": "Core",
+      "projects": "Proyectos",
+      "keyping": "KeyPing"
+    },
     "header": {
       "eyebrow": "MÓDULO PRINCIPAL // KP-01",
       "title": "KeyPing",
-      "tagline": "Sistema de higiene de credenciales diseñado para confianza local."
+      "tagline": "Sistema local-first de higiene de credenciales para escritorio.",
+      "punchline": "Detecta credenciales débiles, refuerza la higiene y mantiene tu bóveda totalmente offline."
     },
     "health": {
       "label": "Salud del Módulo",
-      "state": "Seguro / Local / Activo"
+      "state": "Desarrollo activo / Core estable / Uso diario"
+    },
+    "pills": {
+      "privacy": "Privacidad primero",
+      "offline": "Totalmente offline",
+      "local": "Bóveda local cifrada",
+      "cross": "Windows / Linux / macOS"
+    },
+    "overview": {
+      "title": "Qué es KeyPing",
+      "lead": "KeyPing es un gestor de contraseñas de escritorio centrado en higiene de credenciales: detecta contraseñas débiles, reutilizadas y de riesgo manteniendo todos los datos en local y offline.",
+      "copy": "No es una demo conceptual. Es un producto en desarrollo activo, con funcionalidades core estables, disciplina de publicación de nivel producción y controles de seguridad pensados para uso real."
+    },
+    "why": {
+      "title": "Por qué construí KeyPing",
+      "subtitle": "Por qué existe este proyecto",
+      "lead": "KeyPing nace para resolver problemas reales de contraseñas bajo presión, no solo para guardar entradas en una bóveda.",
+      "cards": {
+        "reuse": {
+          "title": "Reutilización de contraseñas",
+          "copy": "Reutilizar credenciales multiplica el riesgo entre servicios. Una sola filtración puede comprometer varias cuentas."
+        },
+        "weak": {
+          "title": "Contraseñas débiles",
+          "copy": "Los patrones débiles siguen siendo comunes. El usuario necesita señales claras, no avisos vagos, para mejorar rápido."
+        },
+        "cloud": {
+          "title": "Dependencia cloud",
+          "copy": "Muchos gestores exigen confianza en la nube por defecto. KeyPing está pensado para control local-first."
+        },
+        "privacy": {
+          "title": "Privacidad bajo estrés",
+          "copy": "Cuando hay incidentes, privacidad y velocidad de respuesta importan al mismo tiempo."
+        }
+      },
+      "focus": {
+        "title": "Función crítica de respuesta",
+        "copy": "Cada credencial puede guardar un enlace directo para cambiar la contraseña. En una brecha, ese clic único reduce fricción y tiempo de reacción justo cuando el estrés es mayor."
+      }
+    },
+    "metrics": {
+      "title": "Prueba de ingeniería",
+      "subtitle": "Indicadores reales de construcción",
+      "items": [
+        "15.5k+ líneas de código",
+        "74 commits",
+        "443 archivos versionados",
+        "Arquitectura Electron + Angular",
+        "Bóveda cifrada offline-first",
+        "Releases firmadas (SHA256 + GPG)"
+      ],
+      "statement": "Construido como producto de escritorio real con límites de seguridad entre renderer, preload y proceso principal."
+    },
+    "actions": {
+      "downloadEyebrow": "Consigue KeyPing",
+      "download": "Descargar última versión",
+      "githubEyebrow": "Código fuente",
+      "github": "Abrir en GitHub"
+    },
+    "visuals": {
+      "title": "Producto en acción",
+      "lead": "Recorrido real del producto: desde la actividad de la bóveda y la creación de contraseñas hasta el diagnóstico de salud, los controles del generador y los ajustes de seguridad.",
+      "moreBadge": "+3 más",
+      "captions": {
+        "flow": "Empieza en el listado de contraseñas, entra en Crear contraseña, genera una nueva credencial y vuelve al listado actualizado con el nuevo detalle seleccionado.",
+        "dashboard": "Resumen de seguridad con distribución fuerte/media/débil, conteo de 2FA, carpetas, duplicadas, actividad reciente y sección de información.",
+        "list": "Listado operativo de contraseñas con panel de detalle de la entrada seleccionada para revisar registros sin salir de la vista de la bóveda.",
+        "health": "Anillo de Salud de Contraseñas con puntuación global y desglose fuerte/media/débil, razones y visibilidad de riesgo por duplicados.",
+        "health2": "Panel ampliado de salud que complementa la vista principal con diagnóstico adicional y contexto accionable.",
+        "healthCombo": "Vista completa de Salud de Contraseñas: puntuación global, distribución de calidad, razones de riesgo, detección de duplicados y diagnóstico ampliado.",
+        "generator": "Generador de contraseñas con longitud configurable y toggles para mayúsculas, minúsculas, números y símbolos.",
+        "settings": "Ajustes de protección de la bóveda: cambio de contraseña maestra, tiempo de autobloqueo por inactividad, intentos fallidos y política de delay.",
+        "settings2": "Ajustes de sistema: idioma, actualizaciones automáticas, versiones conservadas de la bóveda y opciones de importación/exportación cifrada."
+      }
+    },
+    "features": {
+      "title": "Funcionalidades clave",
+      "items": [
+        "Bóveda cifrada solo en local (AES-256-GCM)",
+        "Detección de similitud y reutilización de contraseñas",
+        "Análisis y puntuación de salud de contraseñas",
+        "Historial de versiones por contraseña",
+        "Búsqueda y filtros avanzados",
+        "Organización por carpetas con drag and drop",
+        "Importación/exportación cifrada en modo offline",
+        "Autoactualizaciones vía GitHub Releases",
+        "Onboarding interactivo y modo demo",
+        "Interfaz ES / EN"
+      ]
+    },
+    "security": {
+      "title": "Modelo de seguridad",
+      "items": [
+        "Bóveda cifrada en disco con AES-256-GCM",
+        "Sin sincronización cloud obligatoria y sin cuenta requerida",
+        "Derivación PBKDF2-HMAC-SHA512 (120000 iteraciones)",
+        "Autolimpieza del portapapeles solo si el secreto sigue coincidiendo",
+        "Retardos progresivos tras intentos fallidos de desbloqueo maestro",
+        "Validaciones de estructura de la bóveda y detección de anomalías o corrupción"
+      ]
+    },
+    "architecture": {
+      "title": "Arquitectura",
+      "stack": {
+        "frontend": {
+          "label": "Frontend",
+          "value": "Angular con componentes standalone"
+        },
+        "runtime": {
+          "label": "Runtime",
+          "value": "Electron"
+        },
+        "bridge": {
+          "label": "Puente IPC",
+          "value": "API preload segura con contextIsolation activado"
+        },
+        "vault": {
+          "label": "Bóveda",
+          "value": "Archivo local cifrado gestionado por el proceso principal de Electron"
+        }
+      },
+      "flow": [
+        "La UI solicita operaciones a través del IPC del preload",
+        "El proceso principal valida y ejecuta operaciones de forma segura",
+        "El módulo de bóveda cifra y descifra el almacenamiento local",
+        "La UI recibe metadatos saneados y estado de operación"
+      ]
+    },
+    "integrity": {
+      "title": "Integridad de publicaciones",
+      "copy": "Cada publicación incluye checksums y archivos de firma separados.",
+      "files": [
+        "SHA256SUMS.txt",
+        "SHA256SUMS.txt.asc (firma GPG separada en formato ASCII-armored)"
+      ],
+      "fingerprintLabel": "Fingerprint de la clave de firma",
+      "verifySig": "Verificar firma:",
+      "verifySha": "Verificar checksums:"
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "items": [
+        "Integraciones opcionales de comprobación de filtraciones con enfoque de privacidad",
+        "Mayor cobertura de tests automáticos en IPC y bóveda",
+        "Mejor UX para resolución de conflictos de importación",
+        "Pipeline de firma y notarización en macOS",
+        "Modo portable opcional",
+        "Más mejoras de accesibilidad y navegación por teclado"
+      ]
+    },
+    "lightbox": {
+      "close": "Cerrar",
+      "prev": "Anterior",
+      "next": "Siguiente"
+    }
+  },
+  "about": {
+    "page": {
+      "title": "Sobre mí | Núcleo del Sistema",
+      "description": "Sobre Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Ingeniero de software orientado a sistemas"
+    },
+    "status": {
+      "online": "NÚCLEO DEL SISTEMA ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "about": "Sobre mí"
+    },
+    "header": {
+      "eyebrow": "SOBRE MÍ",
+      "title": "Sobre mí",
+      "lead": "Desarrollador de software centrado en construir productos reales.",
+      "copy1": "Disfruto diseñando sistemas prácticos, aplicaciones de escritorio y herramientas orientadas a seguridad.",
+      "copy2": "Enfocado en arquitectura de producto, ingeniería mantenible y desarrollo de software independiente."
+    },
+    "links": {
+      "title": "Siguiente paso",
+      "contact": "Abrir contacto",
+      "cv": "Descargar CV"
+    },
+    "experience": {
+      "title": "Experiencia",
+      "role": "Integra Tecnologia - Software Developer",
+      "date": "2024 - Actualidad",
+      "copy": "Trabajo principalmente con Angular y .NET en entornos empresariales, contribuyendo al desarrollo de aplicaciones, la integración de sistemas y herramientas internas.",
+      "current": {
+        "label": "Posición actual",
+        "value": "Software Developer @ Integra Tecnologia - Stack: Angular / .NET"
+      }
+    },
+    "focus": {
+      "title": "En qué me enfoco",
+      "items": [
+        "Construir aplicaciones reales, no solo demos",
+        "Diseñar arquitecturas mantenibles",
+        "Diseño de software con seguridad en mente",
+        "Crear herramientas prácticas para desarrolladores",
+        "Usar IA como acelerador de productividad e ingeniería"
+      ]
+    },
+    "coreTech": {
+      "title": "Tecnologías core",
+      "items": [
+        "Angular",
+        "Electron",
+        ".NET",
+        "TypeScript",
+        "JavaScript",
+        "SQL",
+        "Docker"
+      ]
+    },
+    "alsoWorked": {
+      "title": "También he trabajado con",
+      "items": [
+        "Unity",
+        "Java",
+        "C#",
+        "HTML / CSS",
+        "REST APIs",
+        "Git"
+      ]
+    },
+    "closing": "Perfil de ingeniería centrado en ejecución de producto, diseño de sistemas y mantenibilidad a largo plazo."
+  },
+  "contact": {
+    "page": {
+      "title": "Contacto | Núcleo del Sistema",
+      "description": "Contacto de Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Ingeniero de software orientado a sistemas"
+    },
+    "status": {
+      "online": "NÚCLEO DEL SISTEMA ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "about": "Sobre mí",
+      "contact": "Contacto"
+    },
+    "header": {
+      "eyebrow": "CONTACTO",
+      "title": "Contacto",
+      "lead": "Usa este módulo para iniciar una conversación sobre colaboración, trabajo de producto u oportunidades de ingeniería."
+    },
+    "channels": {
+      "email": {
+        "title": "Email",
+        "subtitle": "Enviar mensaje directo"
+      },
+      "github": {
+        "title": "GitHub",
+        "subtitle": "Revisar repositorios"
+      },
+      "linkedin": {
+        "title": "LinkedIn",
+        "subtitle": "Abrir perfil profesional"
+      }
+    },
+    "presence": {
+      "location": "Ubicado en Bilbao, España",
+      "remote": "Disponible para colaboración en remoto"
+    }
+  },
+  "capabilities": {
+    "page": {
+      "title": "Capacidades | Núcleo del Sistema",
+      "description": "Módulo de capacidades de ingeniería de Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Ingeniero de software orientado a sistemas"
+    },
+    "status": {
+      "online": "NÚCLEO DEL SISTEMA ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "about": "Sobre mí",
+      "capabilities": "Capacidades"
+    },
+    "header": {
+      "eyebrow": "CAPACIDADES",
+      "title": "Capacidades de ingeniería",
+      "lead": "Cómo diseño sistemas, resuelvo restricciones de producto y entrego software mantenible."
     },
     "cards": {
-      "boundary": {
-        "title": "Mapa de Límites de Proceso",
-        "copy": "Los canales renderer, preload y proceso principal están aislados y validados mediante contratos IPC tipados."
+      "system": {
+        "tag": "Módulo de arquitectura",
+        "title": "Ingeniería de sistemas",
+        "desc": "Diseño sistemas de software modulares con límites claros, interfaces estables y mantenibilidad a largo plazo.",
+        "points": [
+          "Arquitectura modular con fronteras de dominio explícitas",
+          "Decisiones estructurales guiadas por mantenibilidad y escala",
+          "Integración de capas sin acoplar la lógica de negocio a detalles de UI",
+          "Organización del código para una evolución predecible en el tiempo"
+        ]
       },
-      "vault": {
-        "title": "Motor de la bóveda de credenciales",
-        "copy": "Los registros locales de la bóveda se cifran con AES-256-GCM + PBKDF2 y políticas deterministas de bloqueo y tiempo de espera."
+      "desktop": {
+        "tag": "Módulo de entrega",
+        "title": "Ingeniería de escritorio y producto",
+        "desc": "Construyo productos de escritorio como software real de producción, no como demos desechables.",
+        "points": [
+          "Aplicaciones Electron con restricciones reales de ejecución",
+          "Comportamiento offline-first y fiabilidad local por diseño",
+          "Responsabilidad end-to-end desde la interfaz hasta el empaquetado",
+          "Entrega orientada a incrementos de producto utilizables"
+        ]
       },
-      "runtime": {
-        "title": "Salvaguardas de Runtime",
-        "copy": "Las ventanas de exposición del portapapeles, la protección anti fuerza bruta y las restricciones offline se aplican por política."
+      "security": {
+        "tag": "Módulo de confianza",
+        "title": "Desarrollo orientado a seguridad",
+        "desc": "Trato la seguridad como una propiedad del sistema: límites, protección de datos y modelo de confianza predecible.",
+        "points": [
+          "Controles de seguridad integrados en decisiones de arquitectura",
+          "Almacenamiento local cifrado y minimización de datos sensibles",
+          "Separación de fronteras de confianza entre capas de runtime",
+          "Controles de integridad y manejo defensivo de flujos críticos"
+        ]
       },
-      "release": {
-        "title": "Pipeline de Integridad de la publicación",
-        "copy": "Los artefactos se distribuyen con sumas de verificación y verificación de firma para preservar la confianza desde la construcción hasta la instalación."
+      "ux": {
+        "tag": "Módulo de interfaz",
+        "title": "UX técnica",
+        "desc": "Convierto herramientas técnicas en experiencias comprensibles mediante flujos estructurados, visibilidad de estado y diseño usable.",
+        "points": [
+          "Flujos complejos reducidos a acciones claras para el operador",
+          "Visibilidad de estado para diagnóstico, confianza y control",
+          "Patrones de interacción orientados a velocidad y precisión",
+          "Onboarding que reduce fricción en contextos técnicos"
+        ]
+      },
+      "ai": {
+        "tag": "Módulo de aceleración",
+        "title": "Ingeniería asistida por IA",
+        "desc": "Uso IA como multiplicador de ingeniería para velocidad, exploración y calidad de implementación.",
+        "points": [
+          "Exploración rápida de alternativas de arquitectura",
+          "Prototipado e iteración más rápidos",
+          "Refactor asistido con validación técnica explícita",
+          "IA integrada como parte del flujo de herramientas, no como característica superficial"
+        ]
+      },
+      "integration": {
+        "tag": "Módulo de integración",
+        "title": "Visión full stack e integración",
+        "desc": "Conecto frontend, backend y runtime en una arquitectura de producto coherente.",
+        "points": [
+          "Responsabilidades de frontend, backend y runtime alineadas",
+          "API y lógica de aplicación diseñadas como un solo sistema",
+          "Resolución de problemas entre capas con contexto de producto",
+          "Decisiones de implementación conectadas al comportamiento operativo"
+        ]
       }
+    },
+    "closing": "Desarrollo software como un sistema integrado: arquitectura, restricciones de producto, postura de seguridad, UX técnica y ejecución de entrega."
+  },
+  "projects": {
+    "page": {
+      "title": "Proyectos | Núcleo del Sistema",
+      "description": "Galería de proyectos de Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Ingeniero de software orientado a sistemas"
+    },
+    "status": {
+      "online": "NÚCLEO DEL SISTEMA ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "projects": "Proyectos"
+    },
+    "header": {
+      "eyebrow": "PROYECTOS",
+      "title": "Proyectos",
+      "lead": "Trabajo de producto centrado en KeyPing como producto principal, complementado con proyectos de soporte."
+    },
+    "cards": {
+      "actions": {
+        "github": "GitHub"
+      },
+      "keyping": {
+        "eyebrow": "PRODUCTO PRINCIPAL // VERSIÓN DE REFERENCIA",
+        "title": "KeyPing",
+        "enter": "Abrir producto principal",
+        "desc": "Producto de escritorio principal centrado en seguridad local de credenciales, flujos de bóveda cifrada y controles prácticos de endurecimiento.",
+        "stack": [
+          "Electron",
+          "Angular",
+          "TypeScript",
+          "Node.js",
+          "SQLite",
+          "GPG"
+        ]
+      },
+      "portfolio": {
+        "eyebrow": "PROYECTO DE SOPORTE DEL SISTEMA",
+        "title": "Portfolio Core",
+        "enter": "Abrir proyecto de soporte",
+        "desc": "Proyecto de soporte que impulsa esta experiencia de portfolio: renderizado con Three.js, arquitectura UI, navegación guiada por estado y transiciones entre módulos.",
+        "stack": [
+          "Three.js",
+          "JavaScript",
+          "CSS",
+          "Arquitectura UI",
+          "Estado",
+          "Animación"
+        ]
+      }
+    }
+  },
+  "portfolioCore": {
+    "page": {
+      "title": "Portfolio Core | Núcleo del Sistema",
+      "description": "Vista dedicada del proyecto Portfolio Core."
+    },
+    "identity": {
+      "role": "Ingeniero de software orientado a sistemas"
+    },
+    "status": {
+      "online": "NÚCLEO DEL SISTEMA ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "projects": "Proyectos",
+      "portfolio": "Portfolio Core"
+    },
+    "header": {
+      "eyebrow": "MÓDULO DE PROYECTO // PC-01",
+      "title": "Portfolio Core",
+      "lead": "Portfolio interactivo con estilo de sistema, construido como producto frontend real y no como una landing estática."
+    },
+    "overview": {
+      "title": "Qué es este proyecto",
+      "lead": "Esta web exacta es el propio proyecto. Ahora mismo estás navegando Portfolio Core.",
+      "copy": "Está construido como una interfaz ingenierizada: grafo navegable de módulos, vistas dedicadas, orquestación de transiciones, estado de idioma y enrutado contextual compuesto como sistema."
+    },
+    "actions": {
+      "github": "GitHub"
+    },
+    "stack": {
+      "title": "Tecnologías",
+      "items": [
+        "Three.js",
+        "JavaScript",
+        "CSS",
+        "Arquitectura UI",
+        "Estado",
+        "Animación"
+      ]
+    },
+    "architecture": {
+      "title": "Puntos de arquitectura",
+      "items": [
+        "Grafo interactivo del Core con relaciones padre-hijo",
+        "Páginas de módulo dedicadas con lenguaje visual compartido",
+        "Navegación contextual de vuelta entre módulos",
+        "Propagación de idioma a través de los enlaces entre módulos"
+      ]
+    },
+    "engineering": {
+      "title": "Foco de ingeniería",
+      "items": [
+        "Movimiento intencional y timing de transiciones entre vistas",
+        "Estructura legible y patrones de layout reutilizables",
+        "Separación de responsabilidades por módulo (HTML/CSS/JS)",
+        "Etiquetas de accesibilidad consistentes y controles usables con teclado"
+      ]
     }
   }
 }

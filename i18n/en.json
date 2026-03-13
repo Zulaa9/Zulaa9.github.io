@@ -1,140 +1,16 @@
-﻿{
-  "nav": {
-    "home": "Home",
-    "projects": "Projects",
-    "about": "About",
-    "contact": "Contact",
-    "playground": "Playground"
-  },
-  "header": {
-    "github": "GitHub"
-  },
-  "hero": {
-    "kicker": "Full stack product engineering",
-    "title": "I build real software products.",
-    "subtitle": "End-to-end software: interfaces, backend systems and production delivery.",
-    "ctaPrimary": "See flagship project",
-    "ctaSecondary": "View selected work",
-    "signals": [
-      "End-to-end ownership",
-      "Architecture + UX + delivery",
-      "Security mindset by default"
-    ],
-    "proofKicker": "Execution proof",
-    "proofTitle": "Built with production constraints in mind",
-    "proofItems": [
-      "Desktop architecture with clear boundaries: renderer, preload and main process.",
-      "Security controls implemented in real product flows, not just listed in slides.",
-      "Distribution pipeline with releases, checksums and signed artifacts."
-    ],
-    "proofFoot": "Software meant to be used, audited and shipped with confidence."
-  },
-  "flagship": {
-    "kicker": "Flagship project",
-    "title": "KeyPing: a desktop security product built with real-world standards.",
-    "lead": "Offline-first credential hygiene app with local encrypted vault, strict process boundaries and a release workflow ready for production.",
-    "points": [
-      {
-        "title": "Offline by design",
-        "desc": "No mandatory account, no cloud dependency, encrypted local vault."
-      },
-      {
-        "title": "Security in depth",
-        "desc": "Master lock, autolock, guarded clipboard, brute-force cooldown and integrity checks."
-      },
-      {
-        "title": "Shippable product",
-        "desc": "Auto-update flow, packaging, import/export robustness, checksums and release signing."
-      }
-    ],
-    "ctaPrimary": "Explore KeyPing",
-    "ctaSecondary": "View repository",
-    "visualTitle": "System architecture signal",
-    "visual": {
-      "renderer": "Renderer UI",
-      "bridge": "Preload bridge",
-      "core": "Main process + Vault",
-      "release": "Release pipeline"
-    }
-  },
-  "projects": {
-    "kicker": "Upcoming projects",
-    "title": "Next builds in queue.",
-    "more": "See full project list",
-    "items": [
-      {
-        "type": "Future project",
-        "title": "Project 1",
-        "desc": "??????"
-      },
-      {
-        "type": "Future project",
-        "title": "Project 2",
-        "desc": "??????"
-      },
-      {
-        "type": "Future project",
-        "title": "Project 3",
-        "desc": "??????"
-      }
-    ]
-  },
-  "capabilities": {
-    "kicker": "Engineering capabilities",
-    "title": "Range to cover the full product, depth where risk is highest.",
-    "items": [
-      {
-        "title": "Product interfaces",
-        "desc": "Decision-heavy UI for operational contexts, not decorative screens."
-      },
-      {
-        "title": "Desktop applications",
-        "desc": "Permission-aware desktop systems with clear runtime boundaries."
-      },
-      {
-        "title": "Backend systems and integrations",
-        "desc": "Reliable business logic, contracts and third-party integration resilience."
-      },
-      {
-        "title": "Security, architecture and delivery",
-        "desc": "Risk-aware design, maintainable structure and disciplined release execution."
-      }
-    ]
-  },
-  "mindset": {
-    "kicker": "How I think / how I build",
-    "title": "I optimize for software that still works when real usage starts.",
-    "items": [
-      "Think in constraints before choosing tools.",
-      "Design explicit boundaries between layers.",
-      "Validate with real usage, not ideal scenarios.",
-      "Ship with discipline, observability and iteration loops."
-    ]
-  },
-  "footprint": {
-    "kicker": "Compact tech footprint",
-    "title": "Tools are means, product outcomes are the goal."
-  },
-  "final": {
-    "kicker": "Final CTA",
-    "title": "If you need software that must work in production, let's talk.",
-    "desc": "I build end-to-end products with product judgment, technical rigor and delivery discipline.",
-    "ctaPrimary": "Start a conversation",
-    "ctaSecondary": "More about me"
-  },
-  "footer": "&copy; 2026 Zula. Portfolio.",
+{
   "systemCore": {
     "page": {
       "title": "Unax Zulaika | System Core",
-      "description": "System Core interface for Unax Zulaika Fuente portfolio and KeyPing flagship."
+      "description": "System Core interface for Unax Zulaika Fuente portfolio and KeyPing as the flagship product."
     },
     "identity": {
-      "role": "Software Systems Engineer"
+      "role": "Systems-Oriented Software Engineer"
     },
     "startup": {
       "eyebrow": "SYSTEM CORE // OFFLINE",
       "title": "Manual startup required",
-      "copy": "Initialize the core runtime and load module graph.",
+      "copy": "Initialize the core runtime and load the module graph.",
       "cta": "Start System"
     },
     "boot": {
@@ -149,17 +25,35 @@
       ]
     },
     "nodes": {
-      "keyping": { "title": "KeyPing", "meta": "Flagship Product" },
-      "about": { "title": "About", "meta": "Identity" },
-      "capabilities": { "title": "Capabilities", "meta": "Engineering" },
-      "projects": { "title": "Projects", "meta": "Projects" },
-      "contact": { "title": "Contact", "meta": "Channel" },
-      "portfolio": { "title": "Portfolio Core", "meta": "Project" }
+      "keyping": {
+        "title": "KeyPing",
+        "meta": "Flagship Product"
+      },
+      "about": {
+        "title": "About",
+        "meta": "Identity"
+      },
+      "capabilities": {
+        "title": "Capabilities",
+        "meta": "Engineering"
+      },
+      "projects": {
+        "title": "Projects",
+        "meta": "Deliverables"
+      },
+      "contact": {
+        "title": "Contact",
+        "meta": "Channel"
+      },
+      "portfolio": {
+        "title": "Portfolio Core",
+        "meta": "Project"
+      }
     },
     "copy": {
       "eyebrow": "SYSTEM ENTRY",
-      "title": "Product and system engineering portfolio built as an operating software core.",
-      "body": "This is an engineered software system map, not a static showcase. <strong>KeyPing</strong> is the flagship product node, supported by architecture, capabilities and delivery modules."
+      "title": "Product and system engineering portfolio built as an operational software core.",
+      "body": "This is an engineered software system map, not a static showcase. <strong>KeyPing</strong> is the flagship product node, supported by architecture, capabilities and execution modules."
     },
     "dock": {
       "label": "Module",
@@ -177,7 +71,7 @@
     "modules": {
       "keyping": {
         "title": "KeyPing",
-        "copy": "Flagship product module. Primary production version with security-focused desktop architecture."
+        "copy": "Flagship product module. Production version with security-focused desktop architecture."
       },
       "about": {
         "title": "About",
@@ -185,11 +79,11 @@
       },
       "capabilities": {
         "title": "Capabilities",
-        "copy": "Engineering-level strengths across system architecture, product delivery, security design and cross-layer integration."
+        "copy": "Engineering strengths across system architecture, product delivery, security design and cross-layer integration."
       },
       "projects": {
         "title": "Projects",
-        "copy": "Project gallery centered on KeyPing as the primary product, with supporting system projects."
+        "copy": "Project gallery centered on KeyPing as the flagship product, with supporting projects around it."
       },
       "contact": {
         "title": "Contact",
@@ -197,7 +91,7 @@
       },
       "portfolio": {
         "title": "Portfolio Core",
-        "copy": "Supporting project module for this portfolio system: UI architecture, stateful navigation and engineered frontend systems."
+        "copy": "Supporting module for this portfolio system: UI architecture, stateful navigation and interaction layers."
       }
     },
     "status": {
@@ -214,39 +108,495 @@
       "description": "KeyPing dedicated product view."
     },
     "identity": {
-      "role": "Software Systems Engineer"
+      "role": "Systems-Oriented Software Engineer"
     },
     "status": {
       "online": "SYSTEM CORE ONLINE"
     },
     "back": "Back to Core",
+    "crumb": {
+      "core": "Core",
+      "projects": "Projects",
+      "keyping": "KeyPing"
+    },
     "header": {
       "eyebrow": "FLAGSHIP MODULE // KP-01",
       "title": "KeyPing",
-      "tagline": "Desktop credential hygiene system engineered for local trust."
+      "tagline": "Local-first desktop credential hygiene system.",
+      "punchline": "Detect weak credentials, enforce hygiene and keep your vault fully offline."
     },
     "health": {
       "label": "Module Health",
-      "state": "Secure / Local / Active"
+      "state": "Active development / Stable core / Daily use"
+    },
+    "pills": {
+      "privacy": "Privacy-first",
+      "offline": "Fully offline",
+      "local": "Local encrypted vault",
+      "cross": "Windows / Linux / macOS"
+    },
+    "overview": {
+      "title": "What KeyPing is",
+      "lead": "KeyPing is a desktop password manager focused on credential hygiene: detecting weak, reused and risky passwords while keeping all data local and offline.",
+      "copy": "This is not a concept demo. It is an actively developed product with stable core features, production-level release discipline and security controls designed for real use."
+    },
+    "why": {
+      "title": "Why I Built KeyPing",
+      "subtitle": "Why this project exists",
+      "lead": "KeyPing was built to solve real password problems under real pressure, not just to store entries in a vault.",
+      "cards": {
+        "reuse": {
+          "title": "Password reuse",
+          "copy": "Reused credentials multiply risk across services. One leaked password can compromise several accounts."
+        },
+        "weak": {
+          "title": "Weak passwords",
+          "copy": "Weak patterns are still common. Users need clear signals, not vague warnings, to improve quickly."
+        },
+        "cloud": {
+          "title": "Cloud dependency",
+          "copy": "Many managers require cloud trust by default. KeyPing is designed for local-first control."
+        },
+        "privacy": {
+          "title": "Privacy under stress",
+          "copy": "When incidents happen, privacy and response speed matter at the same time."
+        }
+      },
+      "focus": {
+        "title": "Critical response feature",
+        "copy": "Each credential can store a direct password-change URL. In a breach, that one-click path reduces friction and reaction time exactly when stress is highest."
+      }
+    },
+    "metrics": {
+      "title": "Engineering Proof",
+      "subtitle": "Real build signals",
+      "items": [
+        "15.5k+ lines of code",
+        "74 commits",
+        "443 tracked files",
+        "Electron + Angular architecture",
+        "Offline-first encrypted vault",
+        "Signed releases (SHA256 + GPG)"
+      ],
+      "statement": "Built as a real desktop product with security boundaries between renderer, preload and main process."
+    },
+    "actions": {
+      "downloadEyebrow": "Get KeyPing",
+      "download": "Download latest version",
+      "githubEyebrow": "Source code",
+      "github": "Open on GitHub"
+    },
+    "visuals": {
+      "title": "Product in action",
+      "lead": "Real product walkthrough: from vault activity and password creation to health diagnostics, generator controls and security settings.",
+      "moreBadge": "+3 more",
+      "captions": {
+        "flow": "Starts in the password list, opens Create Password, generates a new credential and returns to an updated list with the new password details selected.",
+        "dashboard": "Security overview with strong/medium/weak distribution, 2FA count, folders, duplicates, recent activity and information section.",
+        "list": "Operational password list with selected-entry details, letting you inspect records without leaving the vault view.",
+        "health": "Password Health ring with global score plus strong/medium/weak breakdown, reasons and duplicate-risk visibility.",
+        "health2": "Extended health panel that complements the main view with additional diagnostics and actionable context.",
+        "healthCombo": "Complete Password Health view: global score, quality distribution, risk reasons, duplicate detection and extended diagnostics.",
+        "generator": "Password generator with configurable length and toggles for uppercase, lowercase, numbers and symbols.",
+        "settings": "Vault protection settings: master password change, inactivity auto-lock timeout, failed attempts and delay policy.",
+        "settings2": "System settings: language, automatic updates, retained vault versions and encrypted import/export options."
+      }
+    },
+    "features": {
+      "title": "Core features",
+      "items": [
+        "Local-only encrypted vault (AES-256-GCM)",
+        "Password similarity and reuse detection",
+        "Password health analysis and scoring",
+        "Per-password version history",
+        "Advanced search and filtering",
+        "Folder organization with drag and drop",
+        "Offline encrypted import/export",
+        "Auto-updates via GitHub Releases",
+        "Interactive onboarding and demo mode",
+        "ES / EN interface"
+      ]
+    },
+    "security": {
+      "title": "Security model",
+      "items": [
+        "Vault encrypted on disk using AES-256-GCM",
+        "No mandatory cloud sync and no account required",
+        "PBKDF2-HMAC-SHA512 key derivation (120000 iterations)",
+        "Clipboard auto-clear only when the copied secret still matches",
+        "Escalating cooldown after failed master unlock attempts",
+        "Vault structure validation and anomaly/corruption checks"
+      ]
+    },
+    "architecture": {
+      "title": "Architecture",
+      "stack": {
+        "frontend": {
+          "label": "Frontend",
+          "value": "Angular with standalone components"
+        },
+        "runtime": {
+          "label": "Runtime",
+          "value": "Electron"
+        },
+        "bridge": {
+          "label": "IPC bridge",
+          "value": "Secure preload API with contextIsolation enabled"
+        },
+        "vault": {
+          "label": "Vault",
+          "value": "Encrypted local file managed by the Electron main process"
+        }
+      },
+      "flow": [
+        "The UI requests operations through preload IPC",
+        "The main process validates and executes operations securely",
+        "The vault module encrypts and decrypts local storage",
+        "The UI receives sanitized metadata and operation state"
+      ]
+    },
+    "integrity": {
+      "title": "Release integrity",
+      "copy": "Each release includes checksums and detached signature files.",
+      "files": [
+        "SHA256SUMS.txt",
+        "SHA256SUMS.txt.asc (detached GPG signature in ASCII-armored format)"
+      ],
+      "fingerprintLabel": "Signing key fingerprint",
+      "verifySig": "Verify signature:",
+      "verifySha": "Verify checksums:"
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "items": [
+        "Optional breach-check integrations with a privacy-preserving approach",
+        "Expanded automated test coverage across IPC and vault logic",
+        "Improved UX for import conflict resolution",
+        "Signed and notarized macOS pipeline",
+        "Optional portable mode",
+        "More accessibility and keyboard navigation polish"
+      ]
+    },
+    "lightbox": {
+      "close": "Close",
+      "prev": "Previous",
+      "next": "Next"
+    }
+  },
+  "about": {
+    "page": {
+      "title": "About | System Core",
+      "description": "About Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Systems-Oriented Software Engineer"
+    },
+    "status": {
+      "online": "SYSTEM CORE ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "about": "About"
+    },
+    "header": {
+      "eyebrow": "ABOUT",
+      "title": "About",
+      "lead": "Software developer focused on building real products.",
+      "copy1": "I enjoy designing practical systems, desktop applications and security-oriented tools.",
+      "copy2": "Focused on product architecture, maintainable engineering and independent software development."
+    },
+    "links": {
+      "title": "Next step",
+      "contact": "Open contact",
+      "cv": "Download CV"
+    },
+    "experience": {
+      "title": "Experience",
+      "role": "Integra Tecnologia - Software Developer",
+      "date": "2024 - Present",
+      "copy": "I work mainly with Angular and .NET in enterprise environments, contributing to application development, system integration and internal tools.",
+      "current": {
+        "label": "Current position",
+        "value": "Software Developer @ Integra Tecnologia - Stack: Angular / .NET"
+      }
+    },
+    "focus": {
+      "title": "What I focus on",
+      "items": [
+        "Building real applications, not just demos",
+        "Designing maintainable architectures",
+        "Security-aware software design",
+        "Creating practical developer tools",
+        "Using AI as a productivity and engineering accelerator"
+      ]
+    },
+    "coreTech": {
+      "title": "Core technologies",
+      "items": [
+        "Angular",
+        "Electron",
+        ".NET",
+        "TypeScript",
+        "JavaScript",
+        "SQL",
+        "Docker"
+      ]
+    },
+    "alsoWorked": {
+      "title": "Also worked with",
+      "items": [
+        "Unity",
+        "Java",
+        "C#",
+        "HTML / CSS",
+        "REST APIs",
+        "Git"
+      ]
+    },
+    "closing": "Engineering profile focused on product execution, system design and long-term maintainability."
+  },
+  "contact": {
+    "page": {
+      "title": "Contact | System Core",
+      "description": "Contact for Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Systems-Oriented Software Engineer"
+    },
+    "status": {
+      "online": "SYSTEM CORE ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "about": "About",
+      "contact": "Contact"
+    },
+    "header": {
+      "eyebrow": "CONTACT",
+      "title": "Contact",
+      "lead": "Use this module to start a conversation about collaboration, product work or engineering opportunities."
+    },
+    "channels": {
+      "email": {
+        "title": "Email",
+        "subtitle": "Send direct message"
+      },
+      "github": {
+        "title": "GitHub",
+        "subtitle": "Review repositories"
+      },
+      "linkedin": {
+        "title": "LinkedIn",
+        "subtitle": "Open professional profile"
+      }
+    },
+    "presence": {
+      "location": "Based in Bilbao, Spain",
+      "remote": "Available for remote collaboration"
+    }
+  },
+  "capabilities": {
+    "page": {
+      "title": "Capabilities | System Core",
+      "description": "Engineering capabilities module for Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Systems-Oriented Software Engineer"
+    },
+    "status": {
+      "online": "SYSTEM CORE ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "about": "About",
+      "capabilities": "Capabilities"
+    },
+    "header": {
+      "eyebrow": "CAPABILITIES",
+      "title": "Engineering capabilities",
+      "lead": "How I design systems, solve product constraints and deliver maintainable software."
     },
     "cards": {
-      "boundary": {
-        "title": "Process Boundary Map",
-        "copy": "Renderer, preload and main process lanes are isolated and validated through typed IPC contracts."
+      "system": {
+        "tag": "Architecture module",
+        "title": "System Engineering",
+        "desc": "I design modular software systems with clear boundaries, stable interfaces and long-term maintainability.",
+        "points": [
+          "Modular architecture with explicit domain boundaries",
+          "Structural decisions guided by maintainability and scale",
+          "Layer integration without coupling business logic to UI details",
+          "Codebase organization for predictable evolution over time"
+        ]
       },
-      "vault": {
-        "title": "Credential Vault Engine",
-        "copy": "Local vault records are encrypted using AES-256-GCM + PBKDF2 with deterministic lock and timeout policies."
+      "desktop": {
+        "tag": "Delivery module",
+        "title": "Desktop & Product Engineering",
+        "desc": "I build desktop products as real production software, not as throwaway demos.",
+        "points": [
+          "Electron applications with real runtime constraints",
+          "Offline-first behavior and local reliability by design",
+          "End-to-end ownership from interface to packaging",
+          "Delivery focused on usable product increments"
+        ]
       },
-      "runtime": {
-        "title": "Runtime Safeguards",
-        "copy": "Clipboard exposure windows, brute-force protection and offline-only execution constraints are enforced by policy."
+      "security": {
+        "tag": "Trust module",
+        "title": "Security-Oriented Development",
+        "desc": "I treat security as a system property: boundaries, data protection and predictable trust models.",
+        "points": [
+          "Security controls integrated into architecture decisions",
+          "Local encrypted storage and sensitive data minimization",
+          "Trust boundary separation across runtime layers",
+          "Integrity checks and defensive handling of critical flows"
+        ]
       },
-      "release": {
-        "title": "Release Integrity Pipeline",
-        "copy": "Artifacts are distributed with checksums and signature verification to preserve trust from build to install."
+      "ux": {
+        "tag": "Interface module",
+        "title": "Technical UX",
+        "desc": "I turn technical tools into understandable experiences through structured flows, state visibility and usable interaction design.",
+        "points": [
+          "Complex flows reduced to clear operator actions",
+          "State visibility for diagnostics, confidence and control",
+          "Interaction patterns designed for speed and precision",
+          "Onboarding that reduces friction in technical contexts"
+        ]
+      },
+      "ai": {
+        "tag": "Acceleration module",
+        "title": "AI-Assisted Engineering",
+        "desc": "I use AI as an engineering multiplier for speed, exploration and implementation quality.",
+        "points": [
+          "Rapid exploration of architecture alternatives",
+          "Faster prototyping and iteration loops",
+          "Assisted refactoring with explicit technical validation",
+          "AI integrated as part of the toolchain, not as superficial noise"
+        ]
+      },
+      "integration": {
+        "tag": "Integration module",
+        "title": "Full Stack / Integration Thinking",
+        "desc": "I connect frontend, backend and runtime into a coherent product architecture.",
+        "points": [
+          "Frontend, backend and runtime responsibilities aligned",
+          "API and application logic designed as one system",
+          "Cross-layer problem solving with product context",
+          "Implementation decisions tied to operational behavior"
+        ]
       }
+    },
+    "closing": "I build software as an integrated system: architecture, product constraints, security posture, technical UX and delivery execution."
+  },
+  "projects": {
+    "page": {
+      "title": "Projects | System Core",
+      "description": "Project gallery for Unax Zulaika Fuente."
+    },
+    "identity": {
+      "role": "Systems-Oriented Software Engineer"
+    },
+    "status": {
+      "online": "SYSTEM CORE ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "projects": "Projects"
+    },
+    "header": {
+      "eyebrow": "PROJECTS",
+      "title": "Projects",
+      "lead": "Product work centered on KeyPing as the flagship product, complemented by supporting system projects."
+    },
+    "cards": {
+      "actions": {
+        "github": "GitHub"
+      },
+      "keyping": {
+        "eyebrow": "FLAGSHIP PRODUCT // REFERENCE VERSION",
+        "title": "KeyPing",
+        "enter": "Open flagship product",
+        "desc": "Primary desktop product focused on local-first credential security, encrypted vault workflows and practical hardening controls.",
+        "stack": [
+          "Electron",
+          "Angular",
+          "TypeScript",
+          "Node.js",
+          "SQLite",
+          "GPG"
+        ]
+      },
+      "portfolio": {
+        "eyebrow": "SUPPORTING SYSTEM PROJECT",
+        "title": "Portfolio Core",
+        "enter": "Open supporting project",
+        "desc": "Supporting project that powers this portfolio experience: Three.js rendering, UI architecture, state-driven navigation and module transitions.",
+        "stack": [
+          "Three.js",
+          "JavaScript",
+          "CSS",
+          "UI Architecture",
+          "State",
+          "Animation"
+        ]
+      }
+    }
+  },
+  "portfolioCore": {
+    "page": {
+      "title": "Portfolio Core | System Core",
+      "description": "Portfolio Core dedicated project view."
+    },
+    "identity": {
+      "role": "Systems-Oriented Software Engineer"
+    },
+    "status": {
+      "online": "SYSTEM CORE ONLINE"
+    },
+    "crumb": {
+      "core": "Core",
+      "projects": "Projects",
+      "portfolio": "Portfolio Core"
+    },
+    "header": {
+      "eyebrow": "PROJECT MODULE // PC-01",
+      "title": "Portfolio Core",
+      "lead": "Interactive system-style portfolio built as a real frontend product, not as a static landing page."
+    },
+    "overview": {
+      "title": "What this project is",
+      "lead": "This exact website is the project itself. You are currently navigating Portfolio Core.",
+      "copy": "It is built as an engineered interface: navigable module graph, dedicated views, transition orchestration, language state and contextual routing composed as a system."
+    },
+    "actions": {
+      "github": "GitHub"
+    },
+    "stack": {
+      "title": "Technologies",
+      "items": [
+        "Three.js",
+        "JavaScript",
+        "CSS",
+        "UI Architecture",
+        "State",
+        "Animation"
+      ]
+    },
+    "architecture": {
+      "title": "Architecture highlights",
+      "items": [
+        "Interactive Core graph with parent-child relationships",
+        "Dedicated module pages with a shared visual language",
+        "Context-aware back navigation between modules",
+        "Language propagation through module links"
+      ]
+    },
+    "engineering": {
+      "title": "Engineering focus",
+      "items": [
+        "Intentional motion and transition timing across views",
+        "Readable structure and reusable layout patterns",
+        "Separation of concerns per module (HTML/CSS/JS)",
+        "Consistent accessibility labels and keyboard-friendly controls"
+      ]
     }
   }
 }
-

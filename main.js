@@ -30,142 +30,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const returningFromModule = ["keyping", "about", "capabilities", "contact", "projects", "portfolio"].includes((urlParams.get("from") || "").toLowerCase());
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
-const FALLBACK_LOCALES = {
-  en: {
-    systemCore: {
-      page: {
-        title: "Unax Zulaika | System Core",
-        description: "System Core interface for Unax Zulaika Fuente portfolio and KeyPing flagship.",
-      },
-      identity: { role: "Software Systems Engineer" },
-      startup: {
-        eyebrow: "SYSTEM CORE // OFFLINE",
-        title: "Manual startup required",
-        copy: "Initialize the core runtime and load module graph.",
-        cta: "Start System",
-      },
-      boot: {
-        eyebrow: "SYSTEM CORE // INIT",
-        lines: [
-          "[sys] initializing core context",
-          "[io] probing local environment",
-          "[sec] validating entropy source",
-          "[pkg] loading module map",
-          "[core] handshake complete",
-          "[core] system architecture online",
-        ],
-      },
-      nodes: {
-        keyping: { title: "KeyPing", meta: "Flagship Product" },
-        about: { title: "About", meta: "Identity" },
-        capabilities: { title: "Capabilities", meta: "Engineering" },
-        projects: { title: "Projects", meta: "Projects" },
-        contact: { title: "Contact", meta: "Channel" },
-        portfolio: { title: "Portfolio Core", meta: "Project" },
-      },
-      copy: {
-        eyebrow: "SYSTEM ENTRY",
-        title: "Product and system engineering portfolio built as an operating software core.",
-        body: "This is an engineered software system map, not a static showcase. <strong>KeyPing</strong> is the flagship product node, supported by architecture, capabilities and delivery modules.",
-      },
-      dock: {
-        label: "Module",
-        defaultTitle: "Inspect a module",
-        defaultCopy: "Open any module to review engineering scope, product decisions and system constraints.",
-      },
-      mobile: {
-        keyping: "KeyPing",
-        about: "About",
-        capabilities: "Capabilities",
-        projects: "Projects",
-        contact: "Contact",
-        portfolio: "Portfolio Core",
-      },
-      modules: {
-        keyping: { title: "KeyPing", copy: "Flagship product module. Primary production version with security-focused desktop architecture." },
-        about: { title: "About", copy: "Engineer focused on practical software architecture, security boundaries and maintainable delivery." },
-        capabilities: { title: "Capabilities", copy: "Engineering-level strengths across system architecture, product delivery, security design and cross-layer integration." },
-        projects: { title: "Projects", copy: "Project gallery centered on KeyPing as the primary product build, with supporting system projects." },
-        contact: { title: "Contact", copy: "Direct technical conversations and collaboration opportunities." },
-        portfolio: { title: "Portfolio Core", copy: "Supporting project module for this portfolio system: UI architecture, stateful navigation and engineered frontend systems." },
-      },
-      status: {
-        online: "SYSTEM CORE ONLINE",
-        offline: "SYSTEM CORE OFFLINE",
-        booting: "SYSTEM CORE BOOTING",
-        loading: "SYSTEM CORE LOADING {progress}%",
-        syncing: "SYSTEM CORE SYNCING VISUAL LAYER",
-      },
-    },
-  },
-  es: {
-    systemCore: {
-      page: {
-        title: "Unax Zulaika | Nucleo del Sistema",
-        description: "Interfaz de Nucleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing.",
-      },
-      identity: { role: "Ingeniero de Sistemas de Software" },
-      startup: {
-        eyebrow: "NUCLEO DEL SISTEMA // APAGADO",
-        title: "Arranque manual requerido",
-        copy: "Inicializa el runtime del core y carga el grafo de modulos.",
-        cta: "Iniciar Sistema",
-      },
-      boot: {
-        eyebrow: "NUCLEO DEL SISTEMA // INICIO",
-        lines: [
-          "[sys] inicializando contexto del core",
-          "[io] sondeando entorno local",
-          "[sec] validando fuente de entropia",
-          "[pkg] cargando mapa de modulos",
-          "[core] handshake completado",
-          "[core] arquitectura del sistema online",
-        ],
-      },
-      nodes: {
-        keyping: { title: "KeyPing", meta: "Producto principal" },
-        about: { title: "Sobre mi", meta: "Identidad" },
-        capabilities: { title: "Capacidades", meta: "Ingenieria" },
-        projects: { title: "Proyectos", meta: "Proyectos" },
-        contact: { title: "Contacto", meta: "Canal" },
-        portfolio: { title: "Portfolio Core", meta: "Proyecto" },
-      },
-      copy: {
-        eyebrow: "ENTRADA DEL SISTEMA",
-        title: "Portfolio de ingenieria de producto y sistemas construido como un core de software operativo.",
-        body: "Esto es un mapa de sistema de software ingenierizado, no una portada estatica. <strong>KeyPing</strong> es el nodo de producto principal, respaldado por modulos de arquitectura, capacidades y ejecucion.",
-      },
-      dock: {
-        label: "Modulo",
-        defaultTitle: "Inspecciona un modulo",
-        defaultCopy: "Abre cualquier modulo para revisar alcance de ingenieria, decisiones de producto y restricciones del sistema.",
-      },
-      mobile: {
-        keyping: "KeyPing",
-        about: "Sobre mi",
-        capabilities: "Capacidades",
-        projects: "Proyectos",
-        contact: "Contacto",
-        portfolio: "Portfolio Core",
-      },
-      modules: {
-        keyping: { title: "KeyPing", copy: "Modulo principal del producto. Version de produccion con arquitectura de escritorio orientada a seguridad." },
-        about: { title: "Sobre mi", copy: "Ingeniero centrado en arquitectura de software practica, limites de seguridad y entrega mantenible." },
-        capabilities: { title: "Capacidades", copy: "Fortalezas de ingenieria en arquitectura de sistemas, entrega de producto, diseno seguro e integracion entre capas." },
-        projects: { title: "Proyectos", copy: "Galeria de proyectos centrada en KeyPing como producto principal, con proyectos de soporte." },
-        contact: { title: "Contacto", copy: "Conversaciones tecnicas directas y oportunidades de colaboracion." },
-        portfolio: { title: "Portfolio Core", copy: "Modulo de soporte para este sistema de portfolio: arquitectura UI, navegacion con estado y capas de interaccion." },
-      },
-      status: {
-        online: "NUCLEO DEL SISTEMA ONLINE",
-        offline: "NUCLEO DEL SISTEMA APAGADO",
-        booting: "ARRANCANDO NUCLEO DEL SISTEMA",
-        loading: "CARGANDO NUCLEO DEL SISTEMA {progress}%",
-        syncing: "SINCRONIZANDO CAPA VISUAL DEL NUCLEO DEL SISTEMA",
-      },
-    },
-  },
-};
+const FALLBACK_LOCALES = { en: {}, es: {} };
 
 const desktopNodes = [...document.querySelectorAll(".module-node")];
 const moduleTriggers = [...document.querySelectorAll(".module-trigger")];
@@ -498,7 +363,7 @@ async function runBootSequence() {
   const bootLines = localizedValue("boot.lines");
   const lines = Array.isArray(bootLines) && bootLines.length
     ? bootLines
-    : FALLBACK_LOCALES[state.lang].systemCore.boot.lines;
+    : [];
 
   for (let i = 0; i < lines.length; i += 1) {
     const line = document.createElement("li");
