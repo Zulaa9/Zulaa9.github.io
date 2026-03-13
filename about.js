@@ -10,106 +10,7 @@ const entrySource = (urlParams.get("from") || "").toLowerCase();
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 
-const FALLBACK_LOCALES = {
-  en: {
-    about: {
-      page: { title: "About | System Core", description: "About Unax Zulaika Fuente." },
-      identity: { role: "Software Systems Engineer" },
-      status: { online: "SYSTEM CORE ONLINE" },
-      crumb: { core: "Core", about: "About" },
-      header: {
-        eyebrow: "ABOUT",
-        title: "About",
-        lead: "Software developer focused on building real software products.",
-        copy1: "I enjoy designing practical systems, desktop applications and security-oriented tools.",
-        copy2: "Focused on product architecture, maintainable engineering and independent software builds.",
-      },
-      links: {
-        title: "Next step",
-        contact: "Open Contact",
-        cv: "Download CV",
-      },
-      experience: {
-        title: "Experience",
-        role: "Integra Tecnologia - Software Developer",
-        date: "2024 - Present",
-        copy: "Working mainly with Angular and .NET on enterprise software systems, contributing to application development, system integration and internal tools.",
-        current: {
-          label: "Current position",
-          value: "Software Developer @ Integra Tecnologia - Stack: Angular / .NET",
-        },
-      },
-      focus: {
-        title: "What I focus on",
-        items: [
-          "Building real applications, not just demos",
-          "Designing maintainable system architectures",
-          "Security-aware software design",
-          "Creating practical developer tools",
-          "Using AI as a productivity and engineering accelerator",
-        ],
-      },
-      coreTech: {
-        title: "Core technologies",
-        items: ["Angular", "Electron", ".NET", "TypeScript", "JavaScript", "SQL", "Docker"],
-      },
-      alsoWorked: {
-        title: "Also worked with",
-        items: ["Unity", "Java", "C#", "HTML / CSS", "REST APIs", "Git"],
-      },
-      closing: "Engineering profile focused on product execution, system design and long-term maintainability.",
-    },
-  },
-  es: {
-    about: {
-      page: { title: "Sobre mi | Nucleo del Sistema", description: "Sobre Unax Zulaika Fuente." },
-      identity: { role: "Ingeniero de Sistemas de Software" },
-      status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-      crumb: { core: "Core", about: "Sobre mi" },
-      header: {
-        eyebrow: "SOBRE MI",
-        title: "Sobre mi",
-        lead: "Desarrollador de software centrado en construir productos reales.",
-        copy1: "Disfruto disenando sistemas practicos, aplicaciones desktop y herramientas orientadas a seguridad.",
-        copy2: "Enfocado en arquitectura de producto, ingenieria mantenible y desarrollo de software independiente.",
-      },
-      links: {
-        title: "Siguiente paso",
-        contact: "Abrir contacto",
-        cv: "Descargar CV",
-      },
-      experience: {
-        title: "Experiencia",
-        role: "Integra Tecnologia - Software Developer",
-        date: "2024 - Actualidad",
-        copy: "Trabajo principalmente con Angular y .NET en entornos empresariales, contribuyendo al desarrollo de aplicaciones, la integracion de sistemas y herramientas internas.",
-        current: {
-          label: "Posicion actual",
-          value: "Software Developer @ Integra Tecnologia - Stack: Angular / .NET",
-        },
-      },
-      focus: {
-        title: "En que me enfoco",
-        items: [
-          "Construir aplicaciones reales, no solo demos",
-          "Disenar arquitecturas mantenibles",
-          "Diseno de software con seguridad en mente",
-          "Crear herramientas practicas para desarrolladores",
-          "Usar IA como acelerador de productividad e ingenieria",
-        ],
-      },
-      coreTech: {
-        title: "Tecnologias core",
-        items: ["Angular", "Electron", ".NET", "TypeScript", "JavaScript", "SQL", "Docker"],
-      },
-      alsoWorked: {
-        title: "Tambien he trabajado con",
-        items: ["Unity", "Java", "C#", "HTML / CSS", "REST APIs", "Git"],
-      },
-      closing: "Perfil de ingenieria centrado en ejecucion de producto, diseno de sistemas y mantenibilidad a largo plazo.",
-    },
-  },
-};
+const FALLBACK_LOCALES = { en: {}, es: {} };
 
 const localeCache = { en: null, es: null };
 let currentLang = "en";
@@ -160,16 +61,14 @@ async function loadLocale(lang) {
 
 function t(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].about ? FALLBACK_LOCALES[lang].about : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].about ? FALLBACK_LOCALES[DEFAULT_LANG].about : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].about ? localeCache[DEFAULT_LANG].about : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].about ? localeCache[lang].about : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].about ? FALLBACK_LOCALES[lang].about : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].about ? FALLBACK_LOCALES[DEFAULT_LANG].about : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].about ? localeCache[DEFAULT_LANG].about : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {

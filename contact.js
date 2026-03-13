@@ -10,52 +10,7 @@ const entrySource = (urlParams.get("from") || "").toLowerCase();
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 
-const FALLBACK_LOCALES = {
-  en: {
-    contact: {
-      page: { title: "Contact | System Core", description: "Contact Unax Zulaika Fuente." },
-      identity: { role: "Software Systems Engineer" },
-      status: { online: "SYSTEM CORE ONLINE" },
-      crumb: { core: "Core", about: "About", contact: "Contact" },
-      header: {
-        eyebrow: "CONTACT",
-        title: "Contact",
-        lead: "Use this module to start a conversation about collaboration, product work, or engineering opportunities.",
-      },
-      channels: {
-        email: { title: "Email", subtitle: "Send direct message" },
-        github: { title: "GitHub", subtitle: "Review repositories" },
-        linkedin: { title: "LinkedIn", subtitle: "Open professional profile" },
-      },
-      presence: {
-        location: "Based in Bilbao, Spain",
-        remote: "Available for remote collaboration",
-      },
-    },
-  },
-  es: {
-    contact: {
-      page: { title: "Contacto | Nucleo del Sistema", description: "Contacto de Unax Zulaika Fuente." },
-      identity: { role: "Ingeniero de Sistemas de Software" },
-      status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-      crumb: { core: "Core", about: "Sobre mi", contact: "Contacto" },
-      header: {
-        eyebrow: "CONTACTO",
-        title: "Contacto",
-        lead: "Usa este modulo para iniciar una conversacion sobre colaboracion, producto u oportunidades de ingenieria.",
-      },
-      channels: {
-        email: { title: "Email", subtitle: "Enviar mensaje directo" },
-        github: { title: "GitHub", subtitle: "Revisar repositorios" },
-        linkedin: { title: "LinkedIn", subtitle: "Abrir perfil profesional" },
-      },
-      presence: {
-        location: "Ubicado en Bilbao, Espana",
-        remote: "Disponible para colaboracion en remoto",
-      },
-    },
-  },
-};
+const FALLBACK_LOCALES = { en: {}, es: {} };
 
 const localeCache = { en: null, es: null };
 let currentLang = "en";
@@ -106,9 +61,8 @@ async function loadLocale(lang) {
 
 function t(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].contact ? localeCache[lang].contact : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].contact ? FALLBACK_LOCALES[lang].contact : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].contact ? FALLBACK_LOCALES[DEFAULT_LANG].contact : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].contact ? localeCache[DEFAULT_LANG].contact : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function applyTranslations(lang) {

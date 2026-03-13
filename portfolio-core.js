@@ -10,84 +10,7 @@ const entrySource = (urlParams.get("from") || "").toLowerCase();
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 
-const FALLBACK_LOCALES = {
-  en: {
-    portfolioCore: {
-      page: { title: "Portfolio Core | System Core", description: "Portfolio Core dedicated project view." },
-      identity: { role: "Software Systems Engineer" },
-      status: { online: "SYSTEM CORE ONLINE" },
-      crumb: { core: "Core", projects: "Projects", portfolio: "Portfolio Core" },
-      header: {
-        eyebrow: "PROJECT MODULE // PC-01",
-        title: "Portfolio Core",
-        lead: "Interactive system-style portfolio built as a real frontend product, not a static landing page.",
-      },
-      overview: {
-        title: "What this project is",
-        lead: "This exact website is the project itself. You are currently navigating Portfolio Core.",
-        copy: "It is built as an engineered interface: navigable module graph, dedicated views, transition choreography, language state and contextual routing composed as a system.",
-      },
-      actions: { github: "GitHub" },
-      stack: { title: "Stack", items: ["Three.js", "JavaScript", "CSS", "UI Architecture", "State", "Animation"] },
-      architecture: {
-        title: "Architecture highlights",
-        items: [
-          "Interactive Core graph with parent-child node relationships",
-          "Dedicated module pages with shared system visual language",
-          "Context-aware back navigation between modules",
-          "Language propagation through module links",
-        ],
-      },
-      engineering: {
-        title: "Engineering focus",
-        items: [
-          "Intentional motion and transition timing across views",
-          "Readable structure and reusable layout patterns",
-          "Separation of concerns per module (HTML/CSS/JS)",
-          "Consistent accessibility labels and keyboard-friendly controls",
-        ],
-      },
-    },
-  },
-  es: {
-    portfolioCore: {
-      page: { title: "Portfolio Core | Nucleo del Sistema", description: "Vista dedicada del proyecto Portfolio Core." },
-      identity: { role: "Ingeniero de Sistemas de Software" },
-      status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-      crumb: { core: "Core", projects: "Proyectos", portfolio: "Portfolio Core" },
-      header: {
-        eyebrow: "MODULO DE PROYECTO // PC-01",
-        title: "Portfolio Core",
-        lead: "Portafolio interactivo con estilo de sistema, construido como producto frontend real y no como una landing estatica.",
-      },
-      overview: {
-        title: "Que es este proyecto",
-        lead: "Esta web exacta es el propio proyecto. Ahora mismo estas navegando Portfolio Core.",
-        copy: "Esta construido como interfaz de ingenieria: grafo navegable de modulos, vistas dedicadas, orquestacion de transiciones, estado de idioma y enrutado contextual compuesto como sistema.",
-      },
-      actions: { github: "GitHub" },
-      stack: { title: "Tecnologias", items: ["Three.js", "JavaScript", "CSS", "Arquitectura UI", "Estado", "Animacion"] },
-      architecture: {
-        title: "Puntos de arquitectura",
-        items: [
-          "Grafo interactivo del Core con relaciones padre-hijo",
-          "Paginas de modulo dedicadas con lenguaje visual compartido",
-          "Navegacion de vuelta contextual entre modulos",
-          "Propagacion de idioma en los enlaces entre modulos",
-        ],
-      },
-      engineering: {
-        title: "Foco de ingenieria",
-        items: [
-          "Movimiento intencional y timing de transiciones entre vistas",
-          "Estructura legible y patrones de layout reutilizables",
-          "Separacion de responsabilidades por modulo (HTML/CSS/JS)",
-          "Etiquetas de accesibilidad consistentes y controles utilizables con teclado",
-        ],
-      },
-    },
-  },
-};
+const FALLBACK_LOCALES = { en: {}, es: {} };
 
 const localeCache = { en: null, es: null };
 let currentLang = "en";
@@ -134,16 +57,14 @@ async function loadLocale(lang) {
 
 function t(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore ? FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].portfolioCore ? localeCache[DEFAULT_LANG].portfolioCore : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].portfolioCore ? localeCache[lang].portfolioCore : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].portfolioCore ? FALLBACK_LOCALES[lang].portfolioCore : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore ? FALLBACK_LOCALES[DEFAULT_LANG].portfolioCore : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].portfolioCore ? localeCache[DEFAULT_LANG].portfolioCore : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {

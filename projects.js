@@ -11,68 +11,7 @@ const entrySource = (urlParams.get("from") || "").toLowerCase();
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 
-const FALLBACK_LOCALES = {
-  en: {
-    projects: {
-      page: { title: "Projects | System Core", description: "Project gallery for Unax Zulaika Fuente." },
-      identity: { role: "Software Systems Engineer" },
-      status: { online: "SYSTEM CORE ONLINE" },
-      crumb: { core: "Core", projects: "Projects" },
-      header: {
-        eyebrow: "PROJECTS",
-        title: "Projects",
-        lead: "Product work centered on KeyPing as the flagship product, plus supporting system projects.",
-      },
-      cards: {
-        actions: { github: "GitHub" },
-        keyping: {
-          eyebrow: "FLAGSHIP PRODUCT // PRIMARY VERSION",
-          title: "KeyPing",
-          enter: "Open flagship product",
-          desc: "Primary desktop product focused on local-first credential security, encrypted vault workflows and practical hardening controls.",
-          stack: ["Electron", "Angular", "TypeScript", "Node.js", "SQLite", "GPG"],
-        },
-        portfolio: {
-          eyebrow: "SUPPORTING SYSTEM PROJECT",
-          title: "Portfolio Core",
-          enter: "Open supporting project",
-          desc: "Supporting system project that powers this portfolio experience: Three.js rendering, UI architecture, state-driven navigation and module transitions.",
-          stack: ["Three.js", "JavaScript", "CSS", "UI Architecture", "State", "Animation"],
-        },
-      },
-    },
-  },
-  es: {
-    projects: {
-      page: { title: "Proyectos | Nucleo del Sistema", description: "Galeria de proyectos de Unax Zulaika Fuente." },
-      identity: { role: "Ingeniero de Sistemas de Software" },
-      status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-      crumb: { core: "Core", projects: "Proyectos" },
-      header: {
-        eyebrow: "PROYECTOS",
-        title: "Proyectos",
-        lead: "Trabajo de producto centrado en KeyPing como producto principal y complementado con proyectos de soporte.",
-      },
-      cards: {
-        actions: { github: "GitHub" },
-        keyping: {
-          eyebrow: "PRODUCTO PRINCIPAL // VERSION DE REFERENCIA",
-          title: "KeyPing",
-          enter: "Abrir producto principal",
-          desc: "Producto de escritorio principal centrado en seguridad local de credenciales, boveda cifrada y controles practicos de endurecimiento.",
-          stack: ["Electron", "Angular", "TypeScript", "Node.js", "SQLite", "GPG"],
-        },
-        portfolio: {
-          eyebrow: "PROYECTO DE SISTEMA DE SOPORTE",
-          title: "Portfolio Core",
-          enter: "Abrir proyecto de soporte",
-          desc: "Proyecto de soporte que impulsa esta experiencia de portafolio: renderizado con Three.js, arquitectura UI, estado y transiciones entre modulos.",
-          stack: ["Three.js", "JavaScript", "CSS", "Arquitectura UI", "Estado", "Animacion"],
-        },
-      },
-    },
-  },
-};
+const FALLBACK_LOCALES = { en: {}, es: {} };
 
 const localeCache = { en: null, es: null };
 let currentLang = "en";
@@ -126,16 +65,14 @@ async function loadLocale(lang) {
 
 function t(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].projects ? FALLBACK_LOCALES[DEFAULT_LANG].projects : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].projects ? localeCache[DEFAULT_LANG].projects : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].projects ? localeCache[lang].projects : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].projects ? FALLBACK_LOCALES[lang].projects : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].projects ? FALLBACK_LOCALES[DEFAULT_LANG].projects : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].projects ? localeCache[DEFAULT_LANG].projects : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {

@@ -10,172 +10,7 @@ const entrySource = (urlParams.get("from") || "").toLowerCase();
 const LANG_STORAGE_KEY = "system_core_lang";
 const DEFAULT_LANG = "en";
 
-const FALLBACK_LOCALES = {
-  en: {
-    capabilities: {
-      page: { title: "Capabilities | System Core", description: "Engineering capabilities module for Unax Zulaika Fuente." },
-      identity: { role: "Software Systems Engineer" },
-      status: { online: "SYSTEM CORE ONLINE" },
-      crumb: { core: "Core", about: "About", capabilities: "Capabilities" },
-      header: {
-        eyebrow: "CAPABILITIES",
-        title: "Engineering capabilities",
-        lead: "How I design systems, solve product-level constraints and deliver maintainable software.",
-      },
-      cards: {
-        system: {
-          tag: "Architecture module",
-          title: "System Engineering",
-          desc: "I design modular software systems with clear boundaries, stable interfaces and long-term maintainability.",
-          points: [
-            "Modular architecture with explicit domain boundaries",
-            "Structural decisions driven by maintainability and scale",
-            "Layer integration without coupling business logic to UI details",
-            "Codebase organization for predictable evolution over time",
-          ],
-        },
-        desktop: {
-          tag: "Delivery module",
-          title: "Desktop & Product Engineering",
-          desc: "I build desktop products as production software, not throwaway demos.",
-          points: [
-            "Electron desktop applications with real runtime constraints",
-            "Offline-first behavior and local reliability by design",
-            "End-to-end ownership from interface to packaging",
-            "Delivery focused on usable product increments",
-          ],
-        },
-        security: {
-          tag: "Trust module",
-          title: "Security-Oriented Development",
-          desc: "I treat security as a system property: boundaries, data protection and predictable trust models.",
-          points: [
-            "Security controls built into architecture decisions",
-            "Local encrypted storage and sensitive data minimization",
-            "Trust boundary separation between runtime layers",
-            "Integrity checks and defensive handling of critical flows",
-          ],
-        },
-        ux: {
-          tag: "Interface module",
-          title: "Technical UX",
-          desc: "I make technical tools understandable through structured flows, state visibility and usable interaction design.",
-          points: [
-            "Complex interface flows reduced to clear operator actions",
-            "State visibility for diagnostics, confidence and control",
-            "Interaction patterns that prioritize speed and precision",
-            "Onboarding paths that lower friction in technical contexts",
-          ],
-        },
-        ai: {
-          tag: "Acceleration module",
-          title: "AI-Assisted Engineering",
-          desc: "I use AI as an engineering multiplier for speed, exploration and implementation quality.",
-          points: [
-            "Rapid exploration of architecture alternatives",
-            "Faster prototyping and iteration loops",
-            "Assisted refactoring with explicit technical validation",
-            "AI integrated as a toolchain component, not as product noise",
-          ],
-        },
-        integration: {
-          tag: "Integration module",
-          title: "Full Stack / Integration Thinking",
-          desc: "I connect frontend, backend and runtime concerns into a coherent product architecture.",
-          points: [
-            "Frontend, backend and runtime responsibilities aligned",
-            "API and application logic designed as one system",
-            "Cross-layer troubleshooting with product-level context",
-            "Implementation decisions tied to operational behavior",
-          ],
-        },
-      },
-      closing: "I engineer software as an integrated system: architecture, product constraints, security posture, technical UX and delivery execution.",
-    },
-  },
-  es: {
-    capabilities: {
-      page: { title: "Capacidades | Nucleo del Sistema", description: "Modulo de capacidades de ingenieria de Unax Zulaika Fuente." },
-      identity: { role: "Ingeniero de Sistemas de Software" },
-      status: { online: "NUCLEO DEL SISTEMA ONLINE" },
-      crumb: { core: "Core", about: "Sobre mi", capabilities: "Capacidades" },
-      header: {
-        eyebrow: "CAPACIDADES",
-        title: "Capacidades de ingenieria",
-        lead: "Como diseno sistemas, resuelvo restricciones de producto y entrego software mantenible.",
-      },
-      cards: {
-        system: {
-          tag: "Modulo de arquitectura",
-          title: "Ingenieria de sistemas",
-          desc: "Diseno sistemas de software modulares con limites claros, interfaces estables y mantenibilidad a largo plazo.",
-          points: [
-            "Arquitectura modular con fronteras de dominio explicitas",
-            "Decisiones estructurales guiadas por mantenibilidad y escala",
-            "Integracion de capas sin acoplar la logica de negocio a la UI",
-            "Organizacion del codigo para evolucion predecible en el tiempo",
-          ],
-        },
-        desktop: {
-          tag: "Modulo de entrega",
-          title: "Ingenieria desktop y de producto",
-          desc: "Construyo productos desktop como software real de produccion, no como demos desechables.",
-          points: [
-            "Aplicaciones Electron con restricciones reales de ejecucion",
-            "Comportamiento offline-first y fiabilidad local por diseno",
-            "Responsabilidad end-to-end desde la interfaz hasta el empaquetado",
-            "Entrega orientada a incrementos de producto utilizables",
-          ],
-        },
-        security: {
-          tag: "Modulo de confianza",
-          title: "Desarrollo orientado a seguridad",
-          desc: "Trato la seguridad como una propiedad del sistema: limites, proteccion de datos y modelo de confianza predecible.",
-          points: [
-            "Controles de seguridad integrados en decisiones de arquitectura",
-            "Almacenamiento local cifrado y minimizacion de datos sensibles",
-            "Separacion de fronteras de confianza entre capas de runtime",
-            "Controles de integridad y manejo defensivo de flujos criticos",
-          ],
-        },
-        ux: {
-          tag: "Modulo de interfaz",
-          title: "UX tecnica",
-          desc: "Convierto herramientas tecnicas en experiencias comprensibles mediante flujos estructurados, visibilidad de estado y diseno usable.",
-          points: [
-            "Flujos complejos reducidos a acciones claras para el operador",
-            "Visibilidad de estado para diagnostico, control y confianza",
-            "Patrones de interaccion orientados a velocidad y precision",
-            "Onboarding que reduce friccion en contextos tecnicos",
-          ],
-        },
-        ai: {
-          tag: "Modulo de aceleracion",
-          title: "Ingenieria asistida por IA",
-          desc: "Uso IA como multiplicador de ingenieria para velocidad, exploracion y calidad de implementacion.",
-          points: [
-            "Exploracion rapida de alternativas de arquitectura",
-            "Prototipado e iteracion mas rapidos",
-            "Refactor asistido con validacion tecnica explicita",
-            "IA integrada como parte del flujo de herramientas, no como ruido",
-          ],
-        },
-        integration: {
-          tag: "Modulo de integracion",
-          title: "Vision full stack e integracion",
-          desc: "Conecto frontend, backend y runtime en una arquitectura de producto coherente.",
-          points: [
-            "Responsabilidades de frontend, backend y runtime alineadas",
-            "API y logica de aplicacion disenadas como un solo sistema",
-            "Resolucion de problemas entre capas con contexto de producto",
-            "Decisiones de implementacion conectadas al comportamiento operativo",
-          ],
-        },
-      },
-      closing: "Desarrollo software como un sistema integrado: arquitectura, restricciones de producto, postura de seguridad, UX tecnica y ejecucion de entrega.",
-    },
-  },
-};
+const FALLBACK_LOCALES = { en: {}, es: {} };
 
 const localeCache = { en: null, es: null };
 let currentLang = "en";
@@ -228,16 +63,14 @@ async function loadLocale(lang) {
 
 function t(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].capabilities ? FALLBACK_LOCALES[lang].capabilities : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].capabilities ? FALLBACK_LOCALES[DEFAULT_LANG].capabilities : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? "";
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].capabilities ? localeCache[DEFAULT_LANG].capabilities : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? "";
 }
 
 function listValue(lang, path) {
   const preferred = localeCache[lang] && localeCache[lang].capabilities ? localeCache[lang].capabilities : null;
-  const fallbackLang = FALLBACK_LOCALES[lang] && FALLBACK_LOCALES[lang].capabilities ? FALLBACK_LOCALES[lang].capabilities : null;
-  const fallback = FALLBACK_LOCALES[DEFAULT_LANG] && FALLBACK_LOCALES[DEFAULT_LANG].capabilities ? FALLBACK_LOCALES[DEFAULT_LANG].capabilities : null;
-  return textByPath(preferred, path) ?? textByPath(fallbackLang, path) ?? textByPath(fallback, path) ?? null;
+  const fallback = localeCache[DEFAULT_LANG] && localeCache[DEFAULT_LANG].capabilities ? localeCache[DEFAULT_LANG].capabilities : null;
+  return textByPath(preferred, path) ?? textByPath(fallback, path) ?? null;
 }
 
 function applyTranslations(lang) {
