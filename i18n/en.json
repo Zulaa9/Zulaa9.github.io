@@ -171,12 +171,12 @@
       "title": "Engineering Proof",
       "subtitle": "Real build signals",
       "items": [
-        "15.5k+ lines of code",
-        "74 commits",
+        "16k+ lines of code",
+        "115+ commits",
         "443 tracked files",
         "Electron + Angular architecture",
         "Offline-first encrypted vault",
-        "Signed releases (SHA256 + GPG)"
+        "Checksummed releases (SHA256)"
       ],
       "statement": "Built as a real desktop product with security boundaries between renderer, preload and main process."
     },
@@ -222,7 +222,10 @@
       "items": [
         "Vault encrypted on disk using AES-256-GCM",
         "No mandatory cloud sync and no account required",
-        "PBKDF2-HMAC-SHA512 key derivation (120000 iterations)",
+        "PBKDF2-HMAC-SHA512 key derivation (600 000 iterations, OWASP 2023)",
+        "Master password verified in main process only · session key never reaches the renderer",
+        "HMAC-SHA256 for duplicate detection · no plaintext passwords compared in renderer",
+        "Atomic vault rotation with automatic rollback on failure",
         "Clipboard auto-clear only when the copied secret still matches",
         "Escalating cooldown after failed master unlock attempts",
         "Vault structure validation and anomaly/corruption checks"
@@ -257,13 +260,10 @@
     },
     "integrity": {
       "title": "Release integrity",
-      "copy": "Each release includes checksums and detached signature files.",
+      "copy": "Each release ships with a SHA256 checksum file. GPG signing is planned for a future release.",
       "files": [
-        "SHA256SUMS.txt",
-        "SHA256SUMS.txt.asc (detached GPG signature in ASCII-armored format)"
+        "SHA256SUMS.txt"
       ],
-      "fingerprintLabel": "Signing key fingerprint",
-      "verifySig": "Verify signature:",
       "verifySha": "Verify checksums:"
     },
     "roadmap": {
@@ -519,9 +519,7 @@
           "Electron",
           "Angular",
           "TypeScript",
-          "Node.js",
-          "SQLite",
-          "GPG"
+          "Node.js"
         ]
       },
       "portfolio": {

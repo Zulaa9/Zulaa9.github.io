@@ -171,12 +171,12 @@
       "title": "Prueba de ingeniería",
       "subtitle": "Indicadores reales de construcción",
       "items": [
-        "15.5k+ líneas de código",
-        "74 commits",
+        "16k+ líneas de código",
+        "115+ commits",
         "443 archivos versionados",
         "Arquitectura Electron + Angular",
         "Bóveda cifrada offline-first",
-        "Releases firmadas (SHA256 + GPG)"
+        "Releases con checksum (SHA256)"
       ],
       "statement": "Construido como producto de escritorio real con límites de seguridad entre renderer, preload y proceso principal."
     },
@@ -222,7 +222,10 @@
       "items": [
         "Bóveda cifrada en disco con AES-256-GCM",
         "Sin sincronización cloud obligatoria y sin cuenta requerida",
-        "Derivación PBKDF2-HMAC-SHA512 (120000 iteraciones)",
+        "Derivación PBKDF2-HMAC-SHA512 (600 000 iteraciones, OWASP 2023)",
+        "Contraseña maestra verificada solo en el proceso principal · la clave de sesión nunca llega al renderer",
+        "HMAC-SHA256 para detección de duplicados · sin comparar contraseñas en claro en el renderer",
+        "Rotación atómica de bóveda con rollback automático en caso de error",
         "Autolimpieza del portapapeles solo si el secreto sigue coincidiendo",
         "Retardos progresivos tras intentos fallidos de desbloqueo maestro",
         "Validaciones de estructura de la bóveda y detección de anomalías o corrupción"
@@ -257,13 +260,10 @@
     },
     "integrity": {
       "title": "Integridad de publicaciones",
-      "copy": "Cada publicación incluye checksums y archivos de firma separados.",
+      "copy": "Cada publicación incluye un archivo de checksums SHA256. La firma GPG está prevista para una publicación futura.",
       "files": [
-        "SHA256SUMS.txt",
-        "SHA256SUMS.txt.asc (firma GPG separada en formato ASCII-armored)"
+        "SHA256SUMS.txt"
       ],
-      "fingerprintLabel": "Fingerprint de la clave de firma",
-      "verifySig": "Verificar firma:",
       "verifySha": "Verificar checksums:"
     },
     "roadmap": {
@@ -519,9 +519,7 @@
           "Electron",
           "Angular",
           "TypeScript",
-          "Node.js",
-          "SQLite",
-          "GPG"
+          "Node.js"
         ]
       },
       "portfolio": {
