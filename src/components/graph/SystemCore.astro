@@ -1,0 +1,130 @@
+---
+import { getCollection } from "astro:content";
+import { resolveLayout } from "./graph-engine";
+import { scUi } from "../../i18n/system-core-ui";
+import type { GraphNodeData } from "./types";
+
+const locale = (Astro.currentLocale ?? "en") as "en" | "es";
+const ui = scUi(locale);
+
+const entries = await getCollection("graph");
+const nodes: GraphNodeData[] = entries.map((entry) => ({
+  id: entry.id,
+  type: entry.data.type,
+  parentId: entry.data.parentId,
+  route: entry.data.route,
+  label: entry.data.label
+    ? {
+        title: entry.data.label[locale].title,
+        meta: entry.data.label[locale].meta,
+        dockCopy: entry.data.label[locale].dockCopy,
+      }
+    : undefined,
+  layout: entry.data.layout,
+  pinned: entry.data.pinned,
+  order: entry.data.order,
+  status: entry.data.status,
+  relations: entry.data.relations,
+}));
+
+const resolved = resolveLayout(nodes);
+const clickableNodes = nodes
+  .filter((n) => n.type !== "core")
+  .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
+const defaultActiveId = clickableNodes.find((n) => n.pinned)?.id ?? clickableNodes[0]?.id ?? "";
+
+const payload = {
+  nodes,
+  strings: {
+    bootLines: ui.bootLines,
+    statusOffline: ui.statusOffline,
+    statusBooting: ui.statusBooting,
+    statusLoadingTemplate: locale === "es" ? "CARGANDO NÚCLEO DEL SISTEMA {progress}%" : "SYSTEM CORE LOADING {progress}%",
+    statusSyncing: ui.statusSyncing,
+    statusOnline: ui.statusOnline,
+  },
+  defaultActiveId,
+};
+
+// Escape "<" so nothing in the payload can prematurely close this <script>
+// tag (defensive now; matters once content comes from the admin panel).
+const payloadJson = JSON.stringify(payload).replace(/</g, "\\u003c");
+---
+
+<section class="core-stage" id="core-stage">
+  <section class="startup-gate" id="startup-gate" aria-label="System startup gate">
+    <div class="startup-gate__panel">
+      <p class="eyebrow">{ui.startupEyebrow}</p>
+      <h2>{ui.startupTitle}</h2>
+      <p>{ui.startupCopy}</p>
+      <button class="startup-gate__button" id="start-core-button" type="button">{ui.startupCta}</button>
+    </div>
+  </section>
+
+  <section class="boot-sequence" id="boot-sequence" aria-label="Boot sequence">
+    <div class="boot-door boot-door--top" aria-hidden="true"></div>
+    <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
+    <div class="boot-terminal">
+      <p class="boot-terminal__eyebrow">{ui.bootEyebrow}</p>
+      <div class="boot-terminal__screen">
+        <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
+        <div class="boot-progress">
+          <div class="boot-progress__bar"><span id="boot-progress-fill"></span></div>
+          <span class="boot-progress__text" id="boot-progress-text">0%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <canvas id="core-canvas" aria-label="System Core visualization"></canvas>
+  <svg id="node-links" class="node-links" aria-hidden="true"></svg>
+  <div class="core-center" id="core-center" aria-hidden="true"></div>
+
+  <div class="node-layer" id="node-layer" aria-label="Primary modules">
+    {clickableNodes.map((node, index) => (
+      <a
+        class:list={["module-node", "module-trigger", { "module-node--flagship": node.pinned }]}
+        data-node-id={node.id}
+        href={node.route}
+        style={{ "--reveal-delay": `${Math.min(index, 8) * 60 + 20}ms` }}
+      >
+        <span class="node-title">{node.label?.title}</span>
+        {node.label?.meta && <span class="node-meta">{node.label.meta}</span>}
+      </a>
+    ))}
+  </div>
+
+  <article class="core-copy">
+    <p class="eyebrow">{ui.heroEyebrow}</p>
+    <h1>{ui.heroTitle}</h1>
+    <p set:html={ui.heroBodyHtml} />
+  </article>
+
+  <aside class="info-dock" id="info-dock" aria-live="polite">
+    <p class="info-dock__label">{ui.dockLabel}</p>
+    <h2 id="dock-title">{ui.dockDefaultTitle}</h2>
+    <p id="dock-copy">{ui.dockDefaultCopy}</p>
+  </aside>
+</section>
+
+<nav class="mobile-modules" aria-label="Modules">
+  {clickableNodes.map((node) => (
+    <a class="mobile-modules__item module-trigger" data-node-id={node.id} href={node.route}>
+      {node.label?.title}
+    </a>
+  ))}
+</nav>
+
+<script type="application/json" id="sc-data" set:html={payloadJson} />
+
+<script>
+  import { bootSystemCore } from "./system-core-app";
+  // astro:page-load fires after the initial load AND after every
+  // ClientRouter transition — a plain top-level bootSystemCore() call only
+  // ran once, ever, because Astro doesn't re-run an already-evaluated
+  // module's top-level code on soft navigations. That's exactly why
+  // returning to "/" via the crumbbar's back button rendered nothing: the
+  // Core page's own markup came back, but nothing ever re-initialized it.
+  document.addEventListener("astro:page-load", bootSystemCore);
+</script>

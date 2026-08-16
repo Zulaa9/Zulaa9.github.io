@@ -1,0 +1,11 @@
+{
+  "type": "project",
+  "parentId": "projects",
+  "route": "/projects/portfolio-core",
+  "label": {
+    "en": { "title": "Portfolio Core", "meta": "Project", "dockCopy": "Supporting module for this portfolio system: UI architecture, stateful navigation and interaction layers." },
+    "es": { "title": "Portfolio Core", "meta": "Proyecto", "dockCopy": "Módulo de soporte para este sistema de portfolio: arquitectura UI, navegación con estado y capas de interacción." }
+  },
+  "layout": { "mode": "fixed", "position": { "x": 0.86, "y": 0.66 } },
+  "status": "active"
+}

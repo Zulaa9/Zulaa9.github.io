@@ -1,0 +1,71 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("projects", ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const locale = "en" as const;
+const { Content } = await render(entry);
+const copy = entry.data[locale];
+---
+
+<BaseLayout title={`${copy.title} | System Core`} description={copy.shortDescription}>
+  <article class="project">
+    {copy.eyebrow && <p class="eyebrow">{copy.eyebrow}</p>}
+    <h1>{copy.title}</h1>
+    <p class="lead">{copy.shortDescription}</p>
+
+    {entry.data.cover && <Image src={entry.data.cover} alt="" width={640} height={360} class="cover" />}
+
+    {entry.data.stack.length > 0 && (
+      <ul class="pills">
+        {entry.data.stack.map((tech: string) => <li>{tech}</li>)}
+      </ul>
+    )}
+
+    {copy.features && copy.features.length > 0 && (
+      <section>
+        <h2>Features</h2>
+        <ul>{copy.features.map((f: string) => <li>{f}</li>)}</ul>
+      </section>
+    )}
+
+    {entry.data.links && (
+      <p class="links">
+        {entry.data.links.repo && <a href={entry.data.links.repo} target="_blank" rel="noopener noreferrer">GitHub</a>}
+        {entry.data.links.demo && <a href={entry.data.links.demo} target="_blank" rel="noopener noreferrer">Demo</a>}
+        {entry.data.links.docs && <a href={entry.data.links.docs} target="_blank" rel="noopener noreferrer">Docs</a>}
+      </p>
+    )}
+
+    <div class="body">
+      <Content />
+    </div>
+
+    <a class="back-link" href="/projects">← Back to Projects</a>
+  </article>
+</BaseLayout>
+
+<style>
+  .project { margin-top: 32px; max-width: 720px; }
+  .project h1 { font-family: var(--font-display); font-size: clamp(1.3rem, 2.4vw, 2rem); margin: 10px 0; }
+  .lead { color: #bfd0df; font-size: 0.95rem; }
+  .cover { border-radius: 14px; width: 100%; height: auto; margin: 16px 0; }
+  .pills { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 12px 0; }
+  .pills li { border: 1px solid rgba(130, 171, 207, 0.3); border-radius: 999px; padding: 4px 10px; font-size: 0.76rem; color: var(--muted); }
+  .project h2 { font-family: var(--font-display); font-size: 1.05rem; margin: 20px 0 8px; }
+  .links { display: flex; gap: 14px; margin: 16px 0; }
+  .links a { color: var(--accent-strong); text-decoration: none; }
+  .links a:hover, .links a:focus-visible { text-decoration: underline; }
+  .body { color: #c7d6e3; line-height: 1.6; font-size: 0.92rem; }
+  .body :global(h2) { font-family: var(--font-display); font-size: 1.05rem; margin: 24px 0 8px; }
+  .body :global(table) { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  .body :global(th), .body :global(td) { border: 1px solid rgba(130, 171, 207, 0.2); padding: 6px 10px; text-align: left; font-size: 0.85rem; }
+  .back-link { display: inline-block; margin-top: 24px; color: var(--accent-strong); text-decoration: none; }
+  .back-link:hover, .back-link:focus-visible { text-decoration: underline; }
+</style>

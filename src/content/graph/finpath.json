@@ -1,0 +1,11 @@
+{
+  "type": "project",
+  "parentId": "projects",
+  "route": "/projects/finpath",
+  "label": {
+    "en": { "title": "FinPath", "meta": "Personal Project", "dockCopy": "Personal finance path planner." },
+    "es": { "title": "FinPath", "meta": "Proyecto personal", "dockCopy": "Planificador personal de finanzas." }
+  },
+  "layout": { "mode": "auto", "angleHint": 95 },
+  "status": "planned"
+}

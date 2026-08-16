@@ -1,0 +1,12 @@
+{
+  "type": "project",
+  "parentId": "projects",
+  "route": "/projects/keyping",
+  "label": {
+    "en": { "title": "KeyPing", "meta": "Flagship Product", "dockCopy": "Flagship product module. Production version with security-focused desktop architecture." },
+    "es": { "title": "KeyPing", "meta": "Producto principal", "dockCopy": "Módulo principal del producto. Versión de producción con arquitectura de escritorio orientada a seguridad." }
+  },
+  "layout": { "mode": "fixed", "position": { "x": 0.74, "y": 0.48 } },
+  "pinned": true,
+  "status": "active"
+}

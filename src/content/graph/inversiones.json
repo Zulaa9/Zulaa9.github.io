@@ -1,0 +1,11 @@
+{
+  "type": "project",
+  "parentId": "projects",
+  "route": "/projects/inversiones",
+  "label": {
+    "en": { "title": "Inversiones desde cero", "meta": "Personal Project", "dockCopy": "Investment education and tracking tool built for personal use." },
+    "es": { "title": "Inversiones desde cero", "meta": "Proyecto personal", "dockCopy": "Herramienta personal de seguimiento y aprendizaje de inversión." }
+  },
+  "layout": { "mode": "auto", "angleHint": 15 },
+  "status": "wip"
+}

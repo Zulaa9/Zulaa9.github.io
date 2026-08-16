@@ -1,0 +1,10 @@
+{
+  "type": "branch",
+  "parentId": "about",
+  "route": "/contact",
+  "label": {
+    "en": { "title": "Contact", "meta": "Channel", "dockCopy": "Direct technical conversations and collaboration opportunities." },
+    "es": { "title": "Contacto", "meta": "Canal", "dockCopy": "Conversaciones técnicas directas y oportunidades de colaboración." }
+  },
+  "layout": { "mode": "fixed", "position": { "x": 0.31, "y": 0.64 } }
+}
