@@ -44,6 +44,14 @@ export interface SimNode extends GraphNodeData {
   // permanently welded in place the instant something else needs the same
   // spot.
   manuallyPlaced?: boolean;
+  // True while a drag elsewhere in the graph is in progress and this node
+  // sits outside that drag's local interaction set — see
+  // growLocalInteraction (system-core-app.ts) and isAnchor
+  // (graph-simulation.ts). Distinct from manuallyPlaced/fx/fy: this is
+  // temporary, interaction-scoped state, cleared the moment that specific
+  // interaction ends, regardless of whether the node was already pinned
+  // for some other reason before it started.
+  frozen?: boolean;
   x?: number;
   y?: number;
   vx?: number;
