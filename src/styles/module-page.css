@@ -1,0 +1,369 @@
+/* Shared shell for every "module" page (About/Capabilities/Contact/Project):
+ * the core-stage becomes a flex column, crumbbar pinned to the top, a
+ * scrollable body below. The window (.core-stage) IS the container — the
+ * content inside no longer wraps itself in a second layer of boxes. These
+ * are typographic primitives (label, rule, spec list), not surfaces. */
+
+.module-stage {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.module-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 50px 24px 40px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(114, 182, 216, 0.62) rgba(6, 16, 24, 0.82);
+}
+
+.module-scroll::-webkit-scrollbar {
+  width: 11px;
+}
+
+.module-scroll::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, rgba(5, 13, 20, 0.92), rgba(7, 18, 27, 0.9));
+}
+
+.module-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(114, 182, 216, 0.74), rgba(84, 149, 182, 0.72));
+  border-radius: 999px;
+  border: 2px solid rgba(7, 18, 27, 0.92);
+}
+
+/* The content column. No border, no background, no shadow — the window
+ * around it already provides that. Just a readable measure and the entry
+ * animation. */
+/* 46rem (736px) was sized for pure prose and left the window looking half-
+ * empty on anything wider than a laptop — real desktop viewports have
+ * plenty more to give. Individual text elements (`.section p`, `.plain-
+ * list`, etc.) keep their own 62ch cap for a comfortable reading measure,
+ * so widening the shell only gives room to things that actually benefit
+ * from it: a two-column intro, a wider spec table, real images. */
+.module-shell {
+  max-width: 68rem;
+  animation: moduleShellIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 40ms;
+}
+
+@keyframes moduleShellIn {
+  from {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.module-header h1 {
+  margin: 6px 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  text-wrap: balance;
+}
+
+.module-header p {
+  margin: 0;
+  max-width: 62ch;
+  color: #bed2e2;
+  line-height: 1.6;
+}
+
+.module-header p + p {
+  margin-top: 10px;
+}
+
+/* ---- typographic section rhythm (replaces .module-section) ---- */
+
+.section-divider {
+  border: none;
+  border-top: 1px solid rgba(130, 171, 207, 0.16);
+  margin: 40px 0;
+}
+
+.section {
+  margin-top: 40px;
+}
+
+.section:first-child {
+  margin-top: 0;
+}
+
+.section h2 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.section p {
+  margin: 0;
+  max-width: 62ch;
+  color: #c4d9ea;
+  line-height: 1.62;
+}
+
+.section p + p {
+  margin-top: 12px;
+}
+
+/* Short qualifier under a section heading — a role + date, a category tag
+ * — one register between the eyebrow and body prose. Not a paragraph in
+ * the reading flow, so it gets its own tight margin rather than the
+ * standard paragraph rhythm. */
+.section .section-meta {
+  margin: -6px 0 14px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+/* auto-numbered sections: "01 / TITLE" — order carries real meaning here
+ * (these are the project's own documented sections, read top to bottom),
+ * so a number is information, not decoration. */
+.numbered-sections {
+  counter-reset: section;
+}
+
+/* Plain descendant selector — this file has no component scoping to escape
+ * (it's a regular imported stylesheet, not an Astro <style> block), so
+ * ":global()" here would be invalid syntax and silently drop the whole
+ * rule. It matches every h2 under .numbered-sections either way: ones
+ * wrapped in .section and ones rendered directly by the Markdown body. */
+.numbered-sections h2 {
+  counter-increment: section;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8eb5d1;
+  margin: 40px 0 14px;
+}
+
+.numbered-sections h2:first-child {
+  margin-top: 0;
+}
+
+.numbered-sections h2::before {
+  content: counter(section, decimal-leading-zero);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- typographic lists (replace pill/chip/card patterns) ---- */
+
+/* short flat lists (tech stack, "also worked with"): inline, dot-separated */
+.inline-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  color: #c4d9ea;
+}
+
+.inline-list li {
+  display: inline;
+}
+
+.inline-list li:not(:last-child)::after {
+  content: " \00B7 ";
+  color: var(--muted);
+}
+
+/* longer conceptual lists (focus areas, security model, roadmap) */
+.plain-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  max-width: 62ch;
+}
+
+.plain-list li {
+  position: relative;
+  padding-left: 18px;
+  color: #c4d9ea;
+  line-height: 1.5;
+}
+
+.plain-list li::before {
+  content: "\2014";
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+
+/* numbered lists (features): order is real information (this is how the
+ * project itself enumerates them), consistent with the section numbering */
+.numbered-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: item;
+  display: grid;
+  gap: 14px;
+  max-width: 62ch;
+}
+
+.numbered-list li {
+  counter-increment: item;
+  display: grid;
+  grid-template-columns: 1.8rem 1fr;
+  gap: 4px 10px;
+}
+
+.numbered-list li::before {
+  content: counter(item, decimal-leading-zero);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.numbered-list li > * {
+  grid-column: 2;
+}
+
+/* ---- spec block: label:value facts (status, stack, links, dates) ---- */
+
+.spec {
+  margin: 24px 0;
+  padding: 16px 0;
+  border-top: 1px solid rgba(130, 171, 207, 0.16);
+  border-bottom: 1px solid rgba(130, 171, 207, 0.16);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 20px;
+  row-gap: 8px;
+}
+
+.spec dt {
+  grid-column: 1;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8eb5d1;
+  white-space: nowrap;
+}
+
+.spec dd {
+  grid-column: 2;
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.spec dd a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(130, 171, 207, 0.4);
+}
+
+.spec dd a:hover,
+.spec dd a:focus-visible {
+  color: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+/* ---- state indicator: reserved for real status, not decoration ---- */
+
+.state {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.state--active {
+  color: #a9edc4;
+}
+
+.state--wip {
+  color: #f6c896;
+}
+
+.state--planned {
+  color: var(--muted);
+}
+
+/* ---- channel list (Contact): label + value, the line itself is the link ---- */
+
+.channel-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.channel-list a {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 12px;
+  align-items: baseline;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.channel-list .channel-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8eb5d1;
+}
+
+.channel-list .channel-value {
+  border-bottom: 1px solid transparent;
+}
+
+.channel-list a:hover .channel-value,
+.channel-list a:focus-visible .channel-value {
+  color: var(--accent-strong);
+  border-bottom-color: var(--accent-strong);
+}
+
+@media (max-width: 860px) {
+  .core-stage {
+    height: auto;
+    min-height: 65vh;
+    border-radius: 18px;
+  }
+
+  .module-scroll {
+    padding: 44px 14px 24px;
+    scrollbar-width: auto;
+  }
+
+  .module-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .spec {
+    grid-template-columns: 1fr;
+    row-gap: 4px;
+  }
+
+  .spec dd {
+    margin-bottom: 6px;
+  }
+
+  .channel-list a {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

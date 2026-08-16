@@ -1,0 +1,34 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Crumbbar from "../components/shared/Crumbbar.astro";
+import "../styles/module-page.css";
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  crumbs: Crumb[];
+  backHref: string;
+  backLabel: string;
+  ogImage?: ImageMetadata;
+  ogType?: "website" | "article";
+}
+
+const { title, description, crumbs, backHref, backLabel, ogImage, ogType } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage} ogType={ogType}>
+  <slot name="head" slot="head" />
+  <div class="core-stage module-stage">
+    <Crumbbar crumbs={crumbs} backHref={backHref} backLabel={backLabel} />
+    <div class="module-scroll">
+      <section class="module-shell">
+        <slot />
+      </section>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,160 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import ModuleLayout from "./ModuleLayout.astro";
+import ProjectHero from "../components/project/ProjectHero.astro";
+import FeatureList from "../components/project/FeatureList.astro";
+import GallerySection from "../components/project/GallerySection.astro";
+import RelatedNodes from "../components/project/RelatedNodes.astro";
+import { projectsUi } from "../i18n/projects-ui";
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+  locale: "en" | "es";
+  /** 1-based position among published projects, for the "PROJECT / 01" eyebrow. */
+  index: number;
+}
+
+const { entry, locale, index } = Astro.props;
+const t = projectsUi[locale];
+const copy = entry.data[locale];
+const { Content } = await render(entry);
+
+const localePrefix = locale === "es" ? "/es" : "";
+const coreHref = locale === "es" ? "/es/" : "/";
+const projectsHref = `${localePrefix}/projects`;
+const eyebrow = `${t.eyebrowProject} / ${String(index).padStart(2, "0")}`;
+
+let relatedNodes: { label: string; href: string }[] = [];
+if (entry.data.relatedNodeIds.length > 0) {
+  const graphNodes = await getCollection("graph", ({ id }) => entry.data.relatedNodeIds.includes(id));
+  relatedNodes = graphNodes
+    .filter((node) => node.data.label && node.data.route)
+    .map((node) => ({
+      label: node.data.label![locale].title,
+      href: `${localePrefix}${node.data.route}`,
+    }));
+}
+---
+
+<ModuleLayout
+  title={`${copy.title} | System Core`}
+  description={copy.shortDescription}
+  crumbs={[
+    { label: t.crumbCore, href: coreHref },
+    { label: t.crumbProjects, href: projectsHref },
+    { label: copy.title },
+  ]}
+  backHref={coreHref}
+  backLabel={t.backLabel}
+  ogImage={entry.data.cover}
+  ogType="article"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: copy.title,
+      description: copy.shortDescription,
+      applicationCategory: "DeveloperApplication",
+      ...(entry.data.links?.repo ? { codeRepository: entry.data.links.repo } : {}),
+      ...(entry.data.stack.length > 0 ? { softwareRequirements: entry.data.stack.join(", ") } : {}),
+    })} />
+  </Fragment>
+
+  <article>
+    <ProjectHero
+      eyebrow={eyebrow}
+      title={copy.title}
+      shortDescription={copy.shortDescription}
+      status={entry.data.status}
+      cover={entry.data.cover}
+    />
+
+    <dl class="spec">
+      <div><dt>{t.specStatus}</dt><dd>{entry.data.status}</dd></div>
+      {entry.data.stack.length > 0 && (
+        <div><dt>{t.specStack}</dt><dd>{entry.data.stack.join(" · ")}</dd></div>
+      )}
+      {entry.data.startDate && (
+        <div><dt>{t.specYear}</dt><dd>{entry.data.startDate.getFullYear()}</dd></div>
+      )}
+      {entry.data.links?.repo && (
+        <div><dt>{t.specSource}</dt><dd><a href={entry.data.links.repo} target="_blank" rel="noopener noreferrer">{t.linkRepo} ↗</a></dd></div>
+      )}
+      {entry.data.links?.demo && (
+        <div><dt>{t.specDemo}</dt><dd><a href={entry.data.links.demo} target="_blank" rel="noopener noreferrer">{t.linkDemo} ↗</a></dd></div>
+      )}
+      {entry.data.links?.docs && (
+        <div><dt>{t.specDocs}</dt><dd><a href={entry.data.links.docs} target="_blank" rel="noopener noreferrer">{t.linkDocs} ↗</a></dd></div>
+      )}
+    </dl>
+
+    <GallerySection title={t.galleryTitle} gallery={entry.data.gallery} />
+
+    <div class="numbered-sections">
+      <FeatureList title={t.featuresTitle} features={copy.features} />
+      <Content />
+    </div>
+
+    <RelatedNodes title={t.relatedTitle} nodes={relatedNodes} />
+
+    <a class="back-link" href={projectsHref}>{t.backToProjects}</a>
+  </article>
+</ModuleLayout>
+
+<style>
+  .numbered-sections :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+  }
+
+  .numbered-sections :global(th),
+  .numbered-sections :global(td) {
+    border-bottom: 1px solid rgba(130, 171, 207, 0.16);
+    padding: 7px 10px 7px 0;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #c4d9ea;
+  }
+
+  .numbered-sections :global(th) {
+    color: #8eb5d1;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .numbered-sections :global(p) {
+    max-width: 62ch;
+    color: #c4d9ea;
+    line-height: 1.62;
+    margin: 0 0 12px;
+  }
+
+  .numbered-sections :global(ol),
+  .numbered-sections :global(ul) {
+    max-width: 62ch;
+    padding-left: 18px;
+    margin: 0 0 12px;
+    color: #c4d9ea;
+    line-height: 1.55;
+    display: grid;
+    gap: 6px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 48px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+  }
+
+  .back-link:hover,
+  .back-link:focus-visible {
+    color: var(--accent-strong);
+  }
+</style>

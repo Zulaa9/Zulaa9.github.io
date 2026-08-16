@@ -1,0 +1,130 @@
+---
+/**
+ * Back button + breadcrumb trail. One component instead of the
+ * about-crumbbar/capabilities-crumbbar/contact-crumbbar/keyping-crumbbar…
+ * markup duplicated per legacy page (same structure, only the class prefix
+ * differed).
+ *
+ * The round back button always returns to the Core — it's "go home", not
+ * "go up one level" — matching the legacy site's behavior exactly (every
+ * module's back button targeted `/`, even nested ones like Capabilities).
+ */
+interface Crumb {
+  label: string;
+  href?: string; // omitted on the last (current) crumb
+}
+
+interface Props {
+  crumbs: Crumb[];
+  backHref: string;
+  backLabel: string;
+}
+
+const { crumbs, backHref, backLabel } = Astro.props;
+---
+
+<nav class="crumbbar" aria-label="Screen path">
+  <a href={backHref} class="crumbbar__back" aria-label={backLabel}>
+    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+      <path d="M15 5L8 12L15 19" />
+    </svg>
+  </a>
+  <p class="crumbbar__trail">
+    {crumbs.map((crumb, index) => (
+      <>
+        <span class="crumbbar__sep" aria-hidden="true">/</span>
+        {crumb.href ? (
+          <a href={crumb.href}>{crumb.label}</a>
+        ) : (
+          <span aria-current="page">{crumb.label}</span>
+        )}
+      </>
+    ))}
+  </p>
+</nav>
+
+<style>
+  .crumbbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    margin: 0;
+    padding: 7px 24px;
+    border-bottom: 1px solid rgba(124, 168, 194, 0.18);
+    background: linear-gradient(180deg, rgba(8, 19, 30, 0.94), rgba(8, 19, 30, 0.42));
+    backdrop-filter: blur(8px);
+  }
+
+  .crumbbar__back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border: 1px solid rgba(143, 186, 214, 0.36);
+    border-radius: 999px;
+    color: #e4f3ff;
+    background: linear-gradient(145deg, rgba(14, 30, 43, 0.9), rgba(9, 20, 31, 0.85));
+    text-decoration: none;
+  }
+
+  .crumbbar__back svg {
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+  .crumbbar__trail {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #bfd9eb;
+  }
+
+  .crumbbar__sep {
+    color: #79a9c6;
+  }
+
+  .crumbbar__trail a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .crumbbar__trail a:hover,
+  .crumbbar__trail a:focus-visible {
+    color: #e7f6ff;
+  }
+
+  @media (max-width: 860px) {
+    .crumbbar {
+      min-height: 36px;
+      padding: 6px 14px;
+    }
+    .crumbbar__trail {
+      font-size: 0.64rem;
+      gap: 6px;
+    }
+    .crumbbar__back {
+      width: 26px;
+      height: 26px;
+    }
+  }
+</style>

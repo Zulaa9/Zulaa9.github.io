@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /debug/
+Disallow: /admin/
+
+Sitemap: https://zula.dev/sitemap-index.xml

@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  nodes: { label: string; href: string }[];
+}
+
+const { title, nodes } = Astro.props;
+---
+
+{nodes.length > 0 && (
+  <nav class="section related" aria-label={title}>
+    <p class="eyebrow">{title}</p>
+    <ul class="related__list">
+      {nodes.map((node) => (
+        <li><a href={node.href}>{node.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .related__list {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+  }
+
+  .related__list a {
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(130, 171, 207, 0.4);
+  }
+
+  .related__list a:hover,
+  .related__list a:focus-visible {
+    color: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
+</style>
