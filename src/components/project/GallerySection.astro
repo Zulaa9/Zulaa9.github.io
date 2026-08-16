@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  title: string;
+  gallery?: ImageMetadata[];
+}
+
+const { title, gallery } = Astro.props;
+
+// Same reasoning as ProjectHero: cap to each image's own resolution so a
+// smaller screenshot renders at its native size instead of being
+// upscaled to fill the (wider) shell.
+const MAX_WIDTH = 1400;
+const sized = (gallery ?? []).map((img) => {
+  const width = Math.min(MAX_WIDTH, img.width);
+  const height = Math.round(width * (img.height / img.width));
+  return { img, width, height };
+});
+---
+
+{sized.length > 0 && (
+  <section class="section gallery">
+    <h2>{title}</h2>
+    <div class="gallery__stack">
+      {sized.map(({ img, width, height }) => (
+        <Image src={img} alt="" width={width} height={height} loading="lazy" />
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .gallery__stack {
+    display: grid;
+    gap: 24px;
+  }
+
+  .gallery__stack :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+</style>

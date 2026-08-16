@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  eyebrow: string; // "PROJECT / 01"
+  title: string;
+  shortDescription: string;
+  status: string;
+  cover?: ImageMetadata;
+}
+
+const { eyebrow, title, shortDescription, status, cover } = Astro.props;
+
+// Never request more than the source actually has — a small screenshot
+// asked to fill the (now much wider) shell just comes out blurry. Sizing
+// down from the source's own dimensions instead of a fixed target means a
+// low-res cover degrades gracefully (renders at its native size, doesn't
+// stretch) instead of being upscaled into visible softness.
+const MAX_COVER_WIDTH = 1400;
+const coverWidth = cover ? Math.min(MAX_COVER_WIDTH, cover.width) : 0;
+const coverHeight = cover ? Math.round(coverWidth * (cover.height / cover.width)) : 0;
+---
+
+<header class="module-header project-hero">
+  <div class="project-hero__top">
+    <p class="eyebrow">{eyebrow}</p>
+    <span class={`state state--${status}`}>{status}</span>
+  </div>
+  <h1>{title}</h1>
+  <p class="project-hero__lead">{shortDescription}</p>
+  {cover && <Image class="project-hero__cover" src={cover} alt="" width={coverWidth} height={coverHeight} />}
+</header>
+
+<style>
+  .project-hero__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .project-hero__lead {
+    font-size: 1.02rem !important;
+    color: #dcebf6 !important;
+  }
+
+  .project-hero__cover {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-top: 28px;
+    border-radius: 4px;
+  }
+</style>

@@ -1,48 +1,156 @@
 ---
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import ModuleLayout from "../../layouts/ModuleLayout.astro";
+import { projectsUi } from "../../i18n/projects-ui";
 
-const locale = "en" as const;
+const t = projectsUi.en;
 const entries = (await getCollection("projects", ({ data }) => !data.draft)).sort(
   (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99),
 );
+
+// Cap to each thumbnail's own resolution — same reasoning as the project
+// page's hero/gallery images — so a small source screenshot never gets
+// upscaled to fill the column.
+const MAX_THUMB_WIDTH = 360;
+function thumbSize(cover: { width: number; height: number }) {
+  const width = Math.min(MAX_THUMB_WIDTH, cover.width);
+  return { width, height: Math.round(width * (cover.height / cover.width)) };
+}
 ---
 
-<BaseLayout title="Projects | System Core" description="Project gallery for Unax Zulaika Fuente.">
-  <section class="projects">
+<ModuleLayout
+  title="Projects | System Core"
+  description="Project gallery for Unax Zulaika Fuente."
+  crumbs={[{ label: t.crumbCore, href: "/" }, { label: t.crumbProjects }]}
+  backHref="/"
+  backLabel={t.backLabel}
+>
+  <header class="module-header">
     <p class="eyebrow">DELIVERABLES</p>
     <h1>Projects</h1>
-    <p class="lead">Full plantilla lands in Fase 4 — this already reads the real project collection.</p>
-    <ul class="grid">
-      {entries.map((project) => (
-        <li class:list={["card", { "card--flagship": project.data.isFlagship }]}>
-          {project.data.cover && <Image src={project.data.cover} alt="" width={280} height={160} />}
-          <p class="card__status">{project.data.status}</p>
-          <h2><a href={`/projects/${project.id}`}>{project.data[locale].title}</a></h2>
-          <p>{project.data[locale].shortDescription}</p>
-          {project.data.stack.length > 0 && <p class="card__stack">{project.data.stack.join(" · ")}</p>}
-        </li>
-      ))}
-    </ul>
-    <a class="back-link" href="/">← Back to Core</a>
-  </section>
-</BaseLayout>
+    <p>{t.galleryLead}</p>
+  </header>
+
+  <ol class="project-index">
+    {entries.map((project, i) => (
+      <li class="project-index__row">
+        <span class="project-index__num">{String(i + 1).padStart(2, "0")}</span>
+        <div class="project-index__main">
+          <div class="project-index__heading">
+            <h2><a href={`/projects/${project.id}`}>{project.data.en.title}</a></h2>
+            <span class={`state state--${project.data.status}`}>{project.data.status}</span>
+          </div>
+          {project.data.isFlagship && <p class="eyebrow project-index__flagship">{t.flagshipLabel}</p>}
+          <p>{project.data.en.shortDescription}</p>
+          {project.data.stack.length > 0 && (
+            <ul class="inline-list project-index__stack">
+              {project.data.stack.map((tech) => <li>{tech}</li>)}
+            </ul>
+          )}
+        </div>
+        {project.data.cover && (
+          <a class="project-index__thumb-link" href={`/projects/${project.id}`} tabindex="-1" aria-hidden="true">
+            <Image class="project-index__thumb" src={project.data.cover} alt="" loading="lazy" {...thumbSize(project.data.cover)} />
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+</ModuleLayout>
 
 <style>
-  .projects { margin-top: 32px; max-width: 900px; }
-  .projects h1 { font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.72rem); margin: 10px 0; }
-  .lead { color: #bfd0df; font-size: 0.92rem; margin-bottom: 24px; }
-  .grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
-  .card { border: 1px solid rgba(130, 171, 207, 0.22); border-radius: 14px; padding: 14px; background: var(--panel); }
-  .card--flagship { border-color: rgba(83, 198, 224, 0.6); }
-  .card img { border-radius: 8px; width: 100%; height: auto; margin-bottom: 8px; }
-  .card__status { text-transform: uppercase; font-size: 0.66rem; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 4px; }
-  .card h2 { font-family: var(--font-display); font-size: 1rem; margin: 0 0 6px; }
-  .card h2 a { color: var(--text); text-decoration: none; }
-  .card h2 a:hover, .card h2 a:focus-visible { color: var(--accent-strong); }
-  .card p { margin: 0 0 6px; font-size: 0.85rem; color: #bfd0df; }
-  .card__stack { color: var(--muted); font-size: 0.75rem; }
-  .back-link { display: inline-block; margin-top: 24px; color: var(--accent-strong); text-decoration: none; }
-  .back-link:hover, .back-link:focus-visible { text-decoration: underline; }
+  .project-index {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+
+  .project-index__row {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr auto;
+    gap: 20px;
+    align-items: start;
+    padding: 28px 0;
+    border-top: 1px solid rgba(130, 171, 207, 0.16);
+  }
+
+  .project-index__row:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .project-index__row:last-child {
+    padding-bottom: 0;
+  }
+
+  .project-index__num {
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-index__heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .project-index__heading h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .project-index__heading h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .project-index__heading h2 a:hover,
+  .project-index__heading h2 a:focus-visible {
+    color: var(--accent-strong);
+  }
+
+  .project-index__flagship {
+    margin: 4px 0 0;
+  }
+
+  .project-index__main p {
+    margin: 8px 0 0;
+    max-width: 62ch;
+    color: #c4d9ea;
+    line-height: 1.55;
+  }
+
+  .project-index__stack {
+    margin-top: 10px !important;
+    font-size: 0.82rem;
+  }
+
+  .project-index__thumb-link {
+    display: block;
+    width: 180px;
+  }
+
+  .project-index__thumb {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 720px) {
+    .project-index__row {
+      grid-template-columns: 2rem 1fr;
+    }
+
+    .project-index__thumb-link {
+      display: none;
+    }
+  }
 </style>

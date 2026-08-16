@@ -1,20 +1,52 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import ModuleLayout from "../../layouts/ModuleLayout.astro";
+import { contactUi } from "../../i18n/contact-ui";
+
+const t = contactUi.es;
 ---
 
-<BaseLayout title="Contacto | Núcleo del Sistema" description="Contacta con Unax Zulaika Fuente.">
-  <article class="placeholder">
-    <p class="eyebrow">CANAL</p>
-    <h1>Contacto llega en la Fase 4.</h1>
-    <p>Esta ruta existe para que la navegación del grafo sea real desde ya — el contenido y diseño completos llegan con las plantillas de proyecto.</p>
-    <a class="back-link" href="/es/">← Volver al Core</a>
-  </article>
-</BaseLayout>
+<ModuleLayout
+  title={t.pageTitle}
+  description={t.pageDescription}
+  crumbs={[
+    { label: t.crumbCore, href: "/es/" },
+    { label: t.crumbAbout, href: "/es/about" },
+    { label: t.crumbContact },
+  ]}
+  backHref="/es/"
+  backLabel="Volver al core"
+>
+  <header class="module-header">
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h1>{t.title}</h1>
+    <p>{t.lead}</p>
+  </header>
 
-<style>
-  .placeholder { margin-top: 40px; max-width: 560px; }
-  .placeholder h1 { font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.72rem); margin: 10px 0; }
-  .placeholder p:not(.eyebrow) { color: #bfd0df; line-height: 1.52; font-size: 0.92rem; }
-  .back-link { display: inline-block; margin-top: 16px; color: var(--accent-strong); text-decoration: none; }
-  .back-link:hover, .back-link:focus-visible { text-decoration: underline; }
-</style>
+  <section class="section">
+    <ul class="channel-list" aria-label="Canales de contacto">
+      <li>
+        <a href="mailto:unax.zulaika.fuente@gmail.com">
+          <span class="channel-label">{t.emailTitle}</span>
+          <span class="channel-value">{t.emailSubtitle}</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/Zulaa9" target="_blank" rel="noopener noreferrer">
+          <span class="channel-label">{t.githubTitle}</span>
+          <span class="channel-value">{t.githubSubtitle}</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/unax-zulaika-fuente/" target="_blank" rel="noopener noreferrer">
+          <span class="channel-label">{t.linkedinTitle}</span>
+          <span class="channel-value">{t.linkedinSubtitle}</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <dl class="spec">
+    <div><dt>{t.locationLabel}</dt><dd>{t.location}</dd></div>
+    <div><dt>{t.remoteLabel}</dt><dd>{t.remote}</dd></div>
+  </dl>
+</ModuleLayout>

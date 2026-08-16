@@ -34,6 +34,27 @@ body {
   color: #8eb5d1;
 }
 
+/*
+ * The bordered "panel" every page's content sits inside, below the topbar.
+ * Was previously only defined in system-core.css, which only the Core page
+ * imports — every module page (About/Capabilities/Contact/Projects) was
+ * silently missing its border, background, box-shadow and (critically)
+ * `position: relative`, which is what the crumbbar's `position: absolute`
+ * is supposed to anchor to. Without it the crumbbar escaped to the
+ * viewport's top instead of sitting inside the panel, and the panel itself
+ * had no height constraint, no visible frame — reads as "fullscreen",
+ * with the topbar seemingly gone even though it was still there.
+ */
+.core-stage {
+  position: relative;
+  height: calc(100vh - 96px);
+  border: 1px solid rgba(130, 171, 207, 0.2);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, rgba(8, 13, 18, 0.62), rgba(8, 14, 20, 0.84));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
