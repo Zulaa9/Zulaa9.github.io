@@ -35,6 +35,15 @@ export interface SimNode extends GraphNodeData {
   // needing its own authored sideBias. Purely derived from topology, same
   // as depth.
   resolvedSideBias?: "left" | "right";
+  // True once the user has ever dragged this node, and stays true even
+  // during a stretch where it's temporarily unpinned (fx/fy cleared) to
+  // let it bounce out of a fresh overlap's way — see releasePinnedOverlaps
+  // and the simulation's "end" handler in system-core-app.ts. What makes a
+  // manual placement "sticky" (sim.on("end") re-pins it once it settles)
+  // rather than a one-time fx/fy assignment that would make it read as
+  // permanently welded in place the instant something else needs the same
+  // spot.
+  manuallyPlaced?: boolean;
   x?: number;
   y?: number;
   vx?: number;

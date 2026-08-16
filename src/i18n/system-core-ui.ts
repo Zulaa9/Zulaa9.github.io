@@ -34,6 +34,9 @@ export const systemCoreUi = {
     statusBooting: "SYSTEM CORE BOOTING",
     statusSyncing: "SYSTEM CORE SYNCING VISUAL LAYER",
     statusOnline: "SYSTEM CORE ONLINE",
+    zoomInLabel: "Zoom in",
+    zoomOutLabel: "Zoom out",
+    zoomResetLabel: "Reset view",
   },
   es: {
     pageTitle: "Unax Zulaika | Núcleo del Sistema",
@@ -63,6 +66,9 @@ export const systemCoreUi = {
     statusBooting: "ARRANCANDO NÚCLEO DEL SISTEMA",
     statusSyncing: "SINCRONIZANDO CAPA VISUAL DEL NÚCLEO DEL SISTEMA",
     statusOnline: "NÚCLEO DEL SISTEMA ONLINE",
+    zoomInLabel: "Acercar",
+    zoomOutLabel: "Alejar",
+    zoomResetLabel: "Restablecer vista",
   },
 } as const;
 
