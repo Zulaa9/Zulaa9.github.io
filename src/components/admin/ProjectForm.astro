@@ -1,0 +1,293 @@
+---
+interface Props {
+  mode: "new" | "edit";
+  initial?: {
+    slug: string;
+    en: { title: string; eyebrow?: string; shortDescription: string; features?: string[] };
+    es: { title: string; eyebrow?: string; shortDescription: string; features?: string[] };
+    stack: string[];
+    status: string;
+    links?: { repo?: string; demo?: string; docs?: string };
+    isFlagship: boolean;
+    draft: boolean;
+    order?: number;
+    body?: string;
+    hasCover: boolean;
+  };
+}
+
+const { mode, initial } = Astro.props;
+const v = initial ?? {
+  slug: "",
+  en: { title: "", eyebrow: "", shortDescription: "", features: [] },
+  es: { title: "", eyebrow: "", shortDescription: "", features: [] },
+  stack: [],
+  status: "wip",
+  links: { repo: "", demo: "", docs: "" },
+  isFlagship: false,
+  draft: true,
+  order: undefined,
+  body: "",
+  hasCover: false,
+};
+---
+
+<form id="project-form" class="admin-form" data-mode={mode}>
+  <div class="admin-form__row">
+    <label>
+      Slug
+      <input
+        name="slug"
+        type="text"
+        required
+        pattern="[a-z0-9]+(-[a-z0-9]+)*"
+        value={v.slug}
+        readonly={mode === "edit"}
+        aria-readonly={mode === "edit"}
+      />
+    </label>
+    <label>
+      Status
+      <select name="status">
+        {["active", "wip", "planned", "archived"].map((s) => (
+          <option value={s} selected={v.status === s}>{s}</option>
+        ))}
+      </select>
+    </label>
+    <label>
+      Order
+      <input name="order" type="number" value={v.order} />
+    </label>
+  </div>
+
+  <div class="admin-form__row admin-form__row--checks">
+    <label class="admin-form__check"><input type="checkbox" name="isFlagship" checked={v.isFlagship} /> Flagship (pinned)</label>
+    <label class="admin-form__check"><input type="checkbox" name="draft" checked={v.draft} /> Draft (not published)</label>
+  </div>
+
+  <fieldset>
+    <legend>English</legend>
+    <label>Title <input name="en.title" type="text" required value={v.en.title} /></label>
+    <label>Eyebrow <input name="en.eyebrow" type="text" value={v.en.eyebrow} /></label>
+    <label>Short description <textarea name="en.shortDescription" required maxlength="200">{v.en.shortDescription}</textarea></label>
+    <label>Features (one per line) <textarea name="en.features" rows="4">{(v.en.features ?? []).join("\n")}</textarea></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Español</legend>
+    <label>Título <input name="es.title" type="text" required value={v.es.title} /></label>
+    <label>Eyebrow <input name="es.eyebrow" type="text" value={v.es.eyebrow} /></label>
+    <label>Descripción corta <textarea name="es.shortDescription" required maxlength="200">{v.es.shortDescription}</textarea></label>
+    <label>Funcionalidades (una por línea) <textarea name="es.features" rows="4">{(v.es.features ?? []).join("\n")}</textarea></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Facts</legend>
+    <label>Stack (comma-separated) <input name="stack" type="text" value={v.stack.join(", ")} /></label>
+    <label>Repo URL <input name="links.repo" type="url" value={v.links?.repo} /></label>
+    <label>Demo URL <input name="links.demo" type="url" value={v.links?.demo} /></label>
+    <label>Docs URL <input name="links.docs" type="url" value={v.links?.docs} /></label>
+    <label>Cover image {v.hasCover && <span class="admin-form__hint">(leave empty to keep the current one)</span>}
+      <input name="cover" type="file" accept="image/png,image/jpeg,image/webp" />
+    </label>
+    <label>Body (Markdown, optional) <textarea name="body" rows="10">{v.body}</textarea></label>
+  </fieldset>
+
+  <div class="admin-form__actions">
+    <button type="submit">{mode === "new" ? "Create project" : "Save changes"}</button>
+    <span id="form-status" role="status" aria-live="polite"></span>
+  </div>
+</form>
+
+<style>
+  .admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 640px;
+  }
+
+  .admin-form__row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .admin-form__row--checks {
+    gap: 20px;
+  }
+
+  .admin-form__check {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 6px !important;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    flex: 1;
+    min-width: 160px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 0.88rem;
+    color: var(--text);
+    background: rgba(9, 20, 31, 0.6);
+    border: 1px solid rgba(130, 171, 207, 0.3);
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+
+  input:disabled,
+  input:read-only {
+    opacity: 0.6;
+  }
+
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid rgba(130, 171, 207, 0.2);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  legend {
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    padding: 0 6px;
+    color: var(--accent-strong);
+  }
+
+  .admin-form__hint {
+    color: var(--muted);
+    font-weight: normal;
+  }
+
+  .admin-form__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  button {
+    align-self: flex-start;
+    font-family: var(--font-display);
+    font-size: 0.86rem;
+    border: 1px solid rgba(99, 201, 227, 0.54);
+    border-radius: 999px;
+    padding: 9px 18px;
+    color: #d8ebf8;
+    background: linear-gradient(140deg, rgba(26, 78, 104, 0.86), rgba(16, 48, 67, 0.78));
+    cursor: pointer;
+  }
+
+  button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  #form-status {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  #form-status[data-state="error"] {
+    color: #f6a2a2;
+  }
+
+  #form-status[data-state="ok"] {
+    color: #a9edc4;
+  }
+</style>
+
+<script>
+  const form = document.getElementById("project-form") as HTMLFormElement;
+  const statusEl = document.getElementById("form-status")!;
+
+  function linesToArray(value: string): string[] {
+    return value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+  }
+
+  function fileToDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    submitButton.disabled = true;
+    statusEl.textContent = "Saving…";
+    statusEl.removeAttribute("data-state");
+
+    const data = new FormData(form);
+    const coverFile = data.get("cover") as File | null;
+
+    const payload: Record<string, unknown> = {
+      slug: String(data.get("slug") ?? "").trim(),
+      en: {
+        title: String(data.get("en.title") ?? ""),
+        eyebrow: String(data.get("en.eyebrow") ?? "") || undefined,
+        shortDescription: String(data.get("en.shortDescription") ?? ""),
+        features: linesToArray(String(data.get("en.features") ?? "")),
+      },
+      es: {
+        title: String(data.get("es.title") ?? ""),
+        eyebrow: String(data.get("es.eyebrow") ?? "") || undefined,
+        shortDescription: String(data.get("es.shortDescription") ?? ""),
+        features: linesToArray(String(data.get("es.features") ?? "")),
+      },
+      stack: String(data.get("stack") ?? "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      status: String(data.get("status") ?? "wip"),
+      links: {
+        repo: String(data.get("links.repo") ?? "") || undefined,
+        demo: String(data.get("links.demo") ?? "") || undefined,
+        docs: String(data.get("links.docs") ?? "") || undefined,
+      },
+      isFlagship: data.get("isFlagship") === "on",
+      draft: data.get("draft") === "on",
+      order: data.get("order") ? Number(data.get("order")) : undefined,
+      body: String(data.get("body") ?? "") || undefined,
+    };
+
+    if (coverFile && coverFile.size > 0) {
+      payload.coverDataUrl = await fileToDataUrl(coverFile);
+    }
+
+    try {
+      const res = await fetch("/api/admin/save-project", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error ?? "Unknown error");
+
+      statusEl.textContent = `Saved. Preview: /projects/${result.slug} — the build hasn't run yet, so live pages won't update until the commit's rebuild finishes.`;
+      statusEl.setAttribute("data-state", "ok");
+    } catch (error) {
+      statusEl.textContent = `Failed: ${error instanceof Error ? error.message : String(error)}`;
+      statusEl.setAttribute("data-state", "error");
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+</script>

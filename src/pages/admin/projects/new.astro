@@ -1,0 +1,20 @@
+---
+import ModuleLayout from "../../../layouts/ModuleLayout.astro";
+import ProjectForm from "../../../components/admin/ProjectForm.astro";
+---
+
+<ModuleLayout
+  title="New project | Admin"
+  description="Create a new project."
+  crumbs={[{ label: "Core", href: "/" }, { label: "Admin", href: "/admin" }, { label: "New project" }]}
+  backHref="/"
+  backLabel="Back to core"
+>
+  <header class="module-header">
+    <p class="eyebrow">ADMIN</p>
+    <h1>New project</h1>
+    <p>Saves straight to GitHub as a draft — publish it by unchecking "Draft" here or editing it later.</p>
+  </header>
+
+  <ProjectForm mode="new" />
+</ModuleLayout>

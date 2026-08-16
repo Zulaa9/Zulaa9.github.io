@@ -1,0 +1,106 @@
+---
+import { getCollection } from "astro:content";
+import ModuleLayout from "../../layouts/ModuleLayout.astro";
+
+const projects = (await getCollection("projects")).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<ModuleLayout
+  title="Admin | System Core"
+  description="Content admin."
+  crumbs={[{ label: "Core", href: "/" }, { label: "Admin" }]}
+  backHref="/"
+  backLabel="Back to core"
+>
+  <header class="module-header">
+    <p class="eyebrow">ADMIN</p>
+    <h1>Projects</h1>
+    <p class="admin-warning">
+      This route must sit behind Cloudflare Access before it's ever deployed — nothing in this
+      app enforces that itself. See docs/fase6-admin.md. This list reads the collection as of the
+      last build; a very recent edit may not show up here yet.
+    </p>
+  </header>
+
+  <a class="new-project-btn" href="/admin/projects/new">+ New project</a>
+
+  <ul class="admin-list">
+    {projects.map((project) => (
+      <li>
+        <div>
+          <strong>{project.data.en.title}</strong>
+          <span class="admin-list__meta">
+            {project.data.status}
+            {project.data.draft && <span class="admin-list__draft">DRAFT</span>}
+          </span>
+        </div>
+        <a href={`/admin/projects/${project.id}/edit`}>Edit</a>
+      </li>
+    ))}
+  </ul>
+</ModuleLayout>
+
+<style>
+  .admin-warning {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(242, 163, 94, 0.4);
+    border-radius: 10px;
+    background: rgba(34, 17, 9, 0.4);
+    color: #f6c896 !important;
+    font-size: 0.82rem !important;
+  }
+
+  .new-project-btn {
+    display: inline-block;
+    margin: 16px 0;
+    border: 1px solid rgba(99, 201, 227, 0.54);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-family: var(--font-display);
+    font-size: 0.86rem;
+    color: #d8ebf8;
+    text-decoration: none;
+    background: linear-gradient(140deg, rgba(26, 78, 104, 0.86), rgba(16, 48, 67, 0.78));
+  }
+
+  .admin-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .admin-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(130, 171, 207, 0.2);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+
+  .admin-list__meta {
+    margin-left: 10px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+  }
+
+  .admin-list__draft {
+    margin-left: 6px;
+    color: #f6c896;
+  }
+
+  .admin-list a {
+    color: var(--accent-strong);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+
+  .admin-list a:hover,
+  .admin-list a:focus-visible {
+    text-decoration: underline;
+  }
+</style>
