@@ -1,4 +1,4 @@
-import type { ResolvedNode } from "./types";
+import type { SimNode } from "./types";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -12,17 +12,19 @@ interface LinkEntry {
 
 /**
  * SVG connective tissue between nodes: one hierarchy line per node (drawn
- * from its parent's position, or the core center for top-level nodes) plus
- * one dashed line per explicit `relations` entry. Ported from the
- * createLinks/updateLinks/updateLinkParticles trio in legacy-vanilla/main.js.
+ * from its parent's position, or the core's for top-level nodes) plus one
+ * dashed line per explicit `relations` entry. Ported from the
+ * createLinks/updateLinks/updateLinkParticles trio in legacy-vanilla/main.js
+ * — positions now come straight from the force simulation's node.x/node.y
+ * instead of a DOM getBoundingClientRect() round-trip.
  */
 export class EdgeLayer {
   private hierarchyLinks = new Map<string, LinkEntry>();
-  private relationLinks: LinkEntry[] = [];
+  private relationLinks: { link: LinkEntry; from: string; to: string }[] = [];
 
   constructor(private svg: SVGSVGElement) {}
 
-  build(nodes: ResolvedNode[]): void {
+  build(nodes: SimNode[]): void {
     this.svg.innerHTML = "";
     this.hierarchyLinks.clear();
     this.relationLinks = [];
@@ -35,7 +37,8 @@ export class EdgeLayer {
 
     for (const node of nodes) {
       for (const relation of node.relations) {
-        this.relationLinks.push({ ...this.createEntry(false, true), progress: Math.random(), speed: 0.18 });
+        const entry = this.createEntry(false, true);
+        this.relationLinks.push({ link: entry, from: node.id, to: relation.targetId });
       }
     }
   }
@@ -51,35 +54,31 @@ export class EdgeLayer {
     return { line, particle, progress: Math.random(), speed: 0.22 + Math.random() * 0.3, isRelation };
   }
 
-  /** Recomputes every line's endpoints from resolved pixel positions. */
-  update(nodes: Map<string, ResolvedNode>, pixelPos: Map<string, { x: number; y: number }>, coreCenter: { x: number; y: number }): void {
+  /** Recomputes every line's endpoints from the simulation's current node positions. */
+  update(nodes: Map<string, SimNode>): void {
     for (const node of nodes.values()) {
-      if (node.type === "core") continue;
+      if (node.type === "core" || node.x === undefined || node.y === undefined) continue;
       const entry = this.hierarchyLinks.get(node.id);
-      const nodePos = pixelPos.get(node.id);
-      if (!entry || !nodePos) continue;
+      if (!entry) continue;
 
-      const parent = node.parentId ? pixelPos.get(node.parentId) : null;
-      const start = parent ?? coreCenter;
+      const parent = node.parentId ? nodes.get(node.parentId) : undefined;
+      const start = parent && parent.x !== undefined && parent.y !== undefined ? parent : nodes.get("core");
+      if (!start || start.x === undefined || start.y === undefined) continue;
+
       entry.line.setAttribute("x1", `${start.x}`);
       entry.line.setAttribute("y1", `${start.y}`);
-      entry.line.setAttribute("x2", `${nodePos.x}`);
-      entry.line.setAttribute("y2", `${nodePos.y}`);
+      entry.line.setAttribute("x2", `${node.x}`);
+      entry.line.setAttribute("y2", `${node.y}`);
     }
 
-    let relationIndex = 0;
-    for (const node of nodes.values()) {
-      for (const relation of node.relations) {
-        const entry = this.relationLinks[relationIndex];
-        relationIndex += 1;
-        const from = pixelPos.get(node.id);
-        const to = pixelPos.get(relation.targetId);
-        if (!entry || !from || !to) continue;
-        entry.line.setAttribute("x1", `${from.x}`);
-        entry.line.setAttribute("y1", `${from.y}`);
-        entry.line.setAttribute("x2", `${to.x}`);
-        entry.line.setAttribute("y2", `${to.y}`);
-      }
+    for (const { link, from, to } of this.relationLinks) {
+      const fromNode = nodes.get(from);
+      const toNode = nodes.get(to);
+      if (!fromNode || !toNode || fromNode.x === undefined || toNode.x === undefined) continue;
+      link.line.setAttribute("x1", `${fromNode.x}`);
+      link.line.setAttribute("y1", `${fromNode.y}`);
+      link.line.setAttribute("x2", `${toNode.x}`);
+      link.line.setAttribute("y2", `${toNode.y}`);
     }
   }
 

@@ -1,6 +1,5 @@
 {
   "type": "core",
   "parentId": null,
-  "route": "/",
-  "layout": { "mode": "fixed", "position": { "x": 0.5, "y": 0.5 } }
+  "route": "/"
 }

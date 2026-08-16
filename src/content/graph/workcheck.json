@@ -6,6 +6,6 @@
     "en": { "title": "WorkCheck", "meta": "Personal Project", "dockCopy": "Work time and task tracking application." },
     "es": { "title": "WorkCheck", "meta": "Proyecto personal", "dockCopy": "Aplicación de seguimiento de tiempo de trabajo y tareas." }
   },
-  "layout": { "mode": "auto", "angleHint": 55 },
-  "status": "wip"
+  "status": "wip",
+  "order": 4
 }

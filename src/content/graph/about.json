@@ -2,9 +2,9 @@
   "type": "branch",
   "parentId": "core",
   "route": "/about",
+  "sideBias": "left",
   "label": {
     "en": { "title": "About", "meta": "Identity", "dockCopy": "Engineer focused on practical software architecture, security boundaries and maintainable delivery." },
     "es": { "title": "Sobre mí", "meta": "Identidad", "dockCopy": "Ingeniero centrado en arquitectura de software práctica, límites de seguridad y entrega mantenible." }
-  },
-  "layout": { "mode": "fixed", "position": { "x": 0.22, "y": 0.24 } }
+  }
 }

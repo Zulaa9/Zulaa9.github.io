@@ -327,14 +327,14 @@ body.intro-step-2 .core-center {
 
 .module-node {
   position: absolute;
-  min-width: 140px;
+  min-width: 118px;
   border: 1px solid rgba(146, 180, 208, 0.3);
   border-radius: var(--radius-md);
   background: rgba(9, 18, 27, 0.58);
   color: var(--text);
   backdrop-filter: blur(6px);
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
-  padding: 10px 14px;
+  padding: 8px 11px;
   text-align: left;
   text-decoration: none;
   display: block;
@@ -362,7 +362,7 @@ body.intro-step-2 .core-center {
 }
 
 .module-node--flagship {
-  min-width: 176px;
+  min-width: 150px;
   border-color: rgba(83, 198, 224, 0.84);
   background: linear-gradient(140deg, rgba(13, 32, 46, 0.92), rgba(10, 25, 34, 0.72));
   box-shadow: 0 0 0 1px rgba(139, 226, 255, 0.34), 0 18px 48px rgba(13, 53, 73, 0.56);
@@ -386,16 +386,16 @@ body.intro-step-2 .core-center {
   display: block;
   font-family: var(--font-display);
   letter-spacing: 0.02em;
-  font-size: 1rem;
+  font-size: 0.88rem;
 }
 
 .node-meta {
   display: block;
-  margin-top: 4px;
-  font-size: 0.76rem;
+  margin-top: 3px;
+  font-size: 0.68rem;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 body.intro-step-6 .module-node {
@@ -410,7 +410,7 @@ body.intro-step-6 .module-node {
 .info-dock {
   position: absolute;
   z-index: 2;
-  width: min(420px, calc(100% - 40px));
+  width: min(340px, calc(100% - 40px));
   border: 1px solid rgba(130, 171, 207, 0.22);
   border-radius: 16px;
   background: var(--panel);

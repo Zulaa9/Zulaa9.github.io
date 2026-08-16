@@ -4,6 +4,21 @@ const TRANSITION_OUT_MS = 900;
 const TRANSITION_BACK_MS = 760;
 const INTRO_DURATION_MS = 3440;
 
+// Mirrors the actual scene setup below (outer IcosahedronGeometry radius,
+// camera FOV, and the camera's resting Z from fastForwardToReady/the tail
+// of the intro) — kept in sync manually since Three.js has no query for
+// "how many screen pixels does this mesh cover," and getVisualRadius()
+// needs that answer to keep module nodes off the sphere.
+const CORE_MESH_RADIUS = 0.84;
+const CORE_FOV_DEG = 40;
+const CORE_REST_CAMERA_Z = 5.2;
+// No headroom beyond the raw mesh — there's no actual bloom post-process
+// in this scene (the "glow" is emissive material shading on the mesh
+// surface itself, it doesn't extend past the geometry), and the space
+// around the core is tight enough that padding for a halo that isn't
+// there costs real room elsewhere.
+const CORE_GLOW_PADDING = 1.0;
+
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
@@ -122,6 +137,24 @@ export class CoreScene {
 
   getBaseScale(): number {
     return window.matchMedia("(max-width: 860px)").matches ? 0.52 : 1;
+  }
+
+  /**
+   * On-screen radius (px) of the visible core sphere at its resting
+   * position, including glow headroom. The layout's collision math treated
+   * the core's footprint as a guessed ~80px box for a while (there's no DOM
+   * element to measure — the sphere only exists on the canvas), which was
+   * meaningfully smaller than the real rendered sphere and let module
+   * nodes visually sit on top of it despite the physics reporting no
+   * overlap. Deriving it from the actual camera/geometry means it stays
+   * correct if the scene's scale or camera distance ever changes, instead
+   * of silently drifting out of sync with a second hardcoded guess.
+   */
+  getVisualRadius(canvasHeight: number): number {
+    const fovRad = (CORE_FOV_DEG * Math.PI) / 180;
+    const visibleWorldHeight = 2 * CORE_REST_CAMERA_Z * Math.tan(fovRad / 2);
+    const pxPerWorldUnit = canvasHeight / visibleWorldHeight;
+    return CORE_MESH_RADIUS * this.getBaseScale() * pxPerWorldUnit * CORE_GLOW_PADDING;
   }
 
   resize(width: number, height: number): void {
