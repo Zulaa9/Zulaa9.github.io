@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { scUi } from "../../i18n/system-core-ui";
 import type { GraphNodeData } from "./types";
 
@@ -95,7 +96,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, "\\u003c");
         <a
           class:list={["module-node", "module-trigger", { "module-node--flagship": node.pinned }]}
           data-node-id={node.id}
-          href={node.route}
+          href={getRelativeLocaleUrl(locale, node.route)}
           draggable="false"
           style={{ "--reveal-delay": `${Math.min(index, 8) * 60 + 20}ms` }}
         >
@@ -127,7 +128,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, "\\u003c");
 
 <nav class="mobile-modules" aria-label="Modules">
   {clickableNodes.map((node) => (
-    <a class="mobile-modules__item module-trigger" data-node-id={node.id} href={node.route}>
+    <a class="mobile-modules__item module-trigger" data-node-id={node.id} href={getRelativeLocaleUrl(locale, node.route)}>
       {node.label?.title}
     </a>
   ))}
