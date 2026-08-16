@@ -90,15 +90,34 @@ body.awaiting-start .startup-gate {
   z-index: 8;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(72, 131, 172, 0.14), transparent 38%),
-    linear-gradient(145deg, #04070b 12%, #09131c 56%, #04070b 100%);
+  /* Deliberately no background of its own — this wrapper spans the whole
+   * stage for the entire CLOSING -> LOADING -> OPENING sequence, so an
+   * opaque background here would cover the startup-gate content behind
+   * it the instant this becomes visible, well before the door panels
+   * (which do carry their own opaque backgrounds, see .boot-door below)
+   * have actually moved into place to cover it themselves. Confirmed
+   * directly: right when "Start System" is clicked, before the doors
+   * have moved at all, document.elementFromPoint() at the stage's own
+   * center resolved to this exact element, with this rule's old
+   * background-image still attached to it — the previous bug precisely.
+   * Only the individual pieces (.boot-door, .boot-terminal) should ever
+   * be opaque; this wrapper is just their shared positioning/stacking
+   * context and the click-blocking/starfield-timing toggle below.
+   */
   overflow: hidden;
   border-radius: inherit;
   visibility: hidden;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 460ms ease;
+  /* Deliberately no transition here — appearing has to be instant. The
+   * scene's starfield goes visible (setStarsVisible(true)) in the exact
+   * same synchronous moment "Start System" is clicked, and this panel is
+   * what's supposed to be covering the stage when it does; a fade-in
+   * left a ~460ms window where this panel was still translucent and the
+   * newly-lit stars showed through underneath it. Only the boot-unfold
+   * exit (below) gets a graceful opacity fade — that one has no
+   * corresponding "something pops in behind it" problem to cause.
+   */
 }
 
 body.booting .boot-sequence,
@@ -108,6 +127,42 @@ body.boot-unfold .boot-sequence {
   opacity: 1;
 }
 
+/*
+ * Two independently-moving pieces, not one door split in half:
+ *
+ * .boot-top-unit carries the top door panel AND the console together —
+ * the console is a DOM child of it (see SystemCore.astro), not a sibling
+ * with its own separately-authored transform. One transform, applied to
+ * the unit, moves both at once by construction: there's no way for them
+ * to drift out of sync the way two elements with merely matching
+ * duration/easing values could. .boot-door--bottom has no console riding
+ * on it, so it stays a plain sibling with its own transform.
+ *
+ * Open (the default/base state below, no class needed) is what the
+ * startup gate screen sits behind, before "Start System" is ever
+ * clicked — the console isn't in the viewport yet, both panels are
+ * pushed off past the stage's own edges. body.boot-closed is the only
+ * other state either of these two ever has: pulled to their natural,
+ * resting position — the top unit's console lands exactly where it's
+ * always sat during boot-sequence.ts's loading phase, the bottom door
+ * meets it at the stage's vertical center. Closing is "open -> closed";
+ * opening (at the end, once loading finishes) is exactly the same
+ * transition run in reverse by removing boot-closed again — see
+ * boot-sequence.ts for the explicit state sequence that drives this.
+ */
+.boot-top-unit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transform: translateY(-110%);
+  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+body.boot-closed .boot-top-unit {
+  transform: translateY(0);
+}
+
 .boot-door {
   position: absolute;
   left: 0;
@@ -115,30 +170,42 @@ body.boot-unfold .boot-sequence {
   height: 52%;
   background: linear-gradient(180deg, rgba(7, 13, 18, 0.96), rgba(5, 9, 14, 0.94));
   border: 1px solid rgba(106, 139, 163, 0.24);
-  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease;
 }
 
 .boot-door--top {
   top: 0;
   border-bottom-color: rgba(132, 177, 206, 0.26);
+  /* Positioning only — .boot-top-unit above carries the actual open/close
+   * transform for this panel now. */
 }
 
 .boot-door--bottom {
   bottom: 0;
   border-top-color: rgba(132, 177, 206, 0.26);
+  transform: translateY(110%);
+  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.boot-closed .boot-door--bottom {
+  transform: translateY(0);
 }
 
 .boot-terminal {
-  position: relative;
-  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   width: min(780px, calc(100% - 36px));
   border: 1px solid rgba(138, 170, 194, 0.28);
   border-radius: 18px;
   background: rgba(7, 13, 20, 0.78);
   box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
   padding: 14px 16px 16px;
-  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), opacity 760ms cubic-bezier(0.22, 1, 0.36, 1), filter 760ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform, opacity, filter;
+  /* No transform/opacity/filter transition of its own — it doesn't move
+   * independently, it rides .boot-top-unit's transform (above) as a
+   * rigid attachment to the top door panel, opening and closing as one
+   * physical piece with it rather than fading or scaling on its own. */
 }
 
 .boot-terminal__eyebrow {
@@ -213,22 +280,14 @@ body.boot-unfold .boot-sequence {
   text-align: right;
 }
 
-body.boot-unfold .boot-terminal {
-  transform: translateY(-57vh) scale(0.94);
-  opacity: 0;
-  filter: blur(4px);
-}
-
-body.boot-unfold .boot-door--top {
-  transform: translateY(-110%);
-}
-
-body.boot-unfold .boot-door--bottom {
-  transform: translateY(110%);
-}
-
+/* The backdrop's own fade — separate from the door/console mechanism
+ * above, and still needed: even once the doors and console have
+ * physically moved out of the way, this panel's own opaque gradient
+ * background would still be covering the stage on its own, so it has to
+ * fade out too for the core underneath to actually become visible. */
 body.boot-unfold .boot-sequence {
   opacity: 0;
+  transition: opacity 460ms ease;
 }
 
 /* ---- core canvas / links / nodes ---- */
