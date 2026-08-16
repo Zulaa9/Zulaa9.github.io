@@ -1,0 +1,11 @@
+{
+  "type": "project",
+  "parentId": "projects",
+  "route": "/projects/reverberance",
+  "label": {
+    "en": { "title": "Reverberance", "meta": "Personal Project", "dockCopy": "Audio and music-related engineering project." },
+    "es": { "title": "Reverberance", "meta": "Proyecto personal", "dockCopy": "Proyecto de ingeniería relacionado con audio y música." }
+  },
+  "layout": { "mode": "auto", "angleHint": 135 },
+  "status": "planned"
+}

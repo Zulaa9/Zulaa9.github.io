@@ -1,0 +1,10 @@
+{
+  "type": "branch",
+  "parentId": "core",
+  "route": "/projects",
+  "label": {
+    "en": { "title": "Projects", "meta": "Deliverables", "dockCopy": "Project gallery centered on KeyPing as the flagship product, with supporting projects around it." },
+    "es": { "title": "Proyectos", "meta": "Entregables", "dockCopy": "Galería de proyectos centrada en KeyPing como producto principal, con proyectos de soporte." }
+  },
+  "layout": { "mode": "fixed", "position": { "x": 0.78, "y": 0.28 } }
+}
