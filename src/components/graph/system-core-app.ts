@@ -2,12 +2,10 @@ import type { TransitionBeforePreparationEvent } from "astro:transitions/client"
 import { CoreScene } from "./core-scene";
 import { EdgeLayer } from "./edge-layer";
 import { BootSequence, type BootStrings } from "./boot-sequence";
-import { resolveLayout } from "./graph-engine";
-import type { GraphNodeData, ResolvedNode } from "./types";
+import { buildSimNodes, createGraphSimulation, enforceHardBounds, type AvoidRect, type GraphSimulation } from "./graph-simulation";
+import type { GraphNodeData, SimNode } from "./types";
 
-const NODE_PAD = 18;
-const NODE_BOTTOM_SAFE = 170;
-const CORE_HOVER_RADIUS = 0.28;
+const RESIZE_DEBOUNCE_MS = 220;
 
 interface ScPayload {
   nodes: GraphNodeData[];
@@ -20,10 +18,6 @@ interface ScPayload {
     statusOnline: string;
   };
   defaultActiveId: string;
-}
-
-function clamp(v: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, v));
 }
 
 function sleep(ms: number): Promise<void> {
@@ -40,7 +34,7 @@ function sleep(ms: number): Promise<void> {
  * otherwise stack up: one more "astro:before-preparation" listener, one more
  * orphaned requestAnimationFrame loop rendering to a detached canvas, per
  * every return trip to "/". Reproduced and confirmed before this fix — see
- * commit message.
+ * commit history.
  */
 interface CoreInstance {
   cancel: () => void;
@@ -56,9 +50,6 @@ let active: CoreInstance | null = null;
  * those — same reasoning as `active` above) but reset on an actual reload,
  * so a hard refresh of "/" always replays the boot ceremony while the
  * crumbbar's "back to core" link skips straight to the ready state.
- * sessionStorage would have gotten this backwards: it survives a reload
- * just as much as a soft navigation, so refreshing the page would have
- * silently skipped the boot sequence too.
  */
 let coreHasBooted = false;
 
@@ -70,14 +61,11 @@ export function bootSystemCore(): void {
   const stage = document.getElementById("core-stage") as HTMLElement | null;
   const canvas = document.getElementById("core-canvas") as HTMLCanvasElement | null;
   const svg = document.getElementById("node-links") as unknown as SVGSVGElement | null;
-  const coreCenter = document.getElementById("core-center");
   const nodeLayer = document.getElementById("node-layer");
-  if (!dataEl || !stage || !canvas || !svg || !coreCenter || !nodeLayer) return; // not on the Core page
+  if (!dataEl || !stage || !canvas || !svg || !nodeLayer) return; // not on the Core page
 
   const payload = JSON.parse(dataEl.textContent || "{}") as ScPayload;
-  const nodes = payload.nodes;
-  const resolvedNodes = resolveLayout(nodes);
-  const byId = new Map(nodes.map((n) => [n.id, n]));
+  const byId = new Map(payload.nodes.map((n) => [n.id, n]));
 
   const nodeEls = new Map<string, HTMLElement>();
   document.querySelectorAll<HTMLElement>(".module-trigger[data-node-id]").forEach((el) => {
@@ -85,9 +73,86 @@ export function bootSystemCore(): void {
     if (el.closest("#node-layer")) nodeEls.set(el.dataset.nodeId!, el);
   });
 
+  // Real rendered size per node — collision uses this, never a guessed point.
+  const sizes = new Map<string, { width: number; height: number }>();
+  nodeEls.forEach((el, id) => sizes.set(id, { width: el.offsetWidth, height: el.offsetHeight }));
+
+  function currentBounds() {
+    const rect = stage!.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  }
+
+  const simNodes = buildSimNodes(payload.nodes, sizes, currentBounds());
+  const simById = new Map(simNodes.map((n) => [n.id, n]));
+
   const scene = new CoreScene(canvas);
   const edges = new EdgeLayer(svg);
-  edges.build(Array.from(resolvedNodes.values()));
+  edges.build(simNodes);
+
+  // The core has no DOM element to measure (it's drawn on the canvas, not
+  // rendered as a `.module-trigger` button like every other node), so
+  // buildSimNodes fell back to a generic guessed size for it — meaningfully
+  // smaller than the actual glowing sphere, which let module nodes end up
+  // visually sitting on top of it even while the physics reported zero
+  // overlap. The scene knows its own real on-screen size; ask it instead
+  // of guessing. Re-applied in updateStageSize() too, since the sphere's
+  // pixel radius scales with the stage's height.
+  const coreSim = simNodes.find((n) => n.type === "core");
+  function syncCoreRadius(): void {
+    if (coreSim) coreSim.radius = scene.getVisualRadius(currentBounds().height);
+  }
+  syncCoreRadius();
+
+  // UI chrome that lives on top of the stage but isn't part of the graph —
+  // the hero copy panel and the hover info dock. Measured live (not fixed
+  // numbers) so this stays correct across breakpoints and copy-length
+  // changes; re-read on every simulation tick's request rather than cached,
+  // since it's cheap and both panels are position:absolute (never move
+  // during a tick themselves, but can resize on data change).
+  function readAvoidRects(): AvoidRect[] {
+    const stageRect = stage!.getBoundingClientRect();
+    const rects: AvoidRect[] = [];
+    document.querySelectorAll<HTMLElement>(".core-copy, .info-dock").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) return; // not rendered (e.g. display:none on mobile)
+      rects.push({
+        left: r.left - stageRect.left,
+        top: r.top - stageRect.top,
+        right: r.right - stageRect.left,
+        bottom: r.bottom - stageRect.top,
+      });
+    });
+    return rects;
+  }
+
+  const graphSim: GraphSimulation = createGraphSimulation(simNodes, currentBounds(), readAvoidRects);
+
+  function placeNodeEl(node: SimNode): void {
+    const el = nodeEls.get(node.id);
+    if (!el || node.x === undefined || node.y === undefined) return;
+    el.style.left = `${node.x - el.offsetWidth / 2}px`;
+    el.style.top = `${node.y - el.offsetHeight / 2}px`;
+  }
+
+  // Live ticks (every animation frame while the layout is moving) run the
+  // soft forces only — link/charge/collide/boundary/sideBias/avoidRects —
+  // so the settle animation reads as physics, not a series of corrective
+  // snaps. "end" fires once, when d3's internal timer stops because alpha
+  // has decayed past its threshold: that's the one moment a hard, possibly
+  // non-smooth correction is actually appropriate, since nothing is
+  // visibly moving through it. This is what turns "the soft forces mostly
+  // avoid overlap" into the required "zero overlap, guaranteed" — without
+  // that guarantee fighting the animation on every single frame, which is
+  // what "se ponen locos" actually was.
+  graphSim.simulation.on("tick", () => {
+    simNodes.forEach(placeNodeEl);
+    edges.update(simById);
+  });
+  graphSim.simulation.on("end", () => {
+    enforceHardBounds(simNodes, currentBounds(), readAvoidRects());
+    simNodes.forEach(placeNodeEl);
+    edges.update(simById);
+  });
 
   const strings: BootStrings = {
     bootLines: payload.strings.bootLines,
@@ -111,7 +176,6 @@ export function bootSystemCore(): void {
     strings,
     (step) => {
       scene.introStep = step;
-      if (step === 5) edges.update(resolvedNodes, pixelPositions(), corePixelCenter());
       if (step === 6) introComplete = true;
     },
   );
@@ -128,60 +192,6 @@ export function bootSystemCore(): void {
   let coreHovering = false;
   let coreHoverTime = 0;
 
-  function corePixelCenter(): { x: number; y: number } {
-    const centerRect = coreCenter!.getBoundingClientRect();
-    const stageRect = stage!.getBoundingClientRect();
-    return {
-      x: centerRect.left - stageRect.left + centerRect.width / 2,
-      y: centerRect.top - stageRect.top + centerRect.height / 2,
-    };
-  }
-
-  function pixelPositions(): Map<string, { x: number; y: number }> {
-    const stageRect = stage!.getBoundingClientRect();
-    const result = new Map<string, { x: number; y: number }>();
-    resolvedNodes.forEach((node, id) => {
-      if (node.type === "core") {
-        result.set(id, corePixelCenter());
-        return;
-      }
-      const el = nodeEls.get(id);
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      result.set(id, {
-        x: rect.left - stageRect.left + rect.width / 2,
-        y: rect.top - stageRect.top + rect.height / 2,
-      });
-    });
-    return result;
-  }
-
-  function placeNode(node: ResolvedNode, driftX = 0, driftY = 0): void {
-    const el = nodeEls.get(node.id);
-    if (!el) return;
-    const rect = stage!.getBoundingClientRect();
-    const w = el.offsetWidth;
-    const h = el.offsetHeight;
-    const rawX = node.resolvedPosition.x * rect.width - w / 2 + driftX;
-    const rawY = node.resolvedPosition.y * rect.height - h / 2 + driftY;
-    el.style.left = `${clamp(rawX, NODE_PAD, rect.width - w - NODE_PAD)}px`;
-    el.style.top = `${clamp(rawY, NODE_PAD, rect.height - h - NODE_BOTTOM_SAFE)}px`;
-  }
-
-  function placeAllNodes(): void {
-    resolvedNodes.forEach((node) => {
-      if (node.type === "core") return;
-      if (!introComplete) {
-        placeNode(node);
-        return;
-      }
-      const intensity = window.matchMedia("(max-width: 860px)").matches ? 5 : 9;
-      const driftX = parallax.x * intensity * (0.18 + node.resolvedPosition.x);
-      const driftY = parallax.y * intensity * (0.12 + node.resolvedPosition.y);
-      placeNode(node, driftX, driftY);
-    });
-  }
-
   function setActive(id: string): void {
     const changed = activeId !== id;
     activeId = id;
@@ -195,6 +205,7 @@ export function bootSystemCore(): void {
     if (changed && introComplete && !isTransitioning) scene.coreImpulse = 1;
   }
 
+  let resizeTimer = 0;
   function updateStageSize(): void {
     const stageBounds = stage!.getBoundingClientRect();
     const canvasBounds = canvas!.getBoundingClientRect();
@@ -202,9 +213,8 @@ export function bootSystemCore(): void {
     svg!.setAttribute("viewBox", `0 0 ${stageBounds.width} ${stageBounds.height}`);
     svg!.setAttribute("width", `${stageBounds.width}`);
     svg!.setAttribute("height", `${stageBounds.height}`);
-    placeAllNodes();
-    edges.update(resolvedNodes, pixelPositions(), corePixelCenter());
-    setActive(activeId);
+    syncCoreRadius(); // before resize() — the collide/avoid forces read it on the very next tick
+    graphSim.resize({ width: stageBounds.width, height: stageBounds.height });
   }
 
   function handleBeforePreparation(event: TransitionBeforePreparationEvent): void {
@@ -251,7 +261,7 @@ export function bootSystemCore(): void {
     pointer.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
 
     const dist = Math.hypot(pointer.x, pointer.y);
-    coreHovering = dist < CORE_HOVER_RADIUS;
+    coreHovering = dist < 0.28;
     if (!coreHovering) coreHoverTime = 0;
   });
 
@@ -262,7 +272,11 @@ export function bootSystemCore(): void {
     coreHoverTime = 0;
   });
 
-  // ---- unified render loop ----
+  // ---- ambient render loop: Three.js core + edge particle flow only.
+  // Node/edge *positions* are driven by the simulation's own tick above and
+  // stop updating once it converges — this loop keeps running for the
+  // decorative motion (core pulse, particles sliding along the now-static
+  // lines) that's meant to be perpetual regardless of layout stability. ----
   let lastTime = performance.now();
   let rafId = 0;
   let cancelled = false;
@@ -282,10 +296,6 @@ export function bootSystemCore(): void {
     scene.introComplete = introComplete;
     scene.render(now);
 
-    if (introComplete && !isTransitioning) {
-      placeAllNodes();
-      edges.update(resolvedNodes, pixelPositions(), corePixelCenter());
-    }
     edges.tickParticles(dt);
 
     rafId = requestAnimationFrame(tick);
@@ -295,8 +305,13 @@ export function bootSystemCore(): void {
     cancel: () => {
       cancelled = true;
       cancelAnimationFrame(rafId);
+      window.clearTimeout(resizeTimer);
+      graphSim.simulation.stop();
     },
-    updateStageSize,
+    updateStageSize: () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(updateStageSize, RESIZE_DEBOUNCE_MS);
+    },
     handleBeforePreparation,
   };
 

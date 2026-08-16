@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import { resolveLayout } from "./graph-engine";
 import { scUi } from "../../i18n/system-core-ui";
 import type { GraphNodeData } from "./types";
 
@@ -20,14 +19,13 @@ const nodes: GraphNodeData[] = entries.map((entry) => ({
         dockCopy: entry.data.label[locale].dockCopy,
       }
     : undefined,
-  layout: entry.data.layout,
   pinned: entry.data.pinned,
+  sideBias: entry.data.sideBias,
   order: entry.data.order,
   status: entry.data.status,
   relations: entry.data.relations,
 }));
 
-const resolved = resolveLayout(nodes);
 const clickableNodes = nodes
   .filter((n) => n.type !== "core")
   .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));

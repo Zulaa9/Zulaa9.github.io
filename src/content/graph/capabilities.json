@@ -5,6 +5,5 @@
   "label": {
     "en": { "title": "Capabilities", "meta": "Engineering", "dockCopy": "Engineering strengths across system architecture, product delivery, security design and cross-layer integration." },
     "es": { "title": "Capacidades", "meta": "Ingeniería", "dockCopy": "Fortalezas de ingeniería en arquitectura de sistemas, entrega de producto, diseño seguro e integración entre capas." }
-  },
-  "layout": { "mode": "fixed", "position": { "x": 0.20, "y": 0.45 } }
+  }
 }

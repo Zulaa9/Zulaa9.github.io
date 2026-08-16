@@ -22,16 +22,21 @@ const graphNodeSchema = z.object({
   route: z.string().optional(),
   // omitted for the core node (not a clickable button)
   label: z.object({ en: localizedNodeLabel, es: localizedNodeLabel }).optional(),
-  layout: z.object({
-    // "fixed" = curated position, hand-placed (levels 0-1 today).
-    // "auto" = engine distributes it radially around parentId (Fase 3).
-    mode: z.enum(["fixed", "auto"]),
-    position: z.object({ x: z.number(), y: z.number() }).optional(),
-    angleHint: z.number().optional(),
-  }),
-  // Forces a level-0/1 visual slot even if parentId is deeper — how a future
-  // node can get "flagship" treatment the way KeyPing does today.
+  // No position/coordinates here on purpose — the force simulation
+  // (src/components/graph/graph-simulation.ts) computes every node's
+  // placement at runtime from this topology alone. Adding a node never
+  // means adding coordinates.
+  //
+  // Forces extra visual weight in the simulation (shorter link to its
+  // parent, stronger charge) — how a node gets "flagship" treatment the
+  // way KeyPing does, without pinning it to a hand-placed spot.
   pinned: z.boolean().default(false),
+  // A coarse, semantic hint for the handful of top-level identity branches
+  // (About, Projects) — "which half of the window this reads on", not a
+  // coordinate. Children still find their own exact spot automatically;
+  // they just inherit a leftward/rightward tendency by being linked to a
+  // biased parent, the same way any other force propagates.
+  sideBias: z.enum(["left", "right"]).optional(),
   order: z.number().optional(),
   status: z.enum(["active", "wip", "planned", "archived"]).optional(),
   relations: z
