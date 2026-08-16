@@ -16,13 +16,11 @@
     "@astrojs/cloudflare": "^14.2.1",
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^7.2.2",
-    "d3-force": "^3.0.0",
     "three": "^0.185.1",
     "wrangler": "^4.123.0",
     "yaml": "^2.9.0"
   },
   "devDependencies": {
-    "@types/d3-force": "^3.0.10",
     "@types/three": "^0.185.4"
   }
 }

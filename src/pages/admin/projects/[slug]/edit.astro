@@ -1,0 +1,110 @@
+---
+export const prerender = false;
+
+import { getEntry } from "astro:content";
+import { env } from "cloudflare:workers";
+import ModuleLayout from "../../../../layouts/ModuleLayout.astro";
+import ProjectForm from "../../../../components/admin/ProjectForm.astro";
+import { getFileContent, type GithubConfig } from "../../../../lib/github";
+import { parseProjectMarkdown } from "../../../../lib/project-admin";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect("/admin");
+
+const workerEnv = env as {
+  GITHUB_TOKEN?: string;
+  GITHUB_OWNER?: string;
+  GITHUB_REPO?: string;
+  GITHUB_BRANCH?: string;
+};
+
+let parsed: ReturnType<typeof parseProjectMarkdown> | null = null;
+let source: "github" | "local-build" | null = null;
+let loadError: string | null = null;
+
+if (workerEnv.GITHUB_TOKEN) {
+  // Production path: always the true current state, never a stale build.
+  const config: GithubConfig = {
+    token: workerEnv.GITHUB_TOKEN,
+    owner: workerEnv.GITHUB_OWNER ?? "Zulaa9",
+    repo: workerEnv.GITHUB_REPO ?? "Zulaa9.github.io",
+    branch: workerEnv.GITHUB_BRANCH ?? "main",
+  };
+  try {
+    const raw = await getFileContent(config, `src/content/projects/${slug}/index.md`);
+    if (raw) {
+      parsed = parseProjectMarkdown(raw);
+      source = "github";
+    }
+  } catch (error) {
+    loadError = error instanceof Error ? error.message : String(error);
+  }
+} else {
+  // Local dev fallback (no token configured): read from this build's own
+  // collection so the form is still testable without live GitHub access.
+  const entry = await getEntry("projects", slug);
+  if (entry) {
+    parsed = {
+      en: entry.data.en,
+      es: entry.data.es,
+      stack: entry.data.stack,
+      status: entry.data.status,
+      links: entry.data.links ?? {},
+      isFlagship: entry.data.isFlagship,
+      draft: entry.data.draft,
+      order: entry.data.order,
+      body: "", // body Content isn't plain markdown text once collected — re-fetch from GitHub in production instead
+      hasCover: Boolean(entry.data.cover),
+    } as ReturnType<typeof parseProjectMarkdown>;
+    source = "local-build";
+  }
+}
+---
+
+<ModuleLayout
+  title={`Edit ${slug} | Admin`}
+  description="Edit project."
+  crumbs={[{ label: "Core", href: "/" }, { label: "Admin", href: "/admin" }, { label: slug }]}
+  backHref="/"
+  backLabel="Back to core"
+>
+  <header class="module-header">
+    <p class="eyebrow">ADMIN</p>
+    <h1>Edit {slug}</h1>
+    {source === "local-build" && (
+      <p class="admin-note">
+        No GITHUB_TOKEN configured — showing this build's local content instead of live GitHub state
+        (fine for testing the form locally; won't reflect very recent commits).
+      </p>
+    )}
+    {loadError && <p class="admin-error">Could not load from GitHub: {loadError}</p>}
+  </header>
+
+  {parsed ? (
+    <ProjectForm mode="edit" initial={{ slug, ...parsed }} />
+  ) : (
+    <p>Project "{slug}" not found.</p>
+  )}
+</ModuleLayout>
+
+<style>
+  .admin-note {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(130, 171, 207, 0.3);
+    border-radius: 10px;
+    background: rgba(9, 20, 31, 0.5);
+    color: var(--muted) !important;
+    font-size: 0.82rem !important;
+  }
+
+  .admin-error {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(231, 101, 101, 0.5);
+    border-radius: 10px;
+    background: rgba(36, 11, 11, 0.5);
+    color: #ffd0d0 !important;
+    font-size: 0.82rem !important;
+  }
+</style>
