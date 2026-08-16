@@ -1,0 +1,217 @@
+---
+/**
+ * Ambient background: gradient backdrop + parallax starfield + meteor shower.
+ * Ported from the markup/CSS duplicated across all 7 legacy pages — here it's
+ * one component instead of one copy per page.
+ *
+ * Meteor spawning + pointer parallax run as a small inline island script.
+ * Reduced-motion is respected: the script no-ops and CSS disables all
+ * animation/transition via the media query in global.css.
+ */
+interface Props {
+  /**
+   * Core page only: the backdrop starts dim (plain near-black, no blue
+   * gradient) and fades in once the boot sequence reaches intro-step-1,
+   * matching the "offline -> powering on" moment. Every other page has no
+   * boot sequence, so it stays at its normal brightness always.
+   */
+  gated?: boolean;
+}
+
+const { gated = false } = Astro.props;
+---
+
+<div class:list={["backdrop", { "backdrop--gated": gated }]} aria-hidden="true"></div>
+<div class="bg-starfield bg-starfield--far" aria-hidden="true"></div>
+<div class="bg-starfield bg-starfield--near" aria-hidden="true"></div>
+<div class="meteor-layer" id="meteor-layer" aria-hidden="true"></div>
+
+<style>
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 18%, rgba(73, 137, 182, 0.16), transparent 38%),
+      radial-gradient(circle at 82% 70%, rgba(31, 86, 123, 0.22), transparent 34%),
+      linear-gradient(160deg, #06090e 5%, #09131d 56%, #05070b 100%);
+    z-index: -2;
+    opacity: 1;
+  }
+
+  .backdrop--gated {
+    opacity: 0;
+    transition: opacity 620ms ease;
+  }
+
+  :global(body.intro-step-1) .backdrop--gated {
+    opacity: 1;
+  }
+
+  .backdrop::before,
+  .backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .backdrop::before {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(circle at center, black 35%, transparent 88%);
+    opacity: 0.3;
+  }
+
+  .backdrop::after {
+    background: radial-gradient(circle at center, rgba(109, 198, 255, 0.14), transparent 54%);
+  }
+
+  .bg-starfield {
+    position: fixed;
+    inset: -4%;
+    pointer-events: none;
+    z-index: -1;
+    transition: transform 140ms ease-out;
+  }
+
+  .bg-starfield--far {
+    opacity: 0.24;
+    background-image:
+      radial-gradient(1px 1px at 15% 22%, rgba(180, 220, 242, 0.7), transparent 60%),
+      radial-gradient(1px 1px at 72% 28%, rgba(188, 232, 255, 0.6), transparent 60%),
+      radial-gradient(1px 1px at 35% 68%, rgba(171, 221, 247, 0.52), transparent 60%),
+      radial-gradient(1px 1px at 84% 74%, rgba(171, 221, 247, 0.46), transparent 60%),
+      radial-gradient(1px 1px at 48% 44%, rgba(178, 228, 252, 0.54), transparent 60%);
+    background-size: 280px 280px, 260px 260px, 310px 310px, 290px 290px, 340px 340px;
+    transform: translate3d(calc(var(--bg-parallax-x) * -0.38), calc(var(--bg-parallax-y) * -0.38), 0);
+  }
+
+  .bg-starfield--near {
+    opacity: 0.3;
+    background-image:
+      radial-gradient(1.6px 1.6px at 11% 16%, rgba(194, 237, 255, 0.76), transparent 62%),
+      radial-gradient(1.2px 1.2px at 69% 33%, rgba(179, 229, 255, 0.68), transparent 62%),
+      radial-gradient(1.4px 1.4px at 25% 57%, rgba(201, 240, 255, 0.72), transparent 62%),
+      radial-gradient(1.5px 1.5px at 63% 82%, rgba(173, 223, 246, 0.64), transparent 62%),
+      radial-gradient(1.3px 1.3px at 91% 46%, rgba(183, 231, 253, 0.64), transparent 62%);
+    background-size: 210px 210px, 240px 240px, 230px 230px, 260px 260px, 220px 220px;
+    transform: translate3d(calc(var(--bg-parallax-x) * -0.72), calc(var(--bg-parallax-y) * -0.72), 0);
+  }
+
+  .meteor-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  :global(.meteor) {
+    position: absolute;
+    width: var(--meteor-len, 130px);
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      rgba(225, 248, 255, 0.98) 0%,
+      rgba(176, 232, 255, 0.7) 18%,
+      rgba(176, 232, 255, 0.16) 62%,
+      transparent 100%
+    );
+    box-shadow: 0 0 10px rgba(157, 226, 255, 0.62);
+    opacity: 0;
+    transform-origin: left center;
+    animation: meteorFlight var(--meteor-dur, 2200ms) linear;
+  }
+
+  :global(.meteor)::after {
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: rgba(238, 252, 255, 0.98);
+    box-shadow: 0 0 12px rgba(186, 239, 255, 0.92);
+  }
+
+  @keyframes meteorFlight {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) rotate(var(--meteor-angle, 0deg));
+    }
+    10% {
+      opacity: 0.92;
+    }
+    74% {
+      opacity: 0.88;
+    }
+    92% {
+      opacity: 0.38;
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(var(--meteor-dx, -440px), var(--meteor-dy, 300px), 0) rotate(var(--meteor-angle, 0deg));
+    }
+  }
+</style>
+
+<script>
+  // Ambient effects only — no graph/boot state involved, safe on every page.
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.addEventListener("pointermove", (event) => {
+    const nx = (event.clientX / window.innerWidth - 0.5) * 2;
+    const ny = (event.clientY / window.innerHeight - 0.5) * 2;
+    document.body.style.setProperty("--bg-parallax-x", `${(nx * 12).toFixed(2)}px`);
+    document.body.style.setProperty("--bg-parallax-y", `${(ny * 10).toFixed(2)}px`);
+  });
+
+  if (!reduceMotion) {
+    const meteorLayer = document.getElementById("meteor-layer");
+
+    const randomRange = (min: number, max: number) => min + Math.random() * (max - min);
+
+    function spawnMeteor() {
+      if (!meteorLayer) return;
+      const meteor = document.createElement("span");
+      meteor.className = "meteor";
+
+      const startX = randomRange(48, 108);
+      const startY = randomRange(-20, 22);
+      const dx = randomRange(-980, -560);
+      const dy = randomRange(360, 640);
+      const dur = randomRange(1700, 2900);
+      const len = randomRange(110, 180);
+      const moveAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+      const trailAngle = moveAngle + 180;
+
+      meteor.style.left = `${startX}%`;
+      meteor.style.top = `${startY}%`;
+      meteor.style.setProperty("--meteor-dx", `${dx.toFixed(1)}px`);
+      meteor.style.setProperty("--meteor-dy", `${dy.toFixed(1)}px`);
+      meteor.style.setProperty("--meteor-dur", `${dur.toFixed(0)}ms`);
+      meteor.style.setProperty("--meteor-angle", `${trailAngle.toFixed(1)}deg`);
+      meteor.style.setProperty("--meteor-len", `${len.toFixed(0)}px`);
+      meteorLayer.appendChild(meteor);
+
+      meteor.addEventListener("animationend", () => meteor.remove());
+    }
+
+    const schedule = () => {
+      const waitMs = randomRange(3600, 9800);
+      window.setTimeout(() => {
+        spawnMeteor();
+        if (Math.random() < 0.22) {
+          window.setTimeout(spawnMeteor, randomRange(120, 340));
+        }
+        schedule();
+      }, waitMs);
+    };
+
+    schedule();
+  }
+</script>
