@@ -75,22 +75,31 @@ const payloadJson = JSON.stringify(payload).replace(/</g, "\\u003c");
     </div>
   </section>
 
-  <canvas id="core-canvas" aria-label="System Core visualization"></canvas>
-  <svg id="node-links" class="node-links" aria-hidden="true"></svg>
-  <div class="core-center" id="core-center" aria-hidden="true"></div>
+  <div class="core-viewport" id="core-viewport">
+    <canvas id="core-canvas" aria-label="System Core visualization"></canvas>
+    <svg id="node-links" class="node-links" aria-hidden="true"></svg>
+    <div class="core-center" id="core-center" aria-hidden="true"></div>
 
-  <div class="node-layer" id="node-layer" aria-label="Primary modules">
-    {clickableNodes.map((node, index) => (
-      <a
-        class:list={["module-node", "module-trigger", { "module-node--flagship": node.pinned }]}
-        data-node-id={node.id}
-        href={node.route}
-        style={{ "--reveal-delay": `${Math.min(index, 8) * 60 + 20}ms` }}
-      >
-        <span class="node-title">{node.label?.title}</span>
-        {node.label?.meta && <span class="node-meta">{node.label.meta}</span>}
-      </a>
-    ))}
+    <div class="node-layer" id="node-layer" aria-label="Primary modules">
+      {clickableNodes.map((node, index) => (
+        <a
+          class:list={["module-node", "module-trigger", { "module-node--flagship": node.pinned }]}
+          data-node-id={node.id}
+          href={node.route}
+          draggable="false"
+          style={{ "--reveal-delay": `${Math.min(index, 8) * 60 + 20}ms` }}
+        >
+          <span class="node-title">{node.label?.title}</span>
+          {node.label?.meta && <span class="node-meta">{node.label.meta}</span>}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="view-controls" id="view-controls" aria-label="Graph pan and zoom controls">
+    <button type="button" id="view-zoom-out" aria-label={ui.zoomOutLabel}>−</button>
+    <button type="button" id="view-zoom-reset" aria-label={ui.zoomResetLabel}>{ui.zoomResetLabel}</button>
+    <button type="button" id="view-zoom-in" aria-label={ui.zoomInLabel}>+</button>
   </div>
 
   <article class="core-copy">

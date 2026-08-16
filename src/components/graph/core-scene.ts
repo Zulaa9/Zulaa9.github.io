@@ -122,17 +122,12 @@ export class CoreScene {
     rim.position.set(-2.8, -1.2, -1.8);
     this.scene.add(ambient, this.key, rim);
 
-    const starsGeo = new THREE.BufferGeometry();
-    const stars: number[] = [];
-    for (let i = 0; i < 120; i += 1) {
-      stars.push((Math.random() - 0.5) * 12, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8 - 1.5);
-    }
-    starsGeo.setAttribute("position", new THREE.Float32BufferAttribute(stars, 3));
     this.starsMesh = new THREE.Points(
-      starsGeo,
+      new THREE.BufferGeometry(),
       new THREE.PointsMaterial({ color: 0x93d8f8, size: 0.02, transparent: true, opacity: 0.48 }),
     );
     this.scene.add(this.starsMesh);
+    this.layoutStars(1200, 600); // placeholder — resize(), called synchronously during boot, replaces this before it's ever visible
   }
 
   getBaseScale(): number {
@@ -157,10 +152,57 @@ export class CoreScene {
     return CORE_MESH_RADIUS * this.getBaseScale() * pxPerWorldUnit * CORE_GLOW_PADDING;
   }
 
-  resize(width: number, height: number): void {
+  /**
+   * `width`/`height` are the canvas's own render size, which can now be
+   * bigger than the visible stage (padded out to cover the pan/zoom
+   * "world" — see system-core-app.ts — so panning reveals more starfield
+   * instead of empty space at the canvas's edge). `referenceHeight` is the
+   * stage's real height: the size getVisualRadius()'s math, and every
+   * collision/link-distance calculation built on it, assumes. Widening
+   * the camera's FOV to match how much the canvas grew relative to that
+   * reference keeps the world-units-per-pixel density exactly what it was
+   * at the plain stage size — the sphere doesn't quietly get bigger just
+   * because the canvas grew for the starfield's sake — while the extra
+   * canvas around it reveals more periphery at that same density.
+   */
+  resize(width: number, height: number, referenceHeight: number = height): void {
     this.renderer.setSize(width, height, false);
     this.camera.aspect = width / (height || 1);
+    const baseFovRad = (CORE_FOV_DEG * Math.PI) / 180;
+    const baseVisibleHeight = 2 * CORE_REST_CAMERA_Z * Math.tan(baseFovRad / 2);
+    const worldPerPx = baseVisibleHeight / referenceHeight;
+    const visibleHeight = worldPerPx * height;
+    this.camera.fov = (2 * Math.atan(visibleHeight / (2 * CORE_REST_CAMERA_Z)) * 180) / Math.PI;
     this.camera.updateProjectionMatrix();
+    this.layoutStars(width, height);
+  }
+
+  /**
+   * Spreads the starfield across whatever the camera can currently see —
+   * recomputed from the (possibly FOV-widened, see resize()) live camera
+   * settings, not the original fixed box, so panning across the expanded
+   * canvas finds stars the whole way instead of the field ending at the
+   * original stage's edges. Star count scales with the visible area so
+   * density stays roughly constant instead of the same ~120 stars
+   * thinning out across a much bigger canvas.
+   */
+  private layoutStars(canvasWidth: number, canvasHeight: number): void {
+    const fovRad = (this.camera.fov * Math.PI) / 180;
+    const visibleWorldHeight = 2 * CORE_REST_CAMERA_Z * Math.tan(fovRad / 2);
+    const visibleWorldWidth = visibleWorldHeight * this.camera.aspect;
+    const density = 120 / (1200 * 600); // matches the original fixed-box star count at stage scale
+    const starCount = clamp(Math.round(canvasWidth * canvasHeight * density), 120, 640);
+
+    const positions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i += 1) {
+      positions[i * 3] = (Math.random() - 0.5) * visibleWorldWidth * 1.15;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * visibleWorldHeight * 1.15;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 8 - 1.5;
+    }
+    this.starsMesh.geometry.dispose();
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    this.starsMesh.geometry = geometry;
   }
 
   setStarsVisible(visible: boolean): void {
@@ -288,7 +330,20 @@ export class CoreScene {
     innerMat.emissiveIntensity += (emissiveTarget - innerMat.emissiveIntensity) * 0.1;
 
     this.key.intensity = this.introStep >= 3 ? 4 + Math.sin(t * 2.1) * 0.45 + this.coreImpulse * 0.55 : 0;
-    this.starsMesh.rotation.y += this.dt * 0.015;
+    // A slow, small, bounded sway rather than open-ended accumulation
+    // (this used to be `rotation.y += dt * 0.015`, drifting forever). The
+    // starfield is a flat slab, not a shape symmetric around the Y axis it
+    // spins on, so a full, unbounded rotation steadily swings stars between
+    // being near the camera (z close to 0, large and undimmed) and deep in
+    // the scene's fog (z near -5.5, small and fogged toward the background
+    // color, see the Fog(...) set up in the constructor) — the "stars
+    // shrinking away toward the core" this replaces. Now that the field
+    // spans the whole pannable area rather than a small fixed box, that
+    // warp was happening across the entire visible sky instead of a
+    // contained corner, which is what made it read as a bug rather than
+    // ambient motion. A small bounded oscillation keeps the "living sky"
+    // feel without ever reorienting the slab enough to cause it.
+    this.starsMesh.rotation.y = Math.sin(t * 0.035) * 0.04;
 
     this.camera.lookAt(0, 0, 0);
     this.renderer.render(this.scene, this.camera);
