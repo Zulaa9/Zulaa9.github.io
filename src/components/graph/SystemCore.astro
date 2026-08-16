@@ -61,18 +61,28 @@ const payloadJson = JSON.stringify(payload).replace(/</g, "\\u003c");
   </section>
 
   <section class="boot-sequence" id="boot-sequence" aria-label="Boot sequence">
-    <div class="boot-door boot-door--top" aria-hidden="true"></div>
-    <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
-    <div class="boot-terminal">
-      <p class="boot-terminal__eyebrow">{ui.bootEyebrow}</p>
-      <div class="boot-terminal__screen">
-        <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
-        <div class="boot-progress">
-          <div class="boot-progress__bar"><span id="boot-progress-fill"></span></div>
-          <span class="boot-progress__text" id="boot-progress-text">0%</span>
+    <!--
+      The console lives *inside* the top door panel, not beside it — one
+      shared transform on .boot-top-unit moves the panel and the console
+      together, by construction, instead of two separate elements with
+      independently-authored transitions that only *look* synchronized
+      because their durations happen to match. See boot-sequence.ts and
+      system-core.css for the open/closed state this drives.
+    -->
+    <div class="boot-top-unit" id="boot-top-unit">
+      <div class="boot-door boot-door--top" aria-hidden="true"></div>
+      <div class="boot-terminal">
+        <p class="boot-terminal__eyebrow">{ui.bootEyebrow}</p>
+        <div class="boot-terminal__screen">
+          <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
+          <div class="boot-progress">
+            <div class="boot-progress__bar"><span id="boot-progress-fill"></span></div>
+            <span class="boot-progress__text" id="boot-progress-text">0%</span>
+          </div>
         </div>
       </div>
     </div>
+    <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
   </section>
 
   <div class="core-viewport" id="core-viewport">
