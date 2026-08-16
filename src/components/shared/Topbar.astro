@@ -1,0 +1,178 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { t } from "../../i18n/ui";
+
+const locale = Astro.currentLocale ?? "en";
+---
+
+<header class="topbar">
+  <div class="identity">
+    <span class="identity__name">UNAX <span class="identity__accent">ZULA</span>IKA FUENTE</span>
+    <span class="identity__role">{t(locale, "identity.role")}</span>
+  </div>
+  <div class="topbar-controls">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <a
+        class:list={["lang-switch__btn", { "is-active": locale === "en" }]}
+        href={getRelativeLocaleUrl("en", "/")}
+        aria-pressed={locale === "en"}
+      >
+        EN
+      </a>
+      <a
+        class:list={["lang-switch__btn", { "is-active": locale === "es" }]}
+        href={getRelativeLocaleUrl("es", "/")}
+        aria-pressed={locale === "es"}
+      >
+        ES
+      </a>
+    </div>
+    <div class="status-chip">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text" id="core-status-text">{t(locale, "status.online")}</span>
+    </div>
+  </div>
+</header>
+
+<style>
+  .topbar {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .topbar-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .identity {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .identity__name {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.22em;
+    color: #dce8f4;
+  }
+
+  .identity__accent {
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(139, 226, 255, 0.12);
+  }
+
+  .identity__role {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid rgba(130, 171, 207, 0.28);
+    border-radius: 999px;
+    background: rgba(8, 16, 24, 0.66);
+  }
+
+  .lang-switch__btn {
+    display: inline-block;
+    border: 0;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: #b5cada;
+    background: transparent;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .lang-switch__btn.is-active {
+    color: #e9f5ff;
+    background: rgba(79, 154, 197, 0.35);
+  }
+
+  .lang-switch__btn:focus-visible {
+    outline: 1px solid rgba(139, 226, 255, 0.74);
+    outline-offset: 1px;
+  }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(88, 216, 146, 0.4);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.74rem;
+    color: #cdeeda;
+    background: rgba(6, 20, 14, 0.52);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 16px rgba(88, 216, 146, 0.72);
+  }
+
+  /*
+   * State-driven colors: green (online) is the base style above. These only
+   * ever match on the Core page — it's the only page whose script ever adds
+   * "booting"/"core-offline"/"core-syncing" to <body> — so they're inert
+   * (and harmless) everywhere else. Ported from legacy-vanilla/index.css;
+   * this file only ever had the green "online" state, the orange/red
+   * transitions were missed in the original port.
+   */
+  :global(body.booting) .status-chip,
+  :global(body.core-syncing) .status-chip {
+    border-color: rgba(223, 156, 97, 0.52);
+    color: #ffe0c2;
+    background: rgba(34, 17, 9, 0.62);
+  }
+
+  :global(body.booting) .status-dot,
+  :global(body.core-syncing) .status-dot {
+    background: #f2a35e;
+    box-shadow: 0 0 14px rgba(242, 163, 94, 0.72);
+  }
+
+  :global(body.booting.boot-offline) .status-chip,
+  :global(body.core-offline) .status-chip {
+    border-color: rgba(231, 101, 101, 0.54);
+    color: #ffd0d0;
+    background: rgba(36, 11, 11, 0.66);
+  }
+
+  :global(body.booting.boot-offline) .status-dot,
+  :global(body.core-offline) .status-dot {
+    background: #ea5f5f;
+    box-shadow: 0 0 14px rgba(234, 95, 95, 0.72);
+  }
+
+  @media (max-width: 860px) {
+    .topbar {
+      margin-bottom: 10px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .topbar-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>

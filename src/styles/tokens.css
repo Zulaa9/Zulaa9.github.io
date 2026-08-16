@@ -1,0 +1,41 @@
+/*
+ * Design tokens — ported 1:1 from legacy-vanilla/index.css.
+ * Values are unchanged on purpose: this is a technology port, not a redesign.
+ * The System Core is dark-only by identity (no light theme), so these are
+ * the only palette this site needs.
+ */
+:root {
+  /* surfaces */
+  --bg-0: #06090e;
+  --bg-1: #0a1017;
+  --panel: rgba(9, 16, 23, 0.72);
+  --panel-strong: rgba(9, 16, 23, 0.9);
+
+  /* lines & graph */
+  --line: rgba(125, 157, 180, 0.32);
+  --line-active: rgba(83, 198, 224, 0.86);
+
+  /* text */
+  --text: #e7eef7;
+  --muted: #93a8bd;
+
+  /* accent & status */
+  --accent: #53c6e0;
+  --accent-strong: #8be2ff;
+  --ok: #58d892;
+  --danger: #f2a35e;
+
+  /* shape */
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+
+  /* set by the pointer-parallax script in Backdrop.astro */
+  --bg-parallax-x: 0px;
+  --bg-parallax-y: 0px;
+
+  /* type */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+  --font-mono: "Consolas", "SFMono-Regular", "Menlo", monospace;
+}

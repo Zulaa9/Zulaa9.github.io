@@ -1,0 +1,42 @@
+/* Base reset — ported from legacy-vanilla/index.css */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-0);
+  color: var(--text);
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.system-shell {
+  position: relative;
+  min-height: 100vh;
+  padding: 24px 24px 26px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8eb5d1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
