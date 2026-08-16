@@ -196,32 +196,155 @@ export function bootSystemCore(): void {
   }
 
   /**
-   * A pinned (fx/fy-set) node can't be nudged by velocity — d3 resyncs a
-   * fixed node's position from fx/fy on every tick regardless of vx/vy —
-   * so forceCollide, already running every tick for the whole life of the
-   * simulation, simply can't push one out of the way, no matter how long
-   * it keeps trying. That's what made a previously-dragged node read as
-   * welded in place around anything moving near it, live during a drag or
-   * at the moment of a drop. The fix isn't to compute the push ourselves
-   * (that's what produced the teleport-y, only-checks-one-neighbor
-   * behavior this replaces) — it's to stop it from being un-pushable in
-   * the first place: let go of its pin so the *already-running* collide
-   * force can do exactly what it already does for every never-touched
-   * node, live, smoothly, checking against every neighbor each tick, not
-   * just the one node that happened to trigger this. `manuallyPlaced`
-   * stays true so the "end" handler below can re-pin it once it settles —
-   * still sticky, just wherever collision left it instead of where it was
-   * before.
+   * Second-pass fix on top of the local-interaction architecture: the
+   * first version's "active set" (dragged node + parent + direct
+   * children) meant a connection alone could make a node reactive, and
+   * — the actual reported inconsistency — whether an already-connected
+   * node *stayed* reactive depended on drag history: growLocalInteraction
+   * only ever cleared fx/fy for a node *it itself* had just frozen, so a
+   * sibling that happened to already be sticky from an earlier, separate
+   * drag kept that old pin and read as inert, while a never-touched one
+   * (fx still null) reacted freely — same relationship, same gesture,
+   * different outcome, purely from what the user happened to have
+   * touched before. Fixed at the root: connection no longer grants
+   * movement at all. Every node except the one being dragged is frozen,
+   * unconditionally, the instant a drag starts — a node's fx/fy gets set
+   * to wherever it *currently* is regardless of whether that's a never-
+   * moved default position or a spot from three drags ago, so there's no
+   * separate "first time" state left to diverge from a "has history"
+   * one. See resolveDragCollisions below for the only remaining way a
+   * static node can still move.
    */
-  function releasePinnedOverlaps(active: SimNode): void {
-    for (const other of simNodes) {
-      if (other === active || other.type === "core" || other.fx == null) continue;
-      const dist = Math.hypot(other.x! - active.x!, other.y! - active.y!);
-      if (dist < other.radius + active.radius + COLLIDE_PADDING * 2) {
-        other.fx = null;
-        other.fy = null;
+  const frozenByInteraction = new Set<SimNode>();
+  /** Every node repositioned by resolveDragCollisions at any point during the current drag — tracked across the whole gesture (not just the latest pointermove) so a node nudged early and never touched again still gets treated as manually placed at drag end, matching manual placement's own "stays exactly where it was left" guarantee, rather than being silently released back into free-floating physics once nothing is colliding with it anymore. */
+  let touchedThisInteraction = new Set<SimNode>();
+
+  /** Pins every node except `dragged` to its current position, unconditionally — see this section's own comment for why "unconditionally" (not "if not already pinned some other way") is exactly the point. */
+  function freezeAllExcept(dragged: SimNode): void {
+    for (const node of simNodes) {
+      if (node === dragged || node.type === "core") continue;
+      node.frozen = true;
+      if (node.fx == null) {
+        node.fx = node.x;
+        node.fy = node.y;
+        frozenByInteraction.add(node);
       }
     }
+  }
+
+  /**
+   * Collision resolution as a direct position correction, not a state
+   * transition — the second half of this pass's fix. The previous
+   * version's promotion (frozen -> unpinned, permanently, for the rest
+   * of the drag) meant a node stayed reactive long after the thing that
+   * touched it had moved away again — a temporary collision leaving a
+   * permanently "woken" node. This instead recomputes, from scratch,
+   * every single pointermove: is any *currently frozen* node overlapping
+   * the dragged node right now (or another node this same call already
+   * pushed — real chain pushes, About shoving Contact into Capabilities,
+   * are still exactly this, just breadth-first from the dragged node
+   * outward)? If so, move it the minimum distance needed to clear the
+   * overlap and re-sync its own pin to that new spot — it never actually
+   * unfreezes, so there's no separate "active" state for it to fall out
+   * of once the overlap ends. A node this call doesn't touch on a given
+   * frame is left completely alone, including one it touched a moment
+   * ago: whatever resolveDragCollisions last left it at holds
+   * indefinitely, which *is* "the collision ends, the node goes back to
+   * static" — there's nothing to revert because it was static the whole
+   * time, just at an updated position.
+   */
+  function resolveDragCollisions(dragged: SimNode): Set<SimNode> {
+    const touched = new Set<SimNode>();
+    // One breadth-first pass can leave a genuine three-way conflict
+    // slightly unresolved — push a node clear of the dragged one, and if
+    // that same spot happens to also crowd a *third*, already-processed
+    // node, nothing revisits the first pair afterward. Measured directly:
+    // a single pass left a pushed node a handful of px short of the
+    // dragged node's own required clearance in exactly this situation.
+    // Repeating the whole pass a few times — same "a few iterations is
+    // enough at this node count" reasoning resolveOverlaps itself already
+    // relies on — lets a later pass correct what an earlier one's ripple
+    // effect disturbed; each pass is a no-op once nothing's left to fix,
+    // so this costs nothing in the (typical) case of zero or one
+    // collision.
+    for (let pass = 0; pass < 4; pass++) {
+      let movedAny = false;
+      const queue: SimNode[] = [dragged];
+      const queued = new Set<SimNode>([dragged]);
+      while (queue.length > 0) {
+        const mover = queue.shift()!;
+        for (const other of simNodes) {
+          if (other === mover || other === dragged || other.type === "core" || !other.frozen) continue;
+          const dx = other.x! - mover.x!;
+          const dy = other.y! - mover.y!;
+          const dist = Math.hypot(dx, dy);
+          const minDist = other.radius + mover.radius + COLLIDE_PADDING * 2;
+          if (dist >= minDist) continue;
+          const ux = dist > 0.01 ? dx / dist : 1;
+          const uy = dist > 0.01 ? dy / dist : 0;
+          other.x = mover.x! + ux * minDist;
+          other.y = mover.y! + uy * minDist;
+          // A chain push can, in principle, land a node inside the core's
+          // clearance zone even though the dragged node itself can never
+          // reach it (the live core-clamp only ever checks the one node
+          // directly under the pointer) — same floor, applied here too, so
+          // nothing pushed *by* a drag can end up somewhere the drag
+          // couldn't have put itself.
+          if (coreSim) {
+            const cdx = other.x - coreSim.x!;
+            const cdy = other.y - coreSim.y!;
+            const cdist = Math.hypot(cdx, cdy);
+            const coreMinDist = coreSim.radius + COLLIDE_PADDING + other.radius + COLLIDE_PADDING + CORE_CLEARANCE_MARGIN;
+            if (cdist < coreMinDist) {
+              const cux = cdist > 0.01 ? cdx / cdist : 1;
+              const cuy = cdist > 0.01 ? cdy / cdist : 0;
+              other.x = coreSim.x! + cux * coreMinDist;
+              other.y = coreSim.y! + cuy * coreMinDist;
+            }
+          }
+          other.fx = other.x;
+          other.fy = other.y;
+          touched.add(other);
+          movedAny = true;
+          if (!queued.has(other)) {
+            queued.add(other);
+            queue.push(other);
+          }
+        }
+      }
+      if (!movedAny) break;
+    }
+    return touched;
+  }
+
+  /**
+   * Ends the interaction freezeAllExcept started. A node resolveDragCollisions
+   * ever touched during this drag gets marked manuallyPlaced — the
+   * correction gave it a genuine, deliberate new position, same as if the
+   * user had dragged it directly, so it stays exactly there (sticky)
+   * rather than becoming eligible to drift on some future reheat. Every
+   * other still-frozen node just goes back to whatever it was before this
+   * interaction started: released (fx/fy cleared) if this specific
+   * interaction is the one that pinned it and nothing ever collided with
+   * it, otherwise left exactly as it was (already sticky from an earlier,
+   * unrelated placement — this interaction never had any authority over
+   * that pin in the first place, only over whether it counted as a
+   * static obstacle for the duration).
+   */
+  function releaseLocalInteraction(everTouched: Set<SimNode>): void {
+    for (const node of simNodes) {
+      if (!node.frozen) continue;
+      node.frozen = false;
+      if (everTouched.has(node)) {
+        node.manuallyPlaced = true;
+        continue;
+      }
+      if (frozenByInteraction.has(node)) {
+        node.fx = null;
+        node.fy = null;
+      }
+    }
+    frozenByInteraction.clear();
   }
 
   // Live ticks (every animation frame while the layout is moving) run the
@@ -238,19 +361,49 @@ export function bootSystemCore(): void {
     simNodes.forEach(placeNodeEl);
     edges.update(simById);
   });
+  // Tried, this session, and reverted: an "auto-resettle" loop here that,
+  // after enforceHardBounds, checked how much it had to move things and —
+  // if that was more than a tiny amount — reheated and ran the whole
+  // settle-and-correct cycle again, on the theory that repeating it would
+  // converge to a joint fixed point of both the discrete corrector and the
+  // live forces before ever showing the result to the user. A repeated
+  // reheat-and-resettle test (see graph-simulation.ts's own notes) did
+  // show this *not* reliably converging on its own — but the specific
+  // "made it dramatically worse" measurement for this exact mechanism came
+  // from a browser tab that turned out, once cross-checked against a fresh
+  // one on the same code, to have accumulated bad state from this
+  // session's own dozens of hot-reloads — so that specific regression
+  // reading isn't trustworthy either way, and this was reverted on general
+  // "don't ship something whose verification I can't currently trust"
+  // grounds, not a confirmed bad result. Worth re-attempting with a clean
+  // testing setup rather than ruled out.
   graphSim.simulation.on("end", () => {
+    // enforceHardBounds runs *before* releasing any interaction freeze —
+    // frozen nodes are still full obstacles for this final correction
+    // pass (isAnchor, graph-simulation.ts), exactly like every earlier
+    // tick was. Releasing first would let this correction itself reshuffle
+    // nodes the whole interaction just went to great lengths to keep
+    // still.
     enforceHardBounds(simNodes, currentBounds(), readAvoidRects());
-    // Anything released mid-bounce by releasePinnedOverlaps is done moving
-    // now that the simulation has actually gone quiet — re-pin it at
-    // wherever it settled, restoring the "stays put" guarantee every
-    // manual placement gets, just at its new, un-overlapping spot instead
-    // of the one it got bumped out of.
+    // Defensive only — a drag now keeps every manually-placed node's
+    // fx/fy set for its own entire lifetime (see freezeAllExcept/
+    // resolveDragCollisions/endDrag below), so nothing should actually
+    // reach this "end" handler already manually placed but unpinned. Kept
+    // in case boot-time content (an authored `pinned` node, say) ever
+    // needs the same "re-pin wherever it settled" treatment before the
+    // interaction machinery below existed.
     for (const node of simNodes) {
       if (node.manuallyPlaced && node.fx == null) {
         node.fx = node.x;
         node.fy = node.y;
       }
     }
+    // Defensive only, at this point — a drag no longer reheats alpha at
+    // all (see dragstart/endDrag below), so "end" only ever fires here
+    // from boot's or a resize's own global reheat, never mid-interaction,
+    // and nothing should still be frozen when it does. Costs nothing to
+    // release anyway if some edge case leaves it set.
+    releaseLocalInteraction(new Set());
     simNodes.forEach(placeNodeEl);
     edges.update(simById);
   });
@@ -488,14 +641,23 @@ export function bootSystemCore(): void {
         // of the gesture keeps tracking even if it leaves the stage.
         stage.setPointerCapture(event.pointerId);
         if (dragTarget) {
-          // Pin the node under the pointer and reheat the simulation —
-          // the same start-of-drag move d3-force's own drag examples use,
-          // so every other node keeps flowing around wherever the user
-          // is putting this one for the whole gesture, live.
+          // Pin the node under the pointer. No simulation reheat at all
+          // anymore — earlier versions of this restarted d3's own
+          // alphaTarget here, first for the whole graph, then (after the
+          // previous round) for a "local" set that still granted movement
+          // by connection alone. Neither is needed: freezeAllExcept below
+          // pins literally everyone else to exactly where they are, and
+          // resolveDragCollisions (called on every pointermove) is a
+          // direct, synchronous position correction, not a physics
+          // response — there's nothing left for a live tick loop to
+          // usefully do during a drag, so nothing reheats it. Position
+          // updates for the DOM/edges happen manually, right after each
+          // correction, since no "tick" event will fire to do it for us.
           dragTarget.fx = dragTarget.x;
           dragTarget.fy = dragTarget.y;
           dragTarget.manuallyPlaced = true;
-          graphSim.simulation.alphaTarget(0.3).restart();
+          touchedThisInteraction = new Set();
+          freezeAllExcept(dragTarget);
           setActive(dragTarget.id);
         } else {
           viewport.classList.add("is-panning");
@@ -540,13 +702,37 @@ export function bootSystemCore(): void {
             dragTarget.fy = coreSim.y! + cuy * coreMinDist;
           }
         }
-        // Live, not just at drop: anything the dragged node passes over
-        // that's pinned from an earlier manual placement gets released
-        // right now, so it starts reacting to the collide force — which
-        // is already running every tick throughout this drag — the same
-        // moment a never-touched node under the cursor already does,
-        // instead of only once the pointer lifts.
-        releasePinnedOverlaps(dragTarget);
+        // The actual bug this round introduced, found by testing real
+        // pointer interaction instead of trusting the synthetic harness:
+        // this whole section only ever wrote dragTarget.fx/fy, never
+        // dragTarget.x/y — harmless under the *previous* architecture,
+        // where d3's own tick loop resynced every pinned node's x/y from
+        // its fx/fy on every frame regardless of who set fx/fy or why.
+        // With that reheat removed (the whole point of this round), that
+        // resync stops happening entirely — nothing else was left to do
+        // it, so the dragged node's x/y (what placeNodeEl actually
+        // renders, and what resolveDragCollisions' own distance math
+        // reads) stayed frozen at its pre-drag value for the rest of the
+        // gesture: pointermove kept computing a new fx/fy correctly, nothing
+        // downstream of that ever saw it. Same fix as every other node
+        // already gets in resolveDragCollisions (x/y set directly,
+        // fx/fy just mirrors it) — the dragged node needs the same
+        // treatment, just driven by the pointer instead of a collision
+        // push.
+        dragTarget.x = dragTarget.fx;
+        dragTarget.y = dragTarget.fy;
+        // Live, not just at drop: anything the dragged node (or a node a
+        // chain push already moved this same call) currently overlaps
+        // gets corrected right now, every frame, from scratch — see
+        // resolveDragCollisions' own comment for why "every frame, from
+        // scratch" instead of "once, permanently" is the actual fix this
+        // round is about. No "tick" event is coming to redraw the result
+        // (nothing reheats the simulation during a drag anymore), so the
+        // DOM/edge update that used to happen there happens directly
+        // here instead.
+        for (const node of resolveDragCollisions(dragTarget)) touchedThisInteraction.add(node);
+        simNodes.forEach(placeNodeEl);
+        edges.update(simById);
       } else {
         view.pan(dx, dy);
       }
@@ -561,57 +747,38 @@ export function bootSystemCore(): void {
     if (dragTarget) {
       const dropped = dragTarget;
       dragTarget = null;
-      // Catches the exact drop position — the live releasePinnedOverlaps
-      // calls during pointermove above handle everything the node passed
-      // over on the way, but the very last position (where the pointer
-      // actually lifted) is only checked here.
-      releasePinnedOverlaps(dropped);
-      // A previous version of this gave a previously-pinned neighbor a
-      // full, immediate position correction of its own, right here — it
-      // did stop it from being a permanent obstacle, but as a one-shot
-      // pairwise fix it only ever checked *this* pair: the corrected spot
-      // could still land on top of, or too close to, some third node nearby
-      // that this loop never looked at, and the correction itself was an
-      // instant jump rather than a bounce. releasePinnedOverlaps replaces
-      // all of that: it just lets go of the pin, and the ordinary,
-      // already-running collide force — which naturally checks every node
-      // against every other node, every tick, not just the pair that
-      // triggered this — smoothly carries it clear, live, exactly the way
-      // a never-touched node already moves. The kick below is only for a
-      // genuinely free node (never dragged, so never pinned in the first
-      // place) still overlapping — a light nudge so its bounce starts
-      // snappy instead of waiting for collide's own gradual per-tick
-      // build-up.
-      for (const other of simNodes) {
-        if (other === dropped || other.type === "core" || other.fx != null) continue;
-        const dx = other.x! - dropped.x!;
-        const dy = other.y! - dropped.y!;
-        const dist = Math.hypot(dx, dy);
-        const minDist = other.radius + dropped.radius + COLLIDE_PADDING * 2;
-        if (dist >= minDist) continue;
-        const ux = dist > 0.01 ? dx / dist : Math.random() * 2 - 1;
-        const uy = dist > 0.01 ? dy / dist : Math.random() * 2 - 1;
-        // Reduced again (0.3 -> 0.15) — should read as barely nudging the
-        // other node aside, not pushing it away; it only has to move
-        // enough to stop touching, and with COLLIDE_PADDING now down to 2
-        // that's already a small distance most of the time.
-        const push = (minDist - dist) * 0.15;
-        other.vx = (other.vx ?? 0) + ux * push;
-        other.vy = (other.vy ?? 0) + uy * push;
-      }
-      // Collide/boundary/coreClearance/avoidRects all run at full strength
-      // regardless of alpha (see their own comments — none of them are
-      // alpha-scaled, on purpose), so any bounce triggered above will keep
-      // resolving tick after tick even as alpha decays. This just
-      // guarantees a minimum amount of *time* — ticks — for it to visibly
-      // play out before the simulation goes quiet, rather than however
-      // much happened to be left over from the drag itself.
-      graphSim.simulation.alphaTarget(0).alpha(Math.max(graphSim.simulation.alpha(), 0.4));
-      // The dropped node itself stays exactly where it was dropped (fx/fy
-      // remain set) — a deliberate, sticky placement rather than springing
-      // back into the automatic layout. Anything released above is sticky
-      // too, just not yet — it gets re-pinned wherever it settles once the
-      // simulation actually goes quiet (see the "end" handler above).
+      // Catches the exact drop position — the live resolveDragCollisions
+      // calls during pointermove handled everything passed over on the
+      // way, but the very last position (where the pointer actually
+      // lifted) is only checked here.
+      for (const node of resolveDragCollisions(dropped)) touchedThisInteraction.add(node);
+      dropped.manuallyPlaced = true;
+      // Safety net, not a relayout: every node except `dropped` is still
+      // frozen (isAnchor, graph-simulation.ts) at this point, so no matter
+      // how many nodes this whole graph has, resolveOverlaps/enforceCoreClearance/
+      // the viewport and panel clamps inside this call can only actually
+      // move `dropped` itself — catches it landing in a UI panel or (in
+      // an edge case resolveDragCollisions' own chain-push doesn't check)
+      // slightly past a viewport edge, without reopening the door to
+      // reshuffling anything the interaction spent the whole gesture
+      // keeping still.
+      enforceHardBounds(simNodes, currentBounds(), readAvoidRects());
+      // No alpha reheat, no "bounce" — the correction above already *is*
+      // the resolution, applied once, directly, the same way every
+      // pointermove already did it live. Releasing the rest of this
+      // interaction's freezes right here (not deferred to the simulation's
+      // "end" event, which won't fire — nothing reheats alpha for a drag
+      // anymore) is what makes the drop itself the last thing that can
+      // move anything: nothing is left hot afterward to drift.
+      releaseLocalInteraction(touchedThisInteraction);
+      touchedThisInteraction = new Set();
+      simNodes.forEach(placeNodeEl);
+      edges.update(simById);
+      // The dropped node, and anything resolveDragCollisions ever
+      // repositioned this gesture, stay exactly where they were left
+      // (fx/fy remain set, manuallyPlaced now true for both) — a
+      // deliberate, sticky placement rather than springing back into
+      // automatic layout.
     }
   }
   stage.addEventListener("pointerup", endDrag);

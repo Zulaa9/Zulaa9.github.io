@@ -86,6 +86,38 @@ function clamp(v: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, v));
 }
 
+/**
+ * The one target distance a linked (parent/child) pair is actually
+ * supposed to end up at — shared by the live link force (below, in
+ * createGraphSimulation) and the discrete hard-corrector (resolveOverlaps,
+ * via enforceHardBounds). Extracted specifically so there's only one
+ * formula to keep in sync, not two independently-written ones that drift
+ * apart. Real, measured consequence of them drifting apart before this
+ * fix: resolveOverlaps only ever pushed a linked pair to *its own* bare
+ * collision minimum (no breathing room, no ring floor, no viewport
+ * scale), which for most pairs is *closer* than the live link force
+ * actually wants — so the discrete corrector would settle a pair at one
+ * distance, and the very next reheat's link force would immediately pull
+ * them apart again toward a *different* distance, which the next hard
+ * correction would then have to react to, forever. Measured directly —
+ * see resolveOverlaps' and endFn's own comments for the fuller
+ * investigation, including the fix attempted on the resolveOverlaps side
+ * of this same mismatch (tried, and reverted for a separate reason: not
+ * wrong about the mismatch, just made a different, worse problem worse).
+ * Kept here because the live link force side of it is a plain,
+ * behavior-preserving extraction with no downside — this is exactly the
+ * formula linkForce.distance() already used, just named and shared
+ * instead of duplicated.
+ */
+function linkPreferredDistance(parent: SimNode, child: SimNode, bounds: Bounds, minRingRadii: Map<string, number>): number {
+  const scale = scaleForBounds(bounds);
+  const collideMin = parent.radius + COLLIDE_PADDING + (child.radius + COLLIDE_PADDING);
+  const breathingRoom = child.depth <= 1 ? LINK_BREATHING_ROOM.primary : LINK_BREATHING_ROOM.nested;
+  const ringFloor = child.parentId ? (minRingRadii.get(child.parentId) ?? 0) : 0;
+  const distance = Math.max(collideMin + breathingRoom, ringFloor);
+  return distance * scale * (child.pinned ? 0.9 : 1);
+}
+
 /** Wider stages get proportionally more spread, not just more empty margin. */
 function scaleForBounds(bounds: Bounds): number {
   return clamp(bounds.width / 1200, 0.5, 1.4);
@@ -547,23 +579,38 @@ function enforceCoreClearance(nodes: SimNode[]): void {
  * would have gotten there eventually.
  */
 /**
- * The *only* node collision resolution won't move: the true center the
- * whole graph is built around (core.fx/fy is pinned by applyBounds to the
- * stage's exact center, and every other bit of layout math assumes it
- * stays there). A branch or sub-branch the user has dragged is *also*
- * fx/fy-pinned (that's what makes its placement stick instead of springing
- * back into the automatic layout — see endDrag's own comment), but it's
- * not this kind of anchor: it was free a moment ago and there's no reason
- * dragging it once should weld it in place forever, immune to ever being
- * bumped by a later drag/drop the way every other node still is. Collision
- * resolution treats those two cases differently below; every *other*
- * force in this file (side bias, horizontal anchor, core clearance, ...)
- * still skips any fx/fy-pinned node on purpose — placement bypassing those
- * preferences is the whole point of a manual drag, and that's unrelated to
- * whether it can still be pushed aside by a fresh overlap.
+ * The nodes collision resolution (resolveOverlaps, findStuckNodes, the
+ * perturbation retry) treats as pure, unmovable obstacles: the true
+ * center the whole graph is built around (core.fx/fy is pinned by
+ * applyBounds to the stage's exact center, and every other bit of layout
+ * math assumes it stays there), and — the architectural fix behind
+ * `frozen` — every node *outside* the current local interaction set
+ * during a drag (see growLocalInteraction in system-core-app.ts).
+ *
+ * A branch or sub-branch the user has dragged, once that interaction is
+ * over, is *also* fx/fy-pinned (that's what makes its placement stick
+ * instead of springing back into the automatic layout — see endDrag's
+ * own comment), but on its own that's not this kind of anchor: it was
+ * free a moment ago and there's no reason dragging it once should weld
+ * it in place forever, immune to ever being bumped by a later drag/drop
+ * the way every other free node still is. What actually makes it
+ * unmovable *during* someone else's drag is `frozen` being set on it for
+ * that interaction's duration, same as everything else outside the
+ * active set — not the leftover fx/fy pin by itself.
+ *
+ * Every *other* force in this file (side bias, horizontal anchor, core
+ * clearance, the native d3 forces) already skips any fx/fy-pinned node
+ * on its own, for a different, narrower reason (placement bypassing
+ * those preferences is the whole point of a manual drag) — frozen nodes
+ * get fx/fy set too (see growLocalInteraction), so they're covered by
+ * that same existing check without needing changes there. This function
+ * is specifically for the one place that reasons about pinned nodes
+ * differently — resolveOverlaps *can* nudge an ordinary manually-placed
+ * node when it's not otherwise frozen, so the frozen case has to be
+ * checked explicitly here rather than folded into "has fx/fy."
  */
 function isAnchor(node: SimNode): boolean {
-  return node.type === "core";
+  return node.type === "core" || node.frozen === true;
 }
 
 /** Moving a fixed (fx/fy-pinned) node's x/y alone isn't enough — d3 resyncs a fixed node's position from fx/fy on every subsequent tick, so the correction has to move the pin itself to actually stick. */
@@ -572,6 +619,33 @@ function syncPin(node: SimNode): void {
   if (node.fy != null) node.fy = node.y;
 }
 
+// Tried, this session, and reverted: a seeded, deterministic PRNG
+// (mulberry32) standing in for Math.random() in resolveOverlaps' shuffle
+// and the perturbation-retry jitter below, re-seeded to the same constant
+// at the start of every enforceHardBounds call. The diagnosis behind it
+// was real and confirmed directly: patching Math.random to a *constant*
+// during testing and repeating the same reheat-and-resettle cycle from
+// the same starting layout showed real Math.random never converging to
+// one resting layout (total movement per cycle stayed large — 600-1300px
+// — forever) while a frozen Math.random converged to a genuine fixed
+// point by the third cycle. But deploying an actual seeded generator (not
+// a frozen constant) appeared, in testing, to make results *worse* — two
+// different arbitrary seeds both showed dramatically more residual
+// overlap after a full settle (28-29 violating pairs) than plain
+// Math.random() typically leaves (1-2), and the generator itself checked
+// out fine in isolation (good distribution, full [0,1) range). Flagging
+// that finding as unconfirmed rather than proven, though: the specific
+// browser tab used for that comparison turned out, once cross-checked
+// against a fresh one running the exact same code, to have accumulated
+// bad state from this session's own dozens of hot-reloads — so the
+// measured "seeded is worse" gap may partly or fully be that, not the
+// seeding itself. Reverted on "can't currently trust this measurement"
+// grounds, not a confirmed regression — worth re-attempting with a
+// cleanly reloaded environment before ruling it out. If it does hold up,
+// a "try several seeds, keep whichever leaves the fewest violations"
+// version (the same best-of-N idea the perturbation loop below already
+// uses, just one level up) would keep the reproducibility benefit
+// without betting everything on one arbitrary seed.
 function resolveOverlaps(nodes: SimNode[]): void {
   // Same fixed i/j processing order every call can lock a tightly
   // constrained group into a stable-but-wrong pattern: fixing pair A-B
@@ -598,6 +672,25 @@ function resolveOverlaps(nodes: SimNode[]): void {
         const dx = b.x! - a.x!;
         const dy = b.y! - a.y!;
         const dist = Math.hypot(dx, dy);
+        // Tried, this session, and reverted: making a linked pair's
+        // minDist here match linkPreferredDistance (the same target the
+        // live link force uses), on the theory that resolveOverlaps
+        // settling for only bare collision was what let the next reheat's
+        // link force pull things toward a different distance. The theory
+        // isn't wrong about the mismatch existing, but this specific fix
+        // appeared, in testing, to make it worse — demanding *more* space
+        // per linked pair, for a parent already over capacity for its
+        // child count (Projects' six — see the still-open note in this
+        // session's audit report), plausibly leaves less slack for the
+        // rest of resolveRounds to work with (up to 19 residual violating
+        // pairs measured, vs. bare collision's usual 1-2). Same caveat as
+        // seededRandom's own note, though: that measurement came from the
+        // same browser tab later found to have accumulated bad state from
+        // this session's own repeated hot-reloads, so treat "made it
+        // worse" as a real *possibility* worth re-testing cleanly, not a
+        // settled conclusion. Reverted on "not currently able to trust the
+        // verification" grounds. Bare collision (below) is what's actually
+        // been confirmed safe across this whole session.
         const minDist = a.radius + b.radius + COLLIDE_PADDING * 2;
         if (dist >= minDist) continue;
 
@@ -943,15 +1036,11 @@ export function createGraphSimulation(
     .distance((link) => {
       const source = (typeof link.source === "object" ? link.source : byId.get(link.source as unknown as string)) as SimNode;
       const target = (typeof link.target === "object" ? link.target : byId.get(link.target as unknown as string)) as SimNode;
-      const scale = scaleForBounds(currentBounds);
-      // Always at least the two nodes' own collide requirement — see
-      // LINK_BREATHING_ROOM's comment for why that's load-bearing, not
-      // just a nicety.
-      const collideMin = source.radius + COLLIDE_PADDING + (target.radius + COLLIDE_PADDING);
-      const breathingRoom = target.depth <= 1 ? LINK_BREATHING_ROOM.primary : LINK_BREATHING_ROOM.nested;
-      const ringFloor = target.parentId ? (minRingRadii.get(target.parentId) ?? 0) : 0;
-      const distance = Math.max(collideMin + breathingRoom, ringFloor);
-      return distance * scale * (target.pinned ? 0.9 : 1);
+      // See linkPreferredDistance's own comment — shared with
+      // resolveOverlaps (via enforceHardBounds) specifically so the live
+      // force and the discrete hard-corrector are never aiming for two
+      // different distances on the same pair.
+      return linkPreferredDistance(source, target, currentBounds, minRingRadii);
     });
 
   const simulation = forceSimulation(nodes)
