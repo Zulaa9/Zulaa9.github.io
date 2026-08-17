@@ -1,0 +1,21 @@
+---
+/**
+ * Shared opening block for every "module inspector" page (About /
+ * Capabilities / Contact): a large statement heading plus an optional
+ * short lead. The page's position in the Core's architecture is already
+ * communicated by the crumbbar above (trail + coordinate) — repeating it
+ * here as its own "01 / 03 — LABEL" line was redundant with that, so this
+ * only renders the statement itself now.
+ */
+interface Props {
+  statement: string;
+  lead?: string;
+}
+
+const { statement, lead } = Astro.props;
+---
+
+<header class="module-index-block">
+  <h1 class="module-statement">{statement}</h1>
+  {lead && <p class="module-lead">{lead}</p>}
+</header>

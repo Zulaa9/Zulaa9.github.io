@@ -13,7 +13,11 @@
 .module-scroll {
   flex: 1;
   min-height: 0;
-  padding: 50px 24px 40px;
+  /* Top padding used to also carry the weight of clearing the crumbbar,
+   * back when it floated over this element via position: absolute — now
+   * that it's a normal flex sibling above this one (see Crumbbar.astro),
+   * this is just ordinary breathing room. */
+  padding: 24px;
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(114, 182, 216, 0.62) rgba(6, 16, 24, 0.82);
@@ -34,16 +38,17 @@
 }
 
 /* The content column. No border, no background, no shadow — the window
- * around it already provides that. Just a readable measure and the entry
- * animation. */
-/* 46rem (736px) was sized for pure prose and left the window looking half-
- * empty on anything wider than a laptop — real desktop viewports have
- * plenty more to give. Individual text elements (`.section p`, `.plain-
- * list`, etc.) keep their own 62ch cap for a comfortable reading measure,
- * so widening the shell only gives room to things that actually benefit
- * from it: a two-column intro, a wider spec table, real images. */
+ * around it already provides that. Just the entry animation.
+ *
+ * Deliberately no max-width here: this used to cap out well short of the
+ * stage's actual width (first at 46rem, then progressively raised, and
+ * still leaving a few hundred px of dead margin at desktop sizes even at
+ * 102rem). The shell now simply fills the stage. Individual text elements
+ * (`.section p`, `.plain-list`, etc.) keep their own ch caps for a
+ * comfortable reading measure, and section-level compositions (grids,
+ * the About hero) cap their own parts — so the shell can be full width
+ * without any single line of text getting unreadably wide. */
 .module-shell {
-  max-width: 68rem;
   animation: moduleShellIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: 40ms;
 }
@@ -87,6 +92,7 @@
 
 .section {
   margin-top: 40px;
+  scroll-margin-top: 64px;
 }
 
 .section:first-child {
@@ -157,6 +163,68 @@
   content: counter(section, decimal-leading-zero);
   color: var(--accent);
   font-variant-numeric: tabular-nums;
+}
+
+/* ---- Module Inspector primitives: shared across About/Capabilities/Contact ---- */
+
+/* .module-index-block (the page's opening <header>, from ModuleIntro.astro)
+ * intentionally has no styles of its own: it used to carry its own
+ * padding-top for breathing room under the crumbbar, back when the bar
+ * was an overlay; now that .module-scroll's own top padding already
+ * provides that (the bar is a normal flex sibling — see Crumbbar.astro),
+ * stacking both here just produced a visibly oversized gap above the
+ * statement. */
+
+/* Large opening statement — replaces a plain h1 for the page intro. This is
+ * the thing a visitor reads first; everything else is smaller than it. */
+.module-statement {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.3vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--text);
+  max-width: 22ch;
+}
+
+.module-lead {
+  margin: 0;
+  max-width: 54ch;
+  color: #bed2e2;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Running section header: "SECTION TITLE ─────────────". The hairline
+ * fills whatever width is left, so it always reaches the far edge of
+ * whatever column it's in — a seam, not a fixed-length underline. */
+.rule-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0 0 26px;
+}
+
+.rule-heading::after {
+  content: "";
+  flex: 1;
+  min-width: 24px;
+  height: 1px;
+  transform: translateY(-3px);
+  background: rgba(130, 171, 207, 0.18);
+}
+
+.rule-heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #d7e7f4;
+  white-space: nowrap;
 }
 
 /* ---- typographic lists (replace pill/chip/card patterns) ---- */
@@ -300,41 +368,191 @@
   color: var(--muted);
 }
 
-/* ---- channel list (Contact): label + value, the line itself is the link ---- */
+/* ---- channel row (Contact): full-width interactive row, the hairline
+ * itself is the affordance — no card, no button chrome. ---- */
 
-.channel-list {
+.channel-rows {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: grid;
-  gap: 14px;
+  border-top: 1px solid rgba(130, 171, 207, 0.18);
 }
 
-.channel-list a {
+.channel-row {
+  position: relative;
   display: grid;
-  grid-template-columns: 6.5rem 1fr;
-  gap: 12px;
+  grid-template-columns: 9rem 1fr auto;
   align-items: baseline;
+  column-gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(130, 171, 207, 0.18);
   color: var(--text);
   text-decoration: none;
 }
 
-.channel-list .channel-label {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
+.channel-row::before {
+  /* the seam that lights up on hover, drawn over the shared hairline
+   * above so it reads as "this row" activating, not a new border */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--accent-strong);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.channel-row:hover::before,
+.channel-row:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.channel-row__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #8eb5d1;
 }
 
-.channel-list .channel-value {
-  border-bottom: 1px solid transparent;
+.channel-row__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  font-weight: 500;
 }
 
-.channel-list a:hover .channel-value,
-.channel-list a:focus-visible .channel-value {
+.channel-row__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.channel-row__arrow {
+  display: inline-block;
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+.channel-row:hover .channel-row__arrow,
+.channel-row:focus-visible .channel-row__arrow {
   color: var(--accent-strong);
-  border-bottom-color: var(--accent-strong);
+  transform: translate(3px, -3px);
+}
+
+.channel-row:hover .channel-row__value,
+.channel-row:focus-visible .channel-row__value {
+  color: var(--accent-strong);
+}
+
+/* ---- horizontal timeline (About / Experience): one schematic line, not a
+ * vertical stack of cards — this project only has one entry to place on it. ---- */
+
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 6px 0 22px;
+}
+
+.timeline__edge {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.timeline__edge--end {
+  color: var(--ok);
+}
+
+.timeline__track {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  min-width: 40px;
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(130, 171, 207, 0.22) 100%);
+}
+
+.timeline__track::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
+}
+
+.timeline__track::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--ok);
+  background: var(--bg-0);
+  transform: translate(50%, -50%);
+}
+
+/* ---- related-module rows (About footer): plain rows + arrow, not cards ---- */
+
+.related-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(130, 171, 207, 0.18);
+}
+
+.related-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(130, 171, 207, 0.18);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.related-row__label {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.related-row__line {
+  flex: 1;
+  height: 1px;
+  background: rgba(130, 171, 207, 0.18);
+  transition: background 200ms ease;
+}
+
+.related-row__arrow {
+  transition: transform 200ms ease, color 200ms ease;
+  color: var(--muted);
+}
+
+.related-row:hover .related-row__label,
+.related-row:focus-visible .related-row__label {
+  color: var(--accent-strong);
+}
+
+.related-row:hover .related-row__line,
+.related-row:focus-visible .related-row__line {
+  background: var(--accent-strong);
+}
+
+.related-row:hover .related-row__arrow,
+.related-row:focus-visible .related-row__arrow {
+  color: var(--accent-strong);
+  transform: translateX(3px);
 }
 
 @media (max-width: 860px) {
@@ -345,7 +563,7 @@
   }
 
   .module-scroll {
-    padding: 44px 14px 24px;
+    padding: 24px 14px 24px;
     scrollbar-width: auto;
   }
 
@@ -362,8 +580,34 @@
     margin-bottom: 6px;
   }
 
-  .channel-list a {
+  .module-statement {
+    max-width: none;
+  }
+
+  .rule-heading {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .channel-row {
     grid-template-columns: 1fr;
-    gap: 2px;
+    row-gap: 4px;
+    padding: 16px 0;
+  }
+
+  .channel-row__meta {
+    justify-content: space-between;
+  }
+
+  .timeline {
+    gap: 10px;
+  }
+
+  .related-row {
+    gap: 10px;
+  }
+
+  .related-row__line {
+    display: none;
   }
 }

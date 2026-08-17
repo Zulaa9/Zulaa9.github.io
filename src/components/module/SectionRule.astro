@@ -1,0 +1,18 @@
+---
+/**
+ * Running section header: "TITLE ──────────". A hairline, not a card
+ * border — see .rule-heading in module-page.css. Deliberately no number:
+ * this sits inside pages that already number their own sub-items (a focus
+ * grid, a related-modules list), and stacking a section-level number on
+ * top of those read as one numbering system arguing with another.
+ */
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="rule-heading">
+  <h2>{title}</h2>
+</div>

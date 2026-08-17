@@ -36,7 +36,7 @@ const { crumbs, backHref, backLabel } = Astro.props;
         {crumb.href ? (
           <a href={crumb.href}>{crumb.label}</a>
         ) : (
-          <span aria-current="page">{crumb.label}</span>
+          <span class="crumbbar__current" aria-current="page">{crumb.label}</span>
         )}
       </>
     ))}
@@ -45,11 +45,14 @@ const { crumbs, backHref, backLabel } = Astro.props;
 
 <style>
   .crumbbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 6;
+    /* A normal flex child of .module-stage, not an overlay: it used to be
+     * position: absolute, floating over .module-scroll so its own top
+     * padding could "clear" it visually — but that also meant
+     * module-scroll's box (and therefore its native scrollbar) started at
+     * y:0, underneath the bar, instead of at its actual bottom edge. As a
+     * regular flex item, module-scroll now simply starts right after this
+     * ends, so the scrollbar starts there too. */
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -58,7 +61,6 @@ const { crumbs, backHref, backLabel } = Astro.props;
     padding: 7px 24px;
     border-bottom: 1px solid rgba(124, 168, 194, 0.18);
     background: linear-gradient(180deg, rgba(8, 19, 30, 0.94), rgba(8, 19, 30, 0.42));
-    backdrop-filter: blur(8px);
   }
 
   .crumbbar__back {
@@ -111,6 +113,10 @@ const { crumbs, backHref, backLabel } = Astro.props;
   .crumbbar__trail a:hover,
   .crumbbar__trail a:focus-visible {
     color: #e7f6ff;
+  }
+
+  .crumbbar__current {
+    color: var(--accent-strong);
   }
 
   @media (max-width: 860px) {

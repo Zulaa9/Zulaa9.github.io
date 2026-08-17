@@ -47,7 +47,7 @@ body {
  */
 .core-stage {
   position: relative;
-  height: calc(100vh - 96px);
+  height: calc(100vh - 110px);
   border: 1px solid rgba(130, 171, 207, 0.2);
   border-radius: var(--radius-lg);
   background: linear-gradient(160deg, rgba(8, 13, 18, 0.62), rgba(8, 14, 20, 0.84));
