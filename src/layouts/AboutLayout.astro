@@ -2,7 +2,10 @@
 import { Image } from "astro:assets";
 import ModuleLayout from "./ModuleLayout.astro";
 import ModuleIntro from "../components/module/ModuleIntro.astro";
+import SectionRule from "../components/module/SectionRule.astro";
 import { aboutUi } from "../i18n/about-ui";
+import { capabilitiesUi } from "../i18n/capabilities-ui";
+import { contactUi } from "../i18n/contact-ui";
 import profilePhoto from "../assets/profile/zula.png";
 
 interface Props {
@@ -11,10 +14,19 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = aboutUi[locale];
+const tCapabilities = capabilitiesUi[locale];
+const tContact = contactUi[locale];
 
 const localePrefix = locale === "es" ? "/es" : "";
 const coreHref = locale === "es" ? "/es/" : "/";
+const capabilitiesHref = `${localePrefix}/capabilities`;
 const contactHref = `${localePrefix}/contact`;
+
+// "2024 — Present" / "2024 — Actualidad" → the two edges of the horizontal
+// timeline. Pure display parsing of the existing string, not new data.
+const [timelineStart, timelineEnd] = t.experienceDate.split("—").map((part) => part.trim());
+// "Integra Tecnologia — Software Developer" → company + role, same parsing.
+const [experienceCompany, experienceRoleTitle] = t.experienceRole.split("—").map((part) => part.trim());
 ---
 
 <ModuleLayout
@@ -128,6 +140,74 @@ const contactHref = `${localePrefix}/contact`;
       }
       initAboutHeroPhotoSync();
     </script>
+
+    <section class="section">
+      <SectionRule title={t.experienceTitle} />
+      <div class="timeline">
+        <span class="timeline__edge">{timelineStart}</span>
+        <span class="timeline__track"></span>
+        <span class="timeline__edge timeline__edge--end">{timelineEnd}</span>
+      </div>
+
+      <div class="experience-detail">
+        <div class="experience-detail__identity">
+          <p class="experience-detail__company">{experienceCompany}</p>
+          <p class="experience-detail__role">{experienceRoleTitle}</p>
+        </div>
+        <div class="experience-detail__stack">
+          <p class="experience-detail__stack-label">{t.experienceStackLabel}</p>
+          <p class="experience-detail__stack-value">{t.experienceStack}</p>
+        </div>
+      </div>
+      <p class="experience-detail__copy">{t.experienceCopy}</p>
+    </section>
+
+    <section class="section">
+      <SectionRule title={t.focusTitle} />
+      <div class="focus-grid">
+        {t.focusItems.map((item) => (
+          <div class="focus-grid__item">
+            <span class="focus-grid__label">{item.label}</span>
+            <p>{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <SectionRule title={t.coreTechTitle} />
+      <div class="tech-inventory">
+        <ul class="tech-inventory__list tech-inventory__list--primary">
+          {t.coreTechItems.map((item) => <li>{item}</li>)}
+        </ul>
+        <div class="tech-inventory__group">
+          <p class="tech-inventory__label">{t.alsoWorkedTitle}</p>
+          <ul class="tech-inventory__list">
+            {t.alsoWorkedItems.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <nav class="section" aria-label={t.relatedTitle}>
+      <SectionRule title={t.relatedTitle} />
+      <ul class="related-rows">
+        <li>
+          <a class="related-row" href={capabilitiesHref}>
+            <span class="related-row__label">{tCapabilities.title}</span>
+            <span class="related-row__line" aria-hidden="true"></span>
+            <span class="related-row__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="related-row" href={contactHref}>
+            <span class="related-row__label">{tContact.title}</span>
+            <span class="related-row__line" aria-hidden="true"></span>
+            <span class="related-row__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </article>
 </ModuleLayout>
 
@@ -287,6 +367,169 @@ const contactHref = `${localePrefix}/contact`;
     letter-spacing: 0.04em;
   }
 
+  /* Experience detail: company/role identity on the left, the current
+   * stack as a compact metadata callout on the right — using the row's
+   * width instead of one more line of prose. No standalone "current
+   * position" restating company + role + stack all over again; this is
+   * the one place each of those facts appears. */
+  .experience-detail {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 18px;
+  }
+
+  .experience-detail__company {
+    margin: 0 0 4px;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .experience-detail__role {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .experience-detail__stack {
+    flex-shrink: 0;
+  }
+
+  .experience-detail__stack-label {
+    margin: 0 0 4px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8eb5d1;
+  }
+
+  .experience-detail__stack-value {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+
+  .experience-detail__copy {
+    margin: 0;
+    max-width: 62ch;
+    color: #c4d9ea;
+    line-height: 1.62;
+  }
+
+  /* Focus areas: an open typographic grid — a category label + one line,
+   * separated by a shared top hairline per item, never a box per item.
+   * No number and no generic bullet: the label is drawn from each item's
+   * own content (Product, Architecture, Security…) instead — it doubles
+   * as a one-word summary and happens to line up with Capabilities' own
+   * category names. */
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: 32px;
+    row-gap: 22px;
+  }
+
+  .focus-grid__item {
+    grid-column: span 2;
+    padding-top: 14px;
+    border-top: 1px solid rgba(130, 171, 207, 0.18);
+  }
+
+  /* Five items at three-per-row leaves a visibly empty sixth cell on the
+   * last row — instead of that gap, the last two items split the row
+   * evenly in half each, rather than a third each like the first row. */
+  .focus-grid__item:nth-child(4),
+  .focus-grid__item:nth-child(5) {
+    grid-column: span 3;
+  }
+
+  .focus-grid__label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .focus-grid__item p {
+    margin: 0;
+    max-width: 26ch;
+    color: #c4d9ea;
+    line-height: 1.45;
+    font-size: 0.92rem;
+  }
+
+  /* Technology inventory: a flowed index, not a CV line. Each group is a
+   * real vertical list (not a dot-joined sentence), primary and extended
+   * told apart by scale/weight/color and the extended group's own label
+   * — never badges, pills or logos. columns: 2 lets each list use its
+   * own width instead of running one long unbroken line down the page. */
+  .tech-inventory {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 64px;
+  }
+
+  .tech-inventory__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    columns: 2;
+    column-gap: 28px;
+  }
+
+  .tech-inventory__list li {
+    padding: 5px 0;
+    break-inside: avoid;
+  }
+
+  .tech-inventory__list--primary {
+    flex: 1 1 320px;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    color: var(--text);
+  }
+
+  .tech-inventory__group {
+    flex: 1 1 240px;
+  }
+
+  .tech-inventory__label {
+    margin: 0 0 12px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8eb5d1;
+  }
+
+  .tech-inventory__group .tech-inventory__list {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 1100px) {
+    .focus-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .focus-grid__item,
+    .focus-grid__item:nth-child(4),
+    .focus-grid__item:nth-child(5) {
+      grid-column: span 1;
+    }
+  }
+
   /* Once the hero wraps to a single column, "match the text's height"
    * stops making sense (the photo is now below the text, not beside it)
    * — fall back to a normal fixed-width portrait. */
@@ -312,6 +555,20 @@ const contactHref = `${localePrefix}/contact`;
        * normal fixed-width portrait sized purely by aspect-ratio. */
       width: 100%;
       height: auto;
+    }
+
+    .focus-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .focus-grid__item,
+    .focus-grid__item:nth-child(4),
+    .focus-grid__item:nth-child(5) {
+      grid-column: span 1;
+    }
+
+    .tech-inventory__list {
+      columns: 1;
     }
   }
 </style>
