@@ -1,0 +1,317 @@
+---
+import { Image } from "astro:assets";
+import ModuleLayout from "./ModuleLayout.astro";
+import ModuleIntro from "../components/module/ModuleIntro.astro";
+import { aboutUi } from "../i18n/about-ui";
+import profilePhoto from "../assets/profile/zula.png";
+
+interface Props {
+  locale: "en" | "es";
+}
+
+const { locale } = Astro.props;
+const t = aboutUi[locale];
+
+const localePrefix = locale === "es" ? "/es" : "";
+const coreHref = locale === "es" ? "/es/" : "/";
+const contactHref = `${localePrefix}/contact`;
+---
+
+<ModuleLayout
+  title={t.pageTitle}
+  description={t.pageDescription}
+  crumbs={[{ label: t.crumbCore, href: coreHref }, { label: t.crumbAbout }]}
+  backHref={coreHref}
+  backLabel={locale === "es" ? "Volver al core" : "Back to core"}
+>
+  <article class="about">
+    <section class="about-hero">
+      <div class="about-hero__intro">
+        <ModuleIntro statement={t.lead} />
+        <div class="about-hero__copy">
+          <p>{t.copy1}</p>
+          <p>{t.copy2}</p>
+        </div>
+        <a class="hero-link" href={contactHref}>{t.linksContact} →</a>
+      </div>
+
+      <figure class="identity-record">
+        <div class="identity-record__frame">
+          <Image src={profilePhoto} alt="Unax Zulaika Fuente" width={520} height={640} />
+          <span class="identity-record__tick identity-record__tick--tl" aria-hidden="true"></span>
+          <span class="identity-record__tick identity-record__tick--br" aria-hidden="true"></span>
+        </div>
+        <figcaption class="identity-record__meta">
+          <p class="state state--active">● {locale === "es" ? "ACTIVO" : "ACTIVE"}</p>
+          <p class="identity-record__location">{t.location}</p>
+        </figcaption>
+      </figure>
+    </section>
+
+    <script>
+      // Match the *whole* identity-record figure — photo plus the
+      // status/location caption underneath — to the intro text block's
+      // real rendered height, not just the photo on its own (which left
+      // the figure as a whole taller than the text by the caption's own
+      // height). CSS alone can't express this reliably: every attempt at
+      // "stretch this sibling then derive its width from the resolved
+      // height via aspect-ratio" (flex align-items: stretch, then a grid
+      // row) hit a genuine browser circular-sizing case — the photo either
+      // collapsed to a sliver or overflowed its own column. A direct
+      // measurement removes the ambiguity entirely: give the frame
+      // whatever height is left once the caption and the gap between them
+      // are subtracted from the intro's height.
+      function syncAboutHeroPhoto() {
+        const intro = document.querySelector<HTMLElement>(".about-hero__intro");
+        const identity = document.querySelector<HTMLElement>(".identity-record");
+        const frame = document.querySelector<HTMLElement>(".identity-record__frame");
+        const caption = document.querySelector<HTMLElement>(".identity-record__meta");
+        if (!intro || !identity || !frame || !caption) return;
+
+        // Below the stack breakpoint the photo sits under the text, full
+        // width, sized by the CSS media query instead — matching heights
+        // only makes sense in the side-by-side layout.
+        const stacked = window.matchMedia("(max-width: 860px)").matches;
+        if (stacked) {
+          frame.style.height = "";
+          return;
+        }
+
+        const rowGap = parseFloat(getComputedStyle(identity).rowGap) || 0;
+        const frameHeight = intro.offsetHeight - rowGap - caption.offsetHeight;
+        frame.style.height = `${Math.max(frameHeight, 0)}px`;
+      }
+
+      function initAboutHeroPhotoSync() {
+        const intro = document.querySelector<HTMLElement>(".about-hero__intro");
+        if (!intro) return; // this navigation didn't land on About
+
+        syncAboutHeroPhoto();
+
+        const w = window as typeof window & { __aboutHeroPhotoObserver?: ResizeObserver };
+        w.__aboutHeroPhotoObserver?.disconnect();
+        if ("ResizeObserver" in window) {
+          w.__aboutHeroPhotoObserver = new ResizeObserver(syncAboutHeroPhoto);
+          w.__aboutHeroPhotoObserver.observe(intro);
+        }
+
+        // Belt-and-suspenders re-measurement, independent of whatever
+        // triggered the first one: on a genuinely fresh load (not a
+        // same-page reload) the very first measurement can land before
+        // something else affecting intro's height has settled — a webfont
+        // swap, the crumbbar's own layout, anything — and neither
+        // ResizeObserver nor document.fonts.ready reliably fires a second
+        // pass afterward in every environment this runs in. Plain timers
+        // don't depend on any of that machinery, so a couple of short-
+        // delay re-checks catch it regardless of the actual cause.
+        document.fonts?.ready?.then(syncAboutHeroPhoto);
+        setTimeout(syncAboutHeroPhoto, 60);
+        setTimeout(syncAboutHeroPhoto, 400);
+      }
+
+      // The page can be reached either by a full load or, via the Core's
+      // client-side routing, a view transition that swaps this markup in
+      // without reloading — astro:page-load fires after both, so it's the
+      // one place that needs to run the sync (including the very first
+      // load, so no separate direct call is needed). The ResizeObserver set
+      // up inside already covers window resizes (they reflow .about-hero__
+      // intro, which it's watching), so there's no separate resize listener
+      // to also guard against leaking. Bound once, ever, via the window
+      // flag: this script's top-level code re-runs on every visit to
+      // About, and each visit's function is a distinct closure, so without
+      // the flag every revisit would register another astro:page-load
+      // listener that never gets cleaned up.
+      const w = window as typeof window & { __aboutHeroPageLoadBound?: boolean };
+      if (!w.__aboutHeroPageLoadBound) {
+        document.addEventListener("astro:page-load", initAboutHeroPhotoSync);
+        w.__aboutHeroPageLoadBound = true;
+      }
+      initAboutHeroPhotoSync();
+    </script>
+  </article>
+</ModuleLayout>
+
+<style>
+  /* Grid, not flex: the text column is genuinely flexible (minmax(0, 1fr)
+   * — grows to fill whatever the row has once the photo column is
+   * accounted for) and the photo column is auto — sized to its own
+   * intrinsic content width, never stretched. That combination is what
+   * keeps the photo pinned at the row's real right edge on any viewport
+   * without needing a max-width on the hero itself: a previous pass
+   * capped .about-hero's own width to pull the photo inward, which
+   * fixed the gap by shrinking the text column to a fixed 760px instead
+   * of growing it — the opposite of the actual fix. The text elements
+   * (heading, paragraphs) still keep their own reading-width caps below,
+   * so the 1fr column growing doesn't turn them into unreadably long
+   * lines; it just gives them more room before those caps kick in.
+   *
+   * No line or mark drawn between the two: a hairline connector was
+   * tried in an earlier pass and read as a divider, the opposite of the
+   * intent. The photo's own height is set to match the intro's rendered
+   * height directly by the script above, in real pixels — every pure-CSS
+   * way of expressing "stretch this sibling, then derive its width from
+   * that resolved height via aspect-ratio" (flex align-items: stretch, a
+   * grid row relying on that stretch) hit a genuine browser circular-
+   * sizing case, collapsing or overflowing the photo. Setting the height
+   * directly via JS sidesteps that; the grid here only has to size the
+   * auto column from the now-determinate result, which it does cleanly. */
+  .about-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: clamp(48px, 5vw, 96px);
+    row-gap: 36px;
+  }
+
+  .about-hero__intro {
+    min-width: 0;
+  }
+
+  /* The shared .module-statement caps its width at 22ch — sized for a
+   * short module title (Capabilities, Contact), not the wider column
+   * About's hero actually has to spend. :global() reaches past
+   * ModuleIntro's own render without touching the shared rule other
+   * pages still use. Wider than the body copy below on purpose (a
+   * display headline can carry a longer line than body prose) while
+   * still keeping the two-line break this phrase already reads well at. */
+  .about-hero__intro :global(.module-statement) {
+    max-width: 39ch;
+  }
+
+  .about-hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+    max-width: 118ch;
+  }
+
+  .about-hero__copy p {
+    margin: 0;
+    color: #c4d9ea;
+    line-height: 1.62;
+  }
+
+  .hero-link {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 22px;
+    color: var(--text);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.86rem;
+    border-bottom: 1px solid rgba(130, 171, 207, 0.4);
+    padding-bottom: 2px;
+  }
+
+  .hero-link:hover,
+  .hero-link:focus-visible {
+    color: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
+
+  /* Identity record: a technical frame, not a profile-picture card. Sharp
+   * corners, a hairline, two corner ticks, and a caption strip that reads
+   * like a status readout — echoing the Core's own "ONLINE" language via
+   * the existing .state--active token instead of a decorative badge.
+   *
+   * The frame's height is set inline by the script above, in real pixels
+   * measured from the intro column; width then just follows from that
+   * through the fixed aspect-ratio. The 350px here is only the pre-script
+   * fallback (SSR output, no-JS) — sized to roughly match this copy's
+   * typical rendered height so there's no visible jump once the script
+   * runs. */
+  .identity-record {
+    margin: 6px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .identity-record__frame {
+    position: relative;
+    width: auto;
+    height: 350px;
+    aspect-ratio: 4 / 5;
+    border: 1px solid rgba(132, 180, 207, 0.32);
+    overflow: hidden;
+    background: rgba(8, 16, 24, 0.72);
+  }
+
+  .identity-record__frame :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 22%;
+  }
+
+  .identity-record__tick {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+  }
+
+  .identity-record__tick--tl {
+    top: -1px;
+    left: -1px;
+    border-top: 2px solid var(--accent);
+    border-left: 2px solid var(--accent);
+  }
+
+  .identity-record__tick--br {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 2px solid var(--accent);
+    border-right: 2px solid var(--accent);
+  }
+
+  .identity-record__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0;
+    font-size: 0.76rem;
+  }
+
+  .identity-record__meta .state {
+    letter-spacing: 0.1em;
+  }
+
+  .identity-record__location {
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+  }
+
+  /* Once the hero wraps to a single column, "match the text's height"
+   * stops making sense (the photo is now below the text, not beside it)
+   * — fall back to a normal fixed-width portrait. */
+  @media (max-width: 860px) {
+    .about-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .about-hero__intro :global(.module-statement) {
+      max-width: none;
+    }
+
+    .about-hero__copy {
+      max-width: none;
+    }
+
+    .identity-record {
+      width: min(100%, 280px);
+    }
+
+    .identity-record__frame {
+      /* The script clears its inline height at this width — back to a
+       * normal fixed-width portrait sized purely by aspect-ratio. */
+      width: 100%;
+      height: auto;
+    }
+  }
+</style>
