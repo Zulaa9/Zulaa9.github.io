@@ -1,0 +1,83 @@
+---
+import ModuleLayout from "./ModuleLayout.astro";
+import ModuleIntro from "../components/module/ModuleIntro.astro";
+import { contactUi } from "../i18n/contact-ui";
+
+interface Props {
+  locale: "en" | "es";
+}
+
+const { locale } = Astro.props;
+const t = contactUi[locale];
+
+const localePrefix = locale === "es" ? "/es" : "";
+const coreHref = locale === "es" ? "/es/" : "/";
+const aboutHref = `${localePrefix}/about`;
+---
+
+<ModuleLayout
+  title={t.pageTitle}
+  description={t.pageDescription}
+  crumbs={[
+    { label: t.crumbCore, href: coreHref },
+    { label: t.crumbAbout, href: aboutHref },
+    { label: t.crumbContact },
+  ]}
+  backHref={coreHref}
+  backLabel={locale === "es" ? "Volver al core" : "Back to core"}
+>
+  <article class="contact">
+    <ModuleIntro statement={t.lead} />
+
+    <ul class="channel-rows" aria-label={locale === "es" ? "Canales de contacto" : "Contact channels"}>
+      <li>
+        <a class="channel-row" href="mailto:unax.zulaika.fuente@gmail.com">
+          <span class="channel-row__label">{t.emailTitle}</span>
+          <span class="channel-row__value">{t.emailValue}</span>
+          <span class="channel-row__meta">
+            <span>{t.emailSubtitle}</span>
+            <span class="channel-row__arrow" aria-hidden="true">↗</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="channel-row" href="https://github.com/Zulaa9" target="_blank" rel="noopener noreferrer">
+          <span class="channel-row__label">{t.githubTitle}</span>
+          <span class="channel-row__value">{t.githubValue}</span>
+          <span class="channel-row__meta">
+            <span>{t.githubSubtitle}</span>
+            <span class="channel-row__arrow" aria-hidden="true">↗</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="channel-row" href="https://www.linkedin.com/in/unax-zulaika-fuente/" target="_blank" rel="noopener noreferrer">
+          <span class="channel-row__label">{t.linkedinTitle}</span>
+          <span class="channel-row__value">{t.linkedinValue}</span>
+          <span class="channel-row__meta">
+            <span>{t.linkedinSubtitle}</span>
+            <span class="channel-row__arrow" aria-hidden="true">↗</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+
+    <dl class="spec">
+      <div><dt>{t.locationLabel}</dt><dd>{t.location}</dd></div>
+      <div><dt>{t.remoteLabel}</dt><dd>{t.remote}</dd></div>
+    </dl>
+  </article>
+</ModuleLayout>
+
+<style>
+  /* Deliberately narrower than the shared shell: Contact has three actions,
+   * not a page's worth of content, so the negative space to the right is
+   * composition, not a gap waiting to be filled. */
+  .contact {
+    max-width: 46rem;
+  }
+
+  .contact .channel-rows {
+    margin-top: 12px;
+  }
+</style>

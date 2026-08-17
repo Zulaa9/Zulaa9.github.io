@@ -13,7 +13,6 @@ export const capabilitiesUi = {
     crumbCore: "Core",
     crumbAbout: "About",
     crumbCapabilities: "Capabilities",
-    eyebrow: "CAPABILITIES",
     title: "Engineering capabilities",
     lead: "How I design systems, solve product constraints and deliver maintainable software.",
     cards: [
@@ -93,7 +92,6 @@ export const capabilitiesUi = {
     crumbCore: "Core",
     crumbAbout: "Sobre mí",
     crumbCapabilities: "Capacidades",
-    eyebrow: "CAPACIDADES",
     title: "Capacidades de ingeniería",
     lead: "Cómo diseño sistemas, resuelvo restricciones de producto y entrego software mantenible.",
     cards: [
