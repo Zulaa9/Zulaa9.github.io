@@ -240,12 +240,17 @@ const aboutHref = `${localePrefix}/about`;
    * instead of leaving that third track empty. The section's own
    * SectionRule already draws a hairline immediately above this, so the
    * shared .spec border-top is dropped here to avoid stacking two rules
-   * back to back; the border-bottom stays as this block's own close. */
+   * back to back. The shared border-bottom is dropped too — it used to
+   * read as this block's own close, but it's actually a second one,
+   * 16px below the .spec::after hairline added lower down for that same
+   * job; padding-bottom goes with it since it only existed to clear that
+   * border. */
   .contact .spec {
     max-width: none;
     margin: 0;
-    padding-top: 0;
+    padding: 0;
     border-top: none;
+    border-bottom: none;
     grid-template-columns: 1fr 0.85fr 1.15fr;
     column-gap: 28px;
   }
@@ -263,10 +268,9 @@ const aboutHref = `${localePrefix}/about`;
   }
 
   /* Contact Details is the page's actual close (no further section
-   * follows it) — a quiet hairline under it marks that deliberately,
-   * the same "this composition ends here" gesture the border-bottom
-   * already gives every other row-based list in this system, rather
-   * than just trailing off after the last value. */
+   * follows it) — this quiet hairline marks that deliberately instead
+   * of just trailing off after the last value. The one and only closing
+   * rule for this block now that .spec's own border-bottom is gone. */
   .contact .spec::after {
     content: "";
     display: block;
