@@ -1,6 +1,9 @@
 /** Ported verbatim from legacy-vanilla/i18n/{en,es}.json — "capabilities" scope. */
 interface CapabilityCard {
   tag: string;
+  /** Short category word for the "01 / CODE" header unit — tag without the
+   * redundant "module" noun, already uppercase for that display. */
+  code: string;
   title: string;
   desc: string;
   points: string[];
@@ -18,6 +21,7 @@ export const capabilitiesUi = {
     cards: [
       {
         tag: "Architecture module",
+        code: "ARCHITECTURE",
         title: "System Engineering",
         desc: "I design modular software systems with clear boundaries, stable interfaces and long-term maintainability.",
         points: [
@@ -29,6 +33,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Delivery module",
+        code: "DELIVERY",
         title: "Desktop & Product Engineering",
         desc: "I build desktop products as real production software, not as throwaway demos.",
         points: [
@@ -40,6 +45,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Trust module",
+        code: "TRUST",
         title: "Security-Oriented Development",
         desc: "I treat security as a system property: boundaries, data protection and predictable trust models.",
         points: [
@@ -51,6 +57,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Interface module",
+        code: "INTERFACE",
         title: "Technical UX",
         desc: "I turn technical tools into understandable experiences through structured flows, state visibility and usable interaction design.",
         points: [
@@ -62,6 +69,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Acceleration module",
+        code: "ACCELERATION",
         title: "AI-Assisted Engineering",
         desc: "I use AI as an engineering multiplier for speed, exploration and implementation quality.",
         points: [
@@ -73,6 +81,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Integration module",
+        code: "INTEGRATION",
         title: "Full Stack / Integration Thinking",
         desc: "I connect frontend, backend and runtime into a coherent product architecture.",
         points: [
@@ -83,6 +92,7 @@ export const capabilitiesUi = {
         ],
       },
     ] satisfies CapabilityCard[],
+    closingLabel: "System view",
     closing:
       "I build software as an integrated system: architecture, product constraints, security posture, technical UX and delivery execution.",
   },
@@ -97,6 +107,7 @@ export const capabilitiesUi = {
     cards: [
       {
         tag: "Módulo de arquitectura",
+        code: "ARQUITECTURA",
         title: "Ingeniería de sistemas",
         desc: "Diseño sistemas de software modulares con límites claros, interfaces estables y mantenibilidad a largo plazo.",
         points: [
@@ -108,6 +119,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Módulo de entrega",
+        code: "ENTREGA",
         title: "Ingeniería de escritorio y producto",
         desc: "Construyo productos de escritorio como software real de producción, no como demos desechables.",
         points: [
@@ -119,6 +131,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Módulo de confianza",
+        code: "CONFIANZA",
         title: "Desarrollo orientado a seguridad",
         desc: "Trato la seguridad como una propiedad del sistema: límites, protección de datos y modelo de confianza predecible.",
         points: [
@@ -130,6 +143,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Módulo de interfaz",
+        code: "INTERFAZ",
         title: "UX técnica",
         desc: "Convierto herramientas técnicas en experiencias comprensibles mediante flujos estructurados, visibilidad de estado y diseño usable.",
         points: [
@@ -141,6 +155,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Módulo de aceleración",
+        code: "ACELERACIÓN",
         title: "Ingeniería asistida por IA",
         desc: "Uso IA como multiplicador de ingeniería para velocidad, exploración y calidad de implementación.",
         points: [
@@ -152,6 +167,7 @@ export const capabilitiesUi = {
       },
       {
         tag: "Módulo de integración",
+        code: "INTEGRACIÓN",
         title: "Visión full stack e integración",
         desc: "Conecto frontend, backend y runtime en una arquitectura de producto coherente.",
         points: [
@@ -162,6 +178,7 @@ export const capabilitiesUi = {
         ],
       },
     ] satisfies CapabilityCard[],
+    closingLabel: "Visión del sistema",
     closing:
       "Desarrollo software como un sistema integrado: arquitectura, restricciones de producto, postura de seguridad, UX técnica y ejecución de entrega.",
   },

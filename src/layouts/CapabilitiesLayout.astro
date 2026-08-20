@@ -32,9 +32,11 @@ const aboutHref = `${localePrefix}/about`;
     <div class="matrix">
       {t.cards.map((card, i) => (
         <div class="matrix__cell">
-          <div class="matrix__cell-head">
+          <div class="matrix__head">
             <span class="matrix__index">{String(i + 1).padStart(2, "0")}</span>
-            <span class="matrix__tag">{card.tag}</span>
+            <span class="matrix__sep" aria-hidden="true">/</span>
+            <span class="matrix__code">{card.code}</span>
+            <span class="matrix__head-rule" aria-hidden="true"></span>
           </div>
           <h2 class="matrix__title">{card.title}</h2>
           <p class="matrix__desc">{card.desc}</p>
@@ -45,13 +47,20 @@ const aboutHref = `${localePrefix}/about`;
       ))}
     </div>
 
-    <p class="closing-line">{t.closing}</p>
+    <div class="closing">
+      <p class="closing__label">{t.closingLabel}</p>
+      <p class="closing__line">{t.closing}</p>
+    </div>
   </article>
 </ModuleLayout>
 
 <style>
+  /* Breathing room between the page intro and the matrix's own top edge —
+   * was 8px, reading as "stuck together"; 40px lines up with the same
+   * section rhythm used everywhere else on the module pages (see
+   * .section in module-page.css) instead of a one-off number. */
   .capabilities .matrix {
-    margin-top: 8px;
+    margin-top: 40px;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     border-top: 1px solid rgba(130, 171, 207, 0.2);
@@ -62,87 +71,156 @@ const aboutHref = `${localePrefix}/about`;
     padding: 26px 26px 28px;
     border-right: 1px solid rgba(130, 171, 207, 0.2);
     border-bottom: 1px solid rgba(130, 171, 207, 0.2);
+    transition: opacity 200ms ease;
   }
 
   /* Barely-there row banding — depth without a card: the whole row reads a
    * half-step brighter, not a boxed tile. */
   .matrix__cell:nth-child(-n + 3) {
     background: rgba(255, 255, 255, 0.012);
+    /* A faint accent tint on the row-1/row-2 seam only — the matrix's one
+     * schematic "midline", not a boundary drawn around any one cell. */
+    border-bottom-color: rgba(83, 198, 224, 0.32);
   }
 
-  .matrix__cell-head {
+  /* Hovering one cell brings it forward by barely dimming its neighbors,
+   * the same "which one am I looking at" cue as a schematic's highlighted
+   * trace — never the cell's own size, position or shadow. Progressive
+   * enhancement: browsers without :has() just skip this, every cell stays
+   * at full opacity, nothing breaks. */
+  .matrix:has(.matrix__cell:hover) .matrix__cell:not(:hover) {
+    opacity: 0.82;
+  }
+
+  /* Index + category read as one metadata unit — "01 / ARCHITECTURE" —
+   * instead of a number and a right-aligned tag with nothing tying them
+   * together. The hairline after the code is idle-collapsed and grows in
+   * on hover, the same scaleX affordance .channel-row and .related-row
+   * already use elsewhere on the module pages. */
+  .matrix__head {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 18px;
+    font-family: var(--font-mono);
   }
 
   .matrix__index {
-    font-family: var(--font-mono);
     font-size: 0.82rem;
     color: var(--accent);
+    font-variant-numeric: tabular-nums;
   }
 
-  .matrix__tag {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: right;
+  .matrix__sep {
+    color: rgba(130, 171, 207, 0.45);
+    font-size: 0.82rem;
   }
 
+  .matrix__code {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: #8eb5d1;
+    transition: color 200ms ease;
+  }
+
+  .matrix__head-rule {
+    flex: 1;
+    min-width: 12px;
+    height: 1px;
+    background: rgba(130, 171, 207, 0.3);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms ease;
+  }
+
+  .matrix__cell:hover .matrix__code {
+    color: var(--accent-strong);
+  }
+
+  .matrix__cell:hover .matrix__head-rule {
+    transform: scaleX(1);
+  }
+
+  /* Primary information: the title carries the most weight in the block,
+   * a clear step above the metadata line above it. */
   .matrix__title {
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-    line-height: 1.2;
+    font-size: clamp(1.08rem, 1.7vw, 1.34rem);
+    line-height: 1.22;
     color: var(--text);
   }
 
+  /* The summary is the block's real content — sized and spaced to read as
+   * the main statement, not a caption for the bullets below it. */
   .matrix__desc {
-    margin: 0 0 18px;
+    margin: 0 0 20px;
     max-width: 40ch;
-    color: #c4d9ea;
-    font-size: 0.88rem;
-    line-height: 1.55;
+    color: #c9deee;
+    font-size: 0.94rem;
+    line-height: 1.6;
   }
 
+  /* Bullets are supporting evidence, not a second paragraph: no divider
+   * of their own — the size/weight/spacing drop already reads as "detail"
+   * without one more hairline inside the cell (see the matrix-wide
+   * ledger note above .matrix__cell for why those got cut). Compact,
+   * dimmer, and indented a touch further so the marker doesn't compete
+   * with the desc's own left edge. */
   .matrix__points {
     margin: 0;
-    padding: 14px 0 0;
-    border-top: 1px solid rgba(130, 171, 207, 0.14);
+    padding: 0;
     list-style: none;
     display: grid;
-    gap: 7px;
+    gap: 6px;
   }
 
   .matrix__points li {
     position: relative;
     max-width: 44ch;
-    padding-left: 14px;
+    padding-left: 16px;
     color: var(--muted);
-    font-size: 0.8rem;
-    line-height: 1.45;
+    opacity: 0.86;
+    font-size: 0.76rem;
+    line-height: 1.42;
   }
 
   .matrix__points li::before {
     content: "\2014";
     position: absolute;
     left: 0;
-    color: rgba(130, 171, 207, 0.5);
+    color: rgba(130, 171, 207, 0.32);
   }
 
-  .closing-line {
-    margin: 40px 0 0;
+  /* Closing statement: a deliberate small coda under the matrix, not a
+   * paragraph that happened to land there — a label in the same register
+   * as the rest of the system's eyebrows, plus its own top hairline
+   * instead of borrowing the matrix's. Still just text, no card. */
+  .closing {
+    margin-top: 44px;
+    padding-top: 20px;
     max-width: 62ch;
-    color: var(--muted);
+    border-top: 1px solid rgba(130, 171, 207, 0.16);
+  }
+
+  .closing__label {
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8eb5d1;
+  }
+
+  .closing__line {
+    margin: 0;
+    color: #c4d9ea;
     font-size: 0.95rem;
     line-height: 1.6;
   }
 
+  /* ---- tablet: 2 columns, same matrix, same rules ---- */
   @media (max-width: 1100px) {
     .capabilities .matrix {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -150,17 +228,42 @@ const aboutHref = `${localePrefix}/about`;
 
     .matrix__cell:nth-child(-n + 3) {
       background: none;
+      border-bottom-color: rgba(130, 171, 207, 0.2);
     }
 
     .matrix__cell:nth-child(4n + 1),
     .matrix__cell:nth-child(4n + 2) {
       background: rgba(255, 255, 255, 0.012);
     }
+
+    /* At 2 columns, cells 1–2 are the first row, not 1–3 — the midline
+     * accent follows the grid's actual shape instead of staying pinned to
+     * indices that only meant "row 1" back at 3 columns. */
+    .matrix__cell:nth-child(-n + 2) {
+      border-bottom-color: rgba(83, 198, 224, 0.32);
+    }
   }
 
+  /* ---- mobile: the matrix disassembles into a single column of plain
+   * rows — index, hairline, spacing — never six boxed cards. Dropping the
+   * side borders is what makes that read correctly: with one column,
+   * every cell is also the row's last column, so the shared perimeter
+   * rule (container's left edge + each cell's own right edge) would
+   * otherwise close a full box around every single cell instead of
+   * around the matrix as a whole. ---- */
   @media (max-width: 700px) {
     .capabilities .matrix {
       grid-template-columns: 1fr;
+      border-left: none;
+    }
+
+    .matrix__cell {
+      border-right: none;
+      padding: 22px 0;
+    }
+
+    .matrix__cell:first-child {
+      padding-top: 0;
     }
 
     .matrix__cell:nth-child(4n + 1),
@@ -168,8 +271,16 @@ const aboutHref = `${localePrefix}/about`;
       background: none;
     }
 
+    .matrix__cell:nth-child(-n + 2) {
+      border-bottom-color: rgba(130, 171, 207, 0.2);
+    }
+
     .matrix__cell:nth-child(odd) {
       background: rgba(255, 255, 255, 0.012);
+    }
+
+    .matrix:has(.matrix__cell:hover) .matrix__cell:not(:hover) {
+      opacity: 1;
     }
   }
 </style>
