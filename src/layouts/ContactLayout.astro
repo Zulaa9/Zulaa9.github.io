@@ -1,7 +1,10 @@
 ---
 import ModuleLayout from "./ModuleLayout.astro";
 import ModuleIntro from "../components/module/ModuleIntro.astro";
+import SectionRule from "../components/module/SectionRule.astro";
 import { contactUi } from "../i18n/contact-ui";
+import { aboutUi } from "../i18n/about-ui";
+import { capabilitiesUi } from "../i18n/capabilities-ui";
 
 interface Props {
   locale: "en" | "es";
@@ -9,10 +12,13 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = contactUi[locale];
+const tAbout = aboutUi[locale];
+const tCapabilities = capabilitiesUi[locale];
 
 const localePrefix = locale === "es" ? "/es" : "";
 const coreHref = locale === "es" ? "/es/" : "/";
 const aboutHref = `${localePrefix}/about`;
+const capabilitiesHref = `${localePrefix}/capabilities`;
 ---
 
 <ModuleLayout
@@ -63,10 +69,41 @@ const aboutHref = `${localePrefix}/about`;
       </li>
     </ul>
 
-    <dl class="spec">
-      <div><dt>{t.locationLabel}</dt><dd>{t.location}</dd></div>
-      <div><dt>{t.remoteLabel}</dt><dd>{t.remote}</dd></div>
-    </dl>
+    <section class="section">
+      <SectionRule title={t.contactDetailsTitle} />
+      <dl class="spec">
+        <div><dt>{t.locationLabel}</dt><dd>{t.location}</dd></div>
+        <div><dt>{t.remoteLabel}</dt><dd>{t.remote}</dd></div>
+        <div>
+          <dt>{t.openToLabel}</dt>
+          <dd>
+            <ul class="plain-list">
+              {t.openToItems.map((item) => <li>{item}</li>)}
+            </ul>
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <nav class="section" aria-label={t.relatedTitle}>
+      <SectionRule title={t.relatedTitle} />
+      <ul class="related-rows">
+        <li>
+          <a class="related-row" href={aboutHref}>
+            <span class="related-row__label">{tAbout.title}</span>
+            <span class="related-row__line" aria-hidden="true"></span>
+            <span class="related-row__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="related-row" href={capabilitiesHref}>
+            <span class="related-row__label">{tCapabilities.title}</span>
+            <span class="related-row__line" aria-hidden="true"></span>
+            <span class="related-row__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </article>
 </ModuleLayout>
 
@@ -220,27 +257,34 @@ const aboutHref = `${localePrefix}/about`;
     outline-offset: 6px;
   }
 
-  /* Location / availability: shares the channels' own grid instead of a
+  /* Contact details: shares the channels' own grid instead of a
    * separately-capped narrow box, so its width is visibly tied to the
-   * composition above it rather than an accidental island. Location
-   * lands under Email, Availability under GitHub — the LinkedIn column
-   * stays empty beneath, deliberate negative space instead of a random
-   * leftover gap. A closing hairline after it gives the page a definite
-   * end instead of trailing off into the remaining viewport height. */
+   * composition above it rather than an accidental island — Location
+   * lands under Email, Availability under GitHub, Open To under
+   * LinkedIn, completing the column system the channels established
+   * instead of leaving that third track empty. The section's own
+   * SectionRule already draws a hairline immediately above this, so the
+   * shared .spec border-top is dropped here to avoid stacking two rules
+   * back to back; the border-bottom stays as this block's own close. */
   .contact .spec {
     max-width: none;
-    margin: 28px 0 0;
+    margin: 0;
+    padding-top: 0;
+    border-top: none;
     grid-template-columns: 1fr 0.85fr 1.15fr;
     column-gap: 28px;
   }
 
-  .contact .spec::after {
-    content: "";
-    display: block;
-    grid-column: 1 / -1;
-    height: 1px;
-    margin-top: 8px;
-    background: rgba(130, 171, 207, 0.12);
+  /* Open To's three short items reuse the shared .plain-list — a dash
+   * list, not a new component — sized down slightly to sit comfortably
+   * inside a dl value instead of a full section's worth of space. */
+  .contact .spec .plain-list {
+    gap: 6px;
+    max-width: none;
+  }
+
+  .contact .spec .plain-list li {
+    font-size: 0.88rem;
   }
 
   @media (max-width: 1100px) {

@@ -21,6 +21,13 @@ export const contactUi = {
     location: "Bilbao, Spain",
     remoteLabel: "Availability",
     remote: "Remote collaboration",
+    contactDetailsTitle: "Contact details",
+    openToLabel: "Open to",
+    // Not new claims — the same three things the lead statement already
+    // names ("collaboration, product work or engineering opportunities"),
+    // just unpacked as a short list instead of buried in prose.
+    openToItems: ["Collaboration", "Product work", "Engineering opportunities"],
+    relatedTitle: "Related modules",
   },
   es: {
     pageTitle: "Contacto | Núcleo del Sistema",
@@ -43,5 +50,9 @@ export const contactUi = {
     location: "Bilbao, España",
     remoteLabel: "Disponibilidad",
     remote: "Colaboración en remoto",
+    contactDetailsTitle: "Detalles de contacto",
+    openToLabel: "Abierto a",
+    openToItems: ["Colaboración", "Trabajo de producto", "Oportunidades de ingeniería"],
+    relatedTitle: "Módulos relacionados",
   },
 } as const;
