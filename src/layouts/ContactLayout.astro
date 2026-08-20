@@ -27,36 +27,37 @@ const aboutHref = `${localePrefix}/about`;
   backLabel={locale === "es" ? "Volver al core" : "Back to core"}
 >
   <article class="contact">
+    <p class="eyebrow contact-tag">{t.title}</p>
     <ModuleIntro statement={t.lead} />
 
-    <ul class="channel-rows" aria-label={locale === "es" ? "Canales de contacto" : "Contact channels"}>
+    <ul class="channels" aria-label={locale === "es" ? "Canales de contacto" : "Contact channels"}>
       <li>
-        <a class="channel-row" href="mailto:unax.zulaika.fuente@gmail.com">
-          <span class="channel-row__label">{t.emailTitle}</span>
-          <span class="channel-row__value">{t.emailValue}</span>
-          <span class="channel-row__meta">
+        <a class="channel" href="mailto:unax.zulaika.fuente@gmail.com">
+          <span class="channel__label">{t.emailTitle}</span>
+          <span class="channel__value">{t.emailValue}</span>
+          <span class="channel__action">
             <span>{t.emailSubtitle}</span>
-            <span class="channel-row__arrow" aria-hidden="true">↗</span>
+            <span class="channel__arrow" aria-hidden="true">↗</span>
           </span>
         </a>
       </li>
       <li>
-        <a class="channel-row" href="https://github.com/Zulaa9" target="_blank" rel="noopener noreferrer">
-          <span class="channel-row__label">{t.githubTitle}</span>
-          <span class="channel-row__value">{t.githubValue}</span>
-          <span class="channel-row__meta">
+        <a class="channel" href="https://github.com/Zulaa9" target="_blank" rel="noopener noreferrer">
+          <span class="channel__label">{t.githubTitle}</span>
+          <span class="channel__value">{t.githubValue}</span>
+          <span class="channel__action">
             <span>{t.githubSubtitle}</span>
-            <span class="channel-row__arrow" aria-hidden="true">↗</span>
+            <span class="channel__arrow" aria-hidden="true">↗</span>
           </span>
         </a>
       </li>
       <li>
-        <a class="channel-row" href="https://www.linkedin.com/in/unax-zulaika-fuente/" target="_blank" rel="noopener noreferrer">
-          <span class="channel-row__label">{t.linkedinTitle}</span>
-          <span class="channel-row__value">{t.linkedinValue}</span>
-          <span class="channel-row__meta">
+        <a class="channel" href="https://www.linkedin.com/in/unax-zulaika-fuente/" target="_blank" rel="noopener noreferrer">
+          <span class="channel__label">{t.linkedinTitle}</span>
+          <span class="channel__value">{t.linkedinValue}</span>
+          <span class="channel__action">
             <span>{t.linkedinSubtitle}</span>
-            <span class="channel-row__arrow" aria-hidden="true">↗</span>
+            <span class="channel__arrow" aria-hidden="true">↗</span>
           </span>
         </a>
       </li>
@@ -70,14 +71,167 @@ const aboutHref = `${localePrefix}/about`;
 </ModuleLayout>
 
 <style>
-  /* Deliberately narrower than the shared shell: Contact has three actions,
-   * not a page's worth of content, so the negative space to the right is
-   * composition, not a gap waiting to be filled. */
-  .contact {
-    max-width: 46rem;
+  /* No cap on the article itself — the composition uses the shell's full
+   * width the same way About's hero does; each piece below caps its own
+   * part instead. The previous 46rem cap was the actual bug: it squeezed
+   * a page's worth of composition into a viewport-agnostic narrow column
+   * regardless of how wide the shell around it actually was. */
+
+  .contact-tag {
+    margin: 0 0 10px;
   }
 
-  .contact .channel-rows {
-    margin-top: 12px;
+  /* Still the sentence itself (ModuleIntro's statement prop, unchanged),
+   * still the biggest thing on the page — just wide enough to settle
+   * into two intentional lines at wide viewports instead of the shared
+   * 22ch default's many short, forced ones. */
+  .contact :global(.module-statement) {
+    max-width: 50ch;
+  }
+
+  /* Channels: the page's three real endpoints, given room to be the
+   * composition's second major piece — three unnumbered columns divided
+   * by hairlines, deliberately not a numbered matrix (that's
+   * Capabilities' language, not this page's) and not cards. */
+  .channels {
+    margin: 48px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid rgba(130, 171, 207, 0.2);
+  }
+
+  .channel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    padding: 28px 32px 30px 0;
+    margin-left: 32px;
+    border-left: 1px solid rgba(130, 171, 207, 0.16);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .channels li:first-child .channel {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+  }
+
+  /* The seam that activates on hover/focus — same idea as the shared
+   * .channel-row's own hover seam (a hairline that lights up rather than
+   * a highlighted box), rotated to sit above a column instead of under a
+   * row, since these are columns now, not stacked rows. */
+  .channel::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: transparent;
+    transition: background 200ms ease;
+  }
+
+  .channel:hover::before,
+  .channel:focus-visible::before {
+    background: var(--accent-strong);
+  }
+
+  .channel__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8eb5d1;
+  }
+
+  .channel__value {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.3;
+    overflow-wrap: break-word;
+    transition: color 200ms ease;
+  }
+
+  .channel:hover .channel__value,
+  .channel:focus-visible .channel__value {
+    color: var(--accent-strong);
+  }
+
+  .channel__action {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 10px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .channel__arrow {
+    transition: transform 200ms ease, color 200ms ease;
+  }
+
+  .channel:hover .channel__arrow,
+  .channel:focus-visible .channel__arrow {
+    color: var(--accent-strong);
+    transform: translate(3px, -3px);
+  }
+
+  .channel:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 6px;
+  }
+
+  /* Location / availability: a quiet metadata strip under the channels,
+   * capped so it doesn't stretch into a huge gap-filled row of its own —
+   * it's context, not a third structural piece competing with the
+   * channels above it. */
+  .contact .spec {
+    max-width: 42rem;
+  }
+
+  @media (max-width: 1100px) {
+    .channel {
+      padding-right: 22px;
+      margin-left: 22px;
+    }
+  }
+
+  /* Tablet and below: three narrow columns stop being the better shape
+   * for three long endpoint strings — the matrix disassembles into a
+   * plain vertical list of rows instead, same principle as Capabilities'
+   * own mobile collapse: hairlines and spacing, never boxed cards. */
+  @media (max-width: 820px) {
+    .channels {
+      grid-template-columns: 1fr;
+      border-top: none;
+    }
+
+    .channel {
+      margin-left: 0;
+      padding: 22px 0;
+      border-left: none;
+      border-top: 1px solid rgba(130, 171, 207, 0.2);
+    }
+
+    .channels li:first-child .channel {
+      border-top: 1px solid rgba(130, 171, 207, 0.2);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .contact :global(.module-statement) {
+      max-width: none;
+    }
+
+    .contact .spec {
+      max-width: none;
+    }
   }
 </style>
