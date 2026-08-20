@@ -92,33 +92,56 @@ const aboutHref = `${localePrefix}/about`;
   /* Channels: the page's three real endpoints, given room to be the
    * composition's second major piece — three unnumbered columns divided
    * by hairlines, deliberately not a numbered matrix (that's
-   * Capabilities' language, not this page's) and not cards. */
+   * Capabilities' language, not this page's) and not cards.
+   *
+   * The hairline above sits close under the statement (32px, down from
+   * 48px) so it reads as this same composition continuing, not a second
+   * block starting after a pause — the statement's own 18px margin
+   * collapses into that gap the normal block-margin way, same as any
+   * other pair of block siblings here.
+   *
+   * Columns are no longer equal 1fr: measured against the actual
+   * rendered strings at this font (canvas.measureText, not eyeballed),
+   * GitHub's handle is ~40% narrower than Email's and LinkedIn's is the
+   * widest of the three — 1fr / 0.85fr / 1.15fr gives LinkedIn the extra
+   * room it actually uses and keeps GitHub from sitting in a track sized
+   * for a much longer string it doesn't have. */
   .channels {
-    margin: 48px 0 0;
+    margin: 32px 0 0;
     padding: 0;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1fr 0.85fr 1.15fr;
+    column-gap: 28px;
     border-top: 1px solid rgba(130, 171, 207, 0.2);
   }
 
+  /* A real grid column-gap (not a margin trick on .channel) so this
+   * grid's track boundaries are constructed identically to .spec's below
+   * — the two line up because they share the same column math, not
+   * because of hand-tuned pixel offsets between two different systems. */
   .channel {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 10px;
     height: 100%;
-    padding: 28px 32px 30px 0;
-    margin-left: 32px;
-    border-left: 1px solid rgba(130, 171, 207, 0.16);
+    padding: 22px 0 24px;
     color: var(--text);
     text-decoration: none;
   }
 
-  .channels li:first-child .channel {
-    margin-left: 0;
-    padding-left: 0;
-    border-left: none;
+  /* Vertical dividers between channels: inset top/bottom instead of
+   * running the column's full height, so they read as a structural seam
+   * between three related pieces rather than a table's column rule.
+   * Centered in the column-gap gutter (half of 28px). */
+  .channels li:not(:first-child) .channel::after {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: rgba(130, 171, 207, 0.16);
   }
 
   /* The seam that activates on hover/focus — same idea as the shared
@@ -142,6 +165,7 @@ const aboutHref = `${localePrefix}/about`;
   }
 
   .channel__label {
+    margin: 0 0 8px;
     font-family: var(--font-mono);
     font-size: 0.72rem;
     letter-spacing: 0.12em;
@@ -149,11 +173,15 @@ const aboutHref = `${localePrefix}/about`;
     color: #8eb5d1;
   }
 
+  /* The value is the block's real payload — sized and weighted to
+   * dominate the action line below it, not just edge it out slightly. */
   .channel__value {
+    margin: 0 0 14px;
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-    line-height: 1.3;
+    font-size: clamp(1.1rem, 1.7vw, 1.4rem);
+    line-height: 1.28;
+    color: var(--text);
     overflow-wrap: break-word;
     transition: color 200ms ease;
   }
@@ -163,14 +191,18 @@ const aboutHref = `${localePrefix}/about`;
     color: var(--accent-strong);
   }
 
+  /* Pinned to the bottom of the column via margin-top: auto, so all
+   * three actions sit on one baseline regardless of label/value height —
+   * dimmer and smaller than the value, clearly secondary but still
+   * comfortably legible. */
   .channel__action {
     display: flex;
     align-items: baseline;
     gap: 8px;
     margin-top: auto;
-    padding-top: 10px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--muted);
+    opacity: 0.82;
   }
 
   .channel__arrow {
@@ -188,18 +220,40 @@ const aboutHref = `${localePrefix}/about`;
     outline-offset: 6px;
   }
 
-  /* Location / availability: a quiet metadata strip under the channels,
-   * capped so it doesn't stretch into a huge gap-filled row of its own —
-   * it's context, not a third structural piece competing with the
-   * channels above it. */
+  /* Location / availability: shares the channels' own grid instead of a
+   * separately-capped narrow box, so its width is visibly tied to the
+   * composition above it rather than an accidental island. Location
+   * lands under Email, Availability under GitHub — the LinkedIn column
+   * stays empty beneath, deliberate negative space instead of a random
+   * leftover gap. A closing hairline after it gives the page a definite
+   * end instead of trailing off into the remaining viewport height. */
   .contact .spec {
-    max-width: 42rem;
+    max-width: none;
+    margin: 28px 0 0;
+    grid-template-columns: 1fr 0.85fr 1.15fr;
+    column-gap: 28px;
+  }
+
+  .contact .spec::after {
+    content: "";
+    display: block;
+    grid-column: 1 / -1;
+    height: 1px;
+    margin-top: 8px;
+    background: rgba(130, 171, 207, 0.12);
   }
 
   @media (max-width: 1100px) {
-    .channel {
-      padding-right: 22px;
-      margin-left: 22px;
+    .channels {
+      column-gap: 20px;
+    }
+
+    .channels li:not(:first-child) .channel::after {
+      left: -10px;
+    }
+
+    .contact .spec {
+      column-gap: 20px;
     }
   }
 
@@ -214,14 +268,20 @@ const aboutHref = `${localePrefix}/about`;
     }
 
     .channel {
-      margin-left: 0;
-      padding: 22px 0;
-      border-left: none;
+      padding: 18px 0;
       border-top: 1px solid rgba(130, 171, 207, 0.2);
     }
 
     .channels li:first-child .channel {
       border-top: 1px solid rgba(130, 171, 207, 0.2);
+    }
+
+    .channels li:not(:first-child) .channel::after {
+      display: none;
+    }
+
+    .contact .spec {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
@@ -231,7 +291,8 @@ const aboutHref = `${localePrefix}/about`;
     }
 
     .contact .spec {
-      max-width: none;
+      grid-template-columns: 1fr;
+      row-gap: 16px;
     }
   }
 </style>
