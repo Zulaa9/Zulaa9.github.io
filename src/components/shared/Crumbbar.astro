@@ -5,9 +5,12 @@
  * markup duplicated per legacy page (same structure, only the class prefix
  * differed).
  *
- * The round back button always returns to the Core — it's "go home", not
- * "go up one level" — matching the legacy site's behavior exactly (every
- * module's back button targeted `/`, even nested ones like Capabilities).
+ * The round back button is a smart back, like Windows Explorer's: it
+ * returns to wherever this tab actually came from within the site, and
+ * only falls back to the Core — its `href`, used as-is with no JS — when
+ * there's nowhere in-site to go back to (a fresh tab, a deep link, or
+ * having already walked back to the site's own entry point). See the
+ * script below for how that's tracked.
  */
 interface Crumb {
   label: string;
@@ -42,6 +45,95 @@ const { crumbs, backHref, backLabel } = Astro.props;
     ))}
   </p>
 </nav>
+
+<script>
+  // Smart back, à la Windows Explorer: go to whichever page this tab
+  // actually navigated here from within the site, not always the Core.
+  //
+  // document.referrer can't drive this — it's frozen at the tab's very
+  // first hard load and Astro's view-transition navigations (a plain
+  // pushState swap, no reload) never update it. Raw history.length can't
+  // either: it never shrinks when navigating backward, so it can't tell
+  // "several pages deep" apart from "back at the site's entry point".
+  //
+  // Instead we keep our own stack of visited pathnames in sessionStorage,
+  // one entry per in-site page (deduped against reloads of the same
+  // page), and truncated back down to size on a real back/forward so it
+  // stays in sync with the browser's own history rather than only ever
+  // growing. The back button then just checks whether that stack is more
+  // than one page deep before hijacking the click into a real
+  // history.back() — otherwise its plain href (the Core) applies as-is.
+  function currentPath() {
+    return location.pathname + location.search;
+  }
+
+  function readStack(): string[] {
+    try {
+      const raw = sessionStorage.getItem("crumbbar-nav-stack");
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function writeStack(stack: string[]) {
+    sessionStorage.setItem("crumbbar-nav-stack", JSON.stringify(stack));
+  }
+
+  function onPageLoad() {
+    const path = currentPath();
+    const stack = readStack();
+    const isBackNav = sessionStorage.getItem("crumbbar-popstate-pending") === "1";
+    sessionStorage.removeItem("crumbbar-popstate-pending");
+
+    if (isBackNav) {
+      // Landed here via a real back/forward: the stack already reached
+      // this page on the way forward, so trim anything recorded after it
+      // instead of pushing a duplicate.
+      const index = stack.lastIndexOf(path);
+      if (index !== -1) writeStack(stack.slice(0, index + 1));
+      return;
+    }
+
+    if (stack[stack.length - 1] !== path) {
+      stack.push(path);
+      writeStack(stack);
+    }
+  }
+
+  function onBackClick(event: MouseEvent) {
+    const back = (event.target as HTMLElement)?.closest<HTMLAnchorElement>(".crumbbar__back");
+    if (!back) return;
+
+    const stack = readStack();
+    if (stack.length > 1) {
+      event.preventDefault();
+      history.back();
+    }
+    // Otherwise: nothing in-site to go back to — fall through to the
+    // anchor's own href, which targets the Core.
+  }
+
+  // Bound once, ever, via the window flag: this script's top-level code
+  // re-runs on every visit to a module page (each one a distinct
+  // closure), so without the flag every revisit would register another
+  // set of listeners that never gets cleaned up. Both listeners live on
+  // window/document, which persist across Astro's view transitions, so
+  // binding them once here keeps tracking navigation for the rest of the
+  // tab's life — including visits to pages (like the Core) that don't
+  // render this component at all.
+  const w = window as typeof window & { __crumbbarNavBound?: boolean };
+  if (!w.__crumbbarNavBound) {
+    window.addEventListener("popstate", () => {
+      sessionStorage.setItem("crumbbar-popstate-pending", "1");
+    });
+    document.addEventListener("astro:page-load", onPageLoad);
+    document.addEventListener("click", onBackClick);
+    w.__crumbbarNavBound = true;
+  }
+  onPageLoad();
+</script>
 
 <style>
   .crumbbar {
