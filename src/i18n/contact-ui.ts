@@ -23,11 +23,12 @@ export const contactUi = {
     remote: "Remote collaboration",
     contactDetailsTitle: "Contact details",
     openToLabel: "Open to",
-    // Not new claims — the same three things the lead statement already
-    // names ("collaboration, product work or engineering opportunities"),
-    // just unpacked as a short list instead of buried in prose.
-    openToItems: ["Collaboration", "Product work", "Engineering opportunities"],
-    relatedTitle: "Related modules",
+    // Complements the lead statement instead of restating its exact
+    // wording — grounded in what About and Capabilities already say
+    // about the work itself (copy1's "designing practical systems",
+    // Capabilities' System Engineering category, About's "independent
+    // software development"), not a new claim about availability.
+    openToItems: ["Product & system design", "Engineering collaboration", "Technical projects"],
   },
   es: {
     pageTitle: "Contacto | Núcleo del Sistema",
@@ -52,7 +53,6 @@ export const contactUi = {
     remote: "Colaboración en remoto",
     contactDetailsTitle: "Detalles de contacto",
     openToLabel: "Abierto a",
-    openToItems: ["Colaboración", "Trabajo de producto", "Oportunidades de ingeniería"],
-    relatedTitle: "Módulos relacionados",
+    openToItems: ["Diseño de producto y sistemas", "Colaboración en ingeniería", "Proyectos técnicos"],
   },
 } as const;

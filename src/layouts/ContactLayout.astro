@@ -3,8 +3,6 @@ import ModuleLayout from "./ModuleLayout.astro";
 import ModuleIntro from "../components/module/ModuleIntro.astro";
 import SectionRule from "../components/module/SectionRule.astro";
 import { contactUi } from "../i18n/contact-ui";
-import { aboutUi } from "../i18n/about-ui";
-import { capabilitiesUi } from "../i18n/capabilities-ui";
 
 interface Props {
   locale: "en" | "es";
@@ -12,13 +10,10 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = contactUi[locale];
-const tAbout = aboutUi[locale];
-const tCapabilities = capabilitiesUi[locale];
 
 const localePrefix = locale === "es" ? "/es" : "";
 const coreHref = locale === "es" ? "/es/" : "/";
 const aboutHref = `${localePrefix}/about`;
-const capabilitiesHref = `${localePrefix}/capabilities`;
 ---
 
 <ModuleLayout
@@ -84,26 +79,6 @@ const capabilitiesHref = `${localePrefix}/capabilities`;
         </div>
       </dl>
     </section>
-
-    <nav class="section" aria-label={t.relatedTitle}>
-      <SectionRule title={t.relatedTitle} />
-      <ul class="related-rows">
-        <li>
-          <a class="related-row" href={aboutHref}>
-            <span class="related-row__label">{tAbout.title}</span>
-            <span class="related-row__line" aria-hidden="true"></span>
-            <span class="related-row__arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
-        <li>
-          <a class="related-row" href={capabilitiesHref}>
-            <span class="related-row__label">{tCapabilities.title}</span>
-            <span class="related-row__line" aria-hidden="true"></span>
-            <span class="related-row__arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
   </article>
 </ModuleLayout>
 
@@ -285,6 +260,20 @@ const capabilitiesHref = `${localePrefix}/capabilities`;
 
   .contact .spec .plain-list li {
     font-size: 0.88rem;
+  }
+
+  /* Contact Details is the page's actual close (no further section
+   * follows it) — a quiet hairline under it marks that deliberately,
+   * the same "this composition ends here" gesture the border-bottom
+   * already gives every other row-based list in this system, rather
+   * than just trailing off after the last value. */
+  .contact .spec::after {
+    content: "";
+    display: block;
+    grid-column: 1 / -1;
+    height: 1px;
+    margin-top: 8px;
+    background: rgba(130, 171, 207, 0.12);
   }
 
   @media (max-width: 1100px) {
