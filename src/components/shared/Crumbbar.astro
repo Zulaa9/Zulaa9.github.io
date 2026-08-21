@@ -1,17 +1,30 @@
 ---
 /**
- * Back button + breadcrumb trail. One component instead of the
- * about-crumbbar/capabilities-crumbbar/contact-crumbbar/keyping-crumbbar…
- * markup duplicated per legacy page (same structure, only the class prefix
- * differed).
+ * Explorer-style breadcrumb trail: CORE › ABOUT › CONTACT. Each segment's
+ * label navigates straight to it; the small arrow right after a segment
+ * (when it has children) is the *same* control that also reads as the
+ * path separator to the next segment — not two stacked controls. Closed,
+ * it points right, doubling as "›"; opened, the identical SVG rotates 90°
+ * to point down, and a small menu of that node's direct children drops
+ * below the bar. A leaf segment (no children — an individual project
+ * page, or whichever crumb is current when that page has none) simply
+ * has no arrow after it.
  *
- * The round back button is a smart back, like Windows Explorer's: it
- * returns to wherever this tab actually came from within the site, and
- * only falls back to the Core — its `href`, used as-is with no JS — when
- * there's nowhere in-site to go back to (a fresh tab, a deep link, or
- * having already walked back to the site's own entry point). See the
- * script below for how that's tracked.
+ * There used to also be a round "back" button before the trail, with its
+ * own smart-back logic (return to wherever this tab actually came from,
+ * à la Explorer). It's gone: with every segment now exploring its own
+ * children inline, a separate "go back up" affordance was redundant
+ * navigation, not a second concept. Nothing fills the space it left —
+ * the trail simply starts at the shell's own left padding, like every
+ * other module page's content already does.
+ *
+ * Children come from the Core's real graph topology
+ * (src/content/graph/*.json, the same source SystemCore.astro renders the
+ * node graph from), matched to each crumb by route — never a
+ * hand-maintained menu tree living in this component.
  */
+import { getCollection } from "astro:content";
+
 interface Crumb {
   label: string;
   href?: string; // omitted on the last (current) crumb
@@ -19,124 +32,338 @@ interface Crumb {
 
 interface Props {
   crumbs: Crumb[];
+  // Still accepted (every caller — ModuleLayout — still passes these for
+  // the moment) but no longer rendered: the back button they used to
+  // drive is gone. Left in the props shape rather than touching every
+  // call site just to drop two now-unused arguments.
   backHref: string;
   backLabel: string;
 }
 
-const { crumbs, backHref, backLabel } = Astro.props;
+const { crumbs } = Astro.props;
+
+const locale = (Astro.currentLocale ?? "en") as "en" | "es";
+const localePrefix = locale === "es" ? "/es" : "";
+
+// Same EN/ES swap BaseLayout.astro already uses, plus a trailing-slash
+// trim on top of it: every route stored in the graph JSON (about.json's
+// "route": "/about", etc.) is written without one, but Astro.url.pathname
+// for the *current* page always has one (e.g. "/about/") even though a
+// crumb's own href — built elsewhere as `${localePrefix}/about` — never
+// does. Without this trim, routeToId.get(currentRoute) below missed on
+// exactly the current page (the one crumb that has to fall back to
+// Astro.url.pathname instead of a stored href), so a page's own explore
+// arrow only ever appeared once you'd reached it *through* a child crumb
+// (whose href never had the trailing slash to begin with), never on
+// direct or reload navigation.
+const stripLocale = (path: string) => {
+  const noLocale = path.replace(/^\/es(?=\/|$)/, "") || "/";
+  return noLocale === "/" ? "/" : noLocale.replace(/\/$/, "");
+};
+const currentRoute = stripLocale(Astro.url.pathname);
+
+interface GraphChild {
+  id: string;
+  parentId: string | null;
+  route: string;
+  title: string;
+  order: number;
+}
+
+const graphEntries = await getCollection("graph");
+// The "core" node itself is excluded here (it isn't a page you'd find in
+// anyone's dropdown), but it's still a valid *parent id* for About/Projects
+// below — only its own entry is filtered out, not its role as a parent key.
+// Anything without a route or a label isn't a real navigable page, the same
+// distinction ProjectLayout's own graph lookup already relies on.
+const graphNodes: GraphChild[] = graphEntries
+  .filter((entry) => entry.data.type !== "core" && entry.data.route && entry.data.label)
+  .map((entry) => ({
+    id: entry.id,
+    parentId: entry.data.parentId,
+    route: entry.data.route!,
+    title: entry.data.label![locale].title,
+    // Same "no explicit order sorts last, ties keep collection order"
+    // convention SystemCore.astro's own clickableNodes list already uses —
+    // reused verbatim rather than re-derived, so the dropdown always
+    // matches the order the Core itself would render these nodes in.
+    order: entry.data.order ?? 99,
+  }));
+
+const childrenByParentId = new Map<string, GraphChild[]>();
+for (const node of graphNodes) {
+  if (!node.parentId) continue;
+  const list = childrenByParentId.get(node.parentId) ?? [];
+  list.push(node);
+  childrenByParentId.set(node.parentId, list);
+}
+for (const list of childrenByParentId.values()) list.sort((a, b) => a.order - b.order);
+
+// A node's own route doubles as the lookup key for "which node is this
+// crumb" — about.json's route is "/about", so a crumb whose (locale-
+// stripped) href is "/about" resolves straight to the "about" node's id
+// without a second, separately-maintained id/route map.
+const routeToId = new Map<string, string>();
+routeToId.set("/", "core");
+for (const node of graphNodes) routeToId.set(node.route, node.id);
+
+interface CrumbChild {
+  id: string;
+  title: string;
+  href: string;
+  isCurrent: boolean;
+}
+
+const crumbsWithChildren = crumbs.map((crumb, index) => {
+  const route = crumb.href ? stripLocale(crumb.href) : currentRoute;
+  const nodeId = routeToId.get(route);
+  const rawChildren = nodeId ? (childrenByParentId.get(nodeId) ?? []) : [];
+  const children: CrumbChild[] = rawChildren.map((child) => ({
+    id: child.id,
+    title: child.title,
+    href: `${localePrefix}${child.route}`,
+    isCurrent: child.route === currentRoute,
+  }));
+  return { ...crumb, children, menuId: `crumb-menu-${index}` };
+});
+
+const exploreLabel = locale === "es" ? "Explorar" : "Explore";
 ---
 
 <nav class="crumbbar" aria-label="Screen path">
-  <a href={backHref} class="crumbbar__back" aria-label={backLabel}>
-    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-      <path d="M15 5L8 12L15 19" />
-    </svg>
-  </a>
-  <p class="crumbbar__trail">
-    {crumbs.map((crumb, index) => (
-      <>
-        <span class="crumbbar__sep" aria-hidden="true">/</span>
+  <div class="crumbbar__trail">
+    {crumbsWithChildren.map((crumb) => (
+      <span class="crumbbar__item">
         {crumb.href ? (
           <a href={crumb.href}>{crumb.label}</a>
         ) : (
           <span class="crumbbar__current" aria-current="page">{crumb.label}</span>
         )}
-      </>
+        {crumb.children.length > 0 && (
+          <>
+            <button
+              type="button"
+              class="crumbbar__chevron"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls={crumb.menuId}
+              aria-label={`${exploreLabel} ${crumb.label}`}
+              data-crumb-trigger
+            >
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+            </button>
+            <ul class="crumbbar__menu" role="menu" id={crumb.menuId} aria-label={crumb.label} hidden>
+              {crumb.children.map((child) => (
+                <li role="none">
+                  <a
+                    role="menuitem"
+                    href={child.href}
+                    class:list={["crumbbar__menu-item", { "crumbbar__menu-item--current": child.isCurrent }]}
+                    aria-current={child.isCurrent ? "page" : undefined}
+                  >
+                    {child.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </span>
     ))}
-  </p>
+  </div>
 </nav>
 
 <script>
-  // Smart back, à la Windows Explorer: go to whichever page this tab
-  // actually navigated here from within the site, not always the Core.
-  //
-  // document.referrer can't drive this — it's frozen at the tab's very
-  // first hard load and Astro's view-transition navigations (a plain
-  // pushState swap, no reload) never update it. Raw history.length can't
-  // either: it never shrinks when navigating backward, so it can't tell
-  // "several pages deep" apart from "back at the site's entry point".
-  //
-  // Instead we keep our own stack of visited pathnames in sessionStorage,
-  // one entry per in-site page (deduped against reloads of the same
-  // page), and truncated back down to size on a real back/forward so it
-  // stays in sync with the browser's own history rather than only ever
-  // growing. The back button then just checks whether that stack is more
-  // than one page deep before hijacking the click into a real
-  // history.back() — otherwise its plain href (the Core) applies as-is.
-  function currentPath() {
-    return location.pathname + location.search;
+  // Explore-children dropdowns. Delegated entirely on document/window —
+  // never bound per-trigger — so this works correctly across Astro's soft
+  // navigations without any rebind step: each navigation re-renders
+  // Crumbbar's markup fresh (it isn't transition:persist'd), and these
+  // delegated listeners just keep matching whatever .crumbbar__* elements
+  // currently exist via closest(), old or new. Bound once, ever, same
+  // guarded pattern as the back-button script above, for the same reason.
+  function getMenuFor(trigger: HTMLElement): HTMLElement | null {
+    const id = trigger.getAttribute("aria-controls");
+    return id ? document.getElementById(id) : null;
   }
 
-  function readStack(): string[] {
-    try {
-      const raw = sessionStorage.getItem("crumbbar-nav-stack");
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
+  function getTriggerFor(menu: HTMLElement): HTMLElement | null {
+    return document.querySelector<HTMLElement>(`[aria-controls="${menu.id}"]`);
+  }
+
+  function menuItems(menu: HTMLElement): HTMLAnchorElement[] {
+    return Array.from(menu.querySelectorAll<HTMLAnchorElement>(".crumbbar__menu-item"));
+  }
+
+  // .core-stage (the panel every module page renders inside) clips its own
+  // content with overflow: hidden, and the crumbbar sits right at its top
+  // edge — a menu positioned with the usual position: absolute would get
+  // silently cut off the moment it needed to extend past that panel's own
+  // box. position: fixed sidesteps this correctly (not a z-index workaround):
+  // its containing block is the viewport itself, not the nearest positioned
+  // ancestor, as long as nothing between here and <body> sets a transform,
+  // filter or will-change — true for every module page's ancestor chain
+  // here (BaseLayout → .core-stage has none of those, only overflow:hidden,
+  // which doesn't affect position: fixed). Position is computed in JS
+  // because "fixed" only means *which* box it's relative to, not where.
+  //
+  // top comes from the whole .crumbbar bar's own bottom edge, not the
+  // trigger's — the trigger is a 24px hit target centered inside a ~40px
+  // bar, so its own bottom edge sits *above* the bar's, which used to open
+  // the menu overlapping the bar itself instead of sitting just under it.
+  // left comes from the crumb-item (label + trigger together), so the menu
+  // reads as anchored to the segment being explored, not to the chevron
+  // glyph off at its right edge.
+  function positionMenu(trigger: HTMLElement, menu: HTMLElement) {
+    const margin = 8;
+    const bar = trigger.closest<HTMLElement>(".crumbbar");
+    const item = trigger.closest<HTMLElement>(".crumbbar__item");
+    const barRect = (bar ?? trigger).getBoundingClientRect();
+    const itemRect = (item ?? trigger).getBoundingClientRect();
+    const menuRect = menu.getBoundingClientRect();
+
+    let left = itemRect.left;
+    const maxLeft = window.innerWidth - menuRect.width - margin;
+    if (left > maxLeft) left = Math.max(margin, maxLeft);
+
+    let top = barRect.bottom + 4;
+    if (top + menuRect.height > window.innerHeight - margin) {
+      // Not enough room below — flip above the bar instead. In practice
+      // the crumbbar sits at the very top of the page, so this mainly
+      // guards very short viewports rather than a case that comes up often.
+      const above = barRect.top - menuRect.height - 4;
+      top = above > margin ? above : margin;
     }
+
+    menu.style.left = `${Math.round(left)}px`;
+    menu.style.top = `${Math.round(top)}px`;
   }
 
-  function writeStack(stack: string[]) {
-    sessionStorage.setItem("crumbbar-nav-stack", JSON.stringify(stack));
+  function closeMenu(trigger: HTMLElement) {
+    const menu = getMenuFor(trigger);
+    trigger.setAttribute("aria-expanded", "false");
+    if (!menu) return;
+    menu.removeAttribute("data-open");
+    menu.hidden = true;
   }
 
-  function onPageLoad() {
-    const path = currentPath();
-    const stack = readStack();
-    const isBackNav = sessionStorage.getItem("crumbbar-popstate-pending") === "1";
-    sessionStorage.removeItem("crumbbar-popstate-pending");
+  function closeAllMenus(except?: HTMLElement) {
+    document.querySelectorAll<HTMLElement>('[data-crumb-trigger][aria-expanded="true"]').forEach((trigger) => {
+      if (trigger !== except) closeMenu(trigger);
+    });
+  }
 
-    if (isBackNav) {
-      // Landed here via a real back/forward: the stack already reached
-      // this page on the way forward, so trim anything recorded after it
-      // instead of pushing a duplicate.
-      const index = stack.lastIndexOf(path);
-      if (index !== -1) writeStack(stack.slice(0, index + 1));
+  function openMenu(trigger: HTMLElement) {
+    const menu = getMenuFor(trigger);
+    if (!menu) return;
+    closeAllMenus(trigger); // at most one menu open at a time
+    menu.hidden = false;
+    positionMenu(trigger, menu);
+    trigger.setAttribute("aria-expanded", "true");
+    // Next frame: hidden -> visible has to land in the DOM first, or the
+    // opacity/transform transition below has nothing to animate from.
+    requestAnimationFrame(() => {
+      menu.setAttribute("data-open", "true");
+    });
+  }
+
+  function toggleMenu(trigger: HTMLElement) {
+    if (trigger.getAttribute("aria-expanded") === "true") closeMenu(trigger);
+    else openMenu(trigger);
+  }
+
+  function focusItem(menu: HTMLElement, index: number) {
+    const items = menuItems(menu);
+    if (!items.length) return;
+    const wrapped = ((index % items.length) + items.length) % items.length;
+    items[wrapped].focus();
+  }
+
+  function onDocumentClick(event: MouseEvent) {
+    const trigger = (event.target as HTMLElement).closest<HTMLElement>("[data-crumb-trigger]");
+    if (trigger) {
+      event.preventDefault();
+      toggleMenu(trigger);
+      return;
+    }
+    if (!(event.target as HTMLElement).closest(".crumbbar__menu")) closeAllMenus();
+  }
+
+  function onDocumentKeydown(event: KeyboardEvent) {
+    const trigger = (event.target as HTMLElement).closest<HTMLElement>("[data-crumb-trigger]");
+    if (trigger) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (trigger.getAttribute("aria-expanded") !== "true") openMenu(trigger);
+        const menu = getMenuFor(trigger);
+        if (menu) focusItem(menu, 0);
+      } else if (event.key === "Escape" && trigger.getAttribute("aria-expanded") === "true") {
+        event.preventDefault();
+        closeMenu(trigger);
+      }
+      // Enter/Space: native <button> click activation already fires the
+      // click handler above — nothing extra needed here.
       return;
     }
 
-    if (stack[stack.length - 1] !== path) {
-      stack.push(path);
-      writeStack(stack);
-    }
-  }
+    const item = (event.target as HTMLElement).closest<HTMLAnchorElement>(".crumbbar__menu-item");
+    if (!item) return;
+    const menu = item.closest<HTMLElement>(".crumbbar__menu");
+    if (!menu) return;
+    const items = menuItems(menu);
+    const index = items.indexOf(item);
 
-  function onBackClick(event: MouseEvent) {
-    const back = (event.target as HTMLElement)?.closest<HTMLAnchorElement>(".crumbbar__back");
-    if (!back) return;
-
-    const stack = readStack();
-    if (stack.length > 1) {
+    if (event.key === "ArrowDown") {
       event.preventDefault();
-      history.back();
+      focusItem(menu, index + 1);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      focusItem(menu, index - 1);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      focusItem(menu, 0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      focusItem(menu, items.length - 1);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      const trigger2 = getTriggerFor(menu);
+      closeAllMenus();
+      trigger2?.focus();
     }
-    // Otherwise: nothing in-site to go back to — fall through to the
-    // anchor's own href, which targets the Core.
+    // Enter/Space on the focused <a>: native link activation navigates.
   }
 
-  // Bound once, ever, via the window flag: this script's top-level code
-  // re-runs on every visit to a module page (each one a distinct
-  // closure), so without the flag every revisit would register another
-  // set of listeners that never gets cleaned up. Both listeners live on
-  // window/document, which persist across Astro's view transitions, so
-  // binding them once here keeps tracking navigation for the rest of the
-  // tab's life — including visits to pages (like the Core) that don't
-  // render this component at all.
-  const w = window as typeof window & { __crumbbarNavBound?: boolean };
-  if (!w.__crumbbarNavBound) {
-    window.addEventListener("popstate", () => {
-      sessionStorage.setItem("crumbbar-popstate-pending", "1");
-    });
-    document.addEventListener("astro:page-load", onPageLoad);
-    document.addEventListener("click", onBackClick);
-    w.__crumbbarNavBound = true;
+  function onWindowResize() {
+    const openTrigger = document.querySelector<HTMLElement>('[data-crumb-trigger][aria-expanded="true"]');
+    if (!openTrigger) return;
+    const menu = getMenuFor(openTrigger);
+    if (menu) positionMenu(openTrigger, menu);
   }
-  onPageLoad();
+
+  const w = window as typeof window & { __crumbbarMenuBound?: boolean };
+  if (!w.__crumbbarMenuBound) {
+    document.addEventListener("click", onDocumentClick);
+    document.addEventListener("keydown", onDocumentKeydown);
+    window.addEventListener("resize", onWindowResize);
+    w.__crumbbarMenuBound = true;
+  }
+  // Defensive, not load-bearing: Crumbbar's markup is freshly rendered by
+  // each navigation (no transition:persist), so open menus never actually
+  // survive a page change to begin with.
+  closeAllMenus();
 </script>
 
 <style>
   .crumbbar {
+    /* One shared surface, painted on .crumbbar__item — not on the label
+     * or the arrow individually — so hovering either sub-control (or
+     * having the arrow's menu open) lights up the exact same shape.
+     * Never glow, shadow, saturated cyan or scale. */
+    --crumb-highlight-strong: rgba(83, 198, 224, 0.14);
+    --crumb-highlight-border: rgba(130, 171, 207, 0.4);
+
     /* A normal flex child of .module-stage, not an overlay: it used to be
      * position: absolute, floating over .module-scroll so its own top
      * padding could "clear" it visually — but that also meant
@@ -155,36 +382,25 @@ const { crumbs, backHref, backLabel } = Astro.props;
     background: linear-gradient(180deg, rgba(8, 19, 30, 0.94), rgba(8, 19, 30, 0.42));
   }
 
-  .crumbbar__back {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-    border: 1px solid rgba(143, 186, 214, 0.36);
-    border-radius: 999px;
-    color: #e4f3ff;
-    background: linear-gradient(145deg, rgba(14, 30, 43, 0.9), rgba(9, 20, 31, 0.85));
-    text-decoration: none;
-  }
-
-  .crumbbar__back svg {
-    width: 13px;
-    height: 13px;
-    stroke: currentColor;
-    stroke-width: 2.4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-  }
-
   .crumbbar__trail {
     margin: 0;
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    /* Gap between one crumb's own item (label+arrow, now painted as one
+     * shared pill — see .crumbbar__item below) and the next crumb's own
+     * item. This is a gap between flex margin-boxes, not painted-surface
+     * edges — .crumbbar__item's own 5px horizontal padding on each side
+     * (10px total per pair of neighbors) eats into it, so 14px here
+     * leaves a real, measured 4px of dark space between two adjacent
+     * pills even in the worst case (both fully highlighted at once) —
+     * confirmed via getBoundingClientRect, not just the logical gap
+     * value. Deliberately bigger than .crumbbar__item's own internal
+     * label-to-arrow gap (4px) so different levels (CORE / ABOUT /
+     * CONTACT) always read as clearly separated pills, never as one
+     * continuous bar, while each pill's own label+arrow stay close
+     * together inside it. */
+    gap: 14px;
     font-family: var(--font-display);
     font-size: 0.72rem;
     letter-spacing: 0.1em;
@@ -192,22 +408,315 @@ const { crumbs, backHref, backLabel } = Astro.props;
     color: #bfd9eb;
   }
 
-  .crumbbar__sep {
-    color: #79a9c6;
-  }
-
-  .crumbbar__trail a {
+  /* Scoped to a direct child of .crumbbar__item (">"), not the plain
+   * descendant selector it used to be — .crumbbar__menu-item anchors also
+   * live inside .crumbbar__trail (the dropdown is physically nested
+   * inside its crumb, for the positioning logic in the script above), so
+   * the old ".crumbbar__trail a" reached them too and, being more
+   * specific than ".crumbbar__menu-item" alone, silently overrode that
+   * dropdown item's own padding/hover styling this whole time. The ">"
+   * makes this rule match only the crumb's own label.
+   *
+   * Horizontal padding + an equal negative margin cancel out in the
+   * item's own layout (margin-box width is unchanged: content + padding
+   * - padding = content), so the label sits exactly where it always did
+   * and nothing downstream shifts. The shared background lives on
+   * .crumbbar__item (below), not here — but the outline is the opposite:
+   * it stays right on the label itself, so it only ever traces the exact
+   * control the user is pointing at or focused on, never the arrow's own
+   * box too.
+   *
+   * height: 18px + box-sizing: border-box pins the label's own box to a
+   * fixed size — 18px being this text's own natural line-box height at
+   * 2px vertical padding, just made explicit rather than incidental — so
+   * .crumbbar__item and .crumbbar__chevron (below) can both be pinned to
+   * that same 18px instead of the chevron's 24px touch target dictating
+   * the whole pill's height. That way this label's outline ring, drawn
+   * flush at outline-offset: 0, ends up exactly as tall as the shared
+   * background fill on .crumbbar__item — and the chevron's own square
+   * ring (18x18, see .crumbbar__chevron::before) matches both. Using the
+   * chevron's 24px instead (tried first) forced the whole pill taller
+   * and turned that ring into a tall 18x24 rectangle instead of a
+   * square — technically equal-height everywhere, but visibly worse.
+   * 18px keeps the pill at its natural text size and lets the chevron's
+   * 24px stay what it always was: an oversized *touch* target only,
+   * centered on but not equal to the visible 18px square. display: flex
+   * + align-items: center keeps the text vertically centered inside that
+   * fixed height. outline-offset: 0 (not the old inset -1px) is safe
+   * horizontally too: this label's left edge already sits flush with
+   * .crumbbar__item's own left edge (there's nothing before it in the
+   * pill to leave room for), so a flush ring touches the shared fill's
+   * edge without crossing past it into .crumbbar__trail's between-pill
+   * gap. */
+  .crumbbar__trail > .crumbbar__item > a {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 18px;
     color: inherit;
     text-decoration: none;
-    transition: color 160ms ease;
+    padding: 0 5px;
+    margin: 0 -5px;
+    /* Full rounding by default — this is also the shape leaf crumbs (no
+     * chevron follows) get, since the rule below only overrides it when
+     * a chevron actually sits next to this label. */
+    border-radius: 3px;
+    outline: 1px solid transparent;
+    outline-offset: 0;
+    transition: color 160ms ease, outline-color 160ms ease;
   }
 
-  .crumbbar__trail a:hover,
-  .crumbbar__trail a:focus-visible {
+  /* When a chevron follows (branch crumbs, not leaf ones), the label's
+   * own ring loses its rounding on the side facing that chevron — flat,
+   * not curved — so the two rings read as adjoining halves of one pill
+   * split down the middle, not two independent capsules that happen to
+   * overlap. The chevron's own ring (below) mirrors this on its own
+   * facing side. */
+  .crumbbar__trail > .crumbbar__item:has(> .crumbbar__chevron) > a {
+    border-radius: 3px 0 0 3px;
+  }
+
+  .crumbbar__trail > .crumbbar__item > a:hover,
+  .crumbbar__trail > .crumbbar__item > a:focus-visible {
     color: #e7f6ff;
+    outline-color: var(--crumb-highlight-border);
   }
 
   .crumbbar__current {
+    color: var(--accent-strong);
+  }
+
+  /* Groups a segment's label with its own arrow into one visual unit —
+   * both stay two independent controls functionally (label navigates,
+   * arrow opens the dropdown), but they now share a single painted
+   * background, matching how Windows Explorer's own path bar treats a
+   * segment name and its expand arrow as one pill. This wrapper is what
+   * paints that shared background below — never the label or the arrow
+   * individually — so hovering either one, or having the arrow's menu
+   * open, fills the exact same shape regardless of which sub-element
+   * triggered it. The outline is deliberately NOT painted here: it stays
+   * on whichever specific control (the label, or the chevron's own inset
+   * box further down) the user is actually pointing at, so the ring
+   * traces only the real target, while the fill behind both still reads
+   * as one pill. Horizontal padding + an equal negative margin (the same
+   * cancellation trick used elsewhere in this file: margin-box width is
+   * unchanged, content + padding - padding = content) gives the
+   * background room to sit a few px past the label/arrow without
+   * shifting .crumbbar__trail's own layout rhythm — .crumbbar__trail's
+   * own gap (above) is sized specifically around this padding so two
+   * adjacent pills never touch even fully highlighted. The gap here is
+   * wider than a single tight cluster: sharing one background is what
+   * reads as "one pill" at rest, so there's room to space the label and
+   * arrow apart without the pair looking like two separate chips — the
+   * per-control outline ring (on the label or the chevron's own inset
+   * box) is what tells them apart on hover instead. No vertical padding:
+   * height below is pinned explicitly to 18px (see the label's own
+   * comment above for why 18, not the chevron's 24px touch target), so
+   * padding isn't what's shaping this box's height any more. */
+  .crumbbar__item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 18px;
+    gap: 10px;
+    padding: 0 5px;
+    margin: 0 -5px;
+    border-radius: 4px;
+    transition: background 160ms ease;
+  }
+
+  /* The one rule that paints the shared background: triggered by the
+   * label being hovered/focused, OR the arrow being hovered/focused, OR
+   * the arrow's own menu being open (aria-expanded="true") — any of
+   * those three produce literally the same fill on the wrapper, so
+   * there's no visual difference between "hovering the name", "hovering
+   * the arrow" and "the dropdown is open". A leaf crumb with no arrow
+   * (e.g. the current page) never matches this at all, since it has
+   * neither an <a> nor a .crumbbar__chevron to hover — it keeps its
+   * plain, unhighlighted look untouched. */
+  .crumbbar__item:has(
+      > a:hover,
+      > a:focus-visible,
+      > .crumbbar__chevron:hover,
+      > .crumbbar__chevron:focus-visible,
+      > .crumbbar__chevron[aria-expanded="true"]
+    ) {
+    background: var(--crumb-highlight-strong);
+  }
+
+  /* One control, two jobs: closed, this arrow *is* the path separator
+   * (points right, reads like "›"); clicked, the identical SVG rotates
+   * 90° to point down and its menu opens below. The real hit target is a
+   * fixed 24px square (WCAG's AA touch-target floor) around an 8px glyph
+   * — a uniform -7px margin pulls that oversized box back in on every
+   * side, keeping the 24px box from ballooning the trail's own rhythm. */
+  .crumbbar__chevron {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin: -7px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #79a9c6;
+    cursor: pointer;
+    transition: color 160ms ease, transform 160ms ease;
+  }
+
+  .crumbbar__chevron svg {
+    width: 8px;
+    height: 8px;
+    stroke: currentColor;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    transition: transform 160ms ease;
+  }
+
+  /* The icon's own color shifts directly on the button. Open counts even
+   * without a live hover so the color doesn't reset the instant the
+   * pointer leaves the arrow for the dropdown that just opened under it. */
+  .crumbbar__chevron:hover,
+  .crumbbar__chevron:focus-visible,
+  .crumbbar__chevron[aria-expanded="true"] {
+    color: var(--accent-strong);
+  }
+
+  /* The chevron's own outline ring — no background here, that's the
+   * shared .crumbbar__item fill above — sits on a pseudo-element inset
+   * evenly (3px) from the 24px hit box, giving an 18x18 square. 18 isn't
+   * arbitrary here: it's the same 18px .crumbbar__item and the label's
+   * own ring are pinned to (see their comments), so this square ends up
+   * exactly as tall as the shared background fill — a uniform inset
+   * happens to also land on a square because the touch target is itself
+   * a square (24x24) and 18 is 6px less on every side. An anisotropic
+   * inset (0 vertical / more horizontal) was tried first to hit 18
+   * height off a target that was still 24 tall at the time — worked
+   * height-wise but read as a tall rectangle, not a square, around a
+   * tiny 8px arrow. Only appears while the arrow itself is the thing
+   * being pointed at, focused, or open; hovering the label never draws
+   * this ring, only the shared fill. */
+  .crumbbar__chevron::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    /* Flat on the left (the side facing the label's own ring), rounded
+     * on the right — the chevron only ever renders with a label before
+     * it, so this is never conditional the way the label's own rule
+     * (above) has to be. Together the two rings read as one pill split
+     * down the middle instead of two overlapping capsules. */
+    border-radius: 0 4px 4px 0;
+    outline: 1px solid transparent;
+    transition: outline-color 160ms ease;
+  }
+
+  .crumbbar__chevron:hover::before,
+  .crumbbar__chevron:focus-visible::before,
+  .crumbbar__chevron[aria-expanded="true"]::before {
+    outline-color: var(--crumb-highlight-border);
+  }
+
+  /* Closed: the SVG's own path already points right, no transform needed
+   * — that's the "›" reading. Open: the same path rotated 90° clockwise
+   * points down, the conventional "expanded" direction. */
+  .crumbbar__chevron[aria-expanded="true"] svg {
+    transform: rotate(90deg);
+  }
+
+  .crumbbar__chevron:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* position: fixed — see the script's own comment on positionMenu() for
+   * why (module pages sit inside .core-stage, which clips with
+   * overflow: hidden). top/left are set in JS from the trigger's real
+   * on-screen position; this file only owns how it looks once placed. */
+  .crumbbar__menu {
+    position: fixed;
+    z-index: 40;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    min-width: 148px;
+    max-width: 240px;
+    max-height: min(320px, 60vh);
+    overflow-y: auto;
+    /* Explicit, not left to default: setting only overflow-y away from
+     * "visible" makes overflow-x compute to "auto" too per spec (the two
+     * axes can't independently be "visible"/non-"visible" — the browser
+     * promotes the other one), which is exactly what surfaced a 1-2px
+     * horizontal scrollbar here. It wasn't real content spilling out —
+     * .crumbbar__menu-item's own offsetWidth measured 148px against its
+     * <li>'s 138px clientWidth, a sub-pixel rounding gap in this
+     * position:fixed list's own shrink-to-fit width math (letter-spacing
+     * is fractional-em, which doesn't always round the same way twice).
+     * This list is meant to scroll vertically only anyway, so declaring
+     * that outright is the correct fix, not a cover-up. */
+    overflow-x: hidden;
+    background: linear-gradient(180deg, rgba(10, 21, 31, 0.98), rgba(7, 16, 24, 0.98));
+    border: 1px solid rgba(143, 186, 214, 0.28);
+    border-radius: 4px;
+    /* A small functional shadow only, for separating a floating panel
+     * from arbitrary page content behind it — not the shell's own
+     * --shadow token (0 24px 80px), which is sized for the whole
+     * core-stage panel and would read as a glow on something this small. */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.36);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 140ms ease, transform 140ms ease;
+    pointer-events: none;
+  }
+
+  .crumbbar__menu[hidden] {
+    display: none;
+  }
+
+  .crumbbar__menu[data-open="true"] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .crumbbar__menu-item {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 3px;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #d7e7f4;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 140ms ease, color 140ms ease;
+  }
+
+  /* A hair of daylight between rows so two adjacent items read as
+   * distinct, not just a taller single block — skipped on the last item
+   * so it doesn't add slack before the menu's own bottom padding. */
+  .crumbbar__menu li:not(:last-child) {
+    margin-bottom: 2px;
+  }
+
+  .crumbbar__menu-item:hover,
+  .crumbbar__menu-item:focus-visible {
+    background: rgba(83, 198, 224, 0.12);
+    color: var(--accent-strong);
+  }
+
+  .crumbbar__menu-item:focus-visible {
+    outline: 1px solid var(--accent-strong);
+    outline-offset: -1px;
+  }
+
+  .crumbbar__menu-item--current {
     color: var(--accent-strong);
   }
 
@@ -218,11 +727,6 @@ const { crumbs, backHref, backLabel } = Astro.props;
     }
     .crumbbar__trail {
       font-size: 0.64rem;
-      gap: 6px;
-    }
-    .crumbbar__back {
-      width: 26px;
-      height: 26px;
     }
   }
 </style>
