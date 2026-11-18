@@ -137,8 +137,8 @@
           "es": "Nemulo ayuda a los negocios a organizar sus citas, aprovechar mejor sus horarios y reducir tareas administrativas. Cada negocio tiene su propia página pública de reservas y un panel para gestionar su agenda."
         },
         {
-          "en": "It is not deployed to the public yet. It is in development and internal testing, so there is no public link.",
-          "es": "Todavía no está desplegado al público. Está en desarrollo y en pruebas internas, por eso no hay enlace público."
+          "en": "It is not deployed to the public yet. It is in development and internal testing.",
+          "es": "Todavía no está desplegado al público. Está en desarrollo y en pruebas internas."
         }
       ]
     },
@@ -158,8 +158,8 @@
             "es": "Correos de confirmación y recordatorio con un enlace seguro para cancelar, cambiar o repetir"
           },
           {
-            "en": "Access to all their appointments through a magic link",
-            "es": "Acceso a todas sus citas con un enlace mágico"
+            "en": "Access to all their appointments without a password, through a sign-in link sent by email",
+            "es": "Acceso a todas sus citas sin contraseña, con un enlace de acceso que reciben por correo"
           }
         ]
       },
