@@ -61,7 +61,7 @@ const pageData = {
     {d.template === 'project' && !isFlagship && <ProjectTemplate module={module} lang={lang} />}
     {isFlagship && <FlagshipProject module={module} lang={lang} />}
   </ModuleFrame>
-  {isFlagship && <Lightbox slot="after-main" lang={lang} />}
+  {(isFlagship || (d.template === 'project' && d.project.media.some((m) => m.type !== 'video'))) && <Lightbox slot="after-main" lang={lang} />}
 </BaseLayout>
 
 <script>

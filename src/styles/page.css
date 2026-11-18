@@ -437,7 +437,8 @@ div.closing p { margin: 0; max-width: 30ch; }
 .figure img { width: 100%; height: auto; border: 1px solid var(--rule); }
 .figure figcaption { margin-top: 10px; font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); }
 .figure--cover img { aspect-ratio: 21 / 9; object-fit: cover; object-position: center 40%; }
-.figure--logo img { aspect-ratio: auto; object-fit: contain; max-height: 320px; background: var(--bg-raise); }
+.figure--logo { display: grid; place-items: center; padding: clamp(28px, 6vw, 64px) 16px; border: 1px solid var(--rule); background: radial-gradient(circle at 50% 45%, rgba(40, 110, 200, 0.18), transparent 60%), var(--bg-raise); }
+.figure--logo img { width: auto; max-width: min(220px, 60%); max-height: 220px; aspect-ratio: auto; object-fit: contain; border: 0; background: none; }
 
 .gallery { display: grid; gap: 28px; }
 

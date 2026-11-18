@@ -1,7 +1,8 @@
 ---
 /** Plantilla "Proyecto" (layout standard). Los proyectos "flagship" usan FlagshipProject. */
-import { Image } from 'astro:assets';
-import { tr, type Locale } from '../../lib/i18n';
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { tr, ui, type Locale } from '../../lib/i18n';
 import type { ModuleEntry } from '../../lib/modules';
 import PageHeader from '../ui/PageHeader.astro';
 import Sec from '../ui/Sec.astro';
@@ -11,6 +12,15 @@ interface Props { module: ModuleEntry; lang: Locale }
 const { module, lang } = Astro.props;
 if (module.data.template !== 'project') throw new Error('ProjectTemplate necesita un módulo "project"');
 const p = module.data.project;
+const t = ui(lang);
+// Las imágenes de la galería se abren en el visor a tamaño completo.
+const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.min(1920, src.width), format: 'webp', quality: 85 })).src;
+const media = await Promise.all(
+  p.media.map(async (item) => ({
+    item,
+    full: item.type === 'image' ? [await full(item.src)] : item.type === 'composite' ? await Promise.all(item.parts.map((x) => full(x.src))) : [],
+  })),
+);
 let n = 0;
 ---
 <article class="page-body">
@@ -52,22 +62,24 @@ let n = 0;
     </Sec>
   ))}
 
-  {p.media.length > 0 && (
+  {media.length > 0 && (
     <div class="gallery-grid">
-      {p.media.map((item) => (
+      {media.map(({ item, full }) => item.type === 'video' ? (
         <figure class="shot">
-          {item.type === 'video' && (
-            <video controls muted playsinline preload="metadata" aria-label={tr(item.alt, lang)}>
-              <source src={item.src} type={item.src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
-            </video>
-          )}
+          <video controls muted playsinline preload="metadata" aria-label={tr(item.alt, lang)}>
+            <source src={item.src} type={item.src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+          </video>
+          <figcaption>{tr(item.caption, lang)}</figcaption>
+        </figure>
+      ) : (
+        <figure class="shot gallery__item" tabindex="0" role="button" aria-label={`${t.lightbox.openMedia}: ${tr(item.type === 'image' ? item.alt : item.caption, lang)}`}>
           {item.type === 'image' && (
-            <Image src={item.src} alt={tr(item.alt, lang)} widths={[480, 960]} sizes="(max-width: 860px) 92vw, 480px" loading="lazy" decoding="async" />
+            <Image src={item.src} alt={tr(item.alt, lang)} widths={[480, 960]} sizes="(max-width: 860px) 92vw, 480px" loading="lazy" decoding="async" data-full={full[0]} />
           )}
           {item.type === 'composite' && (
-            <div class="shot__pair">
-              {item.parts.map((part) => (
-                <Image src={part.src} alt={tr(part.alt, lang)} widths={[480, 960]} sizes="(max-width: 860px) 92vw, 480px" loading="lazy" decoding="async" />
+            <div class="shot__pair gallery__composite">
+              {item.parts.map((part, j) => (
+                <Image src={part.src} alt={tr(part.alt, lang)} widths={[480, 960]} sizes="(max-width: 860px) 92vw, 480px" loading="lazy" decoding="async" data-full={full[j]} />
               ))}
             </div>
           )}
