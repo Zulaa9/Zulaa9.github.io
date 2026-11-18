@@ -6,8 +6,8 @@ const modules = readModules();
 const byId = (id: string) => clone(modules.find((m) => m.id === id)!);
 
 describe('contenido actual', () => {
-  it('existen los seis módulos del portfolio', () => {
-    expect(modules.map((m) => m.id).sort()).toEqual(['about', 'capabilities', 'contact', 'keyping', 'portfolio-core', 'projects']);
+  it('existen los ocho módulos del portfolio', () => {
+    expect(modules.map((m) => m.id).sort()).toEqual(['about', 'capabilities', 'contact', 'framewise', 'keyping', 'nemulo', 'portfolio-core', 'projects']);
   });
 
   it.each(modules.map((m) => [m.id, m.data]))('"%s" cumple el esquema', (_id, data) => {
@@ -29,8 +29,8 @@ describe('contenido actual', () => {
     expect(byId('keyping').data.project.layout).toBe('flagship');
   });
 
-  it('las rutas son las del sitio anterior', () => {
-    expect(modules.map((m) => m.data.path).sort()).toEqual(['about', 'capabilities', 'contact', 'projects', 'projects/keyping', 'projects/portfolio-core']);
+  it('las rutas son las del sitio anterior más los proyectos nuevos', () => {
+    expect(modules.map((m) => m.data.path).sort()).toEqual(['about', 'capabilities', 'contact', 'projects', 'projects/framewise', 'projects/keyping', 'projects/nemulo', 'projects/portfolio-core']);
   });
 
   it('no quedan enlaces al repositorio antiguo ni a zulaa9.github.io como web', () => {

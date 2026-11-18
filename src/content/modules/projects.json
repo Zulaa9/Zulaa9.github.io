@@ -32,8 +32,8 @@
         "es": "Proyectos"
       },
       "copy": {
-        "en": "Project gallery centered on KeyPing as the flagship product, with supporting projects around it.",
-        "es": "Galería de proyectos centrada en KeyPing como producto principal, con proyectos de soporte."
+        "en": "Project gallery: KeyPing as the flagship product, the Framewise browser extension, the Nemulo SaaS in development and this portfolio.",
+        "es": "Galería de proyectos: KeyPing como producto principal, la extensión Framewise, el SaaS Nemulo en desarrollo y este portfolio."
       }
     },
     "position": {
@@ -52,8 +52,8 @@
         "es": "Proyectos"
       },
       "lead": {
-        "en": "Product work centered on KeyPing as the flagship product, complemented by supporting system projects.",
-        "es": "Trabajo de producto centrado en KeyPing como producto principal, complementado con proyectos de soporte."
+        "en": "Product work centered on KeyPing as the flagship product, alongside a published browser extension, a SaaS in development and the system behind this portfolio.",
+        "es": "Trabajo de producto centrado en KeyPing como producto principal, junto a una extensión de navegador publicada, un SaaS en desarrollo y el sistema que hay detrás de este portfolio."
       }
     }
   }

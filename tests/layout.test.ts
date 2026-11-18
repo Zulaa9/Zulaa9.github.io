@@ -6,7 +6,7 @@ import { readModules } from './helpers';
 describe('disposición de nodos del Core', () => {
   const modules = readModules().filter((m) => m.data.visible);
 
-  it('con los módulos actuales conserva exactamente las posiciones anteriores', () => {
+  it('con los módulos actuales respeta sus posiciones manuales', () => {
     const pos = layoutNodes(modules.map((m) => ({ id: m.id, position: m.data.node.position, parent: m.data.parent })));
     expect(Object.fromEntries(pos)).toEqual({
       about: { x: 0.22, y: 0.24 },
@@ -14,6 +14,8 @@ describe('disposición de nodos del Core', () => {
       contact: { x: 0.31, y: 0.64 },
       projects: { x: 0.78, y: 0.28 },
       keyping: { x: 0.74, y: 0.48 },
+      framewise: { x: 0.88, y: 0.42 },
+      nemulo: { x: 0.65, y: 0.7 },
       'portfolio-core': { x: 0.86, y: 0.66 },
     });
   });
