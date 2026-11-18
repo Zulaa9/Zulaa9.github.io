@@ -3,6 +3,8 @@
  * fondo y recordar el idioma elegido al pulsar EN/ES.
  */
 export const LANG_STORAGE_KEY = 'system_core_lang';
+/** Marca de un solo uso: el Core ya estaba arrancado al cambiar de idioma. */
+export const CORE_STARTED_KEY = 'system_core_started';
 
 export function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -77,6 +79,10 @@ export function initShell(): void {
         return;
       }
       storeLang(lang);
+      // Si el Core ya está arrancado, el otro idioma lo muestra arrancado sin pedir Start System.
+      if (document.getElementById('start-core-button') && !body.classList.contains('awaiting-start')) {
+        try { sessionStorage.setItem(CORE_STARTED_KEY, '1'); } catch { /* Ignorar. */ }
+      }
       // Conserva el contexto de navegación (?from=…) al cambiar de idioma.
       const params = new URLSearchParams(location.search);
       params.delete('lang');

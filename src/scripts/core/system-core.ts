@@ -6,7 +6,7 @@
  */
 import { MathUtils } from 'three';
 import { createCoreScene, LIGHTS, type CoreScene } from './scene';
-import { initShell, prefersReducedMotion, startMeteorLoop } from '../shell';
+import { CORE_STARTED_KEY, initShell, prefersReducedMotion, startMeteorLoop } from '../shell';
 
 interface CoreNode {
   id: string;
@@ -68,6 +68,13 @@ export function initSystemCore(): void {
   const returningFromModule = nodeById.has(entrySource);
   // Vista previa del panel de administración: muestra el Core ya arrancado.
   const previewMode = import.meta.env.DEV && entrySource === '__admin';
+  let startedBeforeLangSwitch = false;
+  try {
+    startedBeforeLangSwitch = sessionStorage.getItem(CORE_STARTED_KEY) === '1';
+    sessionStorage.removeItem(CORE_STARTED_KEY);
+  } catch {
+    // Ignorar.
+  }
 
   initShell();
 
@@ -599,7 +606,7 @@ export function initSystemCore(): void {
     return;
   }
 
-  if (previewMode) {
+  if (previewMode || (startedBeforeLangSwitch && !returningFromModule)) {
     startMeteorLoop();
     fastForwardToReadyState();
   } else if (returningFromModule) {
