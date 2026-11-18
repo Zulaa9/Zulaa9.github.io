@@ -170,7 +170,18 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
       stackTitle: localized.optional(),
       cover: z.strictObject({ src: image(), alt: localized, fit: z.enum(['logo', 'cover']).default('cover') }),
       links: z.array(link).default([]),
-      status: z.strictObject({ label: localized, value: localized }).optional(),
+      /**
+       * Estado del proyecto. `tone` cambia el indicador (neutral, live = publicado,
+       * preview = aún no publicado) y `onCard` lo muestra también en la tarjeta del índice.
+       */
+      status: z
+        .strictObject({
+          label: localized,
+          value: localized,
+          tone: z.enum(['neutral', 'live', 'preview']).default('neutral'),
+          onCard: z.boolean().default(false),
+        })
+        .optional(),
       header,
       description: z.strictObject({ title: localized, paragraphs: localizedList.min(1) }),
       sections: z.array(titledList).default([]),

@@ -12,7 +12,7 @@ const LABELS = {
   position: 'Posición en escritorio (0–1)', x: 'Horizontal (x)', y: 'Vertical (y)', featured: 'Destacado',
   project: 'Proyecto', layout: 'Diseño', name: 'Nombre', cardEyebrow: 'Antetítulo de la tarjeta', summary: 'Resumen (tarjeta)',
   enterLabel: 'Texto del botón para abrir', stack: 'Stack', stackTitle: 'Título del stack', cover: 'Portada', src: 'Archivo',
-  alt: 'Texto alternativo', fit: 'Encaje', links: 'Enlaces', kind: 'Tipo', label: 'Texto', url: 'URL', status: 'Estado',
+  alt: 'Texto alternativo', fit: 'Encaje', links: 'Enlaces', kind: 'Tipo', label: 'Texto', url: 'URL', status: 'Estado', tone: 'Indicador (neutral / publicado / no publicado)', onCard: 'Mostrar en la tarjeta del índice',
   value: 'Valor', header: 'Cabecera', eyebrow: 'Antetítulo', lead: 'Entradilla', paragraphs: 'Párrafos', sections: 'Listas',
   items: 'Elementos', media: 'Imágenes y vídeos', caption: 'Pie', placement: 'Ubicación', compact: 'Compacta', parts: 'Imágenes',
   flagship: 'Vista de producto estrella', logo: 'Logotipo', punchline: 'Frase destacada', pills: 'Etiquetas', actions: 'Botones',
@@ -28,7 +28,7 @@ const LABELS = {
 
 const ENUMS = {
   layout: ['standard', 'flagship'], fit: ['cover', 'logo'], kind: ['external', 'github', 'download'], style: ['bullets', 'chips'],
-  leadSize: ['normal', 'large'], placement: ['hero', 'rail', 'extra'],
+  leadSize: ['normal', 'large'], placement: ['hero', 'rail', 'extra'], tone: ['neutral', 'live', 'preview'],
 };
 const L = () => ({ en: '', es: '' });
 const BLOCK_SKELETONS = {
@@ -51,7 +51,7 @@ const ARRAY_SKELETONS = {
 /** Campos opcionales que se pueden añadir o quitar, por tipo de objeto (ruta sin índices). */
 const OPTIONAL = {
   node: { mobileLabel: L, position: () => ({ x: 0.5, y: 0.14 }), featured: () => false },
-  project: { status: () => ({ label: L(), value: L() }), stackTitle: L },
+  project: { status: () => ({ label: L(), value: L(), tone: 'neutral', onCard: false }), stackTitle: L },
   about: { photo: () => ({ src: '../../assets/images/placeholder.png', alt: L() }), nextStep: () => ({ title: L(), contactModule: 'contact', contactLabel: L() }), closing: L },
   'about.nextStep': { cvLabel: L, cvUrl: () => 'https://' },
   'about.experience.items[]': { highlight: () => ({ label: L(), value: L() }) },
@@ -80,7 +80,7 @@ async function api(path, options = {}) {
 const isLocalized = (v) => v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 2 && 'en' in v && 'es' in v && typeof v.en === 'string';
 const clone = (v) => JSON.parse(JSON.stringify(v));
 const shapeOf = (path) => path.replace(/\[\d+\]/g, '[]');
-const KEEP_ON_CLEAR = new Set(['type', 'kind', 'variant', 'style', 'placement', 'fit', 'layout', 'src', 'logo', 'compact']);
+const KEEP_ON_CLEAR = new Set(['tone', 'onCard', 'type', 'kind', 'variant', 'style', 'placement', 'fit', 'layout', 'src', 'logo', 'compact']);
 function cleared(v, key = '') {
   if (Array.isArray(v)) return v.length ? [cleared(v[0])] : [];
   if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, KEEP_ON_CLEAR.has(k) ? clone(x) : cleared(x, k)]));

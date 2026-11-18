@@ -90,6 +90,16 @@ describe('datos no válidos', () => {
     expect(issues(d).join('\n')).toMatch(/Ruta no válida/);
   });
 
+  it('estado de proyecto: sin indicador vale "neutral" y fuera de la tarjeta; un indicador desconocido es un error', () => {
+    const d = byId('portfolio-core').data;
+    d.project.status = { label: { en: 'Status', es: 'Estado' }, value: { en: 'Live', es: 'Publicado' } };
+    const r = moduleSchema.safeParse(d);
+    expect(r.success).toBe(true);
+    if (r.success && r.data.template === 'project') expect(r.data.project.status).toMatchObject({ tone: 'neutral', onCard: false });
+    d.project.status.tone = 'draft';
+    expect(issues(d).join('\n')).toMatch(/project\.status\.tone/);
+  });
+
   it('plantilla desconocida', () => {
     const d = byId('about').data;
     d.template = 'blog';

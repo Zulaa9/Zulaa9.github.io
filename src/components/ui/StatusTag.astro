@@ -1,0 +1,10 @@
+---
+/** Indicador de estado de un proyecto: punto de color + "Etiqueta: valor", sin caja. */
+interface Props { label: string; value: string; tone?: 'neutral' | 'live' | 'preview'; class?: string }
+const { label, value, tone = 'neutral', class: extra } = Astro.props;
+---
+<p class:list={['status-tag', `status-tag--${tone}`, extra]}>
+  <span class="status-tag__dot" aria-hidden="true"></span>
+  <span class="status-tag__label">{label}:</span>
+  <span class="status-tag__value">{value}</span>
+</p>

@@ -549,3 +549,32 @@ body.is-lightbox-open { overflow: hidden; }
   .crumbs { font-size: 0.64rem; gap: 6px; }
 }
 
+
+/* ---------- Estado de proyecto (texto con punto, sin caja) ---------- */
+.status-tag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.status-tag__dot {
+  flex: none;
+  align-self: center;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.status-tag__label { color: var(--muted); text-transform: uppercase; }
+.status-tag--live .status-tag__dot { background: var(--ok); box-shadow: 0 0 0 3px rgba(88, 216, 146, 0.16); }
+.status-tag--live .status-tag__value { color: #a9dcc0; }
+.status-tag--preview .status-tag__dot { background: var(--warn); box-shadow: 0 0 0 3px rgba(242, 163, 94, 0.18); }
+.status-tag--preview .status-tag__value { color: #f5cfa8; }
+.phead .status-tag { margin-top: 18px; }
+.proj__body .status-tag { margin: 0 0 16px; }

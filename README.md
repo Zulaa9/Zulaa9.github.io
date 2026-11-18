@@ -156,7 +156,7 @@ src/
   components/ModulePage.astro  Elige plantilla y estilos
   pages/                   Rutas: /, /es/, /[...path], /es/[...path], 404
   scripts/                 Cliente: escena 3D, navegación, lightbox, idioma
-  styles/                  Estilos por plantilla + shared.css
+  styles/                  base.css (todas), core.css (Core), page.css (páginas de módulo)
   assets/                  Imágenes optimizadas por Astro (WebP)
 public/                    Favicon, iconos, robots.txt, vídeo
 admin/                     Panel local (solo en `astro dev`)
@@ -174,6 +174,13 @@ Cada archivo de `src/content/modules/` es un módulo con:
 - `parent`: módulo padre para las migas de pan y la posición del nodo (un solo nivel).
 - `seo`, `crumb` y `node`: título y descripción por idioma, texto de la miga y nodo del Core (título, metadato, texto del panel inferior, posición opcional `x`/`y` entre 0.08 y 0.92 y `featured`).
 - Un bloque con el nombre de la plantilla (`project`, `about`, `section`, `projects`) con su contenido.
+
+En la plantilla `project`, `status` (opcional) lleva `label` y `value` por idioma y dos campos más:
+
+- `tone`: `neutral` (por defecto; el estado sale como dato en el lateral de la cabecera), `live` (publicado, punto verde) o `preview` (aún no publicado, punto ámbar). Con `live` o `preview` el estado se muestra bajo la entradilla de la página.
+- `onCard`: `true` para mostrar el estado también en la tarjeta del índice de proyectos (por defecto `false`).
+
+Los módulos que no tienen estos campos siguen funcionando igual.
 
 El build valida todo y falla con un mensaje claro cuando falta un campo obligatorio, hay rutas repetidas, una URL no es válida (`https://` o `mailto:`), una imagen o vídeo no existe, el padre no existe, hay más de 10 módulos visibles o ninguno destacado.
 

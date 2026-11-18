@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import { tr, localePath, ui, type Locale } from '../../lib/i18n';
 import type { ModuleEntry } from '../../lib/modules';
 import PageHeader from '../ui/PageHeader.astro';
+import StatusTag from '../ui/StatusTag.astro';
 
 interface Props { module: ModuleEntry; all: ModuleEntry[]; lang: Locale }
 const { module, all, lang } = Astro.props;
@@ -30,6 +31,7 @@ const projects = all.filter((m) => m.data.visible && m.data.template === 'projec
             <p class="kicker"><span class="kicker__index">{String(i + 1).padStart(2, '0')}</span> {tr(p.cardEyebrow, lang)}</p>
             <h2 class="proj__title"><a href={href}>{tr(p.name, lang)}</a></h2>
             <p class="proj__summary">{tr(p.summary, lang)}</p>
+            {p.status?.onCard && <StatusTag label={tr(p.status.label, lang)} value={tr(p.status.value, lang)} tone={p.status.tone} />}
             <ul class="tech tech--small">{p.stack.map((s) => <li>{tr(s, lang)}</li>)}</ul>
             <div class="actions">
               <a class:list={['btn', { 'btn--primary': p.featured }]} href={href}>{tr(p.enterLabel, lang)} <span aria-hidden="true">→</span></a>

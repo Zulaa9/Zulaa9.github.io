@@ -5,6 +5,7 @@ import { tr, type Locale } from '../../lib/i18n';
 import type { ModuleEntry } from '../../lib/modules';
 import PageHeader from '../ui/PageHeader.astro';
 import Sec from '../ui/Sec.astro';
+import StatusTag from '../ui/StatusTag.astro';
 
 interface Props { module: ModuleEntry; lang: Locale }
 const { module, lang } = Astro.props;
@@ -21,7 +22,10 @@ let n = 0;
         ))}
       </div>
     )}
-    {p.status && (
+    {p.status && p.status.tone !== 'neutral' && (
+      <StatusTag label={tr(p.status.label, lang)} value={tr(p.status.value, lang)} tone={p.status.tone} />
+    )}
+    {p.status && p.status.tone === 'neutral' && (
       <dl class="spec spec--compact" slot="aside">
         <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>
       </dl>

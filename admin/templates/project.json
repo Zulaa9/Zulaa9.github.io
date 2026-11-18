@@ -97,7 +97,9 @@
       "value": {
         "en": "In development",
         "es": "En desarrollo"
-      }
+      },
+      "tone": "neutral",
+      "onCard": false
     },
     "header": {
       "eyebrow": {
