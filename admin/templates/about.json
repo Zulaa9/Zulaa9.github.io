@@ -1,0 +1,135 @@
+{
+  "$admin": {
+    "label": "Sobre mí",
+    "description": "Perfil: presentación, foto, experiencia, enfoque y tecnologías."
+  },
+  "template": "about",
+  "order": 0,
+  "visible": false,
+  "path": "__ID__",
+  "crumb": {
+    "en": "__TITLE__",
+    "es": "__TITLE__"
+  },
+  "seo": {
+    "title": {
+      "en": "__TITLE__ | System Core",
+      "es": "__TITLE__ | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Description for search engines.",
+      "es": "Descripción para buscadores."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "__TITLE__",
+      "es": "__TITLE__"
+    },
+    "meta": {
+      "en": "Module",
+      "es": "Módulo"
+    },
+    "dock": {
+      "title": {
+        "en": "__TITLE__",
+        "es": "__TITLE__"
+      },
+      "copy": {
+        "en": "Short description shown in the Core info panel.",
+        "es": "Descripción breve que aparece en el panel del Core."
+      }
+    }
+  },
+  "about": {
+    "header": {
+      "eyebrow": {
+        "en": "ABOUT",
+        "es": "SOBRE MÍ"
+      },
+      "title": {
+        "en": "__TITLE__",
+        "es": "__TITLE__"
+      },
+      "lead": {
+        "en": "Lead sentence.",
+        "es": "Frase principal."
+      },
+      "paragraphs": [
+        {
+          "en": "Paragraph.",
+          "es": "Párrafo."
+        }
+      ]
+    },
+    "photo": {
+      "src": "../../assets/images/placeholder.png",
+      "alt": {
+        "en": "Profile photo",
+        "es": "Foto de perfil"
+      }
+    },
+    "experience": {
+      "title": {
+        "en": "Experience",
+        "es": "Experiencia"
+      },
+      "items": [
+        {
+          "role": {
+            "en": "Company - Role",
+            "es": "Empresa - Puesto"
+          },
+          "date": {
+            "en": "2024 - Present",
+            "es": "2024 - Actualidad"
+          },
+          "copy": {
+            "en": "What you do there.",
+            "es": "Qué haces allí."
+          }
+        }
+      ]
+    },
+    "focus": {
+      "title": {
+        "en": "What I focus on",
+        "es": "En qué me enfoco"
+      },
+      "items": [
+        {
+          "en": "Focus item",
+          "es": "Elemento de enfoque"
+        }
+      ]
+    },
+    "primarySkills": {
+      "title": {
+        "en": "Core technologies",
+        "es": "Tecnologías core"
+      },
+      "items": [
+        {
+          "en": "TypeScript",
+          "es": "TypeScript"
+        }
+      ]
+    },
+    "secondarySkills": {
+      "title": {
+        "en": "Also worked with",
+        "es": "También he trabajado con"
+      },
+      "items": [
+        {
+          "en": "Git",
+          "es": "Git"
+        }
+      ]
+    },
+    "closing": {
+      "en": "Closing statement.",
+      "es": "Frase de cierre."
+    }
+  }
+}

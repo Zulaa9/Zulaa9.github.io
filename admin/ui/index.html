@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <meta name="admin-token" content="__ADMIN_TOKEN__" />
+  <title>Panel del portfolio (local)</title>
+  <link rel="stylesheet" href="/__admin/app.css" />
+</head>
+<body>
+  <header class="bar">
+    <div>
+      <strong>Panel del portfolio</strong>
+      <span class="muted">Solo local · escribe en <code>src/content/modules/</code></span>
+    </div>
+    <div class="bar__actions">
+      <a class="btn btn--ghost" href="/" target="_blank" rel="noopener">Abrir el sitio (EN)</a>
+      <a class="btn btn--ghost" href="/es/" target="_blank" rel="noopener">Abrir el sitio (ES)</a>
+    </div>
+  </header>
+
+  <div id="problems" class="problems" hidden></div>
+
+  <main class="layout">
+    <aside class="sidebar" aria-label="Módulos">
+      <div class="sidebar__head">
+        <h2>Módulos</h2>
+        <button class="btn btn--primary" id="new-module" type="button">+ Nuevo</button>
+      </div>
+      <p class="muted small">Arrastra para reordenar (o usa ↑ ↓). El orden es el de los nodos del Core, el menú móvil y la galería de proyectos.</p>
+      <ol id="module-list" class="module-list"></ol>
+      <p class="muted small" id="node-count"></p>
+    </aside>
+
+    <section class="editor" aria-label="Editor">
+      <div id="editor-empty" class="empty">
+        <p>Selecciona un módulo para editarlo o crea uno nuevo a partir de una plantilla.</p>
+      </div>
+      <form id="editor" hidden novalidate>
+        <div class="editor__head">
+          <div>
+            <h2 id="editor-title"></h2>
+            <p class="muted small" id="editor-meta"></p>
+          </div>
+          <div class="editor__actions">
+            <button class="btn" type="button" id="btn-duplicate">Duplicar</button>
+            <button class="btn" type="button" id="btn-toggle">Ocultar</button>
+            <button class="btn btn--danger" type="button" id="btn-delete">Eliminar</button>
+            <button class="btn" type="button" id="btn-revert">Descartar cambios</button>
+            <button class="btn btn--primary" type="submit" id="btn-save">Guardar</button>
+          </div>
+        </div>
+        <div id="messages" class="messages" aria-live="polite"></div>
+        <div id="fields"></div>
+      </form>
+    </section>
+
+    <section class="preview" aria-label="Vista previa">
+      <div class="preview__head">
+        <h2>Vista previa</h2>
+        <div class="preview__controls">
+          <select id="preview-lang" aria-label="Idioma de la vista previa">
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+          </select>
+          <select id="preview-target" aria-label="Página">
+            <option value="module">Página del módulo</option>
+            <option value="core">System Core</option>
+          </select>
+          <button class="btn" type="button" id="preview-reload">Recargar</button>
+          <a class="btn btn--ghost" id="preview-open" href="/" target="_blank" rel="noopener">Abrir ↗</a>
+        </div>
+      </div>
+      <p class="muted small">Es el sitio real servido por <code>astro dev</code>, con los cambios ya guardados. Los módulos ocultos se pueden previsualizar aquí, pero no se publican.</p>
+      <iframe id="preview-frame" title="Vista previa del sitio" src="about:blank"></iframe>
+    </section>
+  </main>
+
+  <dialog id="new-dialog">
+    <form method="dialog" id="new-form">
+      <h2>Nuevo módulo</h2>
+      <label>Plantilla
+        <select id="new-template" required></select>
+      </label>
+      <p class="muted small" id="new-template-desc"></p>
+      <label>Título
+        <input id="new-title" required placeholder="Mi proyecto" />
+      </label>
+      <label>Identificador (nombre del archivo y de la URL)
+        <input id="new-id" pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="mi-proyecto" />
+      </label>
+      <p class="muted small">Se crea oculto; podrás editarlo y previsualizarlo antes de hacerlo visible.</p>
+      <div class="dialog__actions">
+        <button class="btn" value="cancel" formnovalidate>Cancelar</button>
+        <button class="btn btn--primary" value="ok" id="new-create">Crear</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input type="file" id="file-input" hidden />
+  <script type="module" src="/__admin/app.js"></script>
+</body>
+</html>

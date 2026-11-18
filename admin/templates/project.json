@@ -1,0 +1,144 @@
+{
+  "$admin": {
+    "label": "Proyecto",
+    "description": "Página de proyecto con portada, descripción, stack, enlaces, medios y listas. Aparece como tarjeta en el índice de proyectos."
+  },
+  "template": "project",
+  "order": 0,
+  "visible": false,
+  "path": "projects/__ID__",
+  "parent": "projects",
+  "crumb": {
+    "en": "__TITLE__",
+    "es": "__TITLE__"
+  },
+  "seo": {
+    "title": {
+      "en": "__TITLE__ | System Core",
+      "es": "__TITLE__ | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Description for search engines.",
+      "es": "Descripción para buscadores."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "__TITLE__",
+      "es": "__TITLE__"
+    },
+    "meta": {
+      "en": "Project",
+      "es": "Proyecto"
+    },
+    "dock": {
+      "title": {
+        "en": "__TITLE__",
+        "es": "__TITLE__"
+      },
+      "copy": {
+        "en": "Short description shown in the Core info panel.",
+        "es": "Descripción breve que aparece en el panel del Core."
+      }
+    }
+  },
+  "project": {
+    "layout": "standard",
+    "name": {
+      "en": "__TITLE__",
+      "es": "__TITLE__"
+    },
+    "cardEyebrow": {
+      "en": "PROJECT",
+      "es": "PROYECTO"
+    },
+    "summary": {
+      "en": "One-sentence summary for the project card.",
+      "es": "Resumen de una frase para la tarjeta del proyecto."
+    },
+    "enterLabel": {
+      "en": "Open project",
+      "es": "Abrir proyecto"
+    },
+    "featured": false,
+    "stack": [
+      {
+        "en": "TypeScript",
+        "es": "TypeScript"
+      }
+    ],
+    "stackTitle": {
+      "en": "Technologies",
+      "es": "Tecnologías"
+    },
+    "cover": {
+      "src": "../../assets/images/placeholder.png",
+      "alt": {
+        "en": "__TITLE__ preview",
+        "es": "Vista previa de __TITLE__"
+      },
+      "fit": "cover"
+    },
+    "links": [
+      {
+        "kind": "github",
+        "label": {
+          "en": "GitHub",
+          "es": "GitHub"
+        },
+        "url": "https://github.com/Zulaa9"
+      }
+    ],
+    "status": {
+      "label": {
+        "en": "Status",
+        "es": "Estado"
+      },
+      "value": {
+        "en": "In development",
+        "es": "En desarrollo"
+      }
+    },
+    "header": {
+      "eyebrow": {
+        "en": "PROJECT MODULE",
+        "es": "MÓDULO DE PROYECTO"
+      },
+      "title": {
+        "en": "__TITLE__",
+        "es": "__TITLE__"
+      },
+      "lead": {
+        "en": "What the project is, in one line.",
+        "es": "Qué es el proyecto, en una línea."
+      }
+    },
+    "description": {
+      "title": {
+        "en": "What this project is",
+        "es": "Qué es este proyecto"
+      },
+      "paragraphs": [
+        {
+          "en": "Describe the project.",
+          "es": "Describe el proyecto."
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": {
+          "en": "Highlights",
+          "es": "Puntos clave"
+        },
+        "items": [
+          {
+            "en": "First highlight",
+            "es": "Primer punto"
+          }
+        ]
+      }
+    ],
+    "media": []
+  }
+}
