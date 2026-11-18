@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import { tr, localePath, type Locale } from '../../lib/i18n';
+import type { ModuleEntry } from '../../lib/modules';
+
+interface Props { module: ModuleEntry; all: ModuleEntry[]; lang: Locale }
+const { module, all, lang } = Astro.props;
+if (module.data.template !== 'about') throw new Error('AboutTemplate necesita un módulo "about"');
+const d = module.data.about;
+const contact = d.nextStep ? all.find((m) => m.id === d.nextStep!.contactModule && m.data.visible) : undefined;
+---
+<section class="about-shell" aria-label={tr(module.data.node.title, lang)}>
+  <header class="about-header">
+    <div class="about-intro">
+      <div class="about-copy">
+        <p class="eyebrow">{tr(d.header.eyebrow, lang)}</p>
+        <h1>{tr(d.header.title, lang)}</h1>
+        <p class="about-lead">{tr(d.header.lead, lang)}</p>
+        {d.header.paragraphs.map((p) => <p>{tr(p, lang)}</p>)}
+
+        {d.nextStep && (
+          <section class="about-section about-section--links">
+            <h2>{tr(d.nextStep.title, lang)}</h2>
+            <div class="about-links">
+              {contact && (
+                <a class="about-link" href={`${localePath(lang, contact.data.path)}?from=${module.id}`}>{tr(d.nextStep.contactLabel, lang)}</a>
+              )}
+              {d.nextStep.cvLabel && (d.nextStep.cvUrl
+                ? <a class="about-link" href={d.nextStep.cvUrl} target="_blank" rel="noopener noreferrer">{tr(d.nextStep.cvLabel, lang)}</a>
+                : <button class="about-link is-optional" type="button" aria-disabled="true" disabled>{tr(d.nextStep.cvLabel, lang)}</button>)}
+            </div>
+          </section>
+        )}
+      </div>
+      {d.photo && (
+        <figure class="about-photo">
+          <Image src={d.photo.src} alt={tr(d.photo.alt, lang)} widths={[420, 640, 840]} sizes="(max-width: 860px) 92vw, 420px" loading="lazy" decoding="async" />
+        </figure>
+      )}
+    </div>
+  </header>
+
+  <section class="about-section">
+    <h2>{tr(d.experience.title, lang)}</h2>
+    {d.experience.items.map((item) => (
+      <article class="about-exp-card">
+        <p class="about-exp-role">{tr(item.role, lang)}</p>
+        <p class="about-exp-date">{tr(item.date, lang)}</p>
+        <p>{tr(item.copy, lang)}</p>
+        {item.highlight && (
+          <div class="about-exp-inline">
+            <p class="about-exp-inline__label">{tr(item.highlight.label, lang)}</p>
+            <p class="about-exp-inline__value">{tr(item.highlight.value, lang)}</p>
+          </div>
+        )}
+      </article>
+    ))}
+  </section>
+
+  <div class="about-grid">
+    <section class="about-section">
+      <h2>{tr(d.focus.title, lang)}</h2>
+      <ul class="about-list">{d.focus.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+    </section>
+    <section class="about-section">
+      <h2>{tr(d.primarySkills.title, lang)}</h2>
+      <ul class="about-chip-list">{d.primarySkills.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+    </section>
+  </div>
+
+  <section class="about-section">
+    <h2>{tr(d.secondarySkills.title, lang)}</h2>
+    <ul class="about-chip-list about-chip-list--secondary">{d.secondarySkills.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+  </section>
+
+  {d.closing && (
+    <section class="about-section about-closing">
+      <p>{tr(d.closing, lang)}</p>
+    </section>
+  )}
+</section>

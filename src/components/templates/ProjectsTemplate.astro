@@ -1,0 +1,50 @@
+---
+/** Índice de proyectos: cabecera + tarjetas de los módulos "project" hijos de este módulo. */
+import { tr, localePath, ui, type Locale } from '../../lib/i18n';
+import { coverUrl } from '../../lib/images';
+import type { ModuleEntry } from '../../lib/modules';
+
+interface Props { module: ModuleEntry; all: ModuleEntry[]; lang: Locale }
+const { module, all, lang } = Astro.props;
+if (module.data.template !== 'projects') throw new Error('ProjectsTemplate necesita un módulo "projects"');
+const d = module.data.projects;
+const t = ui(lang);
+const projects = all.filter((m) => m.data.visible && m.data.template === 'project' && m.data.parent === module.id);
+const cards = await Promise.all(
+  projects.map(async (m) => {
+    if (m.data.template !== 'project') throw new Error('unreachable');
+    const p = m.data.project;
+    return { m, p, cover: await coverUrl(p.cover.src, p.cover.fit) };
+  }),
+);
+---
+<section class="projects-shell" aria-label={tr(module.data.node.title, lang)}>
+  <header class="projects-header">
+    <p class="eyebrow">{tr(d.header.eyebrow, lang)}</p>
+    <h1>{tr(d.header.title, lang)}</h1>
+    <p class="projects-lead">{tr(d.header.lead, lang)}</p>
+  </header>
+
+  <section class="projects-gallery">
+    {cards.map(({ m, p, cover }) => (
+      <article class:list={['project-card', p.featured ? 'project-card--flagship' : 'project-card--secondary']}>
+        <div
+          class:list={['project-card__media', p.cover.fit === 'logo' ? 'project-card__media--logo' : 'project-card__media--portfolio']}
+          role="img"
+          aria-label={tr(p.cover.alt, lang)}
+          style={`--cover-image: url("${cover}")`}
+        ></div>
+        <p class="project-card__eyebrow">{tr(p.cardEyebrow, lang)}</p>
+        <h2>{tr(p.name, lang)}</h2>
+        <p class="project-card__desc">{tr(p.summary, lang)}</p>
+        <ul class="stack-list">{p.stack.map((s) => <li>{tr(s, lang)}</li>)}</ul>
+        <div class="project-actions">
+          <a class:list={['project-btn', { 'project-btn--primary': p.featured }]} href={`${localePath(lang, m.data.path)}?from=${module.id}`}>{tr(p.enterLabel, lang)}</a>
+          {p.links.filter((l) => l.kind === 'github').slice(0, 1).map((l) => (
+            <a class="project-btn" href={l.url} target="_blank" rel="noopener noreferrer">{tr(l.label, lang) || t.projects.github}</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </section>
+</section>

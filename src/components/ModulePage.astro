@@ -1,0 +1,71 @@
+---
+/** Página completa de un módulo: elige la plantilla según el tipo del módulo. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ModuleFrame from './ModuleFrame.astro';
+import Lightbox from './Lightbox.astro';
+import AboutTemplate from './templates/AboutTemplate.astro';
+import SectionTemplate from './templates/SectionTemplate.astro';
+import ProjectsTemplate from './templates/ProjectsTemplate.astro';
+import ProjectTemplate from './templates/ProjectTemplate.astro';
+import FlagshipProject from './templates/FlagshipProject.astro';
+import { breadcrumbs, moduleHref, type ModuleEntry } from '../lib/modules';
+import { localePath, tr, ui, type Locale } from '../lib/i18n';
+
+import aboutCss from '../styles/about.css?url';
+import sectionCss from '../styles/section.css?url';
+import projectsCss from '../styles/projects.css?url';
+import projectCss from '../styles/project.css?url';
+import keypingCss from '../styles/keyping.css?url';
+import sharedCss from '../styles/shared.css?url';
+
+interface Props { module: ModuleEntry; all: ModuleEntry[]; lang: Locale }
+const { module, all, lang } = Astro.props;
+const t = ui(lang);
+const d = module.data;
+const isFlagship = d.template === 'project' && d.project.layout === 'flagship';
+const skin = isFlagship ? 'keyping' : d.template === 'project' ? 'project' : d.template === 'projects' ? 'projects' : d.template;
+const css = { keyping: keypingCss, project: projectCss, projects: projectsCss, about: aboutCss, section: sectionCss }[skin]!;
+const crumbs = breadcrumbs(module, all, lang, t.site.crumbCore);
+const visible = all.filter((m) => m.data.visible);
+const pageData = {
+  id: module.id,
+  skin,
+  coreHref: localePath(lang),
+  modules: Object.fromEntries(visible.map((m) => [m.id, moduleHref(m, lang)])),
+};
+---
+<BaseLayout
+  lang={lang}
+  title={tr(d.seo.title, lang)}
+  description={tr(d.seo.description, lang)}
+  path={d.path}
+  bodyClass={`${skin}-page`}
+>
+  <Fragment slot="head">
+    <link rel="stylesheet" href={css} />
+    <link rel="stylesheet" href={sharedCss} />
+    <script type="application/json" id="page-data" set:html={JSON.stringify(pageData)} />
+  </Fragment>
+  <ModuleFrame
+    skin={skin}
+    crumbs={crumbs}
+    currentId={module.id}
+    backHref={`${localePath(lang)}?from=${module.id}`}
+    backLabel={t.site.back}
+    pathLabel={t.site.screenPath}
+  >
+    {d.template === 'about' && <AboutTemplate module={module} all={all} lang={lang} />}
+    {d.template === 'section' && <SectionTemplate module={module} lang={lang} />}
+    {d.template === 'projects' && <ProjectsTemplate module={module} all={all} lang={lang} />}
+    {d.template === 'project' && !isFlagship && <ProjectTemplate module={module} lang={lang} />}
+    {isFlagship && <FlagshipProject module={module} lang={lang} />}
+  </ModuleFrame>
+  {isFlagship && <Lightbox slot="after-main" lang={lang} />}
+</BaseLayout>
+
+<script>
+  import { initModulePage } from '../scripts/module-page';
+  import { initLightbox } from '../scripts/lightbox';
+  initModulePage();
+  initLightbox();
+</script>

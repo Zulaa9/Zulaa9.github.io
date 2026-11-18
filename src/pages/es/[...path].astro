@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths } from 'astro';
+import ModulePage from '../../components/ModulePage.astro';
+import { getAllModules, getVisibleModules, type ModuleEntry } from '../../lib/modules';
+
+export const getStaticPaths = (async () => {
+  // En desarrollo también se generan los módulos ocultos para poder previsualizarlos desde el panel.
+  const pages = import.meta.env.DEV ? await getAllModules() : await getVisibleModules();
+  return pages.map((module) => ({ params: { path: module.data.path }, props: { id: module.id } }));
+}) satisfies GetStaticPaths;
+
+const all = await getAllModules();
+const module = all.find((m) => m.id === Astro.props.id) as ModuleEntry;
+---
+<ModulePage module={module} all={all} lang="es" />

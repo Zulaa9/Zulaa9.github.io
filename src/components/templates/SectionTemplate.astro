@@ -1,0 +1,92 @@
+---
+/** Plantilla "Sección genérica": cabecera + bloques (texto, lista, tarjetas, imagen, enlaces). */
+import { Image } from 'astro:assets';
+import { tr, type Locale } from '../../lib/i18n';
+import type { ModuleEntry } from '../../lib/modules';
+
+interface Props { module: ModuleEntry; lang: Locale }
+const { module, lang } = Astro.props;
+if (module.data.template !== 'section') throw new Error('SectionTemplate necesita un módulo "section"');
+const d = module.data.section;
+const isExternal = (url: string) => /^https?:/i.test(url);
+---
+<section class="section-shell" aria-label={tr(module.data.node.title, lang)}>
+  <header class="section-header">
+    <p class="eyebrow">{tr(d.header.eyebrow, lang)}</p>
+    <h1>{tr(d.header.title, lang)}</h1>
+    <p class:list={['section-lead', { 'section-lead--large': d.header.leadSize === 'large' }]}>{tr(d.header.lead, lang)}</p>
+  </header>
+
+  {d.blocks.map((b) => {
+    switch (b.type) {
+      case 'cards':
+        return (
+          <Fragment>
+            {b.title && <h2 class="block-cards-title">{tr(b.title, lang)}</h2>}
+            <section class="block-cards" aria-label={b.title ? tr(b.title, lang) : undefined}>
+              {b.cards.map((c) => (
+                <article class="block-card">
+                  {c.tag && <p class="block-card__tag">{tr(c.tag, lang)}</p>}
+                  <h2>{tr(c.title, lang)}</h2>
+                  <p class="block-card__desc">{tr(c.desc, lang)}</p>
+                  {c.points.length > 0 && <ul class="block-points">{c.points.map((p) => <li>{tr(p, lang)}</li>)}</ul>}
+                </article>
+              ))}
+            </section>
+          </Fragment>
+        );
+      case 'text':
+        if (b.variant === 'closing') {
+          return (
+            <section class="block-text--closing">
+              {b.title && <h2>{tr(b.title, lang)}</h2>}
+              {b.paragraphs.map((p) => <p>{tr(p, lang)}</p>)}
+            </section>
+          );
+        }
+        if (b.variant === 'lines') {
+          return (
+            <section class="block-box block-text--lines" aria-label={b.title ? tr(b.title, lang) : undefined}>
+              {b.paragraphs.map((p) => <p class="block-text__line">{tr(p, lang)}</p>)}
+            </section>
+          );
+        }
+        return (
+          <section class="block-box block-text">
+            {b.title && <h2>{tr(b.title, lang)}</h2>}
+            {b.paragraphs.map((p) => <p>{tr(p, lang)}</p>)}
+          </section>
+        );
+      case 'list':
+        return (
+          <section class="block-box">
+            <h2>{tr(b.title, lang)}</h2>
+            <ul class:list={['block-list', { 'block-list--chips': b.style === 'chips' }]}>{b.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+          </section>
+        );
+      case 'image':
+        return (
+          <section class="block-box">
+            <figure class="block-image">
+              <Image src={b.src} alt={tr(b.alt, lang)} widths={[480, 960, 1440]} sizes="(max-width: 980px) 92vw, 960px" loading="lazy" decoding="async" />
+              {b.caption && <figcaption>{tr(b.caption, lang)}</figcaption>}
+            </figure>
+          </section>
+        );
+      case 'links':
+        return (
+          <section class="block-box" aria-label={b.title ? tr(b.title, lang) : undefined}>
+            {b.title && <h2>{tr(b.title, lang)}</h2>}
+            <div class="block-links">
+              {b.links.map((l) => (
+                <a class="block-link" href={l.url} {...(isExternal(l.url) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                  <span class="block-link__label">{tr(l.label, lang)}</span>
+                  {l.subtitle && <span class="block-link__value">{tr(l.subtitle, lang)}</span>}
+                </a>
+              ))}
+            </div>
+          </section>
+        );
+    }
+  })}
+</section>

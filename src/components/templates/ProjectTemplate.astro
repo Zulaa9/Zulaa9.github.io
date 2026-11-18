@@ -1,0 +1,84 @@
+---
+/** Plantilla "Proyecto" (layout standard). Los proyectos "flagship" usan FlagshipProject. */
+import { Image } from 'astro:assets';
+import { tr, type Locale } from '../../lib/i18n';
+import { coverUrl } from '../../lib/images';
+import type { ModuleEntry } from '../../lib/modules';
+
+interface Props { module: ModuleEntry; lang: Locale }
+const { module, lang } = Astro.props;
+if (module.data.template !== 'project') throw new Error('ProjectTemplate necesita un módulo "project"');
+const p = module.data.project;
+const cover = await coverUrl(p.cover.src, p.cover.fit);
+---
+<section class="project-shell" aria-label={tr(p.name, lang)}>
+  <header class="project-header">
+    <p class="eyebrow">{tr(p.header.eyebrow, lang)}</p>
+    <h1>{tr(p.header.title, lang)}</h1>
+    <p class="project-lead">{tr(p.header.lead, lang)}</p>
+    {p.status && (
+      <p class="project-status"><span>{tr(p.status.label, lang)}</span> {tr(p.status.value, lang)}</p>
+    )}
+  </header>
+
+  <section class="project-section project-section--hero">
+    <div
+      class:list={['project-hero-media', { 'project-hero-media--logo': p.cover.fit === 'logo' }]}
+      role="img"
+      aria-label={tr(p.cover.alt, lang)}
+      style={`--cover-image: url("${cover}")`}
+    ></div>
+    <div class="project-hero-copy">
+      <h2>{tr(p.description.title, lang)}</h2>
+      {p.description.paragraphs.map((para) => <p>{tr(para, lang)}</p>)}
+      {p.links.length > 0 && (
+        <div class="project-actions">
+          {p.links.map((l) => (
+            <a class:list={['project-btn', { 'project-btn--primary': l.kind === 'download' }]} href={l.url} target="_blank" rel="noopener noreferrer">{tr(l.label, lang)}</a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  {p.stack.length > 0 && (
+    <section class="project-section">
+      <h2>{tr(p.stackTitle, lang) || 'Stack'}</h2>
+      <ul class="chip-list">{p.stack.map((s) => <li>{tr(s, lang)}</li>)}</ul>
+    </section>
+  )}
+
+  {p.media.length > 0 && (
+    <section class="project-section project-media">
+      <div class="project-media-grid">
+        {p.media.map((item) => (
+          <figure class="project-media-item">
+            {item.type === 'video' && (
+              <video controls muted playsinline preload="metadata" aria-label={tr(item.alt, lang)}>
+                <source src={item.src} type={item.src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+              </video>
+            )}
+            {item.type === 'image' && (
+              <Image src={item.src} alt={tr(item.alt, lang)} widths={[480, 960]} sizes="(max-width: 860px) 92vw, 480px" loading="lazy" decoding="async" />
+            )}
+            {item.type === 'composite' && item.parts.map((part) => (
+              <Image src={part.src} alt={tr(part.alt, lang)} widths={[480, 960]} sizes="(max-width: 860px) 92vw, 480px" loading="lazy" decoding="async" />
+            ))}
+            <figcaption>{tr(item.caption, lang)}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {p.sections.length > 0 && (
+    <section class="project-grid">
+      {p.sections.map((s) => (
+        <article class="project-section">
+          <h2>{tr(s.title, lang)}</h2>
+          <ul class="text-list">{s.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+        </article>
+      ))}
+    </section>
+  )}
+</section>
