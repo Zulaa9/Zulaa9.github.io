@@ -1,0 +1,282 @@
+{
+  "template": "project",
+  "order": 55,
+  "visible": true,
+  "path": "projects/framewise",
+  "parent": "projects",
+  "crumb": {
+    "en": "Framewise",
+    "es": "Framewise"
+  },
+  "seo": {
+    "title": {
+      "en": "Framewise | System Core",
+      "es": "Framewise | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Framewise: Manifest V3 extension for Chrome and Edge for frame-by-frame control of any HTML5 video.",
+      "es": "Framewise: extensión Manifest V3 para Chrome y Edge para controlar fotograma a fotograma cualquier vídeo HTML5."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "Framewise",
+      "es": "Framewise"
+    },
+    "meta": {
+      "en": "Browser extension",
+      "es": "Extensión de navegador"
+    },
+    "dock": {
+      "title": {
+        "en": "Framewise",
+        "es": "Framewise"
+      },
+      "copy": {
+        "en": "Published Chrome and Edge extension for precise control of any HTML5 video.",
+        "es": "Extensión publicada para Chrome y Edge para controlar con precisión cualquier vídeo HTML5."
+      }
+    },
+    "position": {
+      "x": 0.88,
+      "y": 0.42
+    }
+  },
+  "project": {
+    "layout": "standard",
+    "name": {
+      "en": "Framewise",
+      "es": "Framewise"
+    },
+    "cardEyebrow": {
+      "en": "BROWSER EXTENSION // PUBLISHED",
+      "es": "EXTENSIÓN DE NAVEGADOR // PUBLICADA"
+    },
+    "summary": {
+      "en": "Manifest V3 extension for Chrome and Edge that controls any HTML5 video: frame-by-frame stepping, speed presets, volume amplification and per-site shortcuts.",
+      "es": "Extensión Manifest V3 para Chrome y Edge que controla cualquier vídeo HTML5: avance fotograma a fotograma, presets de velocidad, volumen amplificado y atajos por sitio."
+    },
+    "enterLabel": {
+      "en": "Open project",
+      "es": "Abrir proyecto"
+    },
+    "featured": false,
+    "stack": [
+      {
+        "en": "JavaScript",
+        "es": "JavaScript"
+      },
+      {
+        "en": "Manifest V3",
+        "es": "Manifest V3"
+      },
+      {
+        "en": "Web Audio API",
+        "es": "Web Audio API"
+      },
+      {
+        "en": "MediaRecorder",
+        "es": "MediaRecorder"
+      },
+      {
+        "en": "Chrome / Edge",
+        "es": "Chrome / Edge"
+      }
+    ],
+    "stackTitle": {
+      "en": "Technologies",
+      "es": "Tecnologías"
+    },
+    "cover": {
+      "src": "../../assets/images/framewise/framewise-logo.png",
+      "alt": {
+        "en": "Framewise logo",
+        "es": "Logotipo de Framewise"
+      },
+      "fit": "logo"
+    },
+    "links": [
+      {
+        "kind": "external",
+        "label": {
+          "en": "Chrome Web Store",
+          "es": "Chrome Web Store"
+        },
+        "url": "https://chromewebstore.google.com/detail/mkpljcojmhhmkpamcdecnmjbndbabfae"
+      },
+      {
+        "kind": "external",
+        "label": {
+          "en": "Edge Add-ons",
+          "es": "Edge Add-ons"
+        },
+        "url": "https://microsoftedge.microsoft.com/addons/detail/ppfmagbmfpeldadpbhbknlffhfnnhgee"
+      },
+      {
+        "kind": "external",
+        "label": {
+          "en": "Website",
+          "es": "Web"
+        },
+        "url": "https://framewise.zula.dev"
+      },
+      {
+        "kind": "github",
+        "label": {
+          "en": "GitHub",
+          "es": "GitHub"
+        },
+        "url": "https://github.com/Zulaa9/framewise"
+      }
+    ],
+    "status": {
+      "label": {
+        "en": "Status",
+        "es": "Estado"
+      },
+      "value": {
+        "en": "Published on Chrome Web Store and Edge Add-ons",
+        "es": "Publicada en Chrome Web Store y Edge Add-ons"
+      },
+      "tone": "live",
+      "onCard": true
+    },
+    "header": {
+      "eyebrow": {
+        "en": "PROJECT MODULE // FW-01",
+        "es": "MÓDULO DE PROYECTO // FW-01"
+      },
+      "title": {
+        "en": "Framewise",
+        "es": "Framewise"
+      },
+      "lead": {
+        "en": "Browser extension for frame-level control of any HTML5 video, published for Chrome and Edge.",
+        "es": "Extensión de navegador para controlar a nivel de fotograma cualquier vídeo HTML5, publicada para Chrome y Edge."
+      }
+    },
+    "description": {
+      "title": {
+        "en": "What Framewise is",
+        "es": "Qué es Framewise"
+      },
+      "paragraphs": [
+        {
+          "en": "Framewise started as a fix for one gap: a streaming player with no way to step through a video frame by frame. It grew into a general toolkit for any page that uses a standard <video> element.",
+          "es": "Framewise nació para cubrir un hueco concreto: un reproductor de streaming sin forma de avanzar un vídeo fotograma a fotograma. Creció hasta ser una herramienta general para cualquier página que use un elemento <video> estándar."
+        },
+        {
+          "en": "It is plain JavaScript with no build step and no runtime dependencies, loaded through Manifest V3 content scripts and a background service worker. The interface is available in Spanish and English.",
+          "es": "Es JavaScript sin paso de build ni dependencias en tiempo de ejecución, cargado con content scripts de Manifest V3 y un service worker en segundo plano. La interfaz está en español e inglés."
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": {
+          "en": "Features",
+          "es": "Funcionalidades"
+        },
+        "items": [
+          {
+            "en": "Frame-by-frame stepping with live FPS detection (requestVideoFrameCallback) and multi-frame jumps",
+            "es": "Avance fotograma a fotograma con detección de FPS en vivo (requestVideoFrameCallback) y saltos de varios fotogramas"
+          },
+          {
+            "en": "Configurable speed presets (0.1× to 4× by default), remembered per site",
+            "es": "Presets de velocidad configurables (de 0,1× a 4× por defecto), recordados por sitio"
+          },
+          {
+            "en": "Independent volume layer above 100% through a Web Audio GainNode",
+            "es": "Capa de volumen independiente por encima del 100% mediante un GainNode de Web Audio"
+          },
+          {
+            "en": "Keyboard shortcuts, global or per domain, with clash detection",
+            "es": "Atajos de teclado globales o por dominio, con detección de conflictos"
+          },
+          {
+            "en": "Loop, PNG frame capture, WebM clip recording and Picture-in-Picture",
+            "es": "Bucle, captura de fotograma en PNG, grabación de clips en WebM y Picture-in-Picture"
+          },
+          {
+            "en": "Detachable popup and always-on-top floating window (Document Picture-in-Picture)",
+            "es": "Popup separable y ventana flotante siempre visible (Document Picture-in-Picture)"
+          },
+          {
+            "en": "Configuration export and import as JSON",
+            "es": "Exportación e importación de la configuración en JSON"
+          }
+        ]
+      },
+      {
+        "title": {
+          "en": "Engineering focus",
+          "es": "Enfoque técnico"
+        },
+        "items": [
+          {
+            "en": "Finds the active video across iframes and on single-page apps that replace the player",
+            "es": "Encuentra el vídeo activo entre iframes y en aplicaciones de una sola página que sustituyen el reproductor"
+          },
+          {
+            "en": "Stall-safe seeking: reverts to the last good position when the site has not buffered the target",
+            "es": "Saltos seguros: vuelve a la última posición válida si el sitio no ha cargado el destino"
+          },
+          {
+            "en": "Self-healing content scripts after an extension update, with a hand-off so two copies never handle the same action",
+            "es": "Content scripts que se recuperan solos tras actualizar la extensión, con relevo para que dos copias nunca atiendan la misma acción"
+          },
+          {
+            "en": "Settings split between storage.sync and storage.local to stay within quota",
+            "es": "Ajustes repartidos entre storage.sync y storage.local para no superar la cuota"
+          },
+          {
+            "en": "Capture and recording are disabled when DRM or cross-origin rules block them, instead of failing silently",
+            "es": "Captura y grabación se desactivan cuando el DRM o el origen cruzado las bloquean, en lugar de fallar en silencio"
+          }
+        ]
+      }
+    ],
+    "media": [
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/framewise/popup.jpg",
+        "alt": {
+          "en": "Framewise popup open over a video page",
+          "es": "Popup de Framewise abierto sobre una página de vídeo"
+        },
+        "caption": {
+          "en": "Toolbar popup: frame stepping, speed presets, extension volume and detected FPS.",
+          "es": "Popup de la barra: avance por fotogramas, presets de velocidad, volumen de la extensión y FPS detectados."
+        }
+      },
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/framewise/options-shortcuts.jpg",
+        "alt": {
+          "en": "Framewise keyboard shortcuts in the Options page",
+          "es": "Atajos de teclado de Framewise en la página de opciones"
+        },
+        "caption": {
+          "en": "Options: shortcuts per action, globally or for a single domain.",
+          "es": "Opciones: atajos por acción, globales o para un dominio concreto."
+        }
+      },
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/framewise/options-volume.jpg",
+        "alt": {
+          "en": "Framewise volume amplification settings",
+          "es": "Ajustes de amplificación de volumen de Framewise"
+        },
+        "caption": {
+          "en": "Options: maximum extension volume, step size and per-site memory.",
+          "es": "Opciones: volumen máximo de la extensión, incremento y memoria por sitio."
+        }
+      }
+    ]
+  }
+}
