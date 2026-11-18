@@ -1,0 +1,116 @@
+---
+/** System Core: escena 3D + nodos generados a partir de los módulos visibles. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getVisibleModules, layoutNodes, moduleHref } from '../lib/modules';
+import { tr, ui, type Locale } from '../lib/i18n';
+import coreCss from '../styles/core.css?url';
+import sharedCss from '../styles/shared.css?url';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = ui(lang);
+const modules = await getVisibleModules();
+const positions = layoutNodes(modules.map((m) => ({ id: m.id, position: m.data.node.position, parent: m.data.parent })));
+const featured = modules.find((m) => m.data.node.featured) ?? modules[0];
+const nodes = modules.map((m, i) => ({
+  id: m.id,
+  href: moduleHref(m, lang),
+  title: tr(m.data.node.title, lang),
+  meta: tr(m.data.node.meta, lang),
+  mobile: tr(m.data.node.mobileLabel, lang) || tr(m.data.node.title, lang),
+  dock: { title: tr(m.data.node.dock.title, lang), copy: tr(m.data.node.dock.copy, lang) },
+  featured: !!m.data.node.featured,
+  parent: m.data.parent && modules.some((x) => x.id === m.data.parent) ? m.data.parent : undefined,
+  position: positions.get(m.id)!,
+  delay: 20 + i * 60,
+}));
+const coreData = {
+  nodes: nodes.map(({ id, href, dock, parent, position, featured: f }) => ({ id, href, dock, parent, position, featured: f })),
+  defaultActive: featured?.id ?? '',
+  status: t.core.status,
+  bootLines: t.core.boot.lines,
+  threeError: t.core.threeError,
+};
+const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
+---
+<BaseLayout
+  lang={lang}
+  title={t.core.page.title}
+  description={t.core.page.description}
+  path=""
+  shellLabel="System Core"
+  statusText={t.core.status.offline}
+>
+  <Fragment slot="head">
+    <link rel="stylesheet" href={coreCss} />
+    <link rel="stylesheet" href={sharedCss} />
+    <script type="application/json" id="core-data" set:html={JSON.stringify(coreData)} />
+  </Fragment>
+
+  <div class="core-stage" id="core-stage">
+    <section class="startup-gate" id="startup-gate" aria-label={t.core.startup.title}>
+      <div class="startup-gate__panel">
+        <p class="eyebrow">{t.core.startup.eyebrow}</p>
+        <h2>{t.core.startup.title}</h2>
+        <p>{t.core.startup.copy}</p>
+        <button class="startup-gate__button" id="start-core-button" type="button">{t.core.startup.cta}</button>
+      </div>
+    </section>
+
+    <section class="boot-sequence" id="boot-sequence" aria-label={t.core.boot.eyebrow}>
+      <div class="boot-door boot-door--top" aria-hidden="true"></div>
+      <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
+      <div class="boot-terminal">
+        <p class="boot-terminal__eyebrow">{t.core.boot.eyebrow}</p>
+        <div class="boot-terminal__screen">
+          <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
+          <div class="boot-progress">
+            <div class="boot-progress__bar"><span id="boot-progress-fill"></span></div>
+            <span class="boot-progress__text" id="boot-progress-text">0%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <canvas id="core-canvas" aria-hidden="true"></canvas>
+    <svg id="node-links" class="node-links" aria-hidden="true"></svg>
+    <div class="core-center" id="core-center" aria-hidden="true"></div>
+
+    <div class="node-layer" id="node-layer" role="navigation" aria-label={t.site.modulesLabel}>
+      {nodes.map((n) => (
+        <a
+          class:list={['module-node', 'module-trigger', { 'module-node--featured': n.featured }]}
+          href={`${n.href}?from=core`}
+          data-target={n.id}
+          style={`--reveal-delay: ${n.delay}ms`}
+        >
+          <span class="node-title">{n.title}</span>
+          <span class="node-meta">{n.meta}</span>
+        </a>
+      ))}
+    </div>
+
+    <article class="core-copy" id="main-content" tabindex="-1">
+      <p class="eyebrow">{t.core.copy.eyebrow}</p>
+      <h1>{t.core.copy.title}</h1>
+      <p set:html={t.core.copy.body} />
+    </article>
+
+    <div class="info-dock" id="info-dock" aria-live="polite">
+      <p class="info-dock__label">{t.core.dock.label}</p>
+      <h2 id="dock-title">{featuredDock?.title ?? t.core.dock.defaultTitle}</h2>
+      <p id="dock-copy">{featuredDock?.copy ?? t.core.dock.defaultCopy}</p>
+    </div>
+  </div>
+
+  <nav class="mobile-modules" aria-label={t.site.modulesLabel}>
+    {nodes.map((n) => (
+      <a class="mobile-modules__item module-trigger" href={`${n.href}?from=core`} data-target={n.id}>{n.mobile}</a>
+    ))}
+  </nav>
+</BaseLayout>
+
+<script>
+  import { initSystemCore } from '../scripts/core/system-core';
+  initSystemCore();
+</script>
