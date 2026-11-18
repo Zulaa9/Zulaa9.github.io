@@ -251,6 +251,17 @@ El resultado queda en **`dist/`**: HTML prerenderizado, `_astro/` (CSS, JS e im�
 
 ## Subir a zula.dev
 
+zula.dev está detrás de Cloudflare y sirve la rama `main` de este repositorio. Con Astro, el proyecto de Cloudflare Pages tiene que compilar antes de publicar (Settings → Builds & deployments):
+
+- Framework preset: **Astro**
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Versión de Node: la fija `.node-version` (22); si el panel no la toma, añade la variable `NODE_VERSION=22`.
+
+Sin esos ajustes, Cloudflare publicaría los archivos fuente tal cual y el sitio dejaría de funcionar.
+
+### Otros servidores
+
 En el repositorio no hay configuración del servidor de zula.dev (no hay `CNAME`, workflows ni archivos de servidor), así que estos pasos son genéricos:
 
 1. `npm ci && npm run build`.
