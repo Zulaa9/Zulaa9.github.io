@@ -33,8 +33,8 @@
         "es": "KeyPing"
       },
       "copy": {
-        "en": "Flagship product module. Production version with security-focused desktop architecture.",
-        "es": "Módulo principal del producto. Versión de producción con arquitectura de escritorio orientada a seguridad."
+        "en": "Flagship product module. Stable release v1.1.1 with a security-focused desktop architecture.",
+        "es": "Módulo principal del producto. Versión estable v1.1.1 con arquitectura de escritorio orientada a seguridad."
       }
     },
     "position": {
@@ -100,12 +100,12 @@
     ],
     "status": {
       "label": {
-        "en": "Module Health",
-        "es": "Salud del Módulo"
+        "en": "Latest release",
+        "es": "Última versión"
       },
       "value": {
-        "en": "Active development / Stable core / Daily use",
-        "es": "Desarrollo activo / Core estable / Uso diario"
+        "en": "v1.1.1 (May 2026) · Stable core · Daily use",
+        "es": "v1.1.1 (mayo de 2026) · Core estable · Uso diario"
       }
     },
     "header": {
@@ -133,8 +133,8 @@
           "es": "KeyPing es un gestor de contraseñas de escritorio centrado en higiene de credenciales: detecta contraseñas débiles, reutilizadas y de riesgo manteniendo todos los datos en local y offline."
         },
         {
-          "en": "This is not a concept demo. It is an actively developed product with stable core features, production-level release discipline and security controls designed for real use.",
-          "es": "No es una demo conceptual. Es un producto en desarrollo activo, con funcionalidades core estables, disciplina de publicación de nivel producción y controles de seguridad pensados para uso real."
+          "en": "This is not a concept demo. It is a released product with stable core features, versioned releases with checksums and security controls designed for real use.",
+          "es": "No es una demo conceptual. Es un producto publicado, con funcionalidades core estables, versiones publicadas con checksums y controles de seguridad pensados para uso real."
         }
       ]
     },
@@ -158,8 +158,8 @@
           "es": "Bóveda local cifrada"
         },
         {
-          "en": "Windows / Linux / macOS",
-          "es": "Windows / Linux / macOS"
+          "en": "Windows / Linux",
+          "es": "Windows / Linux"
         }
       ],
       "actions": [
@@ -265,16 +265,16 @@
         },
         "items": [
           {
-            "en": "16k+ lines of code",
-            "es": "16k+ líneas de código"
+            "en": "~16,400 lines of TypeScript, HTML and CSS (v1.1.1, measured 18 Nov 2026)",
+            "es": "~16.400 líneas de TypeScript, HTML y CSS (v1.1.1, medido el 18-11-2026)"
           },
           {
-            "en": "115+ commits",
-            "es": "115+ commits"
+            "en": "117 commits on main (18 Nov 2026)",
+            "es": "117 commits en main (18-11-2026)"
           },
           {
-            "en": "443 tracked files",
-            "es": "443 archivos versionados"
+            "en": "5 public releases, v1.0.0 to v1.1.1",
+            "es": "5 versiones publicadas, de la v1.0.0 a la v1.1.1"
           },
           {
             "en": "Electron + Angular architecture",
@@ -452,8 +452,16 @@
             "es": "Organización por carpetas con drag and drop"
           },
           {
+            "en": "Clipboard auto-clear and clipboard history cleaning (best effort on Windows)",
+            "es": "Borrado automático del portapapeles y limpieza de su historial (en Windows, en la medida de lo posible)"
+          },
+          {
             "en": "Offline encrypted import/export",
             "es": "Importación/exportación cifrada en modo offline"
+          },
+          {
+            "en": "Automatic migration of vaults from the previous encryption scheme",
+            "es": "Migración automática de las bóvedas del esquema de cifrado anterior"
           },
           {
             "en": "Auto-updates via GitHub Releases",
@@ -488,8 +496,16 @@
             "es": "Derivación PBKDF2-HMAC-SHA512 (600 000 iteraciones, OWASP 2023)"
           },
           {
+            "en": "Iteration count read from the auth file is validated and clamped (100 000 – 2 000 000)",
+            "es": "El número de iteraciones del archivo de autenticación se valida y se limita (100 000 – 2 000 000)"
+          },
+          {
             "en": "Master password verified in main process only · session key never reaches the renderer",
             "es": "Contraseña maestra verificada solo en el proceso principal · la clave de sesión nunca llega al renderer"
+          },
+          {
+            "en": "Vault contents and metadata are not cached in the renderer’s local storage",
+            "es": "El contenido y los metadatos de la bóveda no se guardan en el almacenamiento local del renderer"
           },
           {
             "en": "HMAC-SHA256 for duplicate detection · no plaintext passwords compared in renderer",
@@ -510,6 +526,14 @@
           {
             "en": "Vault structure validation and anomaly/corruption checks",
             "es": "Validaciones de estructura de la bóveda y detección de anomalías o corrupción"
+          },
+          {
+            "en": "Sandboxed renderer (contextIsolation, no Node integration) with a restrictive Content Security Policy",
+            "es": "Renderer aislado (sandbox, contextIsolation, sin integración de Node) con una Content Security Policy restrictiva"
+          },
+          {
+            "en": "Encrypted export with its own key (PBKDF2-SHA256, 600 000 iterations)",
+            "es": "Exportación cifrada con clave propia (PBKDF2-SHA256, 600 000 iteraciones)"
           }
         ]
       },
@@ -525,8 +549,8 @@
               "es": "Frontend"
             },
             "value": {
-              "en": "Angular with standalone components",
-              "es": "Angular con componentes standalone"
+              "en": "Angular 20 with standalone components",
+              "es": "Angular 20 con componentes standalone"
             }
           },
           {
@@ -535,8 +559,8 @@
               "es": "Runtime"
             },
             "value": {
-              "en": "Electron",
-              "es": "Electron"
+              "en": "Electron 31",
+              "es": "Electron 31"
             }
           },
           {
@@ -585,8 +609,8 @@
           "es": "Integridad de publicaciones"
         },
         "copy": {
-          "en": "Each release ships with a SHA256 checksum file. GPG signing is planned for a future release.",
-          "es": "Cada publicación incluye un archivo de checksums SHA256. La firma GPG está prevista para una publicación futura."
+          "en": "Each release includes a SHA256SUMS.txt file; in v1.1.1 it covers the Linux AppImage. GPG signatures are not published yet.",
+          "es": "Cada versión incluye un archivo SHA256SUMS.txt; en la v1.1.1 cubre el AppImage de Linux. Todavía no se publican firmas GPG."
         },
         "files": [
           {
