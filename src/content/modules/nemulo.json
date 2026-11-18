@@ -1,0 +1,225 @@
+{
+  "template": "project",
+  "order": 57,
+  "visible": true,
+  "path": "projects/nemulo",
+  "parent": "projects",
+  "crumb": {
+    "en": "Nemulo",
+    "es": "Nemulo"
+  },
+  "seo": {
+    "title": {
+      "en": "Nemulo | System Core",
+      "es": "Nemulo | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Nemulo: multi-tenant booking SaaS for small businesses. In development, not yet publicly available.",
+      "es": "Nemulo: SaaS multiempresa de reservas para pequeños negocios. En desarrollo, aún no disponible al público."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "Nemulo",
+      "es": "Nemulo"
+    },
+    "meta": {
+      "en": "SaaS · in development",
+      "es": "SaaS · en desarrollo"
+    },
+    "dock": {
+      "title": {
+        "en": "Nemulo",
+        "es": "Nemulo"
+      },
+      "copy": {
+        "en": "Multi-tenant booking SaaS for small businesses. Not yet publicly available: in development and internal testing.",
+        "es": "SaaS multiempresa de reservas para pequeños negocios. Aún no disponible al público: en desarrollo y pruebas internas."
+      }
+    },
+    "position": {
+      "x": 0.65,
+      "y": 0.7
+    }
+  },
+  "project": {
+    "layout": "standard",
+    "name": {
+      "en": "Nemulo",
+      "es": "Nemulo"
+    },
+    "cardEyebrow": {
+      "en": "SAAS // IN DEVELOPMENT",
+      "es": "SAAS // EN DESARROLLO"
+    },
+    "summary": {
+      "en": "Multi-tenant booking platform for small businesses that sell time: a public booking page for each business and a panel for agenda, services, schedules, team and customers.",
+      "es": "Plataforma multiempresa de reservas para pequeños negocios que venden tiempo: una página pública de reservas por negocio y un panel para agenda, servicios, horarios, equipo y clientes."
+    },
+    "enterLabel": {
+      "en": "Open project",
+      "es": "Abrir proyecto"
+    },
+    "featured": false,
+    "stack": [
+      {
+        "en": "Angular 21",
+        "es": "Angular 21"
+      },
+      {
+        "en": "NestJS 12",
+        "es": "NestJS 12"
+      },
+      {
+        "en": "PostgreSQL 18",
+        "es": "PostgreSQL 18"
+      },
+      {
+        "en": "Prisma 7",
+        "es": "Prisma 7"
+      },
+      {
+        "en": "TypeScript",
+        "es": "TypeScript"
+      },
+      {
+        "en": "Vitest",
+        "es": "Vitest"
+      }
+    ],
+    "stackTitle": {
+      "en": "Technologies",
+      "es": "Tecnologías"
+    },
+    "cover": {
+      "src": "../../assets/images/nemulo/nemulo-isotipo.png",
+      "alt": {
+        "en": "Nemulo logo",
+        "es": "Logotipo de Nemulo"
+      },
+      "fit": "logo"
+    },
+    "links": [],
+    "status": {
+      "label": {
+        "en": "Status",
+        "es": "Estado"
+      },
+      "value": {
+        "en": "Not yet publicly available · in development and internal testing",
+        "es": "Aún no disponible al público · en desarrollo y pruebas internas"
+      },
+      "tone": "preview",
+      "onCard": true
+    },
+    "header": {
+      "eyebrow": {
+        "en": "PROJECT MODULE // NM-01",
+        "es": "MÓDULO DE PROYECTO // NM-01"
+      },
+      "title": {
+        "en": "Nemulo",
+        "es": "Nemulo"
+      },
+      "lead": {
+        "en": "Booking and appointment management SaaS for small businesses such as barbershops, beauty salons and trainers.",
+        "es": "SaaS de reservas y gestión de citas para pequeños negocios como barberías, centros de estética o entrenadores."
+      }
+    },
+    "description": {
+      "title": {
+        "en": "What Nemulo is",
+        "es": "Qué es Nemulo"
+      },
+      "paragraphs": [
+        {
+          "en": "Nemulo helps businesses organise their appointments, make better use of their opening hours and cut administrative work. Each business gets its own public booking page and a panel to run its agenda.",
+          "es": "Nemulo ayuda a los negocios a organizar sus citas, aprovechar mejor sus horarios y reducir tareas administrativas. Cada negocio tiene su propia página pública de reservas y un panel para gestionar su agenda."
+        },
+        {
+          "en": "It is not deployed to the public yet. It is in development and internal testing, so there is no public link.",
+          "es": "Todavía no está desplegado al público. Está en desarrollo y en pruebas internas, por eso no hay enlace público."
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": {
+          "en": "For customers",
+          "es": "Para el cliente"
+        },
+        "items": [
+          {
+            "en": "Book from a phone in a few taps, with no account or password",
+            "es": "Reserva desde el móvil en pocos toques, sin cuenta ni contraseña"
+          },
+          {
+            "en": "Confirmation and reminder emails with a secure link to cancel, reschedule or book again",
+            "es": "Correos de confirmación y recordatorio con un enlace seguro para cancelar, cambiar o repetir"
+          },
+          {
+            "en": "Access to all their appointments through a magic link",
+            "es": "Acceso a todas sus citas con un enlace mágico"
+          }
+        ]
+      },
+      {
+        "title": {
+          "en": "For businesses",
+          "es": "Para el negocio"
+        },
+        "items": [
+          {
+            "en": "Day agenda with one column per professional; create appointments or blocks from a free slot",
+            "es": "Agenda del día con una columna por profesional; citas o bloqueos creados desde un hueco libre"
+          },
+          {
+            "en": "Absences, holidays and closures with a preview of affected appointments, which are never cancelled automatically",
+            "es": "Ausencias, vacaciones y cierres con vista previa de las citas afectadas, que nunca se cancelan solas"
+          },
+          {
+            "en": "Services, combined services and optional variants, each with its own price, duration and professionals",
+            "es": "Servicios, servicios combinados y opciones, cada uno con su precio, duración y profesionales"
+          },
+          {
+            "en": "Schedules with several time ranges, holidays and special hours",
+            "es": "Horarios con varias franjas, festivos y horarios especiales"
+          },
+          {
+            "en": "Team invitations, customer records with history and consents, and configurable reminders",
+            "es": "Invitaciones al equipo, fichas de clientes con historial y consentimientos, y recordatorios configurables"
+          }
+        ]
+      },
+      {
+        "title": {
+          "en": "Engineering",
+          "es": "Ingeniería"
+        },
+        "items": [
+          {
+            "en": "Multi-tenant platform with strict isolation between businesses and roles for owner, professional and platform admin",
+            "es": "Plataforma multiempresa con aislamiento estricto entre negocios y roles de propietario, profesional y administrador de plataforma"
+          },
+          {
+            "en": "Modular NestJS monolith; background jobs and an outbox on PostgreSQL itself, with no external queue",
+            "es": "Monolito modular en NestJS; tareas en segundo plano y outbox sobre la propia PostgreSQL, sin colas externas"
+          },
+          {
+            "en": "Overlapping bookings prevented in the database with an exclusion constraint on time ranges",
+            "es": "Solapes de citas impedidos en la base de datos con una restricción de exclusión sobre rangos de tiempo"
+          },
+          {
+            "en": "Pure availability engine tested across daylight-saving changes",
+            "es": "Motor de disponibilidad puro, probado con los cambios de hora de verano e invierno"
+          },
+          {
+            "en": "Integration tests against a real PostgreSQL database",
+            "es": "Pruebas de integración contra una base de datos PostgreSQL real"
+          }
+        ]
+      }
+    ],
+    "media": []
+  }
+}
