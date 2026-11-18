@@ -140,12 +140,26 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 500; letter-spacing: -0
 
 /* ---------- Estructura ---------- */
 .app { min-height: 100vh; }
+.system-shell { height: 100vh; height: 100dvh; }
 
 .system-shell {
   position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* ---------- Pantalla: el marco donde se muestra el sistema ---------- */
+.core-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 0 var(--gutter) var(--gutter);
+  border: 1px solid rgba(130, 171, 207, 0.22);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(8, 13, 18, 0.62), rgba(8, 14, 20, 0.84));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(160, 200, 225, 0.06);
+  overflow: hidden;
 }
 
 /* ---------- Barra superior ---------- */
@@ -268,6 +282,8 @@ body.core-offline .status-dot { background: var(--danger); box-shadow: 0 0 0 3px
 }
 
 @media (max-width: 860px) {
+  .system-shell { height: auto; }
+  .core-stage { border-radius: 18px; }
   .topbar { padding: 14px var(--gutter); flex-wrap: wrap; gap: 10px; }
   .identity__name { font-size: 0.8rem; letter-spacing: 0.16em; white-space: nowrap; }
   .topbar-controls { width: 100%; justify-content: space-between; }

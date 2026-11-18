@@ -1,104 +1,214 @@
 /* System Core: escena 3D, nodos, textos y arranque. */
 body { overflow: hidden; }
-.system-shell { height: 100vh; height: 100dvh; }
 
-.core-stage {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  margin: 0 var(--gutter) var(--gutter);
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  overflow: hidden;
-}
-
-/* Marcas de esquina: delimitan la zona sin encerrarla en una caja. */
-.core-stage::before,
-.core-stage::after {
-  content: "";
+/* ---------- Puesta en marcha manual ---------- */
+.startup-gate {
   position: absolute;
-  top: -1px;
-  width: 14px;
-  height: 14px;
-  border-top: 1px solid var(--rule-strong);
+  inset: 0;
+  z-index: 7;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(109, 145, 173, 0.14), transparent 36%),
+    linear-gradient(170deg, rgba(6, 12, 19, 0.82), rgba(7, 14, 21, 0.86));
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 320ms ease;
 }
-.core-stage::before { left: 0; border-left: 1px solid var(--rule-strong); }
-.core-stage::after { right: 0; border-right: 1px solid var(--rule-strong); }
 
-/* ---------- Secuencia de arranque ---------- */
+body.awaiting-start .startup-gate {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.startup-gate__panel {
+  width: min(560px, calc(100% - 40px));
+  border: 1px solid rgba(148, 112, 112, 0.34);
+  border-radius: 16px;
+  background: rgba(17, 10, 12, 0.76);
+  box-shadow: 0 24px 68px rgba(0, 0, 0, 0.52);
+  padding: 22px 22px 20px;
+  text-align: center;
+}
+
+.startup-gate__panel h2 {
+  margin: 10px 0 10px;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.startup-gate__panel p {
+  margin: 0;
+  color: #d6c0c0;
+}
+
+.startup-gate__button {
+  margin-top: 16px;
+  border: 1px solid rgba(229, 124, 124, 0.52);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.86rem;
+  letter-spacing: 0.05em;
+  color: #ffe3e3;
+  background: linear-gradient(140deg, rgba(92, 30, 30, 0.9), rgba(54, 17, 17, 0.86));
+  cursor: pointer;
+}
+
+.startup-gate__button:hover,
+.startup-gate__button:focus-visible {
+  border-color: rgba(246, 151, 151, 0.72);
+  box-shadow: 0 0 0 1px rgba(246, 151, 151, 0.25), 0 10px 24px rgba(81, 26, 26, 0.48);
+}
+
+
+/* ---------- Secuencia de arranque (puertas que se abren) ---------- */
 .boot-sequence {
   position: absolute;
   inset: 0;
   z-index: 8;
   display: grid;
   place-items: center;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(72, 131, 172, 0.14), transparent 38%),
+    linear-gradient(145deg, #04070b 12%, #09131c 56%, #04070b 100%);
+  overflow: hidden;
+  border-radius: inherit;
   visibility: hidden;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 420ms ease;
+  transition: opacity 460ms ease;
 }
 
 body.booting .boot-sequence,
-body.boot-unfold .boot-sequence { visibility: visible; pointer-events: auto; opacity: 1; }
-body.boot-unfold .boot-sequence { opacity: 0; }
-
-.boot-door { display: none; }
-
-.boot-terminal {
-  width: min(560px, calc(100% - 40px));
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms ease;
+body.boot-unfold .boot-sequence {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
 }
 
-body.boot-unfold .boot-terminal { transform: translateY(-24px); opacity: 0; }
+.boot-door {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 52%;
+  background: linear-gradient(180deg, rgba(7, 13, 18, 0.96), rgba(5, 9, 14, 0.94));
+  border: 1px solid rgba(106, 139, 163, 0.24);
+  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease;
+}
+
+.boot-door--top {
+  top: 0;
+  border-bottom-color: rgba(132, 177, 206, 0.26);
+}
+
+.boot-door--bottom {
+  bottom: 0;
+  border-top-color: rgba(132, 177, 206, 0.26);
+}
+
+.boot-terminal {
+  position: relative;
+  z-index: 2;
+  width: min(780px, calc(100% - 36px));
+  border: 1px solid rgba(138, 170, 194, 0.28);
+  border-radius: 18px;
+  background: rgba(7, 13, 20, 0.78);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
+  padding: 14px 16px 16px;
+  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), opacity 760ms cubic-bezier(0.22, 1, 0.36, 1), filter 760ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, filter;
+}
 
 .boot-terminal__eyebrow {
-  margin: 0 0 14px;
-  font-family: var(--f-mono);
+  margin: 0 0 10px;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
+  letter-spacing: 0.16em;
+  color: #97bedb;
+}
+
+.boot-terminal__screen {
+  border: 1px solid rgba(128, 164, 189, 0.22);
+  border-radius: 12px;
+  background: rgba(2, 7, 11, 0.82);
+  padding: 12px;
 }
 
 .boot-log {
   margin: 0;
   padding: 0;
   list-style: none;
-  min-height: 168px;
-  max-height: 168px;
+  min-height: 180px;
+  max-height: 180px;
   overflow: hidden;
-  font-family: var(--f-mono);
-  font-size: 0.8rem;
-  line-height: 1.75;
-  color: var(--ink-2);
+  font-family: "Consolas", "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #a8d4ec;
 }
 
-.boot-log li::before { content: "› "; color: var(--accent); }
-.boot-log li { opacity: 0; animation: bootLineIn 220ms ease forwards; }
+.boot-log li {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: bootLineIn 280ms ease forwards;
+}
 
-.boot-progress { margin-top: 16px; display: flex; align-items: center; gap: 14px; }
+.boot-progress {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-.boot-progress__bar { flex: 1; height: 1px; background: var(--rule-strong); overflow: hidden; }
+.boot-progress__bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(78, 123, 150, 0.24);
+  overflow: hidden;
+}
 
 .boot-progress__bar span {
   display: block;
   height: 100%;
   width: 0%;
-  background: var(--accent);
-  transition: width 180ms ease;
+  background: linear-gradient(90deg, #3f95be, #8be2ff);
+  box-shadow: 0 0 18px rgba(108, 205, 238, 0.5);
+  transition: width 220ms ease;
 }
 
 .boot-progress__text {
-  min-width: 40px;
-  font-family: var(--f-mono);
-  font-size: 0.72rem;
-  color: var(--ink-2);
+  min-width: 44px;
+  font-size: 0.75rem;
+  color: #c3d9ea;
   text-align: right;
 }
 
-@keyframes bootLineIn { to { opacity: 1; } }
+body.boot-unfold .boot-terminal {
+  transform: translateY(-57vh) scale(0.94);
+  opacity: 0;
+  filter: blur(4px);
+}
+
+body.boot-unfold .boot-door--top {
+  transform: translateY(-110%);
+}
+
+body.boot-unfold .boot-door--bottom {
+  transform: translateY(110%);
+}
+
+body.boot-unfold .boot-sequence {
+  opacity: 0;
+}
+
+@keyframes bootLineIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 /* ---------- Escena ---------- */
 #core-canvas, .node-links, .node-layer, .core-center { position: absolute; inset: 0; }
@@ -218,16 +328,16 @@ body.boot-unfold .boot-terminal { transform: translateY(-24px); opacity: 0; }
 .info-dock {
   position: absolute;
   z-index: 3;
-  bottom: 28px;
+  bottom: 26px;
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 420ms ease, transform 420ms ease;
 }
 
-.core-copy { left: 4px; width: min(470px, calc(100% - 40px)); }
+.core-copy { left: 26px; width: min(470px, calc(100% - 40px)); }
 
 .info-dock {
-  right: 4px;
+  right: 26px;
   width: min(340px, calc(100% - 40px));
   padding-top: 14px;
   border-top: 1px solid var(--rule-strong);
@@ -279,7 +389,9 @@ body.intro-step-6 .core-copy,
 body.intro-step-6 .info-dock,
 body.intro-step-6 .mobile-modules { opacity: 1; transform: none; }
 
-body.core-offline .bg-starfield,
+body.awaiting-start .bg-starfield,
+body.core-offline .bg-starfield { opacity: 0 !important; }
+body.awaiting-start .meteor-layer,
 body.core-offline .meteor-layer { opacity: 0; }
 
 /* ---------- Móvil ---------- */
@@ -290,13 +402,14 @@ body.core-offline .meteor-layer { opacity: 0; }
 
 @media (max-width: 860px) {
   body { overflow: auto; }
-  .system-shell { height: auto; }
 
   .core-stage {
     height: auto;
-    margin: 0 var(--gutter) var(--gutter);
-    padding: 220px 0 8px;
+    min-height: 520px;
+    padding: 220px 16px 16px;
   }
+
+  .startup-gate__panel { width: calc(100% - 22px); padding: 18px 16px 16px; }
 
   .node-layer, .node-links, .core-center { display: none; }
 

@@ -23,6 +23,12 @@
       "title": "Unax Zulaika | System Core",
       "description": "System Core interface for Unax Zulaika Fuente portfolio and KeyPing as the flagship product."
     },
+    "startup": {
+      "eyebrow": "SYSTEM CORE // OFFLINE",
+      "title": "Manual startup required",
+      "copy": "Initialize the core runtime and load the module graph.",
+      "cta": "Start System"
+    },
     "boot": {
       "eyebrow": "SYSTEM CORE // INIT",
       "lines": [

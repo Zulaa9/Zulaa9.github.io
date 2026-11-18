@@ -50,13 +50,26 @@ const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
   </Fragment>
 
   <div class="core-stage" id="core-stage">
+    <section class="startup-gate" id="startup-gate" aria-label={t.core.startup.title}>
+      <div class="startup-gate__panel">
+        <p class="eyebrow">{t.core.startup.eyebrow}</p>
+        <h2>{t.core.startup.title}</h2>
+        <p>{t.core.startup.copy}</p>
+        <button class="startup-gate__button" id="start-core-button" type="button">{t.core.startup.cta}</button>
+      </div>
+    </section>
+
     <section class="boot-sequence" id="boot-sequence" aria-label={t.core.boot.eyebrow}>
+      <div class="boot-door boot-door--top" aria-hidden="true"></div>
+      <div class="boot-door boot-door--bottom" aria-hidden="true"></div>
       <div class="boot-terminal">
         <p class="boot-terminal__eyebrow">{t.core.boot.eyebrow}</p>
-        <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
-        <div class="boot-progress">
-          <div class="boot-progress__bar"><span id="boot-progress-fill"></span></div>
-          <span class="boot-progress__text" id="boot-progress-text">0%</span>
+        <div class="boot-terminal__screen">
+          <ul class="boot-log" id="boot-log" aria-live="polite"></ul>
+          <div class="boot-progress">
+            <div class="boot-progress__bar"><span id="boot-progress-fill"></span></div>
+            <span class="boot-progress__text" id="boot-progress-text">0%</span>
+          </div>
         </div>
       </div>
     </section>

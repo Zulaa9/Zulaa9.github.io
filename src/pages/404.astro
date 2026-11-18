@@ -23,7 +23,9 @@ const en = ui('en');
       })();
     </script>
   </Fragment>
-  <div class="page" id="main-content" tabindex="-1">
+  <div class="core-stage screen" id="main-content" tabindex="-1">
+  <div class="screen__scroll">
+  <div class="page">
     {LOCALES.map((l) => {
       const t = ui(l);
       return (
@@ -41,5 +43,7 @@ const en = ui('en');
         </div>
       );
     })}
+  </div>
+  </div>
   </div>
 </BaseLayout>

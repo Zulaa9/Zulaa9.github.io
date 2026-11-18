@@ -40,8 +40,6 @@ const sleep = (ms: number) => new Promise<void>((resolve) => window.setTimeout(r
 const isMobile = () => window.matchMedia('(max-width: 860px)').matches;
 const getCoreBaseScale = () => (isMobile() ? 0.52 : 1);
 
-const BOOT_KEY = 'system_core_booted';
-
 export function initSystemCore(): void {
   const dataEl = document.getElementById('core-data');
   if (!dataEl?.textContent) return;
@@ -59,6 +57,7 @@ export function initSystemCore(): void {
   const bootProgressFill = document.getElementById('boot-progress-fill');
   const bootProgressText = document.getElementById('boot-progress-text');
   const coreStatusText = document.getElementById('core-status-text');
+  const startCoreButton = document.getElementById('start-core-button') as HTMLButtonElement | null;
   const coreCopy = document.querySelector<HTMLElement>('.core-copy');
   const infoDock = document.getElementById('info-dock');
 
@@ -86,7 +85,7 @@ export function initSystemCore(): void {
     introComplete: false,
     hasDrawnIntroLinks: false,
     introStartTime: 0,
-    introDurationMs: 2100,
+    introDurationMs: 3440,
     spinX: 0,
     spinY: 0,
     coreHovering: false,
@@ -288,7 +287,7 @@ export function initSystemCore(): void {
     }
     body.classList.add('intro-running');
     state.introStartTime = performance.now() + 80;
-    [60, 560, 920, 1280, 1640, 2000].forEach((at, i) => later(() => setIntroStep(i + 1), at));
+    [80, 980, 1580, 2200, 2820, 3440].forEach((at, i) => later(() => setIntroStep(i + 1), at));
   }
 
   async function runBootSequence() {
@@ -303,7 +302,7 @@ export function initSystemCore(): void {
     body.classList.add('booting', 'boot-offline');
     startMeteorLoop();
     setCoreStatus('offline');
-    await sleep(140);
+    await sleep(220);
     body.classList.remove('boot-offline');
     body.classList.add('boot-loading');
     setCoreStatus('booting');
@@ -318,37 +317,37 @@ export function initSystemCore(): void {
       bootProgressFill.style.width = `${progress}%`;
       bootProgressText.textContent = `${progress}%`;
       setCoreStatus('loading', progress);
-      await sleep(70 + i * 8);
+      await sleep(180 + i * 24);
     }
-    await sleep(220);
+    await sleep(340);
     body.classList.add('boot-unfold');
-    await sleep(520);
+    await sleep(820);
     bootSequence.remove();
     body.classList.remove('booting', 'boot-offline', 'boot-loading');
     body.classList.add('core-syncing');
     setCoreStatus('syncing');
   }
 
-  /** Arranque automático: la primera visita de la sesión muestra la secuencia; las siguientes, solo la entrada. */
   function beginSystemStartup() {
     if (state.hasManualStart) return;
     state.hasManualStart = true;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(BOOT_KEY) === '1';
-      sessionStorage.setItem(BOOT_KEY, '1');
-    } catch {
-      // Sin almacenamiento: se muestra la secuencia completa.
-    }
-    body.classList.remove('core-offline');
-    if (seen) {
-      bootSequence?.remove();
-      startMeteorLoop();
-      setCoreStatus('syncing');
-      runIntro();
-      return;
+    body.classList.remove('awaiting-start', 'core-offline');
+    if (startCoreButton) {
+      startCoreButton.disabled = true;
+      startCoreButton.setAttribute('aria-busy', 'true');
     }
     void runBootSequence().then(runIntro);
+  }
+
+  function enterAwaitingStart() {
+    body.classList.add('awaiting-start', 'core-offline');
+    setCoreStatus('offline');
+    if (three) three.starsMesh.visible = false;
+    if (startCoreButton) {
+      startCoreButton.disabled = false;
+      startCoreButton.removeAttribute('aria-busy');
+      startCoreButton.addEventListener('click', beginSystemStartup, { once: true });
+    }
   }
 
   function fastForwardToReadyState() {
@@ -613,7 +612,7 @@ export function initSystemCore(): void {
     fastForwardToReadyState();
     beginReturnTransition();
   } else {
-    beginSystemStartup();
+    enterAwaitingStart();
   }
   if (!document.hidden) start();
 }
