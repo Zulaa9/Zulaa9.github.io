@@ -1,0 +1,79 @@
+{
+  "site": {
+    "identityRole": "Ingeniero de software orientado a sistemas",
+    "statusOnline": "NÚCLEO DEL SISTEMA ONLINE",
+    "crumbCore": "Core",
+    "backToCore": "Volver al Core",
+    "language": "Idioma",
+    "languageNames": {
+      "en": "Inglés",
+      "es": "Español"
+    },
+    "skipToContent": "Saltar al contenido",
+    "back": "Volver",
+    "screenPath": "Ruta de pantalla",
+    "modulesLabel": "Módulos"
+  },
+  "core": {
+    "page": {
+      "title": "Unax Zulaika | Núcleo del Sistema",
+      "description": "Interfaz de Núcleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing como producto principal."
+    },
+    "startup": {
+      "eyebrow": "NÚCLEO DEL SISTEMA // APAGADO",
+      "title": "Arranque manual requerido",
+      "copy": "Inicializa el entorno de ejecución del core y carga el grafo de módulos.",
+      "cta": "Iniciar Sistema"
+    },
+    "boot": {
+      "eyebrow": "NÚCLEO DEL SISTEMA // INICIO",
+      "lines": [
+        "[sys] inicializando contexto del core",
+        "[io] sondeando entorno local",
+        "[sec] validando fuente de entropía",
+        "[pkg] cargando mapa de módulos",
+        "[core] handshake completado",
+        "[core] arquitectura del sistema online"
+      ]
+    },
+    "copy": {
+      "eyebrow": "ENTRADA DEL SISTEMA",
+      "title": "Portfolio de ingeniería de producto y sistemas construido como un núcleo operativo de software.",
+      "body": "Esto es un mapa de sistema de software ingenierizado, no una portada estática. <strong>KeyPing</strong> es el nodo de producto principal, respaldado por módulos de arquitectura, capacidades y ejecución."
+    },
+    "dock": {
+      "label": "Módulo",
+      "defaultTitle": "Inspecciona un módulo",
+      "defaultCopy": "Abre cualquier módulo para revisar alcance de ingeniería, decisiones de producto y restricciones del sistema."
+    },
+    "status": {
+      "online": "NÚCLEO DEL SISTEMA ONLINE",
+      "offline": "NÚCLEO DEL SISTEMA APAGADO",
+      "booting": "ARRANCANDO NÚCLEO DEL SISTEMA",
+      "loading": "CARGANDO NÚCLEO DEL SISTEMA {progress}%",
+      "syncing": "SINCRONIZANDO CAPA VISUAL DEL NÚCLEO DEL SISTEMA"
+    },
+    "threeError": {
+      "title": "Error al cargar Three.js",
+      "copy": "No se ha podido iniciar el motor 3D. Los módulos siguen disponibles."
+    }
+  },
+  "lightbox": {
+    "close": "Cerrar",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "openMedia": "Abrir multimedia",
+    "viewer": "Visor multimedia"
+  },
+  "projects": {
+    "github": "GitHub"
+  },
+  "notFound": {
+    "title": "Módulo no encontrado | Núcleo del Sistema",
+    "description": "La ruta solicitada no existe.",
+    "eyebrow": "ERROR // 404",
+    "heading": "Módulo no encontrado",
+    "copy": "La ruta que has pedido no forma parte del mapa del sistema.",
+    "cta": "Volver al Core"
+  }
+}
