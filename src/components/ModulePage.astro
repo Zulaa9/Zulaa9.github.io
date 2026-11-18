@@ -54,6 +54,8 @@ const pageData = {
     backHref={`${localePath(lang)}?from=${module.id}`}
     backLabel={t.site.back}
     pathLabel={t.site.screenPath}
+    expandLabel={t.site.expandScreen}
+    collapseLabel={t.site.collapseScreen}
   >
     {d.template === 'about' && <AboutTemplate module={module} all={all} lang={lang} />}
     {d.template === 'section' && <SectionTemplate module={module} lang={lang} />}

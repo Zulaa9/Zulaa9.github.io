@@ -12,10 +12,20 @@ interface Props {
   backHref: string;
   backLabel: string;
   pathLabel: string;
+  expandLabel: string;
+  collapseLabel: string;
 }
-const { crumbs, currentId, backHref, backLabel, pathLabel } = Astro.props;
+const { crumbs, currentId, backHref, backLabel, pathLabel, expandLabel, collapseLabel } = Astro.props;
 const withFrom = (href: string) => `${href}?from=${currentId}`;
 ---
+<script is:inline>
+  // Antes de pintar: si la ventana estaba ampliada en esta sesión, se abre ya ampliada y sin animación.
+  try {
+    if (sessionStorage.getItem('zula:screen-expanded') === '1') {
+      document.documentElement.classList.add('screen-expanded', 'screen-noanim');
+    }
+  } catch {}
+</script>
 <div class="core-stage screen" id="main-content" tabindex="-1">
   <nav class="crumbbar" aria-label={pathLabel}>
     <a href={backHref} class="back-button" id="back-to-core-link" aria-label={backLabel}>
@@ -26,6 +36,23 @@ const withFrom = (href: string) => `${href}?from=${currentId}`;
         <li>{c.href ? <a href={withFrom(c.href)}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
       ))}
     </ol>
+    <button
+      type="button"
+      class="screen-toggle"
+      id="screen-toggle"
+      aria-pressed="false"
+      aria-label={expandLabel}
+      title={expandLabel}
+      data-label-expand={expandLabel}
+      data-label-collapse={collapseLabel}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path class="screen-toggle__corner screen-toggle__corner--tl" d="M4 9V4h5" />
+        <path class="screen-toggle__corner screen-toggle__corner--tr" d="M15 4h5v5" />
+        <path class="screen-toggle__corner screen-toggle__corner--br" d="M20 15v5h-5" />
+        <path class="screen-toggle__corner screen-toggle__corner--bl" d="M9 20H4v-5" />
+      </svg>
+    </button>
   </nav>
   <div class="screen__scroll" tabindex="0">
     <div class="page">

@@ -63,6 +63,57 @@ body { overflow: hidden; }
 .crumbs a:hover { color: #fff; }
 .crumbs [aria-current] { color: #e7f6ff; }
 
+/* Botón de ampliar: la ventana crece sobre la barra superior para dejar más sitio al contenido. */
+.screen-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid rgba(143, 186, 214, 0.36);
+  border-radius: 8px;
+  color: #e4f3ff;
+  background: linear-gradient(145deg, rgba(14, 30, 43, 0.9), rgba(9, 20, 31, 0.85));
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.screen-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.screen-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.screen-toggle__corner { transform-box: fill-box; transform-origin: center; transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* Ampliada, cada esquina gira hacia dentro: el icono pasa a "restaurar". */
+html.screen-expanded .screen-toggle__corner--tl { transform: rotate(180deg); }
+html.screen-expanded .screen-toggle__corner--tr { transform: rotate(180deg); }
+html.screen-expanded .screen-toggle__corner--br { transform: rotate(180deg); }
+html.screen-expanded .screen-toggle__corner--bl { transform: rotate(180deg); }
+
+@media (min-width: 861px) {
+  .page-shell .core-stage {
+    z-index: 11;
+    transition: margin 460ms cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 460ms ease, box-shadow 460ms ease;
+  }
+  .page-shell .topbar { transition: opacity 280ms ease 120ms, transform 460ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+  html.screen-expanded .page-shell .core-stage {
+    margin: calc(10px - var(--topbar-h, 76px)) 10px 10px;
+    border-radius: 14px;
+    box-shadow: 0 30px 110px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(160, 200, 225, 0.08);
+  }
+  html.screen-expanded .page-shell .topbar {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 460ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  html.screen-noanim .page-shell .core-stage,
+  html.screen-noanim .page-shell .topbar,
+  html.screen-noanim .screen-toggle__corner { transition: none; }
+}
+
 .screen__scroll {
   flex: 1;
   min-height: 0;
@@ -516,6 +567,7 @@ body.is-lightbox-open { overflow: hidden; }
   .core-stage.screen { overflow: visible; }
   .crumbbar { position: sticky; border-radius: 18px 18px 0 0; }
   .screen__scroll { padding-top: 0; overflow: visible; }
+  .screen-toggle { display: none; }
 
   .phead { grid-template-columns: 1fr; padding: 40px 0 44px; align-items: start; }
   .phead__aside { order: -1; }

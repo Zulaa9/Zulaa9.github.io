@@ -51,6 +51,7 @@ export function initModulePage(): PageData | null {
 
   window.requestAnimationFrame(() => body.classList.add('is-page-ready'));
   initCopyButtons();
+  initScreenToggle();
 
   // Al volver con el botón del navegador (bfcache) la página no debe quedarse "saliendo".
   window.addEventListener('pageshow', (event) => {
@@ -60,6 +61,57 @@ export function initModulePage(): PageData | null {
     }
   });
   return data;
+}
+
+/**
+ * Ampliar/restaurar la ventana: la pantalla crece sobre la barra superior.
+ * El estado se recuerda en la sesión para que siga igual al cambiar de módulo.
+ */
+const EXPANDED_KEY = 'zula:screen-expanded';
+
+function initScreenToggle() {
+  const root = document.documentElement;
+  const btn = document.getElementById('screen-toggle') as HTMLButtonElement | null;
+  const topbar = document.querySelector<HTMLElement>('.topbar');
+  if (!btn) return;
+
+  const measure = () => {
+    if (topbar) root.style.setProperty('--topbar-h', `${topbar.offsetHeight}px`);
+  };
+  const sync = () => {
+    const expanded = root.classList.contains('screen-expanded');
+    btn.setAttribute('aria-pressed', String(expanded));
+    const label = (expanded ? btn.dataset.labelCollapse : btn.dataset.labelExpand) ?? '';
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+    topbar?.toggleAttribute('inert', expanded && window.matchMedia('(min-width: 861px)').matches);
+  };
+  const set = (expanded: boolean) => {
+    measure();
+    root.classList.toggle('screen-expanded', expanded);
+    try {
+      if (expanded) sessionStorage.setItem(EXPANDED_KEY, '1');
+      else sessionStorage.removeItem(EXPANDED_KEY);
+    } catch {
+      // Sin almacenamiento solo se pierde el recuerdo entre páginas.
+    }
+    sync();
+  };
+
+  measure();
+  sync();
+  // Si la página se abrió ya ampliada, se reactivan las transiciones tras el primer pintado.
+  window.requestAnimationFrame(() => window.requestAnimationFrame(() => root.classList.remove('screen-noanim')));
+  window.addEventListener('resize', () => {
+    measure();
+    sync();
+  });
+  btn.addEventListener('click', () => set(!root.classList.contains('screen-expanded')));
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !root.classList.contains('screen-expanded')) return;
+    if (document.body.classList.contains('is-lightbox-open')) return;
+    set(false);
+  });
 }
 
 /** Botones "copiar" (p. ej. la dirección de correo en Contacto). */

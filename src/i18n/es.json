@@ -12,6 +12,8 @@
     "skipToContent": "Saltar al contenido",
     "back": "Volver",
     "screenPath": "Ruta de pantalla",
+    "expandScreen": "Ampliar ventana",
+    "collapseScreen": "Restaurar ventana",
     "modulesLabel": "Módulos",
     "copy": "Copiar",
     "copied": "Copiado",

@@ -12,6 +12,8 @@
     "skipToContent": "Skip to content",
     "back": "Back",
     "screenPath": "Screen path",
+    "expandScreen": "Expand window",
+    "collapseScreen": "Restore window",
     "modulesLabel": "Modules",
     "copy": "Copy",
     "copied": "Copied",
