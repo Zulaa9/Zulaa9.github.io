@@ -1,0 +1,27 @@
+---
+/**
+ * Sección numerada de una página: a la izquierda número, antetítulo y título;
+ * a la derecha el contenido. Sustituye a las tarjetas anidadas.
+ */
+interface Props {
+  index?: number;
+  title?: string;
+  kicker?: string;
+  id?: string;
+  level?: 2 | 3;
+  wide?: boolean;
+}
+const { index, title, kicker, id, level = 2, wide = false } = Astro.props;
+const Heading = level === 3 ? 'h3' : 'h2';
+const headingId = id ? `${id}-title` : undefined;
+---
+<section class:list={['sec', { 'sec--wide': wide, 'sec--untitled': !title }]} id={id} aria-labelledby={title ? headingId : undefined}>
+  {(title || index !== undefined || kicker) && (
+    <div class="sec__head">
+      {index !== undefined && <span class="sec__index" aria-hidden="true">{String(index).padStart(2, '0')}</span>}
+      {kicker && <p class="sec__kicker">{kicker}</p>}
+      {title && <Heading class="sec__title" id={headingId}>{title}</Heading>}
+    </div>
+  )}
+  <div class="sec__body"><slot /></div>
+</section>

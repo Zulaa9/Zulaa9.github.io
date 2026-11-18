@@ -8,7 +8,7 @@ const fullSrc = (img: HTMLImageElement) => img.dataset.full || img.currentSrc ||
 
 export function initLightbox(): void {
   const body = document.body;
-  const figures = [...document.querySelectorAll<HTMLElement>('.keyping-media')];
+  const figures = [...document.querySelectorAll<HTMLElement>('.gallery__item')];
   const lightbox = document.getElementById('keyping-lightbox');
   const image = document.getElementById('keyping-lightbox-image') as HTMLImageElement | null;
   const imageSecondary = document.getElementById('keyping-lightbox-image-secondary') as HTMLImageElement | null;
@@ -17,7 +17,7 @@ export function initLightbox(): void {
   const prev = document.getElementById('keyping-lightbox-prev');
   const next = document.getElementById('keyping-lightbox-next');
   const closeBtn = document.getElementById('keyping-lightbox-close');
-  const figureEl = document.querySelector<HTMLElement>('.keyping-lightbox__figure');
+  const figureEl = document.querySelector<HTMLElement>('.lightbox__figure');
   if (!lightbox || !figures.length || !image || !caption || !figureEl) return;
 
   let index = -1;
@@ -27,7 +27,7 @@ export function initLightbox(): void {
     const figure = figures[i];
     if (!figure) return null;
     const cap = figure.querySelector('figcaption')?.textContent ?? '';
-    const composite = [...figure.querySelectorAll<HTMLImageElement>('.keyping-media-composite img')];
+    const composite = [...figure.querySelectorAll<HTMLImageElement>('.gallery__composite img')];
     if (composite.length >= 2) {
       return { type: 'composite', src: fullSrc(composite[0]!), srcSecondary: fullSrc(composite[1]!), alt: composite[0]!.alt, altSecondary: composite[1]!.alt, caption: cap };
     }

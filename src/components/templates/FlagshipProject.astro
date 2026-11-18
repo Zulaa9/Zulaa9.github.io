@@ -1,14 +1,16 @@
 ---
 /**
  * Vista de producto estrella (layout "flagship" de la plantilla Proyecto).
- * Es un componente específico porque su maquetación (salud del módulo, pills,
- * galería con visor, tarjetas de arquitectura…) no se puede expresar sin pérdida
- * con la plantilla estándar. Todo su contenido sigue en el archivo del módulo.
+ * Componente específico porque tiene más secciones que la plantilla estándar
+ * (motivación, señales, galería con visor, seguridad, arquitectura,
+ * integridad, roadmap). Todo su contenido sigue en el archivo del módulo.
  */
 import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { tr, ui, type Locale } from '../../lib/i18n';
 import type { ModuleEntry } from '../../lib/modules';
+import PageHeader from '../ui/PageHeader.astro';
+import Sec from '../ui/Sec.astro';
 
 interface Props { module: ModuleEntry; lang: Locale }
 const { module, lang } = Astro.props;
@@ -19,115 +21,108 @@ const t = ui(lang);
 const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.min(1920, src.width), format: 'webp', quality: 85 })).src;
 
 type Item = (typeof f.gallery.items)[number];
-const withFull = await Promise.all(
+const media = await Promise.all(
   f.gallery.items.map(async (item: Item) => ({
     item,
     full: item.type === 'image' ? [await full(item.src)] : item.type === 'composite' ? await Promise.all(item.parts.map((x) => full(x.src))) : [],
   })),
 );
-const hero = withFull.filter((x) => x.item.placement === 'hero');
-const rail = withFull.filter((x) => x.item.placement === 'rail');
-const extra = withFull.filter((x) => x.item.placement === 'extra');
-const thumbSizes = '(max-width: 860px) 92vw, 420px';
+const videos = media.filter((x) => x.item.type === 'video');
+const stills = media.filter((x) => x.item.type !== 'video');
+
+const toc = [
+  { id: 'overview', title: tr(p.description.title, lang) },
+  { id: 'why', title: tr(f.why.title, lang) },
+  { id: 'signals', title: tr(f.metrics.title, lang) },
+  { id: 'gallery', title: tr(f.gallery.title, lang) },
+  { id: 'features', title: tr(f.features.title, lang) },
+  { id: 'security', title: tr(f.security.title, lang) },
+  { id: 'architecture', title: tr(f.architecture.title, lang) },
+  { id: 'integrity', title: tr(f.integrity.title, lang) },
+  { id: 'roadmap', title: tr(f.roadmap.title, lang) },
+];
+let n = 0;
 ---
-<section class="keyping-module-shell" aria-label={tr(p.name, lang)}>
-  <div class="keyping-header">
-    <div class="keyping-mark" aria-hidden="true">
-      <Image src={f.logo} alt="" width={112} loading="eager" />
-    </div>
-    <div class="keyping-title">
-      <p class="eyebrow">{tr(p.header.eyebrow, lang)}</p>
-      <h1>{tr(p.header.title, lang)}</h1>
-      <p class="keyping-tagline">{tr(p.header.lead, lang)}</p>
-      <p class="keyping-punchline">{tr(f.punchline, lang)}</p>
-    </div>
-    {p.status && (
-      <div class="keyping-health">
-        <p class="keyping-health__label">{tr(p.status.label, lang)}</p>
-        <p class="keyping-health__state">{tr(p.status.value, lang)}</p>
-      </div>
-    )}
-  </div>
-
-  <div class="keyping-pills">
-    {f.pills.map((pill) => <span class="keyping-pill">{tr(pill, lang)}</span>)}
-  </div>
-
-  <section class="keyping-section">
-    <h2 class="keyping-h3">{tr(p.description.title, lang)}</h2>
-    {p.description.paragraphs.map((para) => <p>{tr(para, lang)}</p>)}
+<article class="page-body page-body--flagship">
+  <PageHeader eyebrow={tr(p.header.eyebrow, lang)} title={tr(p.header.title, lang)} lead={tr(p.header.lead, lang)} leadSize="large">
+    <p class="phead__punchline">{tr(f.punchline, lang)}</p>
     {f.actions.length > 0 && (
-      <div class="keyping-actions">
+      <div class="actions">
         {f.actions.map((a) => (
-          <a class={`keyping-action keyping-action--${a.variant}`} href={a.url} target="_blank" rel="noopener noreferrer">
-            <span class="keyping-action__eyebrow">{tr(a.eyebrow, lang)}</span>
-            <span class="keyping-action__title">{tr(a.label, lang)}</span>
+          <a class={a.variant === 'download' ? 'btn btn--primary' : 'link-arrow'} href={a.url} target="_blank" rel="noopener noreferrer">
+            {tr(a.label, lang)} <span aria-hidden="true">↗</span>
           </a>
         ))}
       </div>
     )}
-  </section>
-
-  <section class="keyping-section keyping-why">
-    <h2 class="keyping-h3">{tr(f.why.title, lang)}</h2>
-    <p class="keyping-why__subtitle">{tr(f.why.subtitle, lang)}</p>
-    <p>{tr(f.why.lead, lang)}</p>
-    <div class="keyping-why-grid">
-      {f.why.cards.map((c) => (
-        <article class="keyping-why-card">
-          <h3 class="keyping-h4">{tr(c.title, lang)}</h3>
-          <p>{tr(c.copy, lang)}</p>
-        </article>
-      ))}
+    <div class="phead__product" slot="aside">
+      <Image class="phead__logo" src={f.logo} alt="" width={96} loading="eager" />
+      <dl class="spec spec--compact">
+        {p.status && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
+        <div><dt>{tr(p.stackTitle, lang) || 'Stack'}</dt><dd>{p.stack.map((s) => tr(s, lang)).join(' · ')}</dd></div>
+      </dl>
+      <ul class="traits">{f.pills.map((pill) => <li>{tr(pill, lang)}</li>)}</ul>
     </div>
+  </PageHeader>
+
+  <nav class="toc" aria-label={t.site.onThisPage}>
+    <p class="label">{t.site.onThisPage}</p>
+    <ol>
+      {toc.map((x, i) => <li><a href={`#${x.id}`}><span aria-hidden="true">{String(i + 1).padStart(2, '0')}</span> {x.title}</a></li>)}
+    </ol>
+  </nav>
+
+  <Sec id="overview" index={++n} title={toc[0]!.title}>
+    <div class="prose prose--large">{p.description.paragraphs.map((para) => <p>{tr(para, lang)}</p>)}</div>
+  </Sec>
+
+  <Sec id="why" index={++n} kicker={tr(f.why.subtitle, lang)} title={toc[1]!.title}>
+    <p class="sec__lead">{tr(f.why.lead, lang)}</p>
+    <dl class="terms">
+      {f.why.cards.map((c) => <div><dt>{tr(c.title, lang)}</dt><dd>{tr(c.copy, lang)}</dd></div>)}
+    </dl>
     {f.why.focus && (
-      <div class="keyping-why-focus">
-        <h3 class="keyping-h4">{tr(f.why.focus.title, lang)}</h3>
+      <div class="callout">
+        <h3 class="callout__title">{tr(f.why.focus.title, lang)}</h3>
         <p>{tr(f.why.focus.copy, lang)}</p>
       </div>
     )}
-  </section>
+  </Sec>
 
-  <section class="keyping-section keyping-metrics">
-    <h2 class="keyping-h3">{tr(f.metrics.title, lang)}</h2>
-    <p class="keyping-metrics__subtitle">{tr(f.metrics.subtitle, lang)}</p>
-    <ul class="keyping-metrics-grid">{f.metrics.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
-    <p class="keyping-metrics__statement">{tr(f.metrics.statement, lang)}</p>
-  </section>
+  <Sec id="signals" index={++n} kicker={tr(f.metrics.subtitle, lang)} title={toc[2]!.title}>
+    <ul class="facts">{f.metrics.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+    <p class="note">{tr(f.metrics.statement, lang)}</p>
+  </Sec>
 
-  <section class="keyping-section keyping-visuals">
-    <h2 class="keyping-h3">{tr(f.gallery.title, lang)}</h2>
-    <p>{tr(f.gallery.lead, lang)}</p>
-    <div class="keyping-media-grid">
-      {hero.map(({ item }) => item.type === 'video' && (
-        <figure class="keyping-media keyping-media--hero" tabindex="0" role="button" aria-label={`${t.lightbox.openMedia}: ${tr(item.alt, lang)}`}>
+  <Sec id="gallery" index={++n} title={toc[3]!.title} wide>
+    <p class="sec__lead">{tr(f.gallery.lead, lang)}</p>
+    <div class="gallery">
+      {videos.map(({ item }) => item.type === 'video' && (
+        <figure class="shot shot--hero gallery__item" tabindex="0" role="button" aria-label={`${t.lightbox.openMedia}: ${tr(item.alt, lang)}`}>
           <video autoplay muted loop playsinline preload="metadata" aria-label={tr(item.alt, lang)}>
             <source src={item.src} type={item.src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
           </video>
           <figcaption>{tr(item.caption, lang)}</figcaption>
         </figure>
       ))}
-      <div class="keyping-media-rail">
-        {rail.map(({ item, full }, i) => {
-          const more = extra.length > 0 && i === rail.length - 1;
+      <div class="gallery-grid">
+        {stills.map(({ item, full }) => {
           if (item.type === 'composite') {
             return (
-              <figure class:list={['keyping-media keyping-media--composite', { 'keyping-media--more': more }]} tabindex="0" role="button" aria-label={`${t.lightbox.openMedia}: ${tr(item.caption, lang)}`}>
-                <div class="keyping-media-composite">
+              <figure class="shot gallery__item" tabindex="0" role="button" aria-label={`${t.lightbox.openMedia}: ${tr(item.caption, lang)}`}>
+                <div class="shot__pair gallery__composite">
                   {item.parts.map((part, j) => (
-                    <Image src={part.src} alt={tr(part.alt, lang)} widths={[420, 840]} sizes={thumbSizes} loading="lazy" decoding="async" data-full={full[j]} />
+                    <Image src={part.src} alt={tr(part.alt, lang)} widths={[420, 840]} sizes="(max-width: 860px) 46vw, 260px" loading="lazy" decoding="async" data-full={full[j]} />
                   ))}
                 </div>
-                {more && <span class="keyping-media-more-badge">{tr(f.gallery.moreBadge, lang)}</span>}
                 <figcaption>{tr(item.caption, lang)}</figcaption>
               </figure>
             );
           }
           if (item.type === 'image') {
             return (
-              <figure class:list={['keyping-media', { 'keyping-media--more': more, 'keyping-media--compact': item.compact }]} tabindex="0" role="button" aria-label={`${t.lightbox.openMedia}: ${tr(item.alt, lang)}`}>
-                <Image src={item.src} alt={tr(item.alt, lang)} widths={[420, 840]} sizes={thumbSizes} loading="lazy" decoding="async" data-full={full[0]} />
-                {more && <span class="keyping-media-more-badge">{tr(f.gallery.moreBadge, lang)}</span>}
+              <figure class="shot gallery__item" tabindex="0" role="button" aria-label={`${t.lightbox.openMedia}: ${tr(item.alt, lang)}`}>
+                <Image src={item.src} alt={tr(item.alt, lang)} widths={[420, 840]} sizes="(max-width: 860px) 92vw, 520px" loading="lazy" decoding="async" data-full={full[0]} />
                 <figcaption>{tr(item.caption, lang)}</figcaption>
               </figure>
             );
@@ -135,53 +130,32 @@ const thumbSizes = '(max-width: 860px) 92vw, 420px';
           return null;
         })}
       </div>
-
-      {extra.length > 0 && (
-        <div class="keyping-media-hidden" aria-hidden="true">
-          {extra.map(({ item, full }) => item.type === 'image' && (
-            <figure class:list={['keyping-media', { 'keyping-media--compact': item.compact }]} tabindex="-1" role="button" aria-label={t.lightbox.openMedia}>
-              <img src={full[0]} alt={tr(item.alt, lang)} loading="lazy" decoding="async" data-full={full[0]} width={item.src.width} height={item.src.height} />
-              <figcaption>{tr(item.caption, lang)}</figcaption>
-            </figure>
-          ))}
-        </div>
-      )}
     </div>
-  </section>
+  </Sec>
 
-  <div class="keyping-grid">
-    <section class="keyping-section keyping-card">
-      <h2 class="keyping-h3">{tr(f.features.title, lang)}</h2>
-      <ul class="keyping-list">{f.features.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
-    </section>
+  <Sec id="features" index={++n} title={toc[4]!.title}>
+    <ul class="ruled ruled--cols">{f.features.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+  </Sec>
 
-    <section class="keyping-section keyping-card">
-      <h2 class="keyping-h3">{tr(f.security.title, lang)}</h2>
-      <ul class="keyping-list">{f.security.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
-    </section>
+  <Sec id="security" index={++n} title={toc[5]!.title}>
+    <ul class="ruled">{f.security.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+  </Sec>
 
-    <section class="keyping-section keyping-card">
-      <h2 class="keyping-h3">{tr(f.architecture.title, lang)}</h2>
-      {f.architecture.stack.map((s) => (
-        <p class="keyping-stack-line">
-          <span>{tr(s.label, lang)}</span>
-          <strong>{tr(s.value, lang)}</strong>
-        </p>
-      ))}
-      <ol class="keyping-flow">{f.architecture.flow.map((i) => <li>{tr(i, lang)}</li>)}</ol>
-    </section>
+  <Sec id="architecture" index={++n} title={toc[6]!.title}>
+    <dl class="spec">
+      {f.architecture.stack.map((s) => <div><dt>{tr(s.label, lang)}</dt><dd>{tr(s.value, lang)}</dd></div>)}
+    </dl>
+    <ol class="flow">{f.architecture.flow.map((i) => <li>{tr(i, lang)}</li>)}</ol>
+  </Sec>
 
-    <section class="keyping-section keyping-card">
-      <h2 class="keyping-h3">{tr(f.integrity.title, lang)}</h2>
-      <p>{tr(f.integrity.copy, lang)}</p>
-      <ul class="keyping-list">{f.integrity.files.map((i) => <li>{tr(i, lang)}</li>)}</ul>
-      <p class="keyping-cmd-label">{tr(f.integrity.verifyLabel, lang)}</p>
-      <pre class="keyping-code"><code>{f.integrity.command}</code></pre>
-    </section>
-  </div>
+  <Sec id="integrity" index={++n} title={toc[7]!.title}>
+    <div class="prose"><p>{tr(f.integrity.copy, lang)}</p></div>
+    <ul class="tech tech--small">{f.integrity.files.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+    <p class="label">{tr(f.integrity.verifyLabel, lang)}</p>
+    <pre class="code"><code>{f.integrity.command}</code></pre>
+  </Sec>
 
-  <section class="keyping-section keyping-section--roadmap">
-    <h2 class="keyping-h3">{tr(f.roadmap.title, lang)}</h2>
-    <ul class="keyping-list">{f.roadmap.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
-  </section>
-</section>
+  <Sec id="roadmap" index={++n} title={toc[8]!.title}>
+    <ul class="ruled ruled--todo">{f.roadmap.items.map((i) => <li>{tr(i, lang)}</li>)}</ul>
+  </Sec>
+</article>

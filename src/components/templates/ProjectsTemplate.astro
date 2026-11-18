@@ -1,8 +1,9 @@
 ---
-/** Índice de proyectos: cabecera + tarjetas de los módulos "project" hijos de este módulo. */
+/** Índice de proyectos: cabecera + los módulos "project" hijos de este módulo. */
+import { Image } from 'astro:assets';
 import { tr, localePath, ui, type Locale } from '../../lib/i18n';
-import { coverUrl } from '../../lib/images';
 import type { ModuleEntry } from '../../lib/modules';
+import PageHeader from '../ui/PageHeader.astro';
 
 interface Props { module: ModuleEntry; all: ModuleEntry[]; lang: Locale }
 const { module, all, lang } = Astro.props;
@@ -10,41 +11,33 @@ if (module.data.template !== 'projects') throw new Error('ProjectsTemplate neces
 const d = module.data.projects;
 const t = ui(lang);
 const projects = all.filter((m) => m.data.visible && m.data.template === 'project' && m.data.parent === module.id);
-const cards = await Promise.all(
-  projects.map(async (m) => {
-    if (m.data.template !== 'project') throw new Error('unreachable');
-    const p = m.data.project;
-    return { m, p, cover: await coverUrl(p.cover.src, p.cover.fit) };
-  }),
-);
 ---
-<section class="projects-shell" aria-label={tr(module.data.node.title, lang)}>
-  <header class="projects-header">
-    <p class="eyebrow">{tr(d.header.eyebrow, lang)}</p>
-    <h1>{tr(d.header.title, lang)}</h1>
-    <p class="projects-lead">{tr(d.header.lead, lang)}</p>
-  </header>
+<article class="page-body">
+  <PageHeader eyebrow={tr(d.header.eyebrow, lang)} title={tr(d.header.title, lang)} lead={tr(d.header.lead, lang)} />
 
-  <section class="projects-gallery">
-    {cards.map(({ m, p, cover }) => (
-      <article class:list={['project-card', p.featured ? 'project-card--flagship' : 'project-card--secondary']}>
-        <div
-          class:list={['project-card__media', p.cover.fit === 'logo' ? 'project-card__media--logo' : 'project-card__media--portfolio']}
-          role="img"
-          aria-label={tr(p.cover.alt, lang)}
-          style={`--cover-image: url("${cover}")`}
-        ></div>
-        <p class="project-card__eyebrow">{tr(p.cardEyebrow, lang)}</p>
-        <h2>{tr(p.name, lang)}</h2>
-        <p class="project-card__desc">{tr(p.summary, lang)}</p>
-        <ul class="stack-list">{p.stack.map((s) => <li>{tr(s, lang)}</li>)}</ul>
-        <div class="project-actions">
-          <a class:list={['project-btn', { 'project-btn--primary': p.featured }]} href={`${localePath(lang, m.data.path)}?from=${module.id}`}>{tr(p.enterLabel, lang)}</a>
-          {p.links.filter((l) => l.kind === 'github').slice(0, 1).map((l) => (
-            <a class="project-btn" href={l.url} target="_blank" rel="noopener noreferrer">{tr(l.label, lang) || t.projects.github}</a>
-          ))}
-        </div>
-      </article>
-    ))}
-  </section>
-</section>
+  <ol class="projects">
+    {projects.map((m, i) => {
+      if (m.data.template !== 'project') return null;
+      const p = m.data.project;
+      const href = `${localePath(lang, m.data.path)}?from=${module.id}`;
+      const gh = p.links.find((l) => l.kind === 'github');
+      return (
+        <li class:list={['proj', { 'proj--featured': p.featured }]}>
+          <a class:list={['proj__media', { 'proj__media--logo': p.cover.fit === 'logo' }]} href={href} tabindex="-1" aria-hidden="true">
+            <Image src={p.cover.src} alt="" widths={p.cover.fit === 'logo' ? [160, 320] : [480, 960]} sizes={p.cover.fit === 'logo' ? '160px' : '(max-width: 860px) 92vw, 520px'} loading="lazy" decoding="async" />
+          </a>
+          <div class="proj__body">
+            <p class="kicker"><span class="kicker__index">{String(i + 1).padStart(2, '0')}</span> {tr(p.cardEyebrow, lang)}</p>
+            <h2 class="proj__title"><a href={href}>{tr(p.name, lang)}</a></h2>
+            <p class="proj__summary">{tr(p.summary, lang)}</p>
+            <ul class="tech tech--small">{p.stack.map((s) => <li>{tr(s, lang)}</li>)}</ul>
+            <div class="actions">
+              <a class:list={['btn', { 'btn--primary': p.featured }]} href={href}>{tr(p.enterLabel, lang)} <span aria-hidden="true">→</span></a>
+              {gh && <a class="link-arrow" href={gh.url} target="_blank" rel="noopener noreferrer">{tr(gh.label, lang) || t.projects.github} <span aria-hidden="true">↗</span></a>}
+            </div>
+          </div>
+        </li>
+      );
+    })}
+  </ol>
+</article>

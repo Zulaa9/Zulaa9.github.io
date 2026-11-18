@@ -1,0 +1,21 @@
+---
+/** Cabecera de una página de módulo: antetítulo, título y entradilla. */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  leadSize?: 'normal' | 'large';
+}
+const { eyebrow, title, lead, leadSize = 'normal' } = Astro.props;
+// Un antetítulo que repite el título (p. ej. "ABOUT" sobre "About") no aporta nada.
+const showEyebrow = !!eyebrow && eyebrow.trim().toLowerCase() !== title.trim().toLowerCase();
+---
+<header class="phead">
+  <div class="phead__main">
+    {showEyebrow && <p class="kicker">{eyebrow}</p>}
+    <h1 class="phead__title">{title}</h1>
+    {lead && <p class:list={['phead__lead', { 'phead__lead--large': leadSize === 'large' }]}>{lead}</p>}
+    <slot />
+  </div>
+  {Astro.slots.has('aside') && <div class="phead__aside"><slot name="aside" /></div>}
+</header>

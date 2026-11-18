@@ -1,35 +1,28 @@
 ---
-/** Marco de una página de módulo: barra de ruta (breadcrumbs + atrás) y zona con scroll. */
+/** Marco de una página de módulo: ruta (volver + migas) y contenido. */
 import type { Crumb } from '../lib/modules';
 
 interface Props {
-  skin: string;
   crumbs: Crumb[];
   currentId: string;
   backHref: string;
   backLabel: string;
   pathLabel: string;
 }
-const { skin, crumbs, currentId, backHref, backLabel, pathLabel } = Astro.props;
+const { crumbs, currentId, backHref, backLabel, pathLabel } = Astro.props;
 const withFrom = (href: string) => `${href}?from=${currentId}`;
 ---
-<div class={`core-stage ${skin}-stage`} id="main-content" tabindex="-1">
-  <nav class={`${skin}-crumbbar`} aria-label={pathLabel}>
-    <a href={backHref} class={`back-button ${skin}-back`} id="back-to-core-link" aria-label={backLabel}>
-      <span class={`${skin}-back__icon`} aria-hidden="true">
-        <svg viewBox="0 0 24 24" focusable="false"><path d="M15 5L8 12L15 19" /></svg>
-      </span>
+<div class="page" id="main-content" tabindex="-1">
+  <nav class="crumbbar" aria-label={pathLabel}>
+    <a href={backHref} class="back-button" id="back-to-core-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5L8 12L15 19" /></svg>
+      <span>{backLabel}</span>
     </a>
-    <p class={`${skin}-crumbs`}>
+    <ol class="crumbs">
       {crumbs.map((c) => (
-        <Fragment>
-          <span class={`${skin}-crumbs__sep`} aria-hidden="true">/</span>
-          {c.href ? <a href={withFrom(c.href)}><span>{c.label}</span></a> : <span aria-current="page">{c.label}</span>}
-        </Fragment>
+        <li>{c.href ? <a href={withFrom(c.href)}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
       ))}
-    </p>
+    </ol>
   </nav>
-  <div class={`${skin}-scroll`} tabindex="0">
-    <slot />
-  </div>
+  <slot />
 </div>

@@ -44,19 +44,41 @@ export function initModulePage(): PageData | null {
         return;
       }
       isLeaving = true;
-      body.classList.add(`is-leaving-${data.skin}`);
+      body.classList.add('is-page-leaving');
       window.setTimeout(() => location.assign(backTarget), 140);
     });
   }
 
-  window.requestAnimationFrame(() => body.classList.add(`is-${data.skin}-ready`));
+  window.requestAnimationFrame(() => body.classList.add('is-page-ready'));
+  initCopyButtons();
 
   // Al volver con el botón del navegador (bfcache) la página no debe quedarse "saliendo".
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
       isLeaving = false;
-      body.classList.remove(`is-leaving-${data.skin}`);
+      body.classList.remove('is-page-leaving');
     }
   });
   return data;
+}
+
+/** Botones "copiar" (p. ej. la dirección de correo en Contacto). */
+function initCopyButtons() {
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const state = btn.querySelector<HTMLElement>('.copy-btn__state');
+    const idle = state?.textContent ?? '';
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+      } catch {
+        return;
+      }
+      btn.classList.add('is-copied');
+      if (state) state.textContent = btn.dataset.copiedLabel ?? idle;
+      window.setTimeout(() => {
+        btn.classList.remove('is-copied');
+        if (state) state.textContent = idle;
+      }, 1800);
+    });
+  });
 }

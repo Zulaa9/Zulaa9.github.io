@@ -6,15 +6,13 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { localePath, ui, LOCALES } from '../lib/i18n';
-import sectionCss from '../styles/section.css?url';
-import sharedCss from '../styles/shared.css?url';
+import pageCss from '../styles/page.css?url';
 
 const en = ui('en');
 ---
-<BaseLayout lang="en" title={en.notFound.title} description={en.notFound.description} path={null} bodyClass="section-page is-section-ready" shellLabel="404">
+<BaseLayout lang="en" title={en.notFound.title} description={en.notFound.description} path={null} bodyClass="page-shell" shellLabel="404">
   <Fragment slot="head">
-    <link rel="stylesheet" href={sectionCss} />
-    <link rel="stylesheet" href={sharedCss} />
+    <link rel="stylesheet" href={pageCss} />
     <style is:inline>html[lang="es"] [data-only="en"], html[lang="en"] [data-only="es"] { display: none; }</style>
     <script is:inline>
       (function () {
@@ -25,25 +23,23 @@ const en = ui('en');
       })();
     </script>
   </Fragment>
-  <div class="core-stage section-stage" id="main-content" tabindex="-1">
-    <div class="section-scroll">
-      <section class="section-shell">
-        {LOCALES.map((l) => {
-          const t = ui(l);
-          return (
-            <div data-only={l} lang={l}>
-              <header class="section-header">
-                <p class="eyebrow">{t.notFound.eyebrow}</p>
-                <h1>{t.notFound.heading}</h1>
-                <p class="section-lead">{t.notFound.copy}</p>
-              </header>
-              <section class="block-box block-text--lines">
-                <a class="block-text__line" href={localePath(l)}>{t.notFound.cta}</a>
-              </section>
+  <div class="page" id="main-content" tabindex="-1">
+    {LOCALES.map((l) => {
+      const t = ui(l);
+      return (
+        <div data-only={l} lang={l}>
+          <header class="phead">
+            <div class="phead__main">
+              <p class="kicker">{t.notFound.eyebrow}</p>
+              <h1 class="phead__title">{t.notFound.heading}</h1>
+              <p class="phead__lead">{t.notFound.copy}</p>
+              <div class="actions">
+                <a class="btn btn--primary" href={localePath(l)}>{t.notFound.cta} <span aria-hidden="true">→</span></a>
+              </div>
             </div>
-          );
-        })}
-      </section>
-    </div>
+          </header>
+        </div>
+      );
+    })}
   </div>
 </BaseLayout>

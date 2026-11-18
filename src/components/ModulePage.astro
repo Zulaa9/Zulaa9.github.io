@@ -11,12 +11,8 @@ import FlagshipProject from './templates/FlagshipProject.astro';
 import { breadcrumbs, moduleHref, type ModuleEntry } from '../lib/modules';
 import { localePath, tr, ui, type Locale } from '../lib/i18n';
 
-import aboutCss from '../styles/about.css?url';
-import sectionCss from '../styles/section.css?url';
-import projectsCss from '../styles/projects.css?url';
-import projectCss from '../styles/project.css?url';
-import keypingCss from '../styles/keyping.css?url';
-import sharedCss from '../styles/shared.css?url';
+import pageCss from '../styles/page.css?url';
+import type { ImageMetadata } from 'astro';
 
 interface Props { module: ModuleEntry; all: ModuleEntry[]; lang: Locale }
 const { module, all, lang } = Astro.props;
@@ -24,7 +20,13 @@ const t = ui(lang);
 const d = module.data;
 const isFlagship = d.template === 'project' && d.project.layout === 'flagship';
 const skin = isFlagship ? 'keyping' : d.template === 'project' ? 'project' : d.template === 'projects' ? 'projects' : d.template;
-const css = { keyping: keypingCss, project: projectCss, projects: projectsCss, about: aboutCss, section: sectionCss }[skin]!;
+// Imagen al compartir: la foto en "about", la portada o la primera captura en proyectos.
+const ogImage =
+  d.template === 'about' ? d.about.photo?.src
+  : d.template === 'project'
+    ? (d.project.flagship?.gallery.items.find((x) => x.type === 'image') as { src: ImageMetadata } | undefined)?.src ??
+      (d.project.cover.fit === 'cover' ? d.project.cover.src : undefined)
+    : undefined;
 const crumbs = breadcrumbs(module, all, lang, t.site.crumbCore);
 const visible = all.filter((m) => m.data.visible);
 const pageData = {
@@ -39,15 +41,14 @@ const pageData = {
   title={tr(d.seo.title, lang)}
   description={tr(d.seo.description, lang)}
   path={d.path}
-  bodyClass={`${skin}-page`}
+  ogImage={ogImage}
+  bodyClass={`page-shell ${skin}-page`}
 >
   <Fragment slot="head">
-    <link rel="stylesheet" href={css} />
-    <link rel="stylesheet" href={sharedCss} />
+    <link rel="stylesheet" href={pageCss} />
     <script type="application/json" id="page-data" set:html={JSON.stringify(pageData)} />
   </Fragment>
   <ModuleFrame
-    skin={skin}
     crumbs={crumbs}
     currentId={module.id}
     backHref={`${localePath(lang)}?from=${module.id}`}
