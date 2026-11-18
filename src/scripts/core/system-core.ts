@@ -40,6 +40,8 @@ const sleep = (ms: number) => new Promise<void>((resolve) => window.setTimeout(r
 const isMobile = () => window.matchMedia('(max-width: 860px)').matches;
 const getCoreBaseScale = () => (isMobile() ? 0.52 : 1);
 
+const BOOT_KEY = 'system_core_booted';
+
 export function initSystemCore(): void {
   const dataEl = document.getElementById('core-data');
   if (!dataEl?.textContent) return;
@@ -57,7 +59,6 @@ export function initSystemCore(): void {
   const bootProgressFill = document.getElementById('boot-progress-fill');
   const bootProgressText = document.getElementById('boot-progress-text');
   const coreStatusText = document.getElementById('core-status-text');
-  const startCoreButton = document.getElementById('start-core-button') as HTMLButtonElement | null;
   const coreCopy = document.querySelector<HTMLElement>('.core-copy');
   const infoDock = document.getElementById('info-dock');
 
@@ -85,7 +86,7 @@ export function initSystemCore(): void {
     introComplete: false,
     hasDrawnIntroLinks: false,
     introStartTime: 0,
-    introDurationMs: 3440,
+    introDurationMs: 2100,
     spinX: 0,
     spinY: 0,
     coreHovering: false,
@@ -128,8 +129,12 @@ export function initSystemCore(): void {
     const bottomSafe = 170;
     const w = node.offsetWidth;
     const h = node.offsetHeight;
-    const x = clamp(pos.x * rect.width - w / 2 + offsetX, pad, rect.width - w - pad);
-    let y = clamp(pos.y * rect.height - h / 2 + offsetY, pad, rect.height - h - bottomSafe);
+    // La posición del módulo corresponde al punto de anclaje; la etiqueta se extiende hacia fuera.
+    const anchor = node.querySelector<HTMLElement>('.node-anchor');
+    const ax = anchor ? anchor.offsetLeft + anchor.offsetWidth / 2 : w / 2;
+    const ay = anchor ? anchor.offsetTop + anchor.offsetHeight / 2 : h / 2;
+    const x = clamp(pos.x * rect.width - ax + offsetX, pad, rect.width - w - pad);
+    let y = clamp(pos.y * rect.height - ay + offsetY, pad, rect.height - h - bottomSafe);
 
     // Corrección: si el nodo invade el panel de texto o el de módulo, sube por encima.
     for (const panel of panelRects) {
@@ -194,7 +199,7 @@ export function initSystemCore(): void {
   function updateLinks(animate = false) {
     const stageRect = stage.getBoundingClientRect();
     const c = centerOf(coreCenter, stageRect);
-    const centers = new Map(desktopNodes.map((n) => [n.dataset.target ?? '', centerOf(n, stageRect)]));
+    const centers = new Map(desktopNodes.map((n) => [n.dataset.target ?? '', centerOf(n.querySelector('.node-anchor') ?? n, stageRect)]));
 
     desktopNodes.forEach((node) => {
       const id = node.dataset.target ?? '';
@@ -283,7 +288,7 @@ export function initSystemCore(): void {
     }
     body.classList.add('intro-running');
     state.introStartTime = performance.now() + 80;
-    [80, 980, 1580, 2200, 2820, 3440].forEach((at, i) => later(() => setIntroStep(i + 1), at));
+    [60, 560, 920, 1280, 1640, 2000].forEach((at, i) => later(() => setIntroStep(i + 1), at));
   }
 
   async function runBootSequence() {
@@ -298,7 +303,7 @@ export function initSystemCore(): void {
     body.classList.add('booting', 'boot-offline');
     startMeteorLoop();
     setCoreStatus('offline');
-    await sleep(220);
+    await sleep(140);
     body.classList.remove('boot-offline');
     body.classList.add('boot-loading');
     setCoreStatus('booting');
@@ -313,37 +318,37 @@ export function initSystemCore(): void {
       bootProgressFill.style.width = `${progress}%`;
       bootProgressText.textContent = `${progress}%`;
       setCoreStatus('loading', progress);
-      await sleep(180 + i * 24);
+      await sleep(70 + i * 8);
     }
-    await sleep(340);
+    await sleep(220);
     body.classList.add('boot-unfold');
-    await sleep(820);
+    await sleep(520);
     bootSequence.remove();
     body.classList.remove('booting', 'boot-offline', 'boot-loading');
     body.classList.add('core-syncing');
     setCoreStatus('syncing');
   }
 
+  /** Arranque automático: la primera visita de la sesión muestra la secuencia; las siguientes, solo la entrada. */
   function beginSystemStartup() {
     if (state.hasManualStart) return;
     state.hasManualStart = true;
-    body.classList.remove('awaiting-start', 'core-offline');
-    if (startCoreButton) {
-      startCoreButton.disabled = true;
-      startCoreButton.setAttribute('aria-busy', 'true');
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(BOOT_KEY) === '1';
+      sessionStorage.setItem(BOOT_KEY, '1');
+    } catch {
+      // Sin almacenamiento: se muestra la secuencia completa.
+    }
+    body.classList.remove('core-offline');
+    if (seen) {
+      bootSequence?.remove();
+      startMeteorLoop();
+      setCoreStatus('syncing');
+      runIntro();
+      return;
     }
     void runBootSequence().then(runIntro);
-  }
-
-  function enterAwaitingStart() {
-    body.classList.add('awaiting-start', 'core-offline');
-    setCoreStatus('offline');
-    if (three) three.starsMesh.visible = false;
-    if (startCoreButton) {
-      startCoreButton.disabled = false;
-      startCoreButton.removeAttribute('aria-busy');
-      startCoreButton.addEventListener('click', beginSystemStartup, { once: true });
-    }
   }
 
   function fastForwardToReadyState() {
@@ -608,7 +613,7 @@ export function initSystemCore(): void {
     fastForwardToReadyState();
     beginReturnTransition();
   } else {
-    enterAwaitingStart();
+    beginSystemStartup();
   }
   if (!document.hidden) start();
 }
