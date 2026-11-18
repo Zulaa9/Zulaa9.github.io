@@ -12,18 +12,16 @@
     "skipToContent": "Saltar al contenido",
     "back": "Volver",
     "screenPath": "Ruta de pantalla",
-    "modulesLabel": "Módulos"
+    "modulesLabel": "Módulos",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "onThisPage": "En esta página",
+    "copyEmail": "Copiar dirección de correo"
   },
   "core": {
     "page": {
       "title": "Unax Zulaika | Núcleo del Sistema",
       "description": "Interfaz de Núcleo del Sistema para el portfolio de Unax Zulaika Fuente y KeyPing como producto principal."
-    },
-    "startup": {
-      "eyebrow": "NÚCLEO DEL SISTEMA // APAGADO",
-      "title": "Arranque manual requerido",
-      "copy": "Inicializa el entorno de ejecución del core y carga el grafo de módulos.",
-      "cta": "Iniciar Sistema"
     },
     "boot": {
       "eyebrow": "NÚCLEO DEL SISTEMA // INICIO",

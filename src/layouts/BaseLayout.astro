@@ -9,7 +9,11 @@ import '@fontsource/space-grotesk/700.css';
 import '@fontsource/plus-jakarta-sans/400.css';
 import '@fontsource/plus-jakarta-sans/500.css';
 import '@fontsource/plus-jakarta-sans/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import baseCss from '../styles/base.css?url';
 import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Topbar from '../components/Topbar.astro';
 import ogSource from '../assets/images/portfolio-core.png';
 import { localePath, LOCALES, ui, type Locale } from '../lib/i18n';
@@ -26,14 +30,16 @@ interface Props {
   statusText?: string;
   statusId?: string;
   shellLabel?: string;
+  /** Imagen para compartir (Open Graph). Por defecto, la captura del Core. */
+  ogImage?: ImageMetadata;
 }
 
-const { lang, title, description, path, bodyClass, bodyAttrs = {}, statusText, statusId, shellLabel } = Astro.props;
+const { lang, title, description, path, bodyClass, bodyAttrs = {}, statusText, statusId, shellLabel, ogImage } = Astro.props;
 const t = ui(lang);
 const site = Astro.site!;
 const hrefs = Object.fromEntries(LOCALES.map((l) => [l, path === null ? localePath(l) : localePath(l, path)])) as Record<Locale, string>;
 const canonical = path === null ? undefined : new URL(hrefs[lang], site).href;
-const og = await getImage({ src: ogSource, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 82 });
+const og = await getImage({ src: ogImage ?? ogSource, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 82 });
 const ogUrl = new URL(og.src, site).href;
 ---
 <!doctype html>
@@ -64,6 +70,7 @@ const ogUrl = new URL(og.src, site).href;
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href={baseCss} />
   <slot name="head" />
 </head>
 <body class={bodyClass} {...bodyAttrs}>
