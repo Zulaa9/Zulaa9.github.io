@@ -96,12 +96,12 @@
       "es": "Tecnologías"
     },
     "cover": {
-      "src": "../../assets/images/portfolio-core.png",
+      "src": "../../assets/images/portfolio-core/portfolio-icon.png",
       "alt": {
-        "en": "Portfolio Core project preview",
-        "es": "Vista previa del proyecto Portfolio Core"
+        "en": "Portfolio Core icon",
+        "es": "Icono de Portfolio Core"
       },
-      "fit": "cover"
+      "fit": "logo"
     },
     "links": [
       {
@@ -197,6 +197,20 @@
         ]
       }
     ],
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/portfolio-core.png",
+        "alt": {
+          "en": "System Core view of the portfolio",
+          "es": "Vista System Core del portfolio"
+        },
+        "caption": {
+          "en": "System Core: each module is a node connected to the core.",
+          "es": "System Core: cada módulo es un nodo conectado al núcleo."
+        }
+      }
+    ]
   }
 }
