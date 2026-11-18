@@ -1,0 +1,637 @@
+{
+  "template": "project",
+  "order": 10,
+  "visible": true,
+  "path": "projects/keyping",
+  "parent": "projects",
+  "crumb": {
+    "en": "KeyPing",
+    "es": "KeyPing"
+  },
+  "seo": {
+    "title": {
+      "en": "KeyPing | System Core",
+      "es": "KeyPing | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "KeyPing dedicated product view.",
+      "es": "Vista dedicada del producto KeyPing."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "KeyPing",
+      "es": "KeyPing"
+    },
+    "meta": {
+      "en": "Flagship Product",
+      "es": "Producto principal"
+    },
+    "dock": {
+      "title": {
+        "en": "KeyPing",
+        "es": "KeyPing"
+      },
+      "copy": {
+        "en": "Flagship product module. Production version with security-focused desktop architecture.",
+        "es": "Módulo principal del producto. Versión de producción con arquitectura de escritorio orientada a seguridad."
+      }
+    },
+    "position": {
+      "x": 0.74,
+      "y": 0.48
+    },
+    "featured": true
+  },
+  "project": {
+    "layout": "flagship",
+    "name": {
+      "en": "KeyPing",
+      "es": "KeyPing"
+    },
+    "cardEyebrow": {
+      "en": "FLAGSHIP PRODUCT // REFERENCE VERSION",
+      "es": "PRODUCTO PRINCIPAL // VERSIÓN DE REFERENCIA"
+    },
+    "summary": {
+      "en": "Primary desktop product focused on local-first credential security, encrypted vault workflows and practical hardening controls.",
+      "es": "Producto de escritorio principal centrado en seguridad local de credenciales, flujos de bóveda cifrada y controles prácticos de endurecimiento."
+    },
+    "enterLabel": {
+      "en": "Open flagship product",
+      "es": "Abrir producto principal"
+    },
+    "featured": true,
+    "stack": [
+      {
+        "en": "Electron",
+        "es": "Electron"
+      },
+      {
+        "en": "Angular",
+        "es": "Angular"
+      },
+      {
+        "en": "TypeScript",
+        "es": "TypeScript"
+      },
+      {
+        "en": "Node.js",
+        "es": "Node.js"
+      }
+    ],
+    "cover": {
+      "src": "../../assets/images/keyping-logo.png",
+      "alt": {
+        "en": "KeyPing project preview",
+        "es": "Vista previa del proyecto KeyPing"
+      },
+      "fit": "logo"
+    },
+    "links": [
+      {
+        "kind": "github",
+        "label": {
+          "en": "GitHub",
+          "es": "GitHub"
+        },
+        "url": "https://github.com/Zulaa9/KeyPing"
+      }
+    ],
+    "status": {
+      "label": {
+        "en": "Module Health",
+        "es": "Salud del Módulo"
+      },
+      "value": {
+        "en": "Active development / Stable core / Daily use",
+        "es": "Desarrollo activo / Core estable / Uso diario"
+      }
+    },
+    "header": {
+      "eyebrow": {
+        "en": "FLAGSHIP MODULE // KP-01",
+        "es": "MÓDULO PRINCIPAL // KP-01"
+      },
+      "title": {
+        "en": "KeyPing",
+        "es": "KeyPing"
+      },
+      "lead": {
+        "en": "Local-first desktop credential hygiene system.",
+        "es": "Sistema local-first de higiene de credenciales para escritorio."
+      }
+    },
+    "description": {
+      "title": {
+        "en": "What KeyPing is",
+        "es": "Qué es KeyPing"
+      },
+      "paragraphs": [
+        {
+          "en": "KeyPing is a desktop password manager focused on credential hygiene: detecting weak, reused and risky passwords while keeping all data local and offline.",
+          "es": "KeyPing es un gestor de contraseñas de escritorio centrado en higiene de credenciales: detecta contraseñas débiles, reutilizadas y de riesgo manteniendo todos los datos en local y offline."
+        },
+        {
+          "en": "This is not a concept demo. It is an actively developed product with stable core features, production-level release discipline and security controls designed for real use.",
+          "es": "No es una demo conceptual. Es un producto en desarrollo activo, con funcionalidades core estables, disciplina de publicación de nivel producción y controles de seguridad pensados para uso real."
+        }
+      ]
+    },
+    "flagship": {
+      "logo": "../../assets/images/keyping-logo.png",
+      "punchline": {
+        "en": "Detect weak credentials, enforce hygiene and keep your vault fully offline.",
+        "es": "Detecta credenciales débiles, refuerza la higiene y mantiene tu bóveda totalmente offline."
+      },
+      "pills": [
+        {
+          "en": "Privacy-first",
+          "es": "Privacidad primero"
+        },
+        {
+          "en": "Fully offline",
+          "es": "Totalmente offline"
+        },
+        {
+          "en": "Local encrypted vault",
+          "es": "Bóveda local cifrada"
+        },
+        {
+          "en": "Windows / Linux / macOS",
+          "es": "Windows / Linux / macOS"
+        }
+      ],
+      "actions": [
+        {
+          "variant": "download",
+          "eyebrow": {
+            "en": "Get KeyPing",
+            "es": "Consigue KeyPing"
+          },
+          "label": {
+            "en": "Download latest version",
+            "es": "Descargar última versión"
+          },
+          "url": "https://github.com/Zulaa9/KeyPing/releases"
+        },
+        {
+          "variant": "github",
+          "eyebrow": {
+            "en": "Source code",
+            "es": "Código fuente"
+          },
+          "label": {
+            "en": "Open on GitHub",
+            "es": "Abrir en GitHub"
+          },
+          "url": "https://github.com/Zulaa9/KeyPing"
+        }
+      ],
+      "why": {
+        "title": {
+          "en": "Why I Built KeyPing",
+          "es": "Por qué construí KeyPing"
+        },
+        "subtitle": {
+          "en": "Why this project exists",
+          "es": "Por qué existe este proyecto"
+        },
+        "lead": {
+          "en": "KeyPing was built to solve real password problems under real pressure, not just to store entries in a vault.",
+          "es": "KeyPing nace para resolver problemas reales de contraseñas bajo presión, no solo para guardar entradas en una bóveda."
+        },
+        "cards": [
+          {
+            "title": {
+              "en": "Password reuse",
+              "es": "Reutilización de contraseñas"
+            },
+            "copy": {
+              "en": "Reused credentials multiply risk across services. One leaked password can compromise several accounts.",
+              "es": "Reutilizar credenciales multiplica el riesgo entre servicios. Una sola filtración puede comprometer varias cuentas."
+            }
+          },
+          {
+            "title": {
+              "en": "Weak passwords",
+              "es": "Contraseñas débiles"
+            },
+            "copy": {
+              "en": "Weak patterns are still common. Users need clear signals, not vague warnings, to improve quickly.",
+              "es": "Los patrones débiles siguen siendo comunes. El usuario necesita señales claras, no avisos vagos, para mejorar rápido."
+            }
+          },
+          {
+            "title": {
+              "en": "Cloud dependency",
+              "es": "Dependencia cloud"
+            },
+            "copy": {
+              "en": "Many managers require cloud trust by default. KeyPing is designed for local-first control.",
+              "es": "Muchos gestores exigen confianza en la nube por defecto. KeyPing está pensado para control local-first."
+            }
+          },
+          {
+            "title": {
+              "en": "Privacy under stress",
+              "es": "Privacidad bajo estrés"
+            },
+            "copy": {
+              "en": "When incidents happen, privacy and response speed matter at the same time.",
+              "es": "Cuando hay incidentes, privacidad y velocidad de respuesta importan al mismo tiempo."
+            }
+          }
+        ],
+        "focus": {
+          "title": {
+            "en": "Critical response feature",
+            "es": "Función crítica de respuesta"
+          },
+          "copy": {
+            "en": "Each credential can store a direct password-change URL. In a breach, that one-click path reduces friction and reaction time exactly when stress is highest.",
+            "es": "Cada credencial puede guardar un enlace directo para cambiar la contraseña. En una brecha, ese clic único reduce fricción y tiempo de reacción justo cuando el estrés es mayor."
+          }
+        }
+      },
+      "metrics": {
+        "title": {
+          "en": "Engineering Proof",
+          "es": "Prueba de ingeniería"
+        },
+        "subtitle": {
+          "en": "Real build signals",
+          "es": "Indicadores reales de construcción"
+        },
+        "items": [
+          {
+            "en": "16k+ lines of code",
+            "es": "16k+ líneas de código"
+          },
+          {
+            "en": "115+ commits",
+            "es": "115+ commits"
+          },
+          {
+            "en": "443 tracked files",
+            "es": "443 archivos versionados"
+          },
+          {
+            "en": "Electron + Angular architecture",
+            "es": "Arquitectura Electron + Angular"
+          },
+          {
+            "en": "Offline-first encrypted vault",
+            "es": "Bóveda cifrada offline-first"
+          },
+          {
+            "en": "Checksummed releases (SHA256)",
+            "es": "Releases con checksum (SHA256)"
+          }
+        ],
+        "statement": {
+          "en": "Built as a real desktop product with security boundaries between renderer, preload and main process.",
+          "es": "Construido como producto de escritorio real con límites de seguridad entre renderer, preload y proceso principal."
+        }
+      },
+      "gallery": {
+        "title": {
+          "en": "Product in action",
+          "es": "Producto en acción"
+        },
+        "lead": {
+          "en": "Real product walkthrough: from vault activity and password creation to health diagnostics, generator controls and security settings.",
+          "es": "Recorrido real del producto: desde la actividad de la bóveda y la creación de contraseñas hasta el diagnóstico de salud, los controles del generador y los ajustes de seguridad."
+        },
+        "moreBadge": {
+          "en": "+3 more",
+          "es": "+3 más"
+        },
+        "items": [
+          {
+            "type": "video",
+            "placement": "hero",
+            "src": "/assets/media/keyping-password-generator-flow.mp4",
+            "alt": {
+              "en": "KeyPing password creation and generator flow",
+              "es": "Flujo de creación de contraseña y generador de KeyPing"
+            },
+            "caption": {
+              "en": "Starts in the password list, opens Create Password, generates a new credential and returns to an updated list with the new password details selected.",
+              "es": "Empieza en el listado de contraseñas, entra en Crear contraseña, genera una nueva credencial y vuelve al listado actualizado con el nuevo detalle seleccionado."
+            }
+          },
+          {
+            "type": "image",
+            "placement": "rail",
+            "src": "../../assets/images/keyping/dashboard.png",
+            "alt": {
+              "en": "KeyPing initial dashboard view",
+              "es": "Vista inicial del panel de KeyPing"
+            },
+            "caption": {
+              "en": "Security overview with strong/medium/weak distribution, 2FA count, folders, duplicates, recent activity and information section.",
+              "es": "Resumen de seguridad con distribución fuerte/media/débil, conteo de 2FA, carpetas, duplicadas, actividad reciente y sección de información."
+            }
+          },
+          {
+            "type": "image",
+            "placement": "rail",
+            "src": "../../assets/images/keyping/password-list.png",
+            "alt": {
+              "en": "KeyPing password list and details panel",
+              "es": "Lista de contraseñas y panel de detalle de KeyPing"
+            },
+            "caption": {
+              "en": "Operational password list with selected-entry details, letting you inspect records without leaving the vault view.",
+              "es": "Listado operativo de contraseñas con panel de detalle de la entrada seleccionada para revisar registros sin salir de la vista de la bóveda."
+            }
+          },
+          {
+            "type": "composite",
+            "placement": "rail",
+            "caption": {
+              "en": "Complete Password Health view: global score, quality distribution, risk reasons, duplicate detection and extended diagnostics.",
+              "es": "Vista completa de Salud de Contraseñas: puntuación global, distribución de calidad, razones de riesgo, detección de duplicados y diagnóstico ampliado."
+            },
+            "parts": [
+              {
+                "src": "../../assets/images/keyping/password-health.png",
+                "alt": {
+                  "en": "KeyPing password health dashboard",
+                  "es": "Panel de salud de contraseñas de KeyPing"
+                },
+                "caption": {
+                  "en": "Password Health ring with global score plus strong/medium/weak breakdown, reasons and duplicate-risk visibility.",
+                  "es": "Anillo de Salud de Contraseñas con puntuación global y desglose fuerte/media/débil, razones y visibilidad de riesgo por duplicados."
+                }
+              },
+              {
+                "src": "../../assets/images/keyping/password-health2.png",
+                "alt": {
+                  "en": "KeyPing password health secondary panel",
+                  "es": "Panel secundario de salud de contraseñas de KeyPing"
+                },
+                "caption": {
+                  "en": "Extended health panel that complements the main view with additional diagnostics and actionable context.",
+                  "es": "Panel ampliado de salud que complementa la vista principal con diagnóstico adicional y contexto accionable."
+                }
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "placement": "extra",
+            "compact": true,
+            "src": "../../assets/images/keyping/generator.png",
+            "alt": {
+              "en": "KeyPing password generator panel",
+              "es": "Panel del generador de contraseñas de KeyPing"
+            },
+            "caption": {
+              "en": "Password generator with configurable length and toggles for uppercase, lowercase, numbers and symbols.",
+              "es": "Generador de contraseñas con longitud configurable y toggles para mayúsculas, minúsculas, números y símbolos."
+            }
+          },
+          {
+            "type": "image",
+            "placement": "extra",
+            "src": "../../assets/images/keyping/settings.png",
+            "alt": {
+              "en": "KeyPing settings panel",
+              "es": "Panel de ajustes de KeyPing"
+            },
+            "caption": {
+              "en": "Vault protection settings: master password change, inactivity auto-lock timeout, failed attempts and delay policy.",
+              "es": "Ajustes de protección de la bóveda: cambio de contraseña maestra, tiempo de autobloqueo por inactividad, intentos fallidos y política de delay."
+            }
+          },
+          {
+            "type": "image",
+            "placement": "extra",
+            "src": "../../assets/images/keyping/settings2.png",
+            "alt": {
+              "en": "KeyPing advanced settings panel",
+              "es": "Panel de ajustes avanzados de KeyPing"
+            },
+            "caption": {
+              "en": "System settings: language, automatic updates, retained vault versions and encrypted import/export options.",
+              "es": "Ajustes de sistema: idioma, actualizaciones automáticas, versiones conservadas de la bóveda y opciones de importación/exportación cifrada."
+            }
+          }
+        ]
+      },
+      "features": {
+        "title": {
+          "en": "Core features",
+          "es": "Funcionalidades clave"
+        },
+        "items": [
+          {
+            "en": "Local-only encrypted vault (AES-256-GCM)",
+            "es": "Bóveda cifrada solo en local (AES-256-GCM)"
+          },
+          {
+            "en": "Password similarity and reuse detection",
+            "es": "Detección de similitud y reutilización de contraseñas"
+          },
+          {
+            "en": "Password health analysis and scoring",
+            "es": "Análisis y puntuación de salud de contraseñas"
+          },
+          {
+            "en": "Per-password version history",
+            "es": "Historial de versiones por contraseña"
+          },
+          {
+            "en": "Advanced search and filtering",
+            "es": "Búsqueda y filtros avanzados"
+          },
+          {
+            "en": "Folder organization with drag and drop",
+            "es": "Organización por carpetas con drag and drop"
+          },
+          {
+            "en": "Offline encrypted import/export",
+            "es": "Importación/exportación cifrada en modo offline"
+          },
+          {
+            "en": "Auto-updates via GitHub Releases",
+            "es": "Autoactualizaciones vía GitHub Releases"
+          },
+          {
+            "en": "Interactive onboarding and demo mode",
+            "es": "Onboarding interactivo y modo demo"
+          },
+          {
+            "en": "ES / EN interface",
+            "es": "Interfaz ES / EN"
+          }
+        ]
+      },
+      "security": {
+        "title": {
+          "en": "Security model",
+          "es": "Modelo de seguridad"
+        },
+        "items": [
+          {
+            "en": "Vault encrypted on disk using AES-256-GCM",
+            "es": "Bóveda cifrada en disco con AES-256-GCM"
+          },
+          {
+            "en": "No mandatory cloud sync and no account required",
+            "es": "Sin sincronización cloud obligatoria y sin cuenta requerida"
+          },
+          {
+            "en": "PBKDF2-HMAC-SHA512 key derivation (600 000 iterations, OWASP 2023)",
+            "es": "Derivación PBKDF2-HMAC-SHA512 (600 000 iteraciones, OWASP 2023)"
+          },
+          {
+            "en": "Master password verified in main process only · session key never reaches the renderer",
+            "es": "Contraseña maestra verificada solo en el proceso principal · la clave de sesión nunca llega al renderer"
+          },
+          {
+            "en": "HMAC-SHA256 for duplicate detection · no plaintext passwords compared in renderer",
+            "es": "HMAC-SHA256 para detección de duplicados · sin comparar contraseñas en claro en el renderer"
+          },
+          {
+            "en": "Atomic vault rotation with automatic rollback on failure",
+            "es": "Rotación atómica de bóveda con rollback automático en caso de error"
+          },
+          {
+            "en": "Clipboard auto-clear only when the copied secret still matches",
+            "es": "Autolimpieza del portapapeles solo si el secreto sigue coincidiendo"
+          },
+          {
+            "en": "Escalating cooldown after failed master unlock attempts",
+            "es": "Retardos progresivos tras intentos fallidos de desbloqueo maestro"
+          },
+          {
+            "en": "Vault structure validation and anomaly/corruption checks",
+            "es": "Validaciones de estructura de la bóveda y detección de anomalías o corrupción"
+          }
+        ]
+      },
+      "architecture": {
+        "title": {
+          "en": "Architecture",
+          "es": "Arquitectura"
+        },
+        "stack": [
+          {
+            "label": {
+              "en": "Frontend",
+              "es": "Frontend"
+            },
+            "value": {
+              "en": "Angular with standalone components",
+              "es": "Angular con componentes standalone"
+            }
+          },
+          {
+            "label": {
+              "en": "Runtime",
+              "es": "Runtime"
+            },
+            "value": {
+              "en": "Electron",
+              "es": "Electron"
+            }
+          },
+          {
+            "label": {
+              "en": "IPC bridge",
+              "es": "Puente IPC"
+            },
+            "value": {
+              "en": "Secure preload API with contextIsolation enabled",
+              "es": "API preload segura con contextIsolation activado"
+            }
+          },
+          {
+            "label": {
+              "en": "Vault",
+              "es": "Bóveda"
+            },
+            "value": {
+              "en": "Encrypted local file managed by the Electron main process",
+              "es": "Archivo local cifrado gestionado por el proceso principal de Electron"
+            }
+          }
+        ],
+        "flow": [
+          {
+            "en": "The UI requests operations through preload IPC",
+            "es": "La UI solicita operaciones a través del IPC del preload"
+          },
+          {
+            "en": "The main process validates and executes operations securely",
+            "es": "El proceso principal valida y ejecuta operaciones de forma segura"
+          },
+          {
+            "en": "The vault module encrypts and decrypts local storage",
+            "es": "El módulo de bóveda cifra y descifra el almacenamiento local"
+          },
+          {
+            "en": "The UI receives sanitized metadata and operation state",
+            "es": "La UI recibe metadatos saneados y estado de operación"
+          }
+        ]
+      },
+      "integrity": {
+        "title": {
+          "en": "Release integrity",
+          "es": "Integridad de publicaciones"
+        },
+        "copy": {
+          "en": "Each release ships with a SHA256 checksum file. GPG signing is planned for a future release.",
+          "es": "Cada publicación incluye un archivo de checksums SHA256. La firma GPG está prevista para una publicación futura."
+        },
+        "files": [
+          {
+            "en": "SHA256SUMS.txt",
+            "es": "SHA256SUMS.txt"
+          }
+        ],
+        "verifyLabel": {
+          "en": "Verify checksums:",
+          "es": "Verificar checksums:"
+        },
+        "command": "sha256sum -c SHA256SUMS.txt"
+      },
+      "roadmap": {
+        "title": {
+          "en": "Roadmap",
+          "es": "Roadmap"
+        },
+        "items": [
+          {
+            "en": "Optional breach-check integrations with a privacy-preserving approach",
+            "es": "Integraciones opcionales de comprobación de filtraciones con enfoque de privacidad"
+          },
+          {
+            "en": "Expanded automated test coverage across IPC and vault logic",
+            "es": "Mayor cobertura de tests automáticos en IPC y bóveda"
+          },
+          {
+            "en": "Improved UX for import conflict resolution",
+            "es": "Mejor UX para resolución de conflictos de importación"
+          },
+          {
+            "en": "Signed and notarized macOS pipeline",
+            "es": "Pipeline de firma y notarización en macOS"
+          },
+          {
+            "en": "Optional portable mode",
+            "es": "Modo portable opcional"
+          },
+          {
+            "en": "More accessibility and keyboard navigation polish",
+            "es": "Más mejoras de accesibilidad y navegación por teclado"
+          }
+        ]
+      }
+    }
+  }
+}

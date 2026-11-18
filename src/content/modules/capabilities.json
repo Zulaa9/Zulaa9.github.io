@@ -1,0 +1,275 @@
+{
+  "template": "section",
+  "order": 30,
+  "visible": true,
+  "path": "capabilities",
+  "parent": "about",
+  "crumb": {
+    "en": "Capabilities",
+    "es": "Capacidades"
+  },
+  "seo": {
+    "title": {
+      "en": "Capabilities | System Core",
+      "es": "Capacidades | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Engineering capabilities module for Unax Zulaika Fuente.",
+      "es": "Módulo de capacidades de ingeniería de Unax Zulaika Fuente."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "Capabilities",
+      "es": "Capacidades"
+    },
+    "meta": {
+      "en": "Engineering",
+      "es": "Ingeniería"
+    },
+    "dock": {
+      "title": {
+        "en": "Capabilities",
+        "es": "Capacidades"
+      },
+      "copy": {
+        "en": "Engineering strengths across system architecture, product delivery, security design and cross-layer integration.",
+        "es": "Fortalezas de ingeniería en arquitectura de sistemas, entrega de producto, diseño seguro e integración entre capas."
+      }
+    },
+    "position": {
+      "x": 0.2,
+      "y": 0.45
+    }
+  },
+  "section": {
+    "header": {
+      "eyebrow": {
+        "en": "CAPABILITIES",
+        "es": "CAPACIDADES"
+      },
+      "title": {
+        "en": "Engineering capabilities",
+        "es": "Capacidades de ingeniería"
+      },
+      "lead": {
+        "en": "How I design systems, solve product constraints and deliver maintainable software.",
+        "es": "Cómo diseño sistemas, resuelvo restricciones de producto y entrego software mantenible."
+      },
+      "leadSize": "normal"
+    },
+    "blocks": [
+      {
+        "type": "cards",
+        "cards": [
+          {
+            "tag": {
+              "en": "Architecture module",
+              "es": "Módulo de arquitectura"
+            },
+            "title": {
+              "en": "System Engineering",
+              "es": "Ingeniería de sistemas"
+            },
+            "desc": {
+              "en": "I design modular software systems with clear boundaries, stable interfaces and long-term maintainability.",
+              "es": "Diseño sistemas de software modulares con límites claros, interfaces estables y mantenibilidad a largo plazo."
+            },
+            "points": [
+              {
+                "en": "Modular architecture with explicit domain boundaries",
+                "es": "Arquitectura modular con fronteras de dominio explícitas"
+              },
+              {
+                "en": "Structural decisions guided by maintainability and scale",
+                "es": "Decisiones estructurales guiadas por mantenibilidad y escala"
+              },
+              {
+                "en": "Layer integration without coupling business logic to UI details",
+                "es": "Integración de capas sin acoplar la lógica de negocio a detalles de UI"
+              },
+              {
+                "en": "Codebase organization for predictable evolution over time",
+                "es": "Organización del código para una evolución predecible en el tiempo"
+              }
+            ]
+          },
+          {
+            "tag": {
+              "en": "Delivery module",
+              "es": "Módulo de entrega"
+            },
+            "title": {
+              "en": "Desktop & Product Engineering",
+              "es": "Ingeniería de escritorio y producto"
+            },
+            "desc": {
+              "en": "I build desktop products as real production software, not as throwaway demos.",
+              "es": "Construyo productos de escritorio como software real de producción, no como demos desechables."
+            },
+            "points": [
+              {
+                "en": "Electron applications with real runtime constraints",
+                "es": "Aplicaciones Electron con restricciones reales de ejecución"
+              },
+              {
+                "en": "Offline-first behavior and local reliability by design",
+                "es": "Comportamiento offline-first y fiabilidad local por diseño"
+              },
+              {
+                "en": "End-to-end ownership from interface to packaging",
+                "es": "Responsabilidad end-to-end desde la interfaz hasta el empaquetado"
+              },
+              {
+                "en": "Delivery focused on usable product increments",
+                "es": "Entrega orientada a incrementos de producto utilizables"
+              }
+            ]
+          },
+          {
+            "tag": {
+              "en": "Trust module",
+              "es": "Módulo de confianza"
+            },
+            "title": {
+              "en": "Security-Oriented Development",
+              "es": "Desarrollo orientado a seguridad"
+            },
+            "desc": {
+              "en": "I treat security as a system property: boundaries, data protection and predictable trust models.",
+              "es": "Trato la seguridad como una propiedad del sistema: límites, protección de datos y modelo de confianza predecible."
+            },
+            "points": [
+              {
+                "en": "Security controls integrated into architecture decisions",
+                "es": "Controles de seguridad integrados en decisiones de arquitectura"
+              },
+              {
+                "en": "Local encrypted storage and sensitive data minimization",
+                "es": "Almacenamiento local cifrado y minimización de datos sensibles"
+              },
+              {
+                "en": "Trust boundary separation across runtime layers",
+                "es": "Separación de fronteras de confianza entre capas de runtime"
+              },
+              {
+                "en": "Integrity checks and defensive handling of critical flows",
+                "es": "Controles de integridad y manejo defensivo de flujos críticos"
+              }
+            ]
+          },
+          {
+            "tag": {
+              "en": "Interface module",
+              "es": "Módulo de interfaz"
+            },
+            "title": {
+              "en": "Technical UX",
+              "es": "UX técnica"
+            },
+            "desc": {
+              "en": "I turn technical tools into understandable experiences through structured flows, state visibility and usable interaction design.",
+              "es": "Convierto herramientas técnicas en experiencias comprensibles mediante flujos estructurados, visibilidad de estado y diseño usable."
+            },
+            "points": [
+              {
+                "en": "Complex flows reduced to clear operator actions",
+                "es": "Flujos complejos reducidos a acciones claras para el operador"
+              },
+              {
+                "en": "State visibility for diagnostics, confidence and control",
+                "es": "Visibilidad de estado para diagnóstico, confianza y control"
+              },
+              {
+                "en": "Interaction patterns designed for speed and precision",
+                "es": "Patrones de interacción orientados a velocidad y precisión"
+              },
+              {
+                "en": "Onboarding that reduces friction in technical contexts",
+                "es": "Onboarding que reduce fricción en contextos técnicos"
+              }
+            ]
+          },
+          {
+            "tag": {
+              "en": "Acceleration module",
+              "es": "Módulo de aceleración"
+            },
+            "title": {
+              "en": "AI-Assisted Engineering",
+              "es": "Ingeniería asistida por IA"
+            },
+            "desc": {
+              "en": "I use AI as an engineering multiplier for speed, exploration and implementation quality.",
+              "es": "Uso IA como multiplicador de ingeniería para velocidad, exploración y calidad de implementación."
+            },
+            "points": [
+              {
+                "en": "Active use of AI tools in my work since early 2023: ChatGPT/Codex, Claude Code, Gemini and Microsoft Copilot",
+                "es": "Uso activo de herramientas de IA en mi trabajo desde principios de 2023: ChatGPT/Codex, Claude Code, Gemini y Microsoft Copilot"
+              },
+              {
+                "en": "Rapid exploration of architecture alternatives",
+                "es": "Exploración rápida de alternativas de arquitectura"
+              },
+              {
+                "en": "Faster prototyping and iteration loops",
+                "es": "Prototipado e iteración más rápidos"
+              },
+              {
+                "en": "Assisted refactoring with explicit technical validation",
+                "es": "Refactor asistido con validación técnica explícita"
+              },
+              {
+                "en": "AI integrated as part of the toolchain, not as superficial noise",
+                "es": "IA integrada como parte del flujo de herramientas, no como característica superficial"
+              }
+            ]
+          },
+          {
+            "tag": {
+              "en": "Integration module",
+              "es": "Módulo de integración"
+            },
+            "title": {
+              "en": "Full Stack / Integration Thinking",
+              "es": "Visión full stack e integración"
+            },
+            "desc": {
+              "en": "I connect frontend, backend and runtime into a coherent product architecture.",
+              "es": "Conecto frontend, backend y runtime en una arquitectura de producto coherente."
+            },
+            "points": [
+              {
+                "en": "Frontend, backend and runtime responsibilities aligned",
+                "es": "Responsabilidades de frontend, backend y runtime alineadas"
+              },
+              {
+                "en": "API and application logic designed as one system",
+                "es": "API y lógica de aplicación diseñadas como un solo sistema"
+              },
+              {
+                "en": "Cross-layer problem solving with product context",
+                "es": "Resolución de problemas entre capas con contexto de producto"
+              },
+              {
+                "en": "Implementation decisions tied to operational behavior",
+                "es": "Decisiones de implementación conectadas al comportamiento operativo"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "variant": "closing",
+        "paragraphs": [
+          {
+            "en": "I build software as an integrated system: architecture, product constraints, security posture, technical UX and delivery execution.",
+            "es": "Desarrollo software como un sistema integrado: arquitectura, restricciones de producto, postura de seguridad, UX técnica y ejecución de entrega."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "template": "projects",
+  "order": 40,
+  "visible": true,
+  "path": "projects",
+  "crumb": {
+    "en": "Projects",
+    "es": "Proyectos"
+  },
+  "seo": {
+    "title": {
+      "en": "Projects | System Core",
+      "es": "Proyectos | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Project gallery for Unax Zulaika Fuente.",
+      "es": "Galería de proyectos de Unax Zulaika Fuente."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "Projects",
+      "es": "Proyectos"
+    },
+    "meta": {
+      "en": "Deliverables",
+      "es": "Entregables"
+    },
+    "dock": {
+      "title": {
+        "en": "Projects",
+        "es": "Proyectos"
+      },
+      "copy": {
+        "en": "Project gallery centered on KeyPing as the flagship product, with supporting projects around it.",
+        "es": "Galería de proyectos centrada en KeyPing como producto principal, con proyectos de soporte."
+      }
+    },
+    "position": {
+      "x": 0.78,
+      "y": 0.28
+    }
+  },
+  "projects": {
+    "header": {
+      "eyebrow": {
+        "en": "PROJECTS",
+        "es": "PROYECTOS"
+      },
+      "title": {
+        "en": "Projects",
+        "es": "Proyectos"
+      },
+      "lead": {
+        "en": "Product work centered on KeyPing as the flagship product, complemented by supporting system projects.",
+        "es": "Trabajo de producto centrado en KeyPing como producto principal, complementado con proyectos de soporte."
+      }
+    }
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "template": "project",
+  "order": 60,
+  "visible": true,
+  "path": "projects/portfolio-core",
+  "parent": "projects",
+  "crumb": {
+    "en": "Portfolio Core",
+    "es": "Portfolio Core"
+  },
+  "seo": {
+    "title": {
+      "en": "Portfolio Core | System Core",
+      "es": "Portfolio Core | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Portfolio Core dedicated project view.",
+      "es": "Vista dedicada del proyecto Portfolio Core."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "Portfolio Core",
+      "es": "Portfolio Core"
+    },
+    "meta": {
+      "en": "Project",
+      "es": "Proyecto"
+    },
+    "dock": {
+      "title": {
+        "en": "Portfolio Core",
+        "es": "Portfolio Core"
+      },
+      "copy": {
+        "en": "Supporting module for this portfolio system: UI architecture, stateful navigation and interaction layers.",
+        "es": "Módulo de soporte para este sistema de portfolio: arquitectura UI, navegación con estado y capas de interacción."
+      }
+    },
+    "position": {
+      "x": 0.86,
+      "y": 0.66
+    }
+  },
+  "project": {
+    "layout": "standard",
+    "name": {
+      "en": "Portfolio Core",
+      "es": "Portfolio Core"
+    },
+    "cardEyebrow": {
+      "en": "SUPPORTING SYSTEM PROJECT",
+      "es": "PROYECTO DE SOPORTE DEL SISTEMA"
+    },
+    "summary": {
+      "en": "Supporting project that powers this portfolio experience: Three.js rendering, UI architecture, state-driven navigation and module transitions.",
+      "es": "Proyecto de soporte que impulsa esta experiencia de portfolio: renderizado con Three.js, arquitectura UI, navegación guiada por estado y transiciones entre módulos."
+    },
+    "enterLabel": {
+      "en": "Open supporting project",
+      "es": "Abrir proyecto de soporte"
+    },
+    "featured": false,
+    "stack": [
+      {
+        "en": "Astro",
+        "es": "Astro"
+      },
+      {
+        "en": "TypeScript",
+        "es": "TypeScript"
+      },
+      {
+        "en": "Three.js",
+        "es": "Three.js"
+      },
+      {
+        "en": "CSS",
+        "es": "CSS"
+      },
+      {
+        "en": "UI Architecture",
+        "es": "Arquitectura UI"
+      },
+      {
+        "en": "State",
+        "es": "Estado"
+      },
+      {
+        "en": "Animation",
+        "es": "Animación"
+      }
+    ],
+    "stackTitle": {
+      "en": "Technologies",
+      "es": "Tecnologías"
+    },
+    "cover": {
+      "src": "../../assets/images/portfolio-core.png",
+      "alt": {
+        "en": "Portfolio Core project preview",
+        "es": "Vista previa del proyecto Portfolio Core"
+      },
+      "fit": "cover"
+    },
+    "links": [
+      {
+        "kind": "github",
+        "label": {
+          "en": "GitHub",
+          "es": "GitHub"
+        },
+        "url": "https://github.com/Zulaa9/Zulaa9.github.io"
+      }
+    ],
+    "header": {
+      "eyebrow": {
+        "en": "PROJECT MODULE // PC-01",
+        "es": "MÓDULO DE PROYECTO // PC-01"
+      },
+      "title": {
+        "en": "Portfolio Core",
+        "es": "Portfolio Core"
+      },
+      "lead": {
+        "en": "Interactive system-style portfolio built as a real frontend product, not as a static landing page.",
+        "es": "Portfolio interactivo con estilo de sistema, construido como producto frontend real y no como una landing estática."
+      }
+    },
+    "description": {
+      "title": {
+        "en": "What this project is",
+        "es": "Qué es este proyecto"
+      },
+      "paragraphs": [
+        {
+          "en": "This exact website is the project itself. You are currently navigating Portfolio Core.",
+          "es": "Esta web exacta es el propio proyecto. Ahora mismo estás navegando Portfolio Core."
+        },
+        {
+          "en": "It is built as an engineered interface: navigable module graph, dedicated views, transition orchestration, language state and contextual routing composed as a system.",
+          "es": "Está construido como una interfaz ingenierizada: grafo navegable de módulos, vistas dedicadas, orquestación de transiciones, estado de idioma y enrutado contextual compuesto como sistema."
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": {
+          "en": "Architecture highlights",
+          "es": "Puntos de arquitectura"
+        },
+        "items": [
+          {
+            "en": "Interactive Core graph with parent-child relationships",
+            "es": "Grafo interactivo del Core con relaciones padre-hijo"
+          },
+          {
+            "en": "Dedicated module pages with a shared visual language",
+            "es": "Páginas de módulo dedicadas con lenguaje visual compartido"
+          },
+          {
+            "en": "Context-aware back navigation between modules",
+            "es": "Navegación contextual de vuelta entre módulos"
+          },
+          {
+            "en": "Language-specific routes (/ and /es/) with a remembered language preference",
+            "es": "Rutas por idioma (/ y /es/) con preferencia de idioma recordada"
+          },
+          {
+            "en": "Modules generated from schema-validated content files",
+            "es": "Módulos generados a partir de archivos de contenido validados con esquema"
+          }
+        ]
+      },
+      {
+        "title": {
+          "en": "Engineering focus",
+          "es": "Foco de ingeniería"
+        },
+        "items": [
+          {
+            "en": "Intentional motion and transition timing across views",
+            "es": "Movimiento intencional y timing de transiciones entre vistas"
+          },
+          {
+            "en": "Readable structure and reusable layout patterns",
+            "es": "Estructura legible y patrones de layout reutilizables"
+          },
+          {
+            "en": "Separation of concerns per module (content, template and styles)",
+            "es": "Separación de responsabilidades por módulo (contenido, plantilla y estilos)"
+          },
+          {
+            "en": "Consistent accessibility labels and keyboard-friendly controls",
+            "es": "Etiquetas de accesibilidad consistentes y controles usables con teclado"
+          }
+        ]
+      }
+    ],
+    "media": []
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "template": "about",
+  "order": 20,
+  "visible": true,
+  "path": "about",
+  "crumb": {
+    "en": "About",
+    "es": "Sobre mí"
+  },
+  "seo": {
+    "title": {
+      "en": "About | System Core",
+      "es": "Sobre mí | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "About Unax Zulaika Fuente.",
+      "es": "Sobre Unax Zulaika Fuente."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "About",
+      "es": "Sobre mí"
+    },
+    "meta": {
+      "en": "Identity",
+      "es": "Identidad"
+    },
+    "dock": {
+      "title": {
+        "en": "About",
+        "es": "Sobre mí"
+      },
+      "copy": {
+        "en": "Engineer focused on practical software architecture, security boundaries and maintainable delivery.",
+        "es": "Ingeniero centrado en arquitectura de software práctica, límites de seguridad y entrega mantenible."
+      }
+    },
+    "position": {
+      "x": 0.22,
+      "y": 0.24
+    }
+  },
+  "about": {
+    "header": {
+      "eyebrow": {
+        "en": "ABOUT",
+        "es": "SOBRE MÍ"
+      },
+      "title": {
+        "en": "About",
+        "es": "Sobre mí"
+      },
+      "lead": {
+        "en": "Software developer focused on building real products.",
+        "es": "Desarrollador de software centrado en construir productos reales."
+      },
+      "paragraphs": [
+        {
+          "en": "I enjoy designing practical systems, desktop applications and security-oriented tools.",
+          "es": "Disfruto diseñando sistemas prácticos, aplicaciones de escritorio y herramientas orientadas a seguridad."
+        },
+        {
+          "en": "Focused on product architecture, maintainable engineering and independent software development.",
+          "es": "Enfocado en arquitectura de producto, ingeniería mantenible y desarrollo de software independiente."
+        }
+      ]
+    },
+    "photo": {
+      "src": "../../assets/images/Zula.png",
+      "alt": {
+        "en": "Unax Zulaika Fuente profile photo",
+        "es": "Foto de perfil de Unax Zulaika Fuente"
+      }
+    },
+    "nextStep": {
+      "title": {
+        "en": "Next step",
+        "es": "Siguiente paso"
+      },
+      "contactModule": "contact",
+      "contactLabel": {
+        "en": "Open contact",
+        "es": "Abrir contacto"
+      },
+      "cvLabel": {
+        "en": "Download CV",
+        "es": "Descargar CV"
+      }
+    },
+    "experience": {
+      "title": {
+        "en": "Experience",
+        "es": "Experiencia"
+      },
+      "items": [
+        {
+          "role": {
+            "en": "Integra Tecnologia - Software Developer",
+            "es": "Integra Tecnologia - Software Developer"
+          },
+          "date": {
+            "en": "2024 - Present",
+            "es": "2024 - Actualidad"
+          },
+          "copy": {
+            "en": "I work mainly with Angular and .NET in enterprise environments, contributing to application development, system integration and internal tools.",
+            "es": "Trabajo principalmente con Angular y .NET en entornos empresariales, contribuyendo al desarrollo de aplicaciones, la integración de sistemas y herramientas internas."
+          },
+          "highlight": {
+            "label": {
+              "en": "Current position",
+              "es": "Posición actual"
+            },
+            "value": {
+              "en": "Software Developer @ Integra Tecnologia - Stack: Angular / .NET",
+              "es": "Software Developer @ Integra Tecnologia - Stack: Angular / .NET"
+            }
+          }
+        }
+      ]
+    },
+    "focus": {
+      "title": {
+        "en": "What I focus on",
+        "es": "En qué me enfoco"
+      },
+      "items": [
+        {
+          "en": "Building real applications, not just demos",
+          "es": "Construir aplicaciones reales, no solo demos"
+        },
+        {
+          "en": "Designing maintainable architectures",
+          "es": "Diseñar arquitecturas mantenibles"
+        },
+        {
+          "en": "Security-aware software design",
+          "es": "Diseño de software con seguridad en mente"
+        },
+        {
+          "en": "Creating practical developer tools",
+          "es": "Crear herramientas prácticas para desarrolladores"
+        },
+        {
+          "en": "Using AI as a productivity and engineering accelerator (actively since early 2023)",
+          "es": "Usar IA como acelerador de productividad e ingeniería (de forma activa desde principios de 2023)"
+        }
+      ]
+    },
+    "primarySkills": {
+      "title": {
+        "en": "Core technologies",
+        "es": "Tecnologías core"
+      },
+      "items": [
+        {
+          "en": "Angular",
+          "es": "Angular"
+        },
+        {
+          "en": "Electron",
+          "es": "Electron"
+        },
+        {
+          "en": ".NET",
+          "es": ".NET"
+        },
+        {
+          "en": "TypeScript",
+          "es": "TypeScript"
+        },
+        {
+          "en": "JavaScript",
+          "es": "JavaScript"
+        },
+        {
+          "en": "SQL",
+          "es": "SQL"
+        },
+        {
+          "en": "Docker",
+          "es": "Docker"
+        }
+      ]
+    },
+    "secondarySkills": {
+      "title": {
+        "en": "Also worked with",
+        "es": "También he trabajado con"
+      },
+      "items": [
+        {
+          "en": "Unity",
+          "es": "Unity"
+        },
+        {
+          "en": "Java",
+          "es": "Java"
+        },
+        {
+          "en": "C#",
+          "es": "C#"
+        },
+        {
+          "en": "HTML / CSS",
+          "es": "HTML / CSS"
+        },
+        {
+          "en": "REST APIs",
+          "es": "REST APIs"
+        },
+        {
+          "en": "Git",
+          "es": "Git"
+        }
+      ]
+    },
+    "closing": {
+      "en": "Engineering profile focused on product execution, system design and long-term maintainability.",
+      "es": "Perfil de ingeniería centrado en ejecución de producto, diseño de sistemas y mantenibilidad a largo plazo."
+    }
+  }
+}

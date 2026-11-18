@@ -1,0 +1,116 @@
+{
+  "template": "section",
+  "order": 50,
+  "visible": true,
+  "path": "contact",
+  "parent": "about",
+  "crumb": {
+    "en": "Contact",
+    "es": "Contacto"
+  },
+  "seo": {
+    "title": {
+      "en": "Contact | System Core",
+      "es": "Contacto | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Contact for Unax Zulaika Fuente.",
+      "es": "Contacto de Unax Zulaika Fuente."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "Contact",
+      "es": "Contacto"
+    },
+    "meta": {
+      "en": "Channel",
+      "es": "Canal"
+    },
+    "dock": {
+      "title": {
+        "en": "Contact",
+        "es": "Contacto"
+      },
+      "copy": {
+        "en": "Direct technical conversations and collaboration opportunities.",
+        "es": "Conversaciones técnicas directas y oportunidades de colaboración."
+      }
+    },
+    "position": {
+      "x": 0.31,
+      "y": 0.64
+    }
+  },
+  "section": {
+    "header": {
+      "eyebrow": {
+        "en": "CONTACT",
+        "es": "CONTACTO"
+      },
+      "title": {
+        "en": "Contact",
+        "es": "Contacto"
+      },
+      "lead": {
+        "en": "Use this module to start a conversation about collaboration, product work or engineering opportunities.",
+        "es": "Usa este módulo para iniciar una conversación sobre colaboración, trabajo de producto u oportunidades de ingeniería."
+      },
+      "leadSize": "large"
+    },
+    "blocks": [
+      {
+        "type": "links",
+        "links": [
+          {
+            "label": {
+              "en": "Email",
+              "es": "Email"
+            },
+            "subtitle": {
+              "en": "Send direct message",
+              "es": "Enviar mensaje directo"
+            },
+            "url": "mailto:unax.zulaika.fuente@gmail.com"
+          },
+          {
+            "label": {
+              "en": "GitHub",
+              "es": "GitHub"
+            },
+            "subtitle": {
+              "en": "Review repositories",
+              "es": "Revisar repositorios"
+            },
+            "url": "https://github.com/Zulaa9"
+          },
+          {
+            "label": {
+              "en": "LinkedIn",
+              "es": "LinkedIn"
+            },
+            "subtitle": {
+              "en": "Open professional profile",
+              "es": "Abrir perfil profesional"
+            },
+            "url": "https://www.linkedin.com/in/unax-zulaika-fuente/"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "variant": "lines",
+        "paragraphs": [
+          {
+            "en": "Based in Bilbao, Spain",
+            "es": "Ubicado en Bilbao, España"
+          },
+          {
+            "en": "Available for remote collaboration",
+            "es": "Disponible para colaboración en remoto"
+          }
+        ]
+      }
+    ]
+  }
+}
