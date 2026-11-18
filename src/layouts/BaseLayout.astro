@@ -1,0 +1,84 @@
+---
+/**
+ * Estructura común de todas las páginas: <head> (SEO, idioma, iconos, fuentes),
+ * fondo animado y barra superior.
+ */
+import '@fontsource/space-grotesk/400.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
+import { getImage } from 'astro:assets';
+import Topbar from '../components/Topbar.astro';
+import ogSource from '../assets/images/portfolio-core.png';
+import { localePath, LOCALES, ui, type Locale } from '../lib/i18n';
+import langRedirect from '../scripts/lang-redirect.js?raw';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  /** Ruta sin prefijo de idioma ('' = Core). null = página sin equivalente indexable (404). */
+  path: string | null;
+  bodyClass?: string;
+  bodyAttrs?: Record<string, string>;
+  statusText?: string;
+  statusId?: string;
+  shellLabel?: string;
+}
+
+const { lang, title, description, path, bodyClass, bodyAttrs = {}, statusText, statusId, shellLabel } = Astro.props;
+const t = ui(lang);
+const site = Astro.site!;
+const hrefs = Object.fromEntries(LOCALES.map((l) => [l, path === null ? localePath(l) : localePath(l, path)])) as Record<Locale, string>;
+const canonical = path === null ? undefined : new URL(hrefs[lang], site).href;
+const og = await getImage({ src: ogSource, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 82 });
+const ogUrl = new URL(og.src, site).href;
+---
+<!doctype html>
+<html lang={lang} data-href-en={hrefs.en} data-href-es={hrefs.es}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {path !== null && <script is:inline set:html={langRedirect} />}
+  {canonical && <link rel="canonical" href={canonical} />}
+  {path !== null && LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(hrefs[l], site).href} />)}
+  {path !== null && <link rel="alternate" hreflang="x-default" href={new URL(hrefs.en, site).href} />}
+  {path === null && <meta name="robots" content="noindex" />}
+  <meta name="theme-color" content="#06090e" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Unax Zulaika Fuente" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  {canonical && <meta property="og:url" content={canonical} />}
+  <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
+  <meta property="og:locale:alternate" content={lang === 'es' ? 'en_US' : 'es_ES'} />
+  <meta property="og:image" content={ogUrl} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <slot name="head" />
+</head>
+<body class={bodyClass} {...bodyAttrs}>
+  <a class="skip-link" href="#main-content">{t.site.skipToContent}</a>
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--far" aria-hidden="true"></div>
+  <div class="bg-starfield bg-starfield--near" aria-hidden="true"></div>
+  <div class="meteor-layer" id="meteor-layer" aria-hidden="true"></div>
+
+  <main class="app" id="app">
+    <section class="system-shell" id="system-shell" aria-label={shellLabel}>
+      <Topbar lang={lang} hrefs={hrefs} statusText={statusText ?? t.site.statusOnline} statusId={statusId} />
+      <slot />
+    </section>
+  </main>
+  <slot name="after-main" />
+</body>
+</html>

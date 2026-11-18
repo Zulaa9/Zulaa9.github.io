@@ -1,0 +1,36 @@
+---
+import { LOCALES, ui, type Locale } from '../lib/i18n';
+
+interface Props {
+  lang: Locale;
+  hrefs: Record<Locale, string>;
+  statusText: string;
+  statusId?: string;
+}
+const { lang, hrefs, statusText, statusId } = Astro.props;
+const t = ui(lang);
+---
+<header class="topbar">
+  <div class="identity">
+    <span class="identity__name">UNAX <span class="identity__accent">ZULA</span>IKA FUENTE</span>
+    <span class="identity__role">{t.site.identityRole}</span>
+  </div>
+  <div class="topbar-controls">
+    <nav class="lang-switch" aria-label={t.site.language}>
+      {LOCALES.map((l) => (
+        <a
+          class:list={['lang-switch__btn', { 'is-active': l === lang }]}
+          href={hrefs[l]}
+          hreflang={l}
+          lang={l}
+          data-lang-switch={l}
+          aria-current={l === lang ? 'true' : undefined}
+        >{l.toUpperCase()}</a>
+      ))}
+    </nav>
+    <div class="status-chip">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text" id={statusId ?? 'core-status-text'}>{statusText}</span>
+    </div>
+  </div>
+</header>
