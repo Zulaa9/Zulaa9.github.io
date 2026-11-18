@@ -260,6 +260,8 @@ zula.dev está detrás de Cloudflare y sirve la rama `main` de este repositorio.
 
 Sin esos ajustes, Cloudflare publicaría los archivos fuente tal cual y el sitio dejaría de funcionar.
 
+Cloudflare Pages también publica una vista previa de cada rama (`<rama>.zula-portfolio.pages.dev`), útil para revisar antes de integrar en `main`.
+
 ### Otros servidores
 
 En el repositorio no hay configuración del servidor de zula.dev (no hay `CNAME`, workflows ni archivos de servidor), así que estos pasos son genéricos:
