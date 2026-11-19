@@ -11,6 +11,10 @@ export function localizeMedia<T extends { type: string }>(items: T[], lang: Loca
   return items.map((item) => {
     const it = item as T & Partial<WithSrc> & { parts?: WithSrc[] };
     if (it.type === 'image') return pick(it as T & WithSrc, lang);
+    if (it.type === 'video') {
+      const v = item as unknown as { src: string; srcEs?: string };
+      return lang === 'es' && v.srcEs ? ({ ...v, src: v.srcEs } as unknown as T) : item;
+    }
     if (it.type === 'composite' && it.parts) return { ...it, parts: it.parts.map((x) => pick(x, lang)) };
     return item;
   });

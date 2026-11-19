@@ -320,14 +320,15 @@
           {
             "type": "video",
             "placement": "hero",
-            "src": "/assets/media/keyping-password-generator-flow.mp4",
+            "src": "/assets/media/keyping-flow-en.mp4",
+            "srcEs": "/assets/media/keyping-flow-es.mp4",
             "alt": {
-              "en": "KeyPing password creation and generator flow",
-              "es": "Flujo de creación de contraseña y generador de KeyPing"
+              "en": "Adding a password in KeyPing with the built-in generator",
+              "es": "Añadir una contraseña en KeyPing con el generador integrado"
             },
             "caption": {
-              "en": "Starts in the password list, opens Create Password, generates a new credential and returns to an updated list with the new password details selected.",
-              "es": "Empieza en el listado de contraseñas, entra en Crear contraseña, genera una nueva credencial y vuelve al listado actualizado con el nuevo detalle seleccionado."
+              "en": "From the password list: add an entry, generate a strong password, fill in the account and its password-change link, save, and see it in its folder.",
+              "es": "Desde la lista de contraseñas: añadir una entrada, generar una contraseña fuerte, completar la cuenta y su enlace de cambio de contraseña, guardar y verla en su carpeta."
             }
           },
           {

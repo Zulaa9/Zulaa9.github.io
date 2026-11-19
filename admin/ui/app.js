@@ -257,7 +257,7 @@ function renderScalar(parent, key, value, _path) {
   span.textContent = label(key);
   let input;
   const isImage = typeof value === 'string' && (key === 'src' || key === 'srcEs' || key === 'logo') && !value.startsWith('/assets/media/') && parent.type !== 'video';
-  const isVideo = key === 'src' && parent.type === 'video';
+  const isVideo = (key === 'src' || key === 'srcEs') && parent.type === 'video';
   if (isImage || isVideo) return renderMedia(parent, key, value, isVideo ? 'video' : 'image');
 
   if (typeof value === 'boolean') {

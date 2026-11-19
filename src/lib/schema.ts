@@ -115,6 +115,7 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
       type: z.literal('video'),
       placement: z.enum(['hero', 'rail', 'extra']).default('hero'),
       src: video,
+      srcEs: video.optional(),
       alt: localized,
       caption: localized,
     }),
