@@ -49,7 +49,7 @@ let n = 0;
     {f.actions.length > 0 && (
       <div class="actions">
         {f.actions.map((a) => (
-          <a class={a.variant === 'download' ? 'btn btn--primary' : 'link-arrow'} href={a.url} target="_blank" rel="noopener noreferrer">
+          <a class={a.variant === 'download' ? 'btn btn--primary' : 'link-arrow'} href={typeof a.url === 'string' ? a.url : a.url[lang]} target="_blank" rel="noopener noreferrer">
             {tr(a.label, lang)} <span aria-hidden="true">↗</span>
           </a>
         ))}

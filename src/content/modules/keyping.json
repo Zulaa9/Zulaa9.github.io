@@ -178,22 +178,13 @@
             "es": "Consigue KeyPing"
           },
           "label": {
-            "en": "Download latest version",
-            "es": "Descargar última versión"
+            "en": "Download v{{keyping.version}}",
+            "es": "Descargar v{{keyping.version}}"
           },
-          "url": "https://github.com/Zulaa9/KeyPing/releases"
-        },
-        {
-          "variant": "website",
-          "eyebrow": {
-            "en": "Product website",
-            "es": "Web del producto"
-          },
-          "label": {
-            "en": "Visit website",
-            "es": "Visitar la web"
-          },
-          "url": "https://keyping.zula.dev"
+          "url": {
+            "en": "https://keyping.zula.dev/en/download/",
+            "es": "https://keyping.zula.dev/descargar/"
+          }
         },
         {
           "variant": "github",

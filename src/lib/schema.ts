@@ -129,7 +129,13 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
     punchline: localized,
     pills: localizedList,
     actions: z.array(
-      z.strictObject({ variant: z.enum(['download', 'website', 'github']), eyebrow: localized, label: localized, url: externalUrl }),
+      z.strictObject({
+        variant: z.enum(['download', 'website', 'github']),
+        eyebrow: localized,
+        label: localized,
+        // Un enlace para todos los idiomas, o uno por idioma ({ en, es }).
+        url: z.union([externalUrl, z.strictObject({ en: externalUrl, es: externalUrl })]),
+      }),
     ),
     why: z.strictObject({
       title: localized,
