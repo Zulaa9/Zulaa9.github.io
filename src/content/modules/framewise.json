@@ -115,13 +115,12 @@
       }
     ],
     "adoption": {
-      "value": "47",
+      "value": "{{framewise.users}}",
       "unit": "users",
       "source": {
-        "en": "Chrome Web Store (40) + Edge Add-ons (7)",
-        "es": "Chrome Web Store (40) + Edge Add-ons (7)"
-      },
-      "asOf": "2026-11-19"
+        "en": "Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}})",
+        "es": "Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}})"
+      }
     },
     "status": {
       "label": {

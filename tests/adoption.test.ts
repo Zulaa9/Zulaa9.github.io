@@ -1,17 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { resolveAdoption } from '../src/lib/adoption';
-import { countInstallerDownloads, type LiveData } from '../src/lib/live';
+import { countInstallerDownloads, parseChromeUsers, type LiveData } from '../src/lib/live';
 
 const api: LiveData = {
-  source: 'api',
   keyping: { version: '1.3.1', publishedAt: '2026-11-19T03:31:14Z', releases: 9, firstVersion: '1.0.0', commits: 167, electron: '45', angular: '20', downloads: 1234 },
+  framewise: { chrome: 40, edge: 7, users: 47 },
+  sources: { keyping: 'api', framewise: 'api' },
+  fallbackAsOf: '2026-11-01',
 };
 const now = new Date('2026-11-20T12:00:00Z');
 
 describe('bloque Adopción', () => {
   it('valor automático: número, unidad, fuente y fecha del build', () => {
     const a = resolveAdoption({ value: '{{keyping.downloads}}', unit: 'downloads', source: { en: 'GitHub Releases' } }, 'es', { data: api, now });
-    expect(a).toEqual({ label: 'Adopción', amount: '1234 descargas', source: 'Fuente: GitHub Releases', date: '20 nov 2026' });
+    expect(a).toEqual({ label: 'Adopción', amount: '1234 descargas', source: 'Fuente: GitHub Releases', date: '20 nov 2026', origin: 'api' });
     expect(resolveAdoption({ value: '{{keyping.downloads}}', unit: 'downloads', source: { en: 'GitHub Releases' } }, 'en', { data: api, now })?.amount).toBe('1,234 downloads');
   });
 
@@ -20,12 +22,24 @@ describe('bloque Adopción', () => {
     expect(a).toMatchObject({ amount: '1 usuario', source: 'Fuente: Tienda', date: '19 nov 2026' });
   });
 
-  it('se oculta sin número, por debajo del mínimo o con datos de respaldo', () => {
+  it('marcadores en la fuente y fecha del respaldo si la tienda falla', () => {
+    const input = { value: '{{framewise.users}}', unit: 'users' as const, source: { en: 'Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}})' } };
+    expect(resolveAdoption(input, 'en', { data: api, now })).toMatchObject({ amount: '47 users', source: 'Source: Chrome Web Store (40) + Edge Add-ons (7)', date: 'Nov 20, 2026', origin: 'api' });
+    const old = { ...api, sources: { ...api.sources, framewise: 'fallback' as const } };
+    expect(resolveAdoption(input, 'es', { data: old, now })).toMatchObject({ amount: '47 usuarios', date: '1 nov 2026', origin: 'fallback' });
+  });
+
+  it('lee la cifra de usuarios de la ficha de Chrome', () => {
+    expect(parseChromeUsers('<div>ExtensionTools</div><div>  1,234 users </div>')).toBe(1234);
+    expect(parseChromeUsers('<span>40 users</span>')).toBe(40);
+    expect(parseChromeUsers('<p>sin cifra</p>')).toBeNull();
+  });
+
+  it('se oculta sin número o por debajo del mínimo', () => {
     expect(resolveAdoption(undefined, 'en')).toBeNull();
     expect(resolveAdoption({ value: 'muchos', unit: 'users', source: { en: 'x' }, asOf: '2026-11-19' }, 'en', { data: api })).toBeNull();
     expect(resolveAdoption({ value: '{{otro.dato}}', unit: 'users', source: { en: 'x' } }, 'en', { data: api })).toBeNull();
     expect(resolveAdoption({ value: '40', unit: 'users', source: { en: 'x' }, asOf: '2026-11-19', minimum: 50 }, 'en', { data: api })).toBeNull();
-    expect(resolveAdoption({ value: '{{keyping.downloads}}', unit: 'downloads', source: { en: 'x' } }, 'en', { data: { ...api, source: 'fallback' } })).toBeNull();
   });
 
   it('solo cuenta instaladores, no blockmap, yml ni SHA256SUMS', () => {

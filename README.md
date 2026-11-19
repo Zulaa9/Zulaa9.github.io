@@ -186,7 +186,7 @@ El build valida todo y falla con un mensaje claro cuando falta un campo obligato
 
 ### Datos en vivo (versión de KeyPing, etc.)
 
-Los textos de los módulos pueden llevar marcadores que se rellenan **al compilar** con la API pública de GitHub (`src/lib/live.ts`); el navegador no hace ninguna petición a terceros:
+Los textos de los módulos pueden llevar marcadores que se rellenan **al compilar** con fuentes públicas (API de GitHub y fichas de las tiendas; `src/lib/live.ts`); el navegador no hace ninguna petición a terceros:
 
 | Marcador | Valor |
 |---|---|
@@ -196,9 +196,10 @@ Los textos de los módulos pueden llevar marcadores que se rellenan **al compila
 | `{{keyping.firstVersion}}` | Primera versión publicada |
 | `{{keyping.commits}}` | Commits en `main` |
 | `{{keyping.downloads}}` | Descargas de instaladores (`.exe` y `.AppImage`) de todas las versiones publicadas |
+| `{{framewise.users}}`, `{{framewise.chrome}}`, `{{framewise.edge}}` | Usuarios de Framewise: suma y cifra de cada tienda (ficha de Chrome Web Store y JSON público de Edge Add-ons) |
 | `{{keyping.electron}}`, `{{keyping.angular}}` | Versión principal de Electron y Angular en `keyping-ui/package.json` |
 
-Si la API no responde, el build usa `src/data/live-fallback.json` (actualízalo de vez en cuando) y lo indica en el log. Con `LIVE_DATA_OFFLINE=1` se usan siempre los datos de respaldo (las pruebas lo hacen así).
+Si una fuente no responde, el build usa para ese proyecto `src/data/live-fallback.json` (actualiza sus cifras y su `asOf` de vez en cuando) y lo indica en el log. Con `LIVE_DATA_OFFLINE=1` se usan siempre los datos de respaldo (las pruebas lo hacen así).
 
 Para que zula.dev se actualice al publicar una versión de KeyPing, el proyecto de Cloudflare Pages `zula-portfolio` tiene un *deploy hook*; su URL se guarda en el repositorio de KeyPing como secreto `PORTFOLIO_DEPLOY_HOOK`, y el workflow `site.yml` de KeyPing lo llama tras cada release.
 
@@ -208,17 +209,18 @@ Cada proyecto puede tener un bloque **Adopción** (`project.adoption`), que se m
 
 1. **Siempre número + unidad explícita + fuente + fecha.** Ejemplo: «47 usuarios · Fuente: Chrome Web Store (40) + Edge Add-ons (7) · 19 nov 2026».
 2. **Unidad según lo que mide la fuente:** `users` si la fuente cuenta usuarios (tiendas de extensiones), `downloads` si solo cuenta descargas (GitHub Releases). Nunca se suman unidades distintas ni se usan términos ambiguos («instalaciones», «usuarios activos», «+N», «miles»).
-3. **Automático cuando hay API pública.** El valor es un marcador en vivo (p. ej. `{{keyping.downloads}}`) y la fecha es la del build. Si el build tira de los datos de respaldo, el bloque se oculta para no fechar como actual un dato viejo.
-4. **Manual cuando no hay API** (Chrome Web Store, Edge Add-ons): número copiado de la ficha pública o del panel del desarrollador, con `asOf` (AAAA-MM-DD) obligatorio. No se hace *scraping* de las fichas en el build: es frágil y rompería la regla de no depender de terceros. Actualízalo a mano de vez en cuando (panel `npm run admin` o el JSON).
-5. **Sin número verificable no hay bloque.** Un proyecto sin publicar (Nemulo) o sin fuente fiable no lleva `adoption`. Nada de cifras estimadas.
-6. **Mínimo opcional:** `minimum` oculta el bloque mientras el número sea menor. Lo decide el autor por proyecto; por defecto es 0.
+3. **Automático siempre que haya una fuente pública legible al compilar.** El valor es un marcador en vivo (`{{keyping.downloads}}`, `{{framewise.users}}`) y la fecha es la del build. Las consultas se hacen solo en el build: el navegador del visitante nunca contacta con terceros.
+4. **Si la fuente falla en un build**, se usa el respaldo de `src/data/live-fallback.json` **con su fecha** (`asOf`), nunca con la del build, para no presentar como actual un dato viejo. El HTML lo marca con `data-origin="fallback"` (o `api`).
+5. **Manual solo si no hay fuente legible:** número con `asOf` (AAAA-MM-DD) obligatorio.
+6. **Sin número verificable no hay bloque.** Un proyecto sin publicar (Nemulo) o sin fuente fiable no lleva `adoption`. Nada de cifras estimadas.
+7. **Mínimo opcional:** `minimum` oculta el bloque mientras el número sea menor. Lo decide el autor por proyecto; por defecto es 0.
 
 Casos actuales:
 
 | Proyecto | Unidad | Fuente | Modo |
 |---|---|---|---|
 | KeyPing | descargas | GitHub Releases, solo instaladores (`.exe`, `.AppImage`); no cuentan `.blockmap`, `latest*.yml` ni `SHA256SUMS`. La app no tiene telemetría, así que no hay usuarios. Las autoactualizaciones también descargan el instalador: cuenta descargas, no personas. | Automático (`{{keyping.downloads}}`) |
-| Framewise | usuarios | Chrome Web Store + Edge Add-ons (cifra de usuarios de cada ficha, sumadas) | Manual con `asOf` |
+| Framewise | usuarios | Chrome Web Store + Edge Add-ons: «N users» de la ficha de Chrome (HTML, no hay API) y `activeInstallCount` del JSON público de Edge, sumados. Leer el HTML de Chrome es frágil: si Google cambia la ficha, el build avisa en el log y usa el respaldo con su fecha. | Automático (`{{framewise.users}}`) |
 | Nemulo | — | No publicado | Sin bloque |
 
 Código: `src/lib/adoption.ts` (reglas de formato y ocultación), `src/components/ui/AdoptionFact.astro`, `countInstallerDownloads` en `src/lib/live.ts` y pruebas en `tests/adoption.test.ts`.

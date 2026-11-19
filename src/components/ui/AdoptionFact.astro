@@ -4,7 +4,7 @@ import type { Adoption } from '../../lib/adoption';
 interface Props { adoption: Adoption }
 const { adoption: a } = Astro.props;
 ---
-<div class="adoption">
+<div class="adoption" data-origin={a.origin}>
   <dt>{a.label}</dt>
   <dd><strong class="adoption__n">{a.amount}</strong> <span class="adoption__src">{a.source} · <time>{a.date}</time></span></dd>
 </div>
