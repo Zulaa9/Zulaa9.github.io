@@ -114,6 +114,15 @@
         "url": "https://github.com/Zulaa9/framewise"
       }
     ],
+    "adoption": {
+      "value": "47",
+      "unit": "users",
+      "source": {
+        "en": "Chrome Web Store (40) + Edge Add-ons (7)",
+        "es": "Chrome Web Store (40) + Edge Add-ons (7)"
+      },
+      "asOf": "2026-11-19"
+    },
     "status": {
       "label": {
         "en": "Status",

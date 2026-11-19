@@ -23,12 +23,14 @@ const LABELS = {
   contactModule: 'Módulo de contacto', contactLabel: 'Texto del enlace de contacto', cvLabel: 'Texto del CV', cvUrl: 'URL del CV',
   experience: 'Experiencia', role: 'Puesto', date: 'Fechas', highlight: 'Dato destacado', primarySkills: 'Tecnologías principales',
   secondarySkills: 'Otras tecnologías', closing: 'Cierre', section: 'Sección', leadSize: 'Tamaño de la entradilla', blocks: 'Bloques',
+  adoption: 'Adopción (número + unidad + fuente + fecha; ver README)', unit: 'Unidad (users si la fuente mide usuarios; downloads si no)',
+  source: 'Fuente', asOf: 'Fecha del dato (AAAA-MM-DD, obligatoria si es manual)', minimum: 'Mínimo para mostrarlo',
   type: 'Tipo', tag: 'Etiqueta', desc: 'Descripción', points: 'Puntos', style: 'Estilo', projects: 'Índice de proyectos',
 };
 
 const ENUMS = {
   layout: ['standard', 'flagship'], fit: ['cover', 'logo'], kind: ['external', 'github', 'download'], style: ['bullets', 'chips'],
-  leadSize: ['normal', 'large'], placement: ['hero', 'rail', 'extra'], tone: ['neutral', 'live', 'preview'],
+  leadSize: ['normal', 'large'], placement: ['hero', 'rail', 'extra'], tone: ['neutral', 'live', 'preview'], unit: ['users', 'downloads'],
 };
 const L = () => ({ en: '', es: '' });
 const BLOCK_SKELETONS = {
@@ -51,7 +53,11 @@ const ARRAY_SKELETONS = {
 /** Campos opcionales que se pueden añadir o quitar, por tipo de objeto (ruta sin índices). */
 const OPTIONAL = {
   node: { mobileLabel: L, position: () => ({ x: 0.5, y: 0.14 }), featured: () => false },
-  project: { status: () => ({ label: L(), value: L(), tone: 'neutral', onCard: false }), stackTitle: L },
+  project: {
+    status: () => ({ label: L(), value: L(), tone: 'neutral', onCard: false }), stackTitle: L,
+    adoption: () => ({ value: '0', unit: 'users', source: L(), asOf: new Date().toISOString().slice(0, 10), minimum: 0 }),
+  },
+  'project.adoption': { asOf: () => new Date().toISOString().slice(0, 10) },
   about: { photo: () => ({ src: '../../assets/images/placeholder.png', alt: L() }), nextStep: () => ({ title: L(), contactModule: 'contact', contactLabel: L() }), closing: L },
   'about.nextStep': { cvLabel: L, cvUrl: () => 'https://' },
   'about.experience.items[]': { highlight: () => ({ label: L(), value: L() }) },
@@ -80,7 +86,7 @@ async function api(path, options = {}) {
 const isLocalized = (v) => v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 2 && 'en' in v && 'es' in v && typeof v.en === 'string';
 const clone = (v) => JSON.parse(JSON.stringify(v));
 const shapeOf = (path) => path.replace(/\[\d+\]/g, '[]');
-const KEEP_ON_CLEAR = new Set(['tone', 'onCard', 'type', 'kind', 'variant', 'style', 'placement', 'fit', 'layout', 'src', 'logo', 'compact']);
+const KEEP_ON_CLEAR = new Set(['tone', 'unit', 'onCard', 'type', 'kind', 'variant', 'style', 'placement', 'fit', 'layout', 'src', 'logo', 'compact']);
 function cleared(v, key = '') {
   if (Array.isArray(v)) return v.length ? [cleared(v[0])] : [];
   if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, KEEP_ON_CLEAR.has(k) ? clone(x) : cleared(x, k)]));

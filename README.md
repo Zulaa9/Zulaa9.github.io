@@ -195,11 +195,33 @@ Los textos de los módulos pueden llevar marcadores que se rellenan **al compila
 | `{{keyping.releases}}` | Número de versiones publicadas |
 | `{{keyping.firstVersion}}` | Primera versión publicada |
 | `{{keyping.commits}}` | Commits en `main` |
+| `{{keyping.downloads}}` | Descargas de instaladores (`.exe` y `.AppImage`) de todas las versiones publicadas |
 | `{{keyping.electron}}`, `{{keyping.angular}}` | Versión principal de Electron y Angular en `keyping-ui/package.json` |
 
 Si la API no responde, el build usa `src/data/live-fallback.json` (actualízalo de vez en cuando) y lo indica en el log. Con `LIVE_DATA_OFFLINE=1` se usan siempre los datos de respaldo (las pruebas lo hacen así).
 
 Para que zula.dev se actualice al publicar una versión de KeyPing, el proyecto de Cloudflare Pages `zula-portfolio` tiene un *deploy hook*; su URL se guarda en el repositorio de KeyPing como secreto `PORTFOLIO_DEPLOY_HOOK`, y el workflow `site.yml` de KeyPing lo llama tras cada release.
+
+### Métricas de adopción (decisión del 19-11-2026)
+
+Cada proyecto puede tener un bloque **Adopción** (`project.adoption`), que se muestra en la columna lateral de su cabecera. Las reglas valen para los proyectos actuales y para los futuros:
+
+1. **Siempre número + unidad explícita + fuente + fecha.** Ejemplo: «47 usuarios · Fuente: Chrome Web Store (40) + Edge Add-ons (7) · 19 nov 2026».
+2. **Unidad según lo que mide la fuente:** `users` si la fuente cuenta usuarios (tiendas de extensiones), `downloads` si solo cuenta descargas (GitHub Releases). Nunca se suman unidades distintas ni se usan términos ambiguos («instalaciones», «usuarios activos», «+N», «miles»).
+3. **Automático cuando hay API pública.** El valor es un marcador en vivo (p. ej. `{{keyping.downloads}}`) y la fecha es la del build. Si el build tira de los datos de respaldo, el bloque se oculta para no fechar como actual un dato viejo.
+4. **Manual cuando no hay API** (Chrome Web Store, Edge Add-ons): número copiado de la ficha pública o del panel del desarrollador, con `asOf` (AAAA-MM-DD) obligatorio. No se hace *scraping* de las fichas en el build: es frágil y rompería la regla de no depender de terceros. Actualízalo a mano de vez en cuando (panel `npm run admin` o el JSON).
+5. **Sin número verificable no hay bloque.** Un proyecto sin publicar (Nemulo) o sin fuente fiable no lleva `adoption`. Nada de cifras estimadas.
+6. **Mínimo opcional:** `minimum` oculta el bloque mientras el número sea menor. Lo decide el autor por proyecto; por defecto es 0.
+
+Casos actuales:
+
+| Proyecto | Unidad | Fuente | Modo |
+|---|---|---|---|
+| KeyPing | descargas | GitHub Releases, solo instaladores (`.exe`, `.AppImage`); no cuentan `.blockmap`, `latest*.yml` ni `SHA256SUMS`. La app no tiene telemetría, así que no hay usuarios. Las autoactualizaciones también descargan el instalador: cuenta descargas, no personas. | Automático (`{{keyping.downloads}}`) |
+| Framewise | usuarios | Chrome Web Store + Edge Add-ons (cifra de usuarios de cada ficha, sumadas) | Manual con `asOf` |
+| Nemulo | — | No publicado | Sin bloque |
+
+Código: `src/lib/adoption.ts` (reglas de formato y ocultación), `src/components/ui/AdoptionFact.astro`, `countInstallerDownloads` en `src/lib/live.ts` y pruebas en `tests/adoption.test.ts`.
 
 ### Nodos del Core
 

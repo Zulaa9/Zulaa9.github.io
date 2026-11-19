@@ -16,6 +16,8 @@ type KeyPingLive = {
   commits: number;
   electron: string;
   angular: string;
+  /** Descargas de instaladores (.exe y .AppImage) de todas las versiones publicadas. */
+  downloads: number;
 };
 export type LiveData = { keyping: KeyPingLive; source: 'api' | 'fallback' };
 
@@ -44,13 +46,24 @@ async function countPaged(url: string): Promise<number> {
   return ((await res.json()) as unknown[]).length;
 }
 
+/**
+ * Solo cuentan los instaladores: .blockmap, latest*.yml y SHA256SUMS los piden el
+ * autoactualizador o quien verifica, y no son descargas de la app. Una actualización
+ * automática sí descarga el instalador, así que esto cuenta descargas, no personas.
+ */
+export function countInstallerDownloads(releases: { assets?: { name: string; download_count: number }[] }[]): number {
+  return releases.flatMap((r) => r.assets ?? []).filter((a) => /\.(exe|AppImage)$/.test(a.name)).reduce((sum, a) => sum + a.download_count, 0);
+}
+
 const major = (range: string | undefined) => range?.match(/(\d+)/)?.[1] ?? '';
 
 async function loadKeyPing(): Promise<KeyPingLive> {
   const api = `https://api.github.com/repos/${REPO}`;
   const [latest, releases, commits, pkg] = await Promise.all([
     get(`${api}/releases/latest`).then((r) => r.json() as Promise<{ tag_name: string; published_at: string }>),
-    get(`${api}/releases?per_page=100`).then((r) => r.json() as Promise<{ tag_name: string; draft: boolean; prerelease: boolean }[]>),
+    get(`${api}/releases?per_page=100`).then(
+      (r) => r.json() as Promise<{ tag_name: string; draft: boolean; prerelease: boolean; assets: { name: string; download_count: number }[] }[]>,
+    ),
     countPaged(`${api}/commits?sha=main&per_page=1`),
     get(`https://raw.githubusercontent.com/${REPO}/main/keyping-ui/package.json`).then(
       (r) => r.json() as Promise<{ dependencies?: Record<string, string>; devDependencies?: Record<string, string> }>,
@@ -66,6 +79,7 @@ async function loadKeyPing(): Promise<KeyPingLive> {
     commits,
     electron: major(deps.electron),
     angular: major(deps['@angular/core']),
+    downloads: countInstallerDownloads(published),
   };
   if (!data.version || !data.releases || !data.electron || !data.angular) throw new Error('datos incompletos');
   return data;
@@ -75,7 +89,7 @@ async function load(): Promise<LiveData> {
   if (process.env.LIVE_DATA_OFFLINE === '1') return { ...fallback, source: 'fallback' };
   try {
     const keyping = await loadKeyPing();
-    console.info(`[live] KeyPing v${keyping.version}, ${keyping.releases} versiones, ${keyping.commits} commits (API de GitHub)`);
+    console.info(`[live] KeyPing v${keyping.version}, ${keyping.releases} versiones, ${keyping.commits} commits, ${keyping.downloads} descargas (API de GitHub)`);
     return { keyping, source: 'api' };
   } catch (err) {
     console.warn(`[live] no se pudo consultar GitHub (${(err as Error).message}); se usan los datos de respaldo`);
@@ -104,6 +118,7 @@ function values(lang: 'en' | 'es', data: LiveData = live): Record<string, string
     'keyping.commits': nf.format(k.commits),
     'keyping.electron': k.electron,
     'keyping.angular': k.angular,
+    'keyping.downloads': nf.format(k.downloads),
   };
 }
 

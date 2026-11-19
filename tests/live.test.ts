@@ -8,7 +8,7 @@ describe('datos en vivo', () => {
   });
 
   it('sustituye marcadores y deja los desconocidos', () => {
-    const data = { source: 'api' as const, keyping: { version: '2.0.0', publishedAt: '2027-03-05T10:00:00Z', releases: 12, firstVersion: '1.0.0', commits: 1234, electron: '46', angular: '21' } };
+    const data = { source: 'api' as const, keyping: { version: '2.0.0', publishedAt: '2027-03-05T10:00:00Z', releases: 12, firstVersion: '1.0.0', commits: 1234, electron: '46', angular: '21', downloads: 66 } };
     expect(interpolateLive('v{{keyping.version}} ({{keyping.date}})', 'en', data)).toBe('v2.0.0 (March 2027)');
     expect(interpolateLive('v{{keyping.version}} ({{keyping.date}})', 'es', data)).toBe('v2.0.0 (marzo de 2027)');
     expect(interpolateLive('{{keyping.commits}} commits', 'en', data)).toBe('1,234 commits');

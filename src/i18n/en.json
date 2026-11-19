@@ -72,7 +72,15 @@
     "viewer": "Media viewer"
   },
   "projects": {
-    "github": "GitHub"
+    "github": "GitHub",
+    "adoption": {
+      "label": "Adoption",
+      "user": "user",
+      "users": "users",
+      "download": "download",
+      "downloads": "downloads",
+      "source": "Source"
+    }
   },
   "notFound": {
     "title": "Module not found | System Core",

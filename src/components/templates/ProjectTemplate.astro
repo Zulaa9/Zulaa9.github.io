@@ -8,12 +8,16 @@ import { localizeMedia } from '../../lib/media';
 import PageHeader from '../ui/PageHeader.astro';
 import Sec from '../ui/Sec.astro';
 import StatusTag from '../ui/StatusTag.astro';
+import AdoptionFact from '../ui/AdoptionFact.astro';
+import { resolveAdoption } from '../../lib/adoption';
 
 interface Props { module: ModuleEntry; lang: Locale }
 const { module, lang } = Astro.props;
 if (module.data.template !== 'project') throw new Error('ProjectTemplate necesita un módulo "project"');
 const p = module.data.project;
 const t = ui(lang);
+const adoption = resolveAdoption(p.adoption, lang);
+const neutral = p.status && p.status.tone === 'neutral' ? p.status : null;
 // Las imágenes de la galería se abren en el visor a tamaño completo.
 const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.min(1920, src.width), format: 'webp', quality: 85 })).src;
 const media = await Promise.all(
@@ -36,9 +40,10 @@ let n = 0;
     {p.status && p.status.tone !== 'neutral' && (
       <StatusTag label={tr(p.status.label, lang)} value={tr(p.status.value, lang)} tone={p.status.tone} />
     )}
-    {p.status && p.status.tone === 'neutral' && (
+    {(neutral || adoption) && (
       <dl class="spec spec--compact" slot="aside">
-        <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>
+        {neutral && <div><dt>{tr(neutral.label, lang)}</dt><dd>{tr(neutral.value, lang)}</dd></div>}
+        {adoption && <AdoptionFact adoption={adoption} />}
       </dl>
     )}
   </PageHeader>

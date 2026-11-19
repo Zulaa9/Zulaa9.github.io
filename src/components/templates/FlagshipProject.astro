@@ -12,6 +12,8 @@ import type { ModuleEntry } from '../../lib/modules';
 import { localizeMedia } from '../../lib/media';
 import PageHeader from '../ui/PageHeader.astro';
 import Sec from '../ui/Sec.astro';
+import AdoptionFact from '../ui/AdoptionFact.astro';
+import { resolveAdoption } from '../../lib/adoption';
 
 interface Props { module: ModuleEntry; lang: Locale }
 const { module, lang } = Astro.props;
@@ -19,6 +21,7 @@ if (module.data.template !== 'project' || !module.data.project.flagship) throw n
 const p = module.data.project;
 const f = p.flagship!;
 const t = ui(lang);
+const adoption = resolveAdoption(p.adoption, lang);
 const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.min(1920, src.width), format: 'webp', quality: 85 })).src;
 
 type Item = (typeof f.gallery.items)[number];
@@ -61,6 +64,7 @@ let n = 0;
       <dl class="spec spec--compact">
         {p.status && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
         <div><dt>{tr(p.stackTitle, lang) || 'Stack'}</dt><dd>{p.stack.map((s) => tr(s, lang)).join(' · ')}</dd></div>
+        {adoption && <AdoptionFact adoption={adoption} />}
       </dl>
       <ul class="traits">{f.pills.map((pill) => <li>{tr(pill, lang)}</li>)}</ul>
     </div>

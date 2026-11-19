@@ -6,6 +6,7 @@
     "firstVersion": "1.0.0",
     "commits": 167,
     "electron": "45",
-    "angular": "20"
+    "angular": "20",
+    "downloads": 66
   }
 }

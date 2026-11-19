@@ -106,6 +106,14 @@
         "url": "https://github.com/Zulaa9/KeyPing"
       }
     ],
+    "adoption": {
+      "value": "{{keyping.downloads}}",
+      "unit": "downloads",
+      "source": {
+        "en": "GitHub Releases (installers; updates count too)",
+        "es": "GitHub Releases (instaladores; las actualizaciones también cuentan)"
+      }
+    },
     "status": {
       "label": {
         "en": "Latest release",

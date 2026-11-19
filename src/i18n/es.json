@@ -72,7 +72,15 @@
     "viewer": "Visor multimedia"
   },
   "projects": {
-    "github": "GitHub"
+    "github": "GitHub",
+    "adoption": {
+      "label": "Adopción",
+      "user": "usuario",
+      "users": "usuarios",
+      "download": "descarga",
+      "downloads": "descargas",
+      "source": "Fuente"
+    }
   },
   "notFound": {
     "title": "Módulo no encontrado | Núcleo del Sistema",

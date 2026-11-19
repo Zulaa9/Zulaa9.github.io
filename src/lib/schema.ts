@@ -194,6 +194,26 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
           onCard: z.boolean().default(false),
         })
         .optional(),
+      /**
+       * Bloque «Adopción» (reglas en README, «Métricas de adopción»).
+       * `value`: número o marcador en vivo ({{keyping.downloads}}). `unit`: users si la
+       * fuente mide usuarios, downloads si no. `asOf` (AAAA-MM-DD) es obligatorio para
+       * valores manuales; si falta, el valor es automático y se fecha con el build.
+       * Si el valor no es un número o es menor que `minimum`, el bloque no se muestra.
+       */
+      adoption: z
+        .strictObject({
+          value: z.string().min(1),
+          unit: z.enum(['users', 'downloads']),
+          source: localized,
+          asOf: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Fecha AAAA-MM-DD').optional(),
+          minimum: z.number().int().nonnegative().default(0),
+        })
+        .refine((a) => !!a.asOf || a.value.includes('{{'), {
+          message: 'Un valor manual necesita la fecha "asOf" (AAAA-MM-DD).',
+          path: ['asOf'],
+        })
+        .optional(),
       header,
       description: z.strictObject({ title: localized, paragraphs: localizedList.min(1) }),
       sections: z.array(titledList).default([]),
