@@ -184,6 +184,23 @@ Los módulos que no tienen estos campos siguen funcionando igual.
 
 El build valida todo y falla con un mensaje claro cuando falta un campo obligatorio, hay rutas repetidas, una URL no es válida (`https://` o `mailto:`), una imagen o vídeo no existe, el padre no existe, hay más de 10 módulos visibles o ninguno destacado.
 
+### Datos en vivo (versión de KeyPing, etc.)
+
+Los textos de los módulos pueden llevar marcadores que se rellenan **al compilar** con la API pública de GitHub (`src/lib/live.ts`); el navegador no hace ninguna petición a terceros:
+
+| Marcador | Valor |
+|---|---|
+| `{{keyping.version}}` | Última versión publicada (p. ej. `1.3.1`) |
+| `{{keyping.date}}` | Mes y año de esa versión, según el idioma |
+| `{{keyping.releases}}` | Número de versiones publicadas |
+| `{{keyping.firstVersion}}` | Primera versión publicada |
+| `{{keyping.commits}}` | Commits en `main` |
+| `{{keyping.electron}}`, `{{keyping.angular}}` | Versión principal de Electron y Angular en `keyping-ui/package.json` |
+
+Si la API no responde, el build usa `src/data/live-fallback.json` (actualízalo de vez en cuando) y lo indica en el log. Con `LIVE_DATA_OFFLINE=1` se usan siempre los datos de respaldo (las pruebas lo hacen así).
+
+Para que zula.dev se actualice al publicar una versión de KeyPing, el proyecto de Cloudflare Pages `zula-portfolio` tiene un *deploy hook*; su URL se guarda en el repositorio de KeyPing como secreto `PORTFOLIO_DEPLOY_HOOK`, y el workflow `site.yml` de KeyPing lo llama tras cada release.
+
 ### Nodos del Core
 
 - Hay un nodo por módulo visible, en el orden de `order`.

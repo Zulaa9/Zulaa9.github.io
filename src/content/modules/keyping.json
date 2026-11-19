@@ -33,8 +33,8 @@
         "es": "KeyPing"
       },
       "copy": {
-        "en": "Flagship product module. Stable release v1.1.1 with a security-focused desktop architecture.",
-        "es": "Módulo principal del producto. Versión estable v1.1.1 con arquitectura de escritorio orientada a seguridad."
+        "en": "Flagship product module. Stable release v{{keyping.version}} with a security-focused desktop architecture.",
+        "es": "Módulo principal del producto. Versión estable v{{keyping.version}} con arquitectura de escritorio orientada a seguridad."
       }
     },
     "position": {
@@ -90,6 +90,14 @@
     },
     "links": [
       {
+        "kind": "external",
+        "label": {
+          "en": "Website",
+          "es": "Web"
+        },
+        "url": "https://keyping.zula.dev"
+      },
+      {
         "kind": "github",
         "label": {
           "en": "GitHub",
@@ -104,8 +112,8 @@
         "es": "Última versión"
       },
       "value": {
-        "en": "v1.1.1 (May 2026) · Stable core · Daily use",
-        "es": "v1.1.1 (mayo de 2026) · Core estable · Uso diario"
+        "en": "v{{keyping.version}} ({{keyping.date}}) · Stable core · Daily use",
+        "es": "v{{keyping.version}} ({{keyping.date}}) · Core estable · Uso diario"
       }
     },
     "header": {
@@ -174,6 +182,18 @@
             "es": "Descargar última versión"
           },
           "url": "https://github.com/Zulaa9/KeyPing/releases"
+        },
+        {
+          "variant": "website",
+          "eyebrow": {
+            "en": "Product website",
+            "es": "Web del producto"
+          },
+          "label": {
+            "en": "Visit website",
+            "es": "Visitar la web"
+          },
+          "url": "https://keyping.zula.dev"
         },
         {
           "variant": "github",
@@ -269,12 +289,12 @@
             "es": "~16.400 líneas de TypeScript, HTML y CSS (v1.1.1, medido el 18-11-2026)"
           },
           {
-            "en": "117 commits on main (18 Nov 2026)",
-            "es": "117 commits en main (18-11-2026)"
+            "en": "{{keyping.commits}} commits on main",
+            "es": "{{keyping.commits}} commits en main"
           },
           {
-            "en": "5 public releases, v1.0.0 to v1.1.1",
-            "es": "5 versiones publicadas, de la v1.0.0 a la v1.1.1"
+            "en": "{{keyping.releases}} public releases, v{{keyping.firstVersion}} to v{{keyping.version}}",
+            "es": "{{keyping.releases}} versiones publicadas, de la v{{keyping.firstVersion}} a la v{{keyping.version}}"
           },
           {
             "en": "Electron + Angular architecture",
@@ -549,8 +569,8 @@
               "es": "Frontend"
             },
             "value": {
-              "en": "Angular 20 with standalone components",
-              "es": "Angular 20 con componentes standalone"
+              "en": "Angular {{keyping.angular}} with standalone components",
+              "es": "Angular {{keyping.angular}} con componentes standalone"
             }
           },
           {
@@ -559,8 +579,8 @@
               "es": "Runtime"
             },
             "value": {
-              "en": "Electron 31",
-              "es": "Electron 31"
+              "en": "Electron {{keyping.electron}}",
+              "es": "Electron {{keyping.electron}}"
             }
           },
           {
@@ -609,8 +629,8 @@
           "es": "Integridad de publicaciones"
         },
         "copy": {
-          "en": "Each release includes a SHA256SUMS.txt file; in v1.1.1 it covers the Linux AppImage. GPG signatures are not published yet.",
-          "es": "Cada versión incluye un archivo SHA256SUMS.txt; en la v1.1.1 cubre el AppImage de Linux. Todavía no se publican firmas GPG."
+          "en": "Each release includes a SHA256SUMS.txt file with the SHA-256 of every installer, and automatic updates are checked with an Ed25519 signature. Only v1.0.0 to v1.0.2 also shipped a GPG signature.",
+          "es": "Cada versión incluye un archivo SHA256SUMS.txt con el SHA-256 de cada instalador, y las actualizaciones automáticas se comprueban con una firma Ed25519. Solo de la v1.0.0 a la v1.0.2 se publicó además una firma GPG."
         },
         "files": [
           {

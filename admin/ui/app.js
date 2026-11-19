@@ -272,7 +272,7 @@ function renderScalar(parent, key, value, _path) {
     return wrap;
   }
   const enumValues =
-    key === 'variant' ? (parent.url !== undefined ? ['download', 'github'] : ['plain', 'closing', 'lines']) :
+    key === 'variant' ? (parent.url !== undefined ? ['download', 'website', 'github'] : ['plain', 'closing', 'lines']) :
     key === 'parent' || key === 'contactModule' ? ['', ...moduleOptions(state.selected)] :
     ENUMS[key];
   if (enumValues && !READONLY.has(key)) {

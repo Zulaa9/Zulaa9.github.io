@@ -6,6 +6,7 @@
 import en from '../i18n/en.json';
 import es from '../i18n/es.json';
 import { DEFAULT_LOCALE, LOCALES, type Locale, type Localized } from './schema';
+import { interpolateLive } from './live';
 
 export { DEFAULT_LOCALE, LOCALES, type Locale };
 
@@ -41,7 +42,7 @@ export function isLocale(value: unknown): value is Locale {
 export function tr(value: Localized | undefined, lang: Locale): string {
   if (!value) return '';
   const v = value[lang];
-  return v && v.trim() ? v : value.en;
+  return interpolateLive(v && v.trim() ? v : value.en, lang);
 }
 
 /** Ruta pública de una página. `path` vacío = System Core. */

@@ -129,7 +129,7 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
     punchline: localized,
     pills: localizedList,
     actions: z.array(
-      z.strictObject({ variant: z.enum(['download', 'github']), eyebrow: localized, label: localized, url: externalUrl }),
+      z.strictObject({ variant: z.enum(['download', 'website', 'github']), eyebrow: localized, label: localized, url: externalUrl }),
     ),
     why: z.strictObject({
       title: localized,
