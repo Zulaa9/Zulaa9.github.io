@@ -20,6 +20,13 @@ const withFrom = (href: string) => `${href}?from=${currentId}`;
 ---
 <script is:inline>
   // Antes de pintar: si la ventana estaba ampliada en esta sesión, se abre ya ampliada y sin animación.
+  // Si se entra desde el Core, la barra de ruta empieza escondida y baja al cargar.
+  try {
+    const ref = document.referrer ? new URL(document.referrer) : null;
+    if (ref && ref.origin === location.origin && /^\/(es\/?)?$/.test(ref.pathname)) {
+      document.documentElement.classList.add('crumb-enter');
+    }
+  } catch {}
   try {
     if (sessionStorage.getItem('zula:screen-expanded') === '1') {
       const h = sessionStorage.getItem('zula:topbar-h');
@@ -40,7 +47,7 @@ const withFrom = (href: string) => `${href}?from=${currentId}`;
     </ol>
     <button
       type="button"
-      class="screen-toggle"
+      class="sys-btn screen-toggle"
       id="screen-toggle"
       aria-pressed="false"
       aria-label={expandLabel}
@@ -48,7 +55,7 @@ const withFrom = (href: string) => `${href}?from=${currentId}`;
       data-label-expand={expandLabel}
       data-label-collapse={collapseLabel}
     >
-      <svg class="screen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <svg class="sys-btn__icon screen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <rect class="screen-toggle__frame" x="3.5" y="3.5" width="17" height="17" rx="3" />
         <rect class="screen-toggle__window" x="8" y="8" width="8" height="8" rx="1.5" />
         <g class="screen-toggle__arrow screen-toggle__arrow--tr"><path d="M14.5 4.5h5v5" /><path d="M19.5 4.5l-4.5 4.5" /></g>

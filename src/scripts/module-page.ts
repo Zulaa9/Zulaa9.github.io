@@ -50,6 +50,7 @@ export function initModulePage(): PageData | null {
   }
 
   window.requestAnimationFrame(() => body.classList.add('is-page-ready'));
+  initCrumbbarHandoff();
   initCopyButtons();
   initScreenToggle();
 
@@ -114,6 +115,29 @@ function initScreenToggle() {
     if (event.key !== 'Escape' || !root.classList.contains('screen-expanded')) return;
     if (document.body.classList.contains('is-lightbox-open')) return;
     set(false);
+  });
+}
+
+/**
+ * Barra de ruta entre páginas y Core: al entrar desde el Core baja (html.crumb-enter, puesto
+ * antes de pintar en ModuleFrame); al salir se guarda una copia para que el Core la suba.
+ */
+function initCrumbbarHandoff() {
+  const root = document.documentElement;
+  if (root.classList.contains('crumb-enter')) {
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => root.classList.remove('crumb-enter')));
+  }
+  window.addEventListener('pagehide', () => {
+    const bar = document.querySelector<HTMLElement>('.crumbbar');
+    if (!bar) return;
+    const ghost = bar.cloneNode(true) as HTMLElement;
+    ghost.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+    ghost.setAttribute('aria-hidden', 'true');
+    try {
+      sessionStorage.setItem('zula:crumbbar', ghost.outerHTML);
+    } catch {
+      // Sin almacenamiento el Core simplemente no anima la barra.
+    }
   });
 }
 

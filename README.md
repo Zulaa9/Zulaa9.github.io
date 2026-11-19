@@ -226,6 +226,24 @@ Casos actuales:
 
 Código: `src/lib/adoption.ts` (reglas de formato y ocultación), `src/components/ui/AdoptionFact.astro`, `countInstallerDownloads` en `src/lib/live.ts` y pruebas en `tests/adoption.test.ts`.
 
+### Botones del sistema (decisión del 19-11-2026)
+
+El botón «Ampliar / Restaurar ventana» es la **referencia visual para todos los botones de control** de la web. Cualquier botón nuevo, o uno existente que se rehaga, usa la clase `.sys-btn` de `src/styles/base.css` y sigue estas reglas:
+
+- **Caja:** 28 px de alto, radio 8 px, filete azul tenue, fondo en degradado oscuro y texto en mono, mayúsculas y con espaciado amplio.
+- **Hover y foco:** el filete pasa al color de acento, aparece un anillo y un halo suaves, y un barrido de luz cruza el botón de izquierda a derecha.
+- **Icono:** SVG de 14 px a trazo (`.sys-btn__icon`), y su animación tiene que explicar el cambio de estado. Por ejemplo, en el de ampliar la ventana llena el marco y las flechas giran hacia dentro. La curva es `cubic-bezier(0.2, 0.8, 0.2, 1)`, de unos 460 ms.
+- **Texto:** opcional. Si el botón cambia de estado, el texto cambia con un deslizamiento vertical. En botones secundarios, el texto solo se muestra en pantallas anchas.
+- **Accesibilidad:** `aria-label` y `title` se actualizan con el estado, y se usa `aria-pressed` si el botón es de tipo interruptor.
+
+El botón principal de llamada a la acción (`.btn--primary`, por ejemplo «Descargar») es otra pieza y no se cambia con esta regla.
+
+### Barra de ruta entre páginas
+
+- Al entrar en una página desde el Core, la barra de ruta baja y aparece (`html.crumb-enter`).
+- Al volver al Core, el Core pinta una copia de la barra de la página anterior y la sube hasta esconderla (`.crumbbar--ghost`).
+- Si la ventana estaba ampliada, el Core empieza ampliado y se restaura con la misma animación.
+
 ### Nodos del Core
 
 - Hay un nodo por módulo visible, en el orden de `order`.

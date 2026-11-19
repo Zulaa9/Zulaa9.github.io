@@ -65,6 +65,31 @@ const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
 
   <div class="core-stage" id="core-stage">
     <script is:inline>
+      // Al volver de una página, el Core pinta la barra de ruta de esa página y la sube.
+      (function () {
+        try {
+          var html = sessionStorage.getItem('zula:crumbbar');
+          sessionStorage.removeItem('zula:crumbbar');
+          var ref = document.referrer ? new URL(document.referrer) : null;
+          if (!html || !ref || ref.origin !== location.origin || /^\/(es\/?)?$/.test(ref.pathname)) return;
+          var stage = document.currentScript.parentElement;
+          var tpl = document.createElement('template');
+          tpl.innerHTML = html;
+          var bar = tpl.content.firstElementChild;
+          if (!bar || !bar.classList.contains('crumbbar')) return;
+          bar.classList.add('crumbbar--ghost');
+          bar.removeAttribute('style');
+          stage.prepend(bar);
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              bar.classList.add('is-leaving');
+              setTimeout(function () { bar.remove(); }, 700);
+            });
+          });
+        } catch (e) {}
+      })();
+    </script>
+    <script is:inline>
       // Restaurar tras el primer pintado; la escena 3D se reajusta mientras dura la animación.
       (function () {
         var root = document.documentElement;
