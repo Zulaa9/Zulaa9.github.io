@@ -96,10 +96,10 @@
       "es": "Tecnologías"
     },
     "cover": {
-      "src": "../../assets/images/portfolio-core/portfolio-icon.png",
+      "src": "../../assets/images/portfolio-core/core-icon.png",
       "alt": {
-        "en": "Portfolio Core icon",
-        "es": "Icono de Portfolio Core"
+        "en": "Portfolio Core icon: the System Core sphere",
+        "es": "Icono de Portfolio Core: la esfera del núcleo del sistema"
       },
       "fit": "logo"
     },
@@ -199,18 +199,137 @@
     ],
     "media": [
       {
-        "type": "image",
-        "placement": "rail",
-        "src": "../../assets/images/portfolio-core.png",
+        "type": "video",
+        "placement": "hero",
+        "src": "/assets/media/portfolio-core-tour-en.mp4",
+        "srcEs": "/assets/media/portfolio-core-tour-es.mp4",
         "alt": {
-          "en": "System Core view of the portfolio",
-          "es": "Vista System Core del portfolio"
+          "en": "Walkthrough from the Start System gate to the Core and the KeyPing page",
+          "es": "Recorrido desde la puerta «Iniciar Sistema» hasta el Core y la página de KeyPing"
         },
         "caption": {
-          "en": "System Core: each module is a node connected to the core.",
-          "es": "System Core: cada módulo es un nodo conectado al núcleo."
+          "en": "From the Start System gate to the Core map and into KeyPing, with the path bar sliding in.",
+          "es": "De la puerta «Iniciar Sistema» al mapa del Core y a la página de KeyPing, con la barra de ruta bajando."
         }
+      },
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/portfolio-core/gate.png",
+        "srcEs": "../../assets/images/portfolio-core/gate-es.png",
+        "alt": {
+          "en": "Start System gate with the core offline",
+          "es": "Puerta «Iniciar Sistema» con el núcleo apagado"
+        },
+        "caption": {
+          "en": "Startup gate: the system starts switched off.",
+          "es": "Puerta de arranque: el sistema empieza apagado."
+        }
+      },
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/portfolio-core/module.png",
+        "srcEs": "../../assets/images/portfolio-core/module-es.png",
+        "alt": {
+          "en": "KeyPing module page with the path bar",
+          "es": "Página del módulo KeyPing con la barra de ruta"
+        },
+        "caption": {
+          "en": "Module page with the path bar and system buttons.",
+          "es": "Página de módulo con barra de ruta y botones del sistema."
+        }
+      },
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/portfolio-core/viewer.png",
+        "srcEs": "../../assets/images/portfolio-core/viewer-es.png",
+        "alt": {
+          "en": "Image viewer open over the KeyPing page",
+          "es": "Visor de imágenes abierto sobre la página de KeyPing"
+        },
+        "caption": {
+          "en": "Viewer: each image grows out of its thumbnail.",
+          "es": "Visor: cada imagen crece desde su miniatura."
+        }
+      },
+      {
+        "type": "image",
+        "placement": "rail",
+        "src": "../../assets/images/portfolio-core/not-found.png",
+        "srcEs": "../../assets/images/portfolio-core/not-found-es.png",
+        "alt": {
+          "en": "404 page with the route terminal and the broken link",
+          "es": "Página 404 con el terminal de la ruta y el enlace roto"
+        },
+        "caption": {
+          "en": "404: the requested route, a broken link on the map and shortcuts.",
+          "es": "404: la ruta pedida, un enlace roto en el mapa y accesos directos."
+        }
+      },
+      {
+        "type": "composite",
+        "placement": "rail",
+        "caption": {
+          "en": "Mobile: the Core sphere and its branches as a tree, with the featured module.",
+          "es": "Móvil: la esfera del Core y sus ramas como árbol, con el módulo destacado."
+        },
+        "parts": [
+          {
+            "src": "../../assets/images/portfolio-core/mobile-core.png",
+            "srcEs": "../../assets/images/portfolio-core/mobile-core-es.png",
+            "alt": {
+              "en": "Mobile Core",
+              "es": "Core en móvil"
+            }
+          },
+          {
+            "src": "../../assets/images/portfolio-core/mobile-tree.png",
+            "srcEs": "../../assets/images/portfolio-core/mobile-tree-es.png",
+            "alt": {
+              "en": "Mobile Core branches as a tree",
+              "es": "Ramas del Core en móvil como árbol"
+            }
+          }
+        ]
+      },
+      {
+        "type": "composite",
+        "placement": "rail",
+        "caption": {
+          "en": "Mobile: KeyPing module page and the 404 page.",
+          "es": "Móvil: página del módulo KeyPing y página 404."
+        },
+        "parts": [
+          {
+            "src": "../../assets/images/portfolio-core/mobile-module.png",
+            "srcEs": "../../assets/images/portfolio-core/mobile-module-es.png",
+            "alt": {
+              "en": "KeyPing page on mobile",
+              "es": "Página de KeyPing en móvil"
+            }
+          },
+          {
+            "src": "../../assets/images/portfolio-core/mobile-not-found.png",
+            "srcEs": "../../assets/images/portfolio-core/mobile-not-found-es.png",
+            "alt": {
+              "en": "404 page on mobile",
+              "es": "Página 404 en móvil"
+            }
+          }
+        ]
       }
-    ]
+    ],
+    "mediaSection": {
+      "title": {
+        "en": "The system in action",
+        "es": "El sistema en acción"
+      },
+      "lead": {
+        "en": "A real walkthrough of the portfolio: startup, Core map, module pages and viewer, on desktop and mobile.",
+        "es": "Recorrido real por el portfolio: arranque, mapa del Core, páginas de módulo y visor, en escritorio y en móvil."
+      }
+    }
   }
 }

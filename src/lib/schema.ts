@@ -220,6 +220,11 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
       description: z.strictObject({ title: localized, paragraphs: localizedList.min(1) }),
       sections: z.array(titledList).default([]),
       media: z.array(mediaItem).default([]),
+      /**
+       * Sección propia para la galería (opcional). Con ella, la galería va numerada con su título
+       * y entradilla, y los vídeos se muestran grandes arriba, en bucle y sin sonido.
+       */
+      mediaSection: z.strictObject({ title: localized, lead: localized.optional() }).optional(),
       flagship: flagship.optional(),
     })
     .refine((p) => p.layout !== 'flagship' || !!p.flagship, {

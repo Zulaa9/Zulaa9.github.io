@@ -157,24 +157,7 @@ body.is-page-leaving .page { opacity: 0; transform: translateY(-6px); transition
 /* ---------- Acciones ---------- */
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 32px; }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 18px;
-  border: 1px solid var(--rule-strong);
-  border-radius: 2px;
-  color: var(--ink);
-  font-family: var(--f-display);
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-
-.btn:hover { border-color: var(--ink); }
-.btn--primary { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
-.btn--primary:hover { background: #8fe3f5; border-color: #8fe3f5; }
+/* .btn y .btn--primary están en base.css (también los usa el Core en móvil). */
 
 .link-arrow {
   display: inline-flex;
@@ -429,6 +412,8 @@ div.closing p { margin: 0; max-width: 30ch; }
 .shot img, .shot video { width: 100%; height: auto; border: 1px solid var(--rule); background: var(--bg-raise); }
 .shot figcaption { margin-top: 10px; max-width: 70ch; font-size: 0.85rem; line-height: 1.5; color: var(--muted); }
 .shot--hero video { aspect-ratio: 16 / 9; object-fit: cover; }
+/* Vídeo con su proporción original, sin recortar (p. ej. el recorrido de Portfolio Core, 16:10). */
+.shot--natural video { aspect-ratio: auto; object-fit: contain; }
 .shot__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .shot__pair img { height: 100%; object-fit: cover; object-position: top left; }
 
@@ -525,6 +510,8 @@ body.is-lightbox-open { overflow: hidden; }
 
 @media (max-width: 560px) {
   .gallery-grid, .facts { grid-template-columns: 1fr; }
+  /* Tablas etiqueta/valor (p. ej. Arquitectura): en móvil, la etiqueta encima y el texto debajo. */
+  .spec > div { grid-template-columns: 1fr; gap: 4px; }
   .crumbbar { padding: 6px 14px; min-height: 38px; }
   .crumbs { font-size: 0.64rem; gap: 6px; }
 }
@@ -558,3 +545,28 @@ body.is-lightbox-open { overflow: hidden; }
 .status-tag--preview .status-tag__value { color: #f5cfa8; }
 .phead .status-tag { margin-top: 18px; }
 .proj__body .status-tag { margin: 0 0 16px; }
+
+/* ---------- 404: terminal con la ruta, mini mapa con el enlace roto y accesos directos ---------- */
+body.route-missing .status-chip { color: #f5cfa8; }
+body.route-missing .status-dot { background: var(--warn); box-shadow: 0 0 0 3px rgba(242, 163, 94, 0.18); }
+.nf { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; align-items: center; padding-top: 24px; }
+.nf__term { margin: 26px 0 30px; padding: 14px 18px; border: 1px solid rgba(143, 186, 214, 0.22); border-radius: 10px; background: rgba(5, 12, 19, 0.7); font-family: var(--f-mono); font-size: 0.78rem; line-height: 1.9; color: #9fb6c8; overflow-wrap: anywhere; }
+.nf__term p { margin: 0; }
+.nf__term b { color: #73c8ff; font-weight: 500; }
+.nf__err { color: var(--warn); }
+.nf__cursor { display: inline-block; width: 8px; height: 14px; margin-left: 6px; vertical-align: -2px; background: #73c8ff; animation: nf-blink 1s steps(1) infinite; }
+@keyframes nf-blink { 50% { opacity: 0; } }
+.nf__label { margin: 30px 0 0; font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.nf__links { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 0; padding: 0; list-style: none; }
+.nf__links .sys-btn { padding: 0 11px; }
+.nf__map { width: 100%; height: auto; }
+.nf__lines line { stroke: rgba(160, 186, 208, 0.3); stroke-width: 1; }
+.nf__nodes circle { fill: #0b1520; stroke: rgba(160, 200, 225, 0.7); }
+.nf__broken { stroke: var(--warn); stroke-width: 1.4; stroke-dasharray: 5 6; animation: nf-dash 1.6s linear infinite; }
+@keyframes nf-dash { to { stroke-dashoffset: -22; } }
+.nf__missing { fill: none; stroke: var(--warn); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.nf__missing-label { fill: var(--warn); font-family: var(--f-mono); font-size: 11px; letter-spacing: 2px; }
+@media (max-width: 860px) {
+  .nf { grid-template-columns: 1fr; gap: 8px; padding-top: 0; }
+  .nf__map { order: -1; max-width: 240px; }
+}

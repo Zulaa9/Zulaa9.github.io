@@ -260,6 +260,7 @@ También lo usan el botón de volver al Core (←), el de copiar el correo en Co
 - Si el módulo tiene `node.position`, se respeta; si no, se coloca en el hueco libre más cercano al lado de su padre.
 - Un nodo que tapa la tarjeta de texto o el panel inferior se sube por encima.
 - **Máximo: 10 nodos visibles** (`MAX_CORE_NODES` en `src/lib/schema.ts`). Con más, el Core deja de ser legible en 390 px de ancho y el build falla. Para cambiarlo hay que añadir huecos en `AUTO_SLOTS` (`src/lib/layout.ts`) y comprobarlo en escritorio y móvil.
+- **En móvil** (≤ 860 px) el mapa se sustituye por: la esfera arriba, una tarjeta «Módulo destacado» con el nodo `featured` y las ramas como árbol (módulos sin padre y, debajo, sus hijos). Se genera solo a partir de `parent`.
 
 ## Panel de administración local
 
@@ -316,6 +317,7 @@ El resultado queda en **`dist/`**: HTML prerenderizado, `_astro/` (CSS, JS e im�
 - Cada ruta es una carpeta con `index.html`: `/about/` → `dist/about/index.html`, `/es/projects/keyping/` → `dist/es/projects/keyping/index.html`.
 - Las URL canónicas terminan en `/`. El servidor debe servir `index.html` de la carpeta y redirigir `/about` → `/about/`.
 - `dist/404.html` es la página de error, en inglés y en español según la ruta (`/es/…`) o la preferencia guardada. El servidor debe devolverla con código 404.
+- La 404 traduce también la barra superior, marca el estado «RUTA NO RESUELTA» en naranja, muestra la ruta pedida en un terminal, un mini mapa con el enlace roto y accesos directos (KeyPing, Proyectos, Sobre mí, Contacto).
 - No hace falta reescribir rutas (no es una SPA).
 
 ## Subir a zula.dev

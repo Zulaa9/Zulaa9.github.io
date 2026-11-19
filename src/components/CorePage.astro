@@ -2,7 +2,7 @@
 /** System Core: escena 3D + nodos generados a partir de los módulos visibles. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getVisibleModules, layoutNodes, moduleHref } from '../lib/modules';
-import { tr, ui, type Locale } from '../lib/i18n';
+import { tr, ui, fillTemplate, type Locale } from '../lib/i18n';
 import coreCss from '../styles/core.css?url';
 
 interface Props { lang: Locale }
@@ -34,6 +34,10 @@ const coreData = {
 const sameAs = [...new Set(modules.flatMap((m) => (m.data.template === 'section' ? m.data.section.blocks : []).flatMap((b) => (b.type === 'links' ? b.links.map((l) => l.url) : [])).filter((u) => /^https:/.test(u))))];
 const person = { '@context': 'https://schema.org', '@type': 'Person', name: 'Unax Zulaika Fuente', url: Astro.site!.href, jobTitle: t.site.identityRole, sameAs };
 const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
+// Móvil: las ramas como árbol (raíces y sus hijos), igual que el mapa de escritorio.
+const featuredNode = nodes.find((n) => n.id === featured?.id);
+const roots = nodes.filter((n) => !n.parent);
+const childrenOf = (id: string) => nodes.filter((n) => n.parent === id);
 ---
 <BaseLayout
   lang={lang}
@@ -167,12 +171,39 @@ const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
   </div>
 
   <nav class="mobile-modules" aria-label={t.site.modulesLabel}>
-    {nodes.map((n) => (
-      <a class:list={['mobile-modules__item', 'module-trigger', { 'mobile-modules__item--featured': n.featured }]} href={`${n.href}?from=core`} data-target={n.id}>
-        <span>{n.mobile}</span>
-        <span class="mobile-modules__meta">{n.meta}</span>
-      </a>
-    ))}
+    {featuredNode && (
+      <div class="mobile-feature">
+        <p class="mobile-feature__label">{t.core.mobile.featured}</p>
+        <h2 class="mobile-feature__title">{featuredNode.dock.title}</h2>
+        <p class="mobile-feature__copy">{featuredNode.dock.copy}</p>
+        <a class="btn btn--primary module-trigger" href={`${featuredNode.href}?from=core`} data-target={featuredNode.id}>{fillTemplate(t.core.mobile.enter, { name: featuredNode.title })} <span aria-hidden="true">→</span></a>
+      </div>
+    )}
+    <p class="mobile-tree__root" aria-hidden="true"><span class="mobile-tree__core"></span>{t.core.mobile.map}</p>
+    <ul class="mobile-tree">
+      {roots.map((r) => (
+        <li class="mobile-tree__branch">
+          <a class="mobile-tree__node module-trigger" href={`${r.href}?from=core`} data-target={r.id}>
+            <span class="mobile-tree__dot" aria-hidden="true"></span>
+            <span class="mobile-tree__title">{r.mobile}</span>
+            <span class="mobile-tree__meta">{r.meta}</span>
+          </a>
+          {childrenOf(r.id).length > 0 && (
+            <ul class="mobile-tree__kids">
+              {childrenOf(r.id).map((c) => (
+                <li>
+                  <a class="mobile-tree__node module-trigger" href={`${c.href}?from=core`} data-target={c.id}>
+                    <span class="mobile-tree__dot" aria-hidden="true"></span>
+                    <span class="mobile-tree__title">{c.mobile}</span>
+                    <span class="mobile-tree__meta">{c.meta}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
   </nav>
 </BaseLayout>
 

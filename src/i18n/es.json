@@ -62,6 +62,11 @@
     "threeError": {
       "title": "Error al cargar Three.js",
       "copy": "No se ha podido iniciar el motor 3D. Los módulos siguen disponibles."
+    },
+    "mobile": {
+      "featured": "Módulo destacado",
+      "enter": "Entrar en {name}",
+      "map": "Core · mapa del sistema"
     }
   },
   "lightbox": {
@@ -88,6 +93,11 @@
     "eyebrow": "ERROR // 404",
     "heading": "Módulo no encontrado",
     "copy": "La ruta que has pedido no forma parte del mapa del sistema.",
-    "cta": "Volver al Core"
+    "cta": "Volver al Core",
+    "status": "RUTA NO RESUELTA",
+    "termMap": "buscando nodo…",
+    "termNoMatch": "sin coincidencias",
+    "termCore": "enlace roto · esperando instrucción",
+    "shortcuts": "O ve directo a"
   }
 }

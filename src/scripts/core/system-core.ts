@@ -38,7 +38,8 @@ const smootherstep = (t: number) => {
 };
 const sleep = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 const isMobile = () => window.matchMedia('(max-width: 860px)').matches;
-const getCoreBaseScale = () => (isMobile() ? 0.52 : 1);
+// En móvil la esfera ocupa la cabecera (220 px); antes 0,52, se veía muy pequeña.
+const getCoreBaseScale = () => (isMobile() ? 0.9 : 1);
 
 export function initSystemCore(): void {
   const dataEl = document.getElementById('core-data');

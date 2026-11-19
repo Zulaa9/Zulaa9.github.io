@@ -14,7 +14,7 @@ const LABELS = {
   enterLabel: 'Texto del botón para abrir', stack: 'Stack', stackTitle: 'Título del stack', cover: 'Portada', src: 'Archivo', srcEs: 'Archivo en español (opcional)', urlEs: 'URL en español (opcional)',
   alt: 'Texto alternativo', fit: 'Encaje', links: 'Enlaces', kind: 'Tipo', label: 'Texto', url: 'URL', status: 'Estado', tone: 'Indicador (neutral / publicado / no publicado)', onCard: 'Mostrar en la tarjeta del índice',
   value: 'Valor', header: 'Cabecera', eyebrow: 'Antetítulo', lead: 'Entradilla', paragraphs: 'Párrafos', sections: 'Listas',
-  items: 'Elementos', media: 'Imágenes y vídeos', caption: 'Pie', placement: 'Ubicación', compact: 'Compacta', parts: 'Imágenes',
+  items: 'Elementos', media: 'Imágenes y vídeos', mediaSection: 'Sección de la galería', caption: 'Pie', placement: 'Ubicación', compact: 'Compacta', parts: 'Imágenes',
   flagship: 'Vista de producto estrella', release: 'Última versión (columna derecha)', logo: 'Logotipo', punchline: 'Frase destacada', pills: 'Etiquetas', actions: 'Botones',
   variant: 'Variante', why: 'Por qué existe', subtitle: 'Subtítulo', cards: 'Tarjetas', focus: 'Enfoque', metrics: 'Métricas',
   statement: 'Conclusión', gallery: 'Galería', moreBadge: 'Insignia "+N"', features: 'Funcionalidades', security: 'Seguridad',
@@ -56,7 +56,9 @@ const OPTIONAL = {
   project: {
     status: () => ({ label: L(), value: L(), tone: 'neutral', onCard: false }), stackTitle: L,
     adoption: () => ({ value: '0', unit: 'users', source: L(), asOf: new Date().toISOString().slice(0, 10), minimum: 0 }),
+    mediaSection: () => ({ title: L(), lead: L() }),
   },
+  'project.mediaSection': { lead: L },
   'project.adoption': { asOf: () => new Date().toISOString().slice(0, 10) },
   about: { photo: () => ({ src: '../../assets/images/placeholder.png', alt: L() }), nextStep: () => ({ title: L(), contactModule: 'contact', contactLabel: L() }), closing: L },
   'about.nextStep': { cvLabel: L, cvUrl: () => 'https://' },

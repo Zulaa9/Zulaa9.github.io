@@ -1,7 +1,9 @@
 ---
 /** Indicador de estado de un proyecto: punto de color + "Etiqueta: valor", sin caja. */
 interface Props { label: string; value: string; tone?: 'neutral' | 'live' | 'preview'; class?: string }
-const { label, value, tone = 'neutral', class: extra } = Astro.props;
+const { label, value: raw, tone = 'neutral', class: extra } = Astro.props;
+// Guion no separable dentro de palabras («Add-ons»): en móvil la línea no se corta a mitad de palabra.
+const value = raw.replace(/(\w)-(\w)/g, '$1\u2011$2');
 ---
 <p class:list={['status-tag', `status-tag--${tone}`, extra]}>
   <span class="status-tag__dot" aria-hidden="true"></span>

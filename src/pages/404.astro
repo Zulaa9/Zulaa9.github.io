@@ -2,15 +2,22 @@
 /**
  * Página 404 única (los servidores estáticos sirven un solo 404.html).
  * Se genera en inglés y en español; un script decide cuál mostrar según la
- * URL pedida (/es/…) o la preferencia guardada.
+ * URL pedida (/es/…) o la preferencia guardada, y traduce también la barra superior.
+ * Muestra la ruta pedida en un terminal, un mini mapa con el enlace roto y accesos directos.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { localePath, ui, LOCALES } from '../lib/i18n';
+import { localePath, ui, tr, LOCALES } from '../lib/i18n';
+import { getVisibleModules, moduleHref } from '../lib/modules';
 import pageCss from '../styles/page.css?url';
 
 const en = ui('en');
+const es = ui('es');
+const modules = await getVisibleModules();
+// Accesos directos: el producto principal y las secciones de primer nivel más útiles.
+const SHORTCUTS = ['keyping', 'projects', 'about', 'contact'];
+const shortcuts = SHORTCUTS.map((id) => modules.find((m) => m.id === id)).filter((m) => !!m);
 ---
-<BaseLayout lang="en" title={en.notFound.title} description={en.notFound.description} path={null} bodyClass="page-shell" shellLabel="404">
+<BaseLayout lang="en" title={en.notFound.title} description={en.notFound.description} path={null} bodyClass="page-shell route-missing" shellLabel="404" statusText={en.notFound.status}>
   <Fragment slot="head">
     <link rel="stylesheet" href={pageCss} />
     <style is:inline>html[lang="es"] [data-only="en"], html[lang="en"] [data-only="es"] { display: none; }</style>
@@ -29,21 +36,54 @@ const en = ui('en');
     {LOCALES.map((l) => {
       const t = ui(l);
       return (
-        <div data-only={l} lang={l}>
-          <header class="phead">
-            <div class="phead__main">
-              <p class="kicker">{t.notFound.eyebrow}</p>
-              <h1 class="phead__title">{t.notFound.heading}</h1>
-              <p class="phead__lead">{t.notFound.copy}</p>
-              <div class="actions">
-                <a class="btn btn--primary" href={localePath(l)}>{t.notFound.cta} <span aria-hidden="true">→</span></a>
-              </div>
+        <div data-only={l} lang={l} class="nf">
+          <div class="nf__main">
+            <p class="kicker">{t.notFound.eyebrow}</p>
+            <h1 class="phead__title">{t.notFound.heading}</h1>
+            <p class="phead__lead">{t.notFound.copy}</p>
+            <div class="nf__term" role="status">
+              <p><b>[route]</b> <span data-nf-path>/</span></p>
+              <p><b>[map]</b> {t.notFound.termMap} <span class="nf__err">{t.notFound.termNoMatch}</span></p>
+              <p><b>[core]</b> {t.notFound.termCore}<span class="nf__cursor" aria-hidden="true"></span></p>
             </div>
-          </header>
+            <div class="actions">
+              <a class="btn btn--primary" href={localePath(l)}>{t.notFound.cta} <span aria-hidden="true">→</span></a>
+            </div>
+            <p class="nf__label">{t.notFound.shortcuts}</p>
+            <ul class="nf__links">
+              {shortcuts.map((m) => <li><a class="sys-btn" href={moduleHref(m, l)}>{tr(m.data.node.title, l)}</a></li>)}
+            </ul>
+          </div>
+          <svg class="nf__map" viewBox="0 0 360 300" aria-hidden="true" focusable="false">
+            <defs>
+              <radialGradient id={`nf-core-${l}`}><stop offset="0" stop-color="#9edfff" /><stop offset="0.45" stop-color="#53c6e0" /><stop offset="1" stop-color="rgba(83,198,224,0)" /></radialGradient>
+            </defs>
+            <g class="nf__lines"><line x1="160" y1="160" x2="70" y2="70" /><line x1="160" y1="160" x2="290" y2="80" /><line x1="160" y1="160" x2="80" y2="250" /></g>
+            <line class="nf__broken" x1="160" y1="160" x2="300" y2="230" />
+            <circle cx="160" cy="160" r="26" fill={`url(#nf-core-${l})`} />
+            <g class="nf__nodes"><circle cx="70" cy="70" r="5.5" /><circle cx="290" cy="80" r="5.5" /><circle cx="80" cy="250" r="5.5" /></g>
+            <circle class="nf__missing" cx="300" cy="230" r="8" />
+            <text class="nf__missing-label" x="300" y="262" text-anchor="middle">?/404</text>
+          </svg>
         </div>
       );
     })}
   </div>
   </div>
   </div>
+  <script is:inline slot="after-main" define:vars={{ esRole: es.site.identityRole, esStatus: es.notFound.status }}>
+    // Barra superior en el idioma de la ruta y ruta pedida en el terminal.
+    (function () {
+      var path = location.pathname + location.search;
+      document.querySelectorAll('[data-nf-path]').forEach(function (n) { n.textContent = path; });
+      if (document.documentElement.lang !== 'es') return;
+      var role = document.querySelector('.identity__role'); if (role) role.textContent = esRole;
+      var status = document.querySelector('.status-text'); if (status) status.textContent = esStatus;
+      document.querySelectorAll('.lang-switch__btn').forEach(function (a) {
+        var on = a.getAttribute('data-lang-switch') === 'es';
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      });
+    })();
+  </script>
 </BaseLayout>

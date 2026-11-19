@@ -62,6 +62,11 @@
     "threeError": {
       "title": "Three.js load error",
       "copy": "Could not start the 3D engine. The modules are still available below."
+    },
+    "mobile": {
+      "featured": "Featured module",
+      "enter": "Enter {name}",
+      "map": "Core · system map"
     }
   },
   "lightbox": {
@@ -88,6 +93,11 @@
     "eyebrow": "ERROR // 404",
     "heading": "Module not found",
     "copy": "The route you requested is not part of the system map.",
-    "cta": "Return to the Core"
+    "cta": "Return to the Core",
+    "status": "ROUTE NOT RESOLVED",
+    "termMap": "searching node…",
+    "termNoMatch": "no match",
+    "termCore": "broken link · awaiting instruction",
+    "shortcuts": "Or go straight to"
   }
 }

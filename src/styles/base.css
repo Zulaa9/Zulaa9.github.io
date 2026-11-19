@@ -346,6 +346,26 @@ body.core-offline .status-dot { background: var(--danger); box-shadow: 0 0 0 3px
 .crumbs a:hover { color: #fff; }
 .crumbs [aria-current] { color: #e7f6ff; }
 
+/* ---------- Botón de llamada a la acción (.btn, .btn--primary) ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.btn:hover { border-color: var(--ink); }
+.btn--primary { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: #8fe3f5; border-color: #8fe3f5; }
+
 /* ---------- Botón del sistema (.sys-btn) ----------
    Estilo de referencia para TODOS los botones de control de la web (decisión del usuario,
    19-11-2026; ver README, «Botones del sistema»). Partes:
