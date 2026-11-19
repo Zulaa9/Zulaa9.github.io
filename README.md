@@ -238,6 +238,8 @@ El botón «Ampliar / Restaurar ventana» es la **referencia visual para todos l
 
 El botón principal de llamada a la acción (`.btn--primary`, por ejemplo «Descargar») es otra pieza y no se cambia con esta regla.
 
+Ya lo usan el botón de ampliar ventana y el selector de idioma, que en reposo muestra el globo y el idioma actual y, al pasar el ratón o con el foco, se abre en «EN / ES». En pantallas táctiles va siempre abierto. No se meten pastillas dentro de pastillas: dentro del botón, el estado activo se marca con una línea de luz, no con otra caja.
+
 ### Barra de ruta entre páginas
 
 - Al entrar en una página desde el Core, la barra de ruta baja y aparece (`html.crumb-enter`).

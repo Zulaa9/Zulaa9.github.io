@@ -192,30 +192,46 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 500; letter-spacing: -0
 
 .topbar-controls { display: inline-flex; align-items: center; gap: 22px; }
 
-.lang-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-family: var(--f-mono);
-  font-size: 0.74rem;
-}
-
+/* Selector de idioma: un .sys-btn (ver «Botones del sistema» más abajo y en el README). */
+.sys-btn.lang-switch { gap: 0; padding: 0 10px 0 9px; cursor: default; }
+.lang-switch__globe { color: var(--accent); margin-right: 8px; }
 .lang-switch__btn {
-  padding: 4px 6px;
-  color: var(--muted);
+  position: relative;
+  display: inline-block;
+  max-width: 3em;
+  color: #6f8aa0;
   text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: color 160ms ease, border-color 160ms ease;
+  white-space: nowrap;
+  overflow: visible;
+  transition: max-width 420ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 260ms ease, color 200ms ease;
 }
-
-.lang-switch__btn + .lang-switch__btn::before {
-  content: "/";
-  margin-right: 8px;
-  color: var(--rule-strong);
+.lang-switch__btn:hover { color: #fff; }
+.lang-switch__btn.is-active { color: #fff; }
+/* Línea de luz bajo el idioma activo. */
+.lang-switch__btn.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0.14em;
+  bottom: -5px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(77, 184, 255, 0.7);
 }
-
-.lang-switch__btn:hover { color: var(--ink); }
-.lang-switch__btn.is-active { color: var(--ink); }
+.lang-switch__sep {
+  display: inline-block;
+  max-width: 2em;
+  margin: 0 8px;
+  color: #3d5568;
+  overflow: hidden;
+  transition: max-width 420ms cubic-bezier(0.2, 0.8, 0.2, 1), margin 420ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 260ms ease;
+}
+/* Con ratón: en reposo solo el idioma actual; se abre al pasar por encima o con el foco. */
+@media (hover: hover) {
+  .lang-switch:not(:hover):not(:focus-within) .lang-switch__btn:not(.is-active),
+  .lang-switch:not(:hover):not(:focus-within) .lang-switch__sep { max-width: 0; margin: 0; opacity: 0; overflow: hidden; }
+}
 
 .status-chip {
   display: inline-flex;
