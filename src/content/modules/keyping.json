@@ -110,8 +110,8 @@
       "value": "{{keyping.downloads}}",
       "unit": "downloads",
       "source": {
-        "en": "GitHub Releases (installers; updates count too)",
-        "es": "GitHub Releases (instaladores; las actualizaciones también cuentan)"
+        "en": "GitHub Releases (installers)",
+        "es": "GitHub Releases (instaladores)"
       }
     },
     "status": {

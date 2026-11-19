@@ -194,11 +194,17 @@ body.is-page-leaving .page { opacity: 0; transform: translateY(-6px); transition
 .phead .prose { margin-top: 22px; }
 .phead__aside { align-self: end; justify-self: end; }
 .phead__aside > .spec--compact { width: min(340px, 100%); margin-left: auto; }
-/* Columna derecha de los proyectos: logotipo arriba (a la altura del título) y datos abajo. */
-.phead__aside:has(> .phead__side) { align-self: stretch; }
-.phead__side { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; gap: 32px; height: 100%; width: 340px; max-width: 100%; margin-left: auto; }
-.phead__side > .spec { width: 100%; }
-.phead__icon { align-self: center; width: clamp(72px, 8vw, 112px); height: auto; margin-top: var(--phead-icon-offset, 34px); }
+/* Proyectos: antetítulo / título + logotipo / cuerpo + datos. El logotipo se centra
+   en la columna derecha y verticalmente con la línea del título. */
+.phead--split { grid-template-columns: minmax(0, 1fr) 340px; grid-template-areas: "eyebrow ." "title icon" "main aside"; row-gap: 0; }
+.phead--split > .phead__eyebrow { grid-area: eyebrow; margin-bottom: 14px; }
+.phead--split > .phead__title { grid-area: title; align-self: center; margin: 0; }
+/* Altura 0: el logotipo se centra con el título sin agrandar su fila. */
+.phead--split > .phead__icon-cell { grid-area: icon; align-self: center; justify-self: center; display: flex; align-items: center; height: 0; overflow: visible; }
+.phead--split > .phead__main { grid-area: main; }
+.phead--split > .phead__aside { grid-area: aside; align-self: end; justify-self: stretch; padding-top: 32px; }
+.phead--split > .phead__aside > .spec--compact { width: 100%; }
+.phead__icon { width: clamp(72px, 8vw, 112px); height: auto; }
 
 .portrait { margin: 0; width: clamp(200px, 24vw, 300px); }
 .portrait img {
@@ -580,11 +586,12 @@ body.is-lightbox-open { overflow: hidden; }
   .phead__aside { order: -1; }
   .portrait { width: 132px; }
   .closing { padding-right: 0; }
-  .page-body--flagship .phead__aside, .phead__aside:has(> .spec), .phead__aside:has(> .phead__side) { order: 0; }
-  /* Móvil: logotipo encima del título y datos debajo de los botones. */
-  .phead__aside:has(> .phead__side), .phead__side { display: contents; }
-  .phead__icon { order: -1; align-self: start; justify-self: start; width: 64px; margin: 0 0 -16px; }
-  .phead__side > .spec { order: 1; width: 100%; }
+  .page-body--flagship .phead__aside, .phead__aside:has(> .spec) { order: 0; }
+  /* Móvil: logotipo encima del antetítulo y datos debajo de los botones. */
+  .phead--split { grid-template-columns: 1fr; grid-template-areas: "icon" "eyebrow" "title" "main" "aside"; }
+  .phead--split > .phead__icon-cell { justify-self: start; height: auto; margin-bottom: 18px; }
+  .phead--split > .phead__aside { padding-top: 0; margin-top: 36px; }
+  .phead__icon { width: 64px; }
 
   .sec { grid-template-columns: 1fr; gap: 18px; padding: 36px 0; }
   .sec__head { position: static; }

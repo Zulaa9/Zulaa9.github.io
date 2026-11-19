@@ -61,14 +61,12 @@ let n = 0;
       </div>
     )}
     <ul class="traits traits--inline">{f.pills.map((pill) => <li>{tr(pill, lang)}</li>)}</ul>
-    <div class="phead__side" slot="aside">
-      {logo && <Image class="phead__icon" src={p.cover.src} alt={tr(p.cover.alt, lang)} width={192} loading="eager" />}
-      <dl class="spec spec--compact">
-        {p.status && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
+    {logo && <Image slot="icon" class="phead__icon" src={p.cover.src} alt={tr(p.cover.alt, lang)} width={192} loading="eager" />}
+    <dl class="spec spec--compact" slot="aside">
+      {p.status && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
       <div><dt>{tr(p.stackTitle, lang) || 'Stack'}</dt><dd>{p.stack.map((s) => tr(s, lang)).join(' · ')}</dd></div>
-        {adoption && <AdoptionFact adoption={adoption} />}
-      </dl>
-    </div>
+      {adoption && <AdoptionFact adoption={adoption} />}
+    </dl>
   </PageHeader>
 
   {!logo && (

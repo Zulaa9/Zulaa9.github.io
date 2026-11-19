@@ -207,9 +207,9 @@ Para que zula.dev se actualice al publicar una versión de KeyPing, el proyecto 
 
 Cada proyecto puede tener un bloque **Adopción** (`project.adoption`), que se muestra en la columna lateral de su cabecera. Las reglas valen para los proyectos actuales y para los futuros:
 
-1. **Siempre número + unidad explícita + fuente + fecha.** Ejemplo: «47 usuarios · Fuente: Chrome Web Store (40) + Edge Add-ons (7) · 19 nov 2026».
+1. **Siempre número + unidad explícita + fuente; fecha solo si el dato no es del momento.** Ejemplo automático: «47 usuarios · Fuente: Chrome Web Store (40) + Edge Add-ons (7)». Un dato manual o de respaldo añade su fecha: «… · 19 nov 2026». (Decisión del 19-11-2026: un dato que se actualiza solo no lleva fecha.)
 2. **Unidad según lo que mide la fuente:** `users` si la fuente cuenta usuarios (tiendas de extensiones), `downloads` si solo cuenta descargas (GitHub Releases). Nunca se suman unidades distintas ni se usan términos ambiguos («instalaciones», «usuarios activos», «+N», «miles»).
-3. **Automático siempre que haya una fuente pública legible al compilar.** El valor es un marcador en vivo (`{{keyping.downloads}}`, `{{framewise.users}}`) y la fecha es la del build. Las consultas se hacen solo en el build: el navegador del visitante nunca contacta con terceros.
+3. **Automático siempre que haya una fuente pública legible al compilar.** El valor es un marcador en vivo (`{{keyping.downloads}}`, `{{framewise.users}}`) y no se muestra fecha. Las consultas se hacen solo en el build: el navegador del visitante nunca contacta con terceros.
 4. **Si la fuente falla en un build**, se usa el respaldo de `src/data/live-fallback.json` **con su fecha** (`asOf`), nunca con la del build, para no presentar como actual un dato viejo. El HTML lo marca con `data-origin="fallback"` (o `api`).
 5. **Manual solo si no hay fuente legible:** número con `asOf` (AAAA-MM-DD) obligatorio.
 6. **Sin número verificable no hay bloque.** Un proyecto sin publicar (Nemulo) o sin fuente fiable no lleva `adoption`. Nada de cifras estimadas.
@@ -219,7 +219,7 @@ Casos actuales:
 
 | Proyecto | Unidad | Fuente | Modo |
 |---|---|---|---|
-| KeyPing | descargas | GitHub Releases, solo instaladores (`.exe`, `.AppImage`); no cuentan `.blockmap`, `latest*.yml` ni `SHA256SUMS`. La app no tiene telemetría, así que no hay usuarios. Las autoactualizaciones también descargan el instalador: cuenta descargas, no personas. | Automático (`{{keyping.downloads}}`) |
+| KeyPing | descargas | GitHub Releases, solo instaladores (`.exe`, `.AppImage`); no cuentan `.blockmap`, `latest*.yml` ni `SHA256SUMS`. La app no tiene telemetría, así que no hay usuarios. Las autoactualizaciones también descargan el instalador: cuenta descargas, no personas (en la web solo pone «instaladores», decisión del usuario). | Automático (`{{keyping.downloads}}`) |
 | Framewise | usuarios | Chrome Web Store + Edge Add-ons: «N users» de la ficha de Chrome (HTML, no hay API) y `activeInstallCount` del JSON público de Edge, sumados. Leer el HTML de Chrome es frágil: si Google cambia la ficha, el build avisa en el log y usa el respaldo con su fecha. | Automático (`{{framewise.users}}`) |
 | Nemulo | — | No publicado | Sin bloque |
 

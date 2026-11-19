@@ -11,9 +11,9 @@ const api: LiveData = {
 const now = new Date('2026-11-20T12:00:00Z');
 
 describe('bloque Adopción', () => {
-  it('valor automático: número, unidad, fuente y fecha del build', () => {
+  it('valor automático: número, unidad y fuente, sin fecha', () => {
     const a = resolveAdoption({ value: '{{keyping.downloads}}', unit: 'downloads', source: { en: 'GitHub Releases' } }, 'es', { data: api, now });
-    expect(a).toEqual({ label: 'Adopción', amount: '1234 descargas', source: 'Fuente: GitHub Releases', date: '20 nov 2026', origin: 'api' });
+    expect(a).toEqual({ label: 'Adopción', amount: '1234 descargas', source: 'Fuente: GitHub Releases', date: '', origin: 'api' });
     expect(resolveAdoption({ value: '{{keyping.downloads}}', unit: 'downloads', source: { en: 'GitHub Releases' } }, 'en', { data: api, now })?.amount).toBe('1,234 downloads');
   });
 
@@ -24,7 +24,7 @@ describe('bloque Adopción', () => {
 
   it('marcadores en la fuente y fecha del respaldo si la tienda falla', () => {
     const input = { value: '{{framewise.users}}', unit: 'users' as const, source: { en: 'Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}})' } };
-    expect(resolveAdoption(input, 'en', { data: api, now })).toMatchObject({ amount: '47 users', source: 'Source: Chrome Web Store (40) + Edge Add-ons (7)', date: 'Nov 20, 2026', origin: 'api' });
+    expect(resolveAdoption(input, 'en', { data: api, now })).toMatchObject({ amount: '47 users', source: 'Source: Chrome Web Store (40) + Edge Add-ons (7)', date: '', origin: 'api' });
     const old = { ...api, sources: { ...api.sources, framewise: 'fallback' as const } };
     expect(resolveAdoption(input, 'es', { data: old, now })).toMatchObject({ amount: '47 usuarios', date: '1 nov 2026', origin: 'fallback' });
   });

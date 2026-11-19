@@ -42,15 +42,13 @@ let n = 0;
     {p.status && p.status.tone !== 'neutral' && (
       <StatusTag label={tr(p.status.label, lang)} value={tr(p.status.value, lang)} tone={p.status.tone} />
     )}
-    <div class="phead__side" slot="aside">
-      {logo && <Image class="phead__icon" src={p.cover.src} alt={tr(p.cover.alt, lang)} width={192} loading="eager" />}
-      {(neutral || adoption) && (
-        <dl class="spec spec--compact">
-          {neutral && <div><dt>{tr(neutral.label, lang)}</dt><dd>{tr(neutral.value, lang)}</dd></div>}
-          {adoption && <AdoptionFact adoption={adoption} />}
-        </dl>
-      )}
-    </div>
+    {logo && <Image slot="icon" class="phead__icon" src={p.cover.src} alt={tr(p.cover.alt, lang)} width={192} loading="eager" />}
+    {(neutral || adoption) && (
+      <dl class="spec spec--compact" slot="aside">
+        {neutral && <div><dt>{tr(neutral.label, lang)}</dt><dd>{tr(neutral.value, lang)}</dd></div>}
+        {adoption && <AdoptionFact adoption={adoption} />}
+      </dl>
+    )}
   </PageHeader>
 
   {!logo && (

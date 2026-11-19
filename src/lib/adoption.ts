@@ -40,7 +40,8 @@ export function resolveAdoption(a: AdoptionInput | undefined, lang: Locale, opts
     label: t.label,
     amount: `${new Intl.NumberFormat(lang === 'es' ? 'es-ES' : 'en-US').format(n)} ${unit}`,
     source: `${t.source}: ${source}`,
-    date: formatDate(date, lang),
+    // Un dato leído en este build está al día: no lleva fecha. Respaldo y manual, sí.
+    date: origin === 'api' ? '' : formatDate(date, lang),
     origin,
   };
 }
