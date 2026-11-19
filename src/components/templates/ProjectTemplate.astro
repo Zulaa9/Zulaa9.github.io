@@ -17,6 +17,8 @@ if (module.data.template !== 'project') throw new Error('ProjectTemplate necesit
 const p = module.data.project;
 const t = ui(lang);
 const adoption = resolveAdoption(p.adoption, lang);
+// Logotipo: arriba a la derecha, a la altura del título. Una captura (fit cover) va en grande debajo.
+const logo = p.cover.fit === 'logo';
 const neutral = p.status && p.status.tone === 'neutral' ? p.status : null;
 // Las imágenes de la galería se abren en el visor a tamaño completo.
 const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.min(1920, src.width), format: 'webp', quality: 85 })).src;
@@ -40,17 +42,22 @@ let n = 0;
     {p.status && p.status.tone !== 'neutral' && (
       <StatusTag label={tr(p.status.label, lang)} value={tr(p.status.value, lang)} tone={p.status.tone} />
     )}
-    {(neutral || adoption) && (
-      <dl class="spec spec--compact" slot="aside">
-        {neutral && <div><dt>{tr(neutral.label, lang)}</dt><dd>{tr(neutral.value, lang)}</dd></div>}
-        {adoption && <AdoptionFact adoption={adoption} />}
-      </dl>
-    )}
+    <div class="phead__side" slot="aside">
+      {logo && <Image class="phead__icon" src={p.cover.src} alt={tr(p.cover.alt, lang)} width={192} loading="eager" />}
+      {(neutral || adoption) && (
+        <dl class="spec spec--compact">
+          {neutral && <div><dt>{tr(neutral.label, lang)}</dt><dd>{tr(neutral.value, lang)}</dd></div>}
+          {adoption && <AdoptionFact adoption={adoption} />}
+        </dl>
+      )}
+    </div>
   </PageHeader>
 
-  <figure class:list={['figure', 'figure--cover', { 'figure--logo': p.cover.fit === 'logo' }]}>
-    <Image src={p.cover.src} alt={tr(p.cover.alt, lang)} widths={[640, 1280, 1920]} sizes="(max-width: 1180px) 92vw, 1100px" loading="eager" decoding="async" />
-  </figure>
+  {!logo && (
+    <figure class="figure figure--cover">
+      <Image src={p.cover.src} alt={tr(p.cover.alt, lang)} widths={[640, 1280, 1920]} sizes="(max-width: 1180px) 92vw, 1100px" loading="eager" decoding="async" />
+    </figure>
+  )}
 
   <Sec index={++n} title={tr(p.description.title, lang)}>
     <div class="prose">{p.description.paragraphs.map((para) => <p>{tr(para, lang)}</p>)}</div>

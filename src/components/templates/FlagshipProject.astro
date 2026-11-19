@@ -22,6 +22,7 @@ const p = module.data.project;
 const f = p.flagship!;
 const t = ui(lang);
 const adoption = resolveAdoption(p.adoption, lang);
+const logo = p.cover.fit === 'logo';
 const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.min(1920, src.width), format: 'webp', quality: 85 })).src;
 
 type Item = (typeof f.gallery.items)[number];
@@ -60,16 +61,21 @@ let n = 0;
       </div>
     )}
     <ul class="traits traits--inline">{f.pills.map((pill) => <li>{tr(pill, lang)}</li>)}</ul>
-    <dl class="spec spec--compact" slot="aside">
-      {p.status && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
+    <div class="phead__side" slot="aside">
+      {logo && <Image class="phead__icon" src={p.cover.src} alt={tr(p.cover.alt, lang)} width={192} loading="eager" />}
+      <dl class="spec spec--compact">
+        {p.status && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
       <div><dt>{tr(p.stackTitle, lang) || 'Stack'}</dt><dd>{p.stack.map((s) => tr(s, lang)).join(' · ')}</dd></div>
-      {adoption && <AdoptionFact adoption={adoption} />}
-    </dl>
+        {adoption && <AdoptionFact adoption={adoption} />}
+      </dl>
+    </div>
   </PageHeader>
 
-  <figure class:list={['figure', 'figure--cover', { 'figure--logo': p.cover.fit === 'logo' }]}>
-    <Image src={p.cover.src} alt={tr(p.cover.alt, lang)} widths={[640, 1280, 1920]} sizes="(max-width: 1180px) 92vw, 1100px" loading="eager" decoding="async" />
-  </figure>
+  {!logo && (
+    <figure class="figure figure--cover">
+      <Image src={p.cover.src} alt={tr(p.cover.alt, lang)} widths={[640, 1280, 1920]} sizes="(max-width: 1180px) 92vw, 1100px" loading="eager" decoding="async" />
+    </figure>
+  )}
 
   <nav class="toc" aria-label={t.site.onThisPage}>
     <p class="label">{t.site.onThisPage}</p>

@@ -194,6 +194,11 @@ body.is-page-leaving .page { opacity: 0; transform: translateY(-6px); transition
 .phead .prose { margin-top: 22px; }
 .phead__aside { align-self: end; justify-self: end; }
 .phead__aside > .spec--compact { width: min(340px, 100%); margin-left: auto; }
+/* Columna derecha de los proyectos: logotipo arriba (a la altura del título) y datos abajo. */
+.phead__aside:has(> .phead__side) { align-self: stretch; }
+.phead__side { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; gap: 32px; height: 100%; width: min(340px, 100%); margin-left: auto; }
+.phead__side > .spec { width: 100%; }
+.phead__icon { width: clamp(72px, 8vw, 112px); height: auto; margin-top: var(--phead-icon-offset, 34px); }
 
 .portrait { margin: 0; width: clamp(200px, 24vw, 300px); }
 .portrait img {
@@ -575,7 +580,11 @@ body.is-lightbox-open { overflow: hidden; }
   .phead__aside { order: -1; }
   .portrait { width: 132px; }
   .closing { padding-right: 0; }
-  .page-body--flagship .phead__aside, .phead__aside:has(> .spec) { order: 0; }
+  .page-body--flagship .phead__aside, .phead__aside:has(> .spec), .phead__aside:has(> .phead__side) { order: 0; }
+  /* Móvil: logotipo encima del título y datos debajo de los botones. */
+  .phead__aside:has(> .phead__side), .phead__side { display: contents; }
+  .phead__icon { order: -1; width: 64px; margin: 0 0 -16px; }
+  .phead__side > .spec { order: 1; width: 100%; }
 
   .sec { grid-template-columns: 1fr; gap: 18px; padding: 36px 0; }
   .sec__head { position: static; }
