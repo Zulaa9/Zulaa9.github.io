@@ -84,40 +84,121 @@ export function initLightbox(): void {
     caption.textContent = item.caption;
   };
 
-  const open = (i: number) => {
+  // Transición: el medio crece desde la miniatura pulsada y, al cerrar, vuelve a ella (técnica FLIP).
+  const backdrop = lightbox.querySelector<HTMLElement>('.lightbox__backdrop');
+  const chrome = [closeBtn, prev, next, caption].filter((x): x is HTMLElement => !!x);
+  const EASE = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+  const DURATION = 440;
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let busy = false;
+
+  /** Pares [miniatura, elemento del visor] del medio actual. */
+  const pairs = (): [HTMLElement, HTMLElement][] => {
+    const figure = figures[index];
+    if (!figure) return [];
+    const parts = [...figure.querySelectorAll<HTMLImageElement>('.gallery__composite img')];
+    if (parts.length >= 2 && imageSecondary) return [[parts[0]!, image], [parts[1]!, imageSecondary]];
+    const thumbVideo = figure.querySelector('video');
+    if (thumbVideo && video) return [[thumbVideo, video]];
+    const thumb = figure.querySelector('img');
+    return thumb ? [[thumb, image]] : [];
+  };
+
+  /** Espera a que el medio del visor tenga tamaño (como mucho 450 ms). */
+  const ready = () => {
+    const waits: Promise<unknown>[] = pairs().map(([, el]) => {
+      if (el instanceof HTMLVideoElement) {
+        return el.readyState >= 1 ? Promise.resolve() : new Promise((r) => el.addEventListener('loadedmetadata', r, { once: true }));
+      }
+      return (el as HTMLImageElement).decode().catch(() => undefined);
+    });
+    return Promise.race([Promise.all(waits), new Promise((r) => window.setTimeout(r, 450))]);
+  };
+
+  const visible = (r: DOMRect) => r.width > 0 && r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
+
+  /** Anima `to` desde la caja de `from` (o hacia ella si reverse). */
+  const flip = (from: HTMLElement, to: HTMLElement, reverse: boolean) => {
+    const a = from.getBoundingClientRect();
+    const b = to.getBoundingClientRect();
+    if (!visible(a) || !b.width || !b.height) return null;
+    const start = `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.width / b.width}, ${a.height / b.height})`;
+    return to.animate(
+      [{ transform: start, transformOrigin: '0 0' }, { transform: 'none', transformOrigin: '0 0' }],
+      { duration: DURATION, easing: EASE, direction: reverse ? 'reverse' : 'normal', fill: reverse ? 'forwards' : 'none' },
+    );
+  };
+
+  const fade = (el: HTMLElement | null | undefined, show: boolean, duration: number, delay = 0) =>
+    el?.animate([{ opacity: 0 }, { opacity: 1 }], { duration, delay, easing: 'ease', direction: show ? 'normal' : 'reverse', fill: show ? 'backwards' : 'forwards' });
+
+  const open = async (i: number) => {
+    if (busy || lightbox.classList.contains('is-open')) return;
     returnFocus = document.activeElement as HTMLElement | null;
     setItem(i);
     lightbox.classList.add('is-open');
     lightbox.setAttribute('aria-hidden', 'false');
     body.classList.add('is-lightbox-open');
-    closeBtn?.focus();
+    closeBtn?.focus({ preventScroll: true });
+    if (reduced()) return;
+
+    busy = true;
+    fade(backdrop, true, 320);
+    chrome.forEach((el) => fade(el, true, 260, 300));
+    figureEl.style.visibility = 'hidden';
+    await ready();
+    figureEl.style.visibility = '';
+    const anims = pairs().map(([thumb, el]) => flip(thumb, el, false)).filter((x): x is Animation => !!x);
+    if (!anims.length) anims.push(fade(figureEl, true, 260)!);
+    await Promise.all(anims.map((a) => a.finished.catch(() => undefined)));
+    busy = false;
   };
 
-  const close = () => {
-    if (!lightbox.classList.contains('is-open')) return;
+  const close = async () => {
+    if (busy || !lightbox.classList.contains('is-open')) return;
+    if (!reduced()) {
+      busy = true;
+      const anims = pairs().map(([thumb, el]) => flip(thumb, el, true)).filter((x): x is Animation => !!x);
+      if (!anims.length) anims.push(fade(figureEl, false, 240)!);
+      chrome.forEach((el) => fade(el, false, 160));
+      anims.push(fade(backdrop, false, DURATION)!);
+      await Promise.all(anims.map((a) => a.finished.catch(() => undefined)));
+    }
     stopVideo();
     lightbox.classList.remove('is-open');
     lightbox.setAttribute('aria-hidden', 'true');
     body.classList.remove('is-lightbox-open');
-    returnFocus?.focus();
+    lightbox.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+    busy = false;
+    returnFocus?.focus({ preventScroll: true });
+  };
+
+  // Precarga la imagen grande al acercar el ratón o el foco, para que la transición empiece al momento.
+  const preload = (figure: HTMLElement) => {
+    figure.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+      const pre = new Image();
+      pre.src = fullSrc(img);
+    });
   };
 
   figures.forEach((figure, i) => {
-    figure.addEventListener('click', () => open(i));
+    figure.addEventListener('pointerenter', () => preload(figure), { once: true });
+    figure.addEventListener('focus', () => preload(figure), { once: true });
+    figure.addEventListener('click', () => void open(i));
     figure.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        open(i);
+        void open(i);
       }
     });
   });
   prev?.addEventListener('click', () => setItem(index - 1));
   next?.addEventListener('click', () => setItem(index + 1));
-  document.querySelectorAll('[data-lightbox-close]').forEach((n) => n.addEventListener('click', close));
+  document.querySelectorAll('[data-lightbox-close]').forEach((n) => n.addEventListener('click', () => void close()));
 
   document.addEventListener('keydown', (event) => {
     if (!lightbox.classList.contains('is-open')) return;
-    if (event.key === 'Escape') close();
+    if (event.key === 'Escape') void close();
     else if (event.key === 'ArrowLeft') setItem(index - 1);
     else if (event.key === 'ArrowRight') setItem(index + 1);
     else if (event.key === 'Tab') {
