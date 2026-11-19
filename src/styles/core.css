@@ -323,6 +323,31 @@ body.boot-unfold .boot-sequence {
 }
 .module-node--featured .node-meta { color: #9fe3f4; }
 
+/* Al pasar el ratón: el punto lanza dos ondas de luz y bajo el título se dibuja una línea de luz
+   (desde el lado del punto). Mismo lenguaje que el «zumbido doble» de los botones del sistema. */
+@keyframes node-ping { 0% { transform: scale(1); opacity: 0.85; } 100% { transform: scale(3.2); opacity: 0; } }
+.node-anchor::before { content: ""; position: absolute; inset: -1px; border: 1px solid var(--accent); border-radius: 50%; opacity: 0; pointer-events: none; }
+.module-node:hover .node-anchor::before,
+.module-node:focus-visible .node-anchor::before { animation: node-ping 520ms cubic-bezier(0.2, 0.8, 0.2, 1) 2; }
+.node-title { position: relative; }
+.node-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(115, 200, 255, 0), rgba(115, 200, 255, 0.95) 50%, rgba(115, 200, 255, 0));
+  box-shadow: 0 0 6px rgba(80, 170, 230, 0.4);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 460ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.module-node--west .node-title::after { transform-origin: right center; }
+.module-node:hover .node-title::after,
+.module-node:focus-visible .node-title::after { transform: scaleX(1); }
+
 /* ---------- Texto de entrada y panel del módulo ---------- */
 .core-copy,
 .info-dock {
@@ -448,7 +473,28 @@ body.core-offline .meteor-layer { opacity: 0; }
     font-size: 1.1rem;
   }
 
-  .mobile-modules__item::after { content: "→"; font-family: var(--f-mono); color: var(--muted); }
+  .mobile-modules__item { position: relative; }
+  .mobile-modules__item::after { content: "→"; display: inline-block; font-family: var(--f-mono); color: var(--muted); --buzz-x: 3px; transition: color 200ms ease; }
+  /* Al tocar: línea de luz a la izquierda y la flecha hace el zumbido doble hacia la derecha. */
+  .mobile-modules__item::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(80, 170, 230, 0.6);
+    transform: scaleY(0);
+    transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .mobile-modules__item:hover::before,
+  .mobile-modules__item:focus-visible::before,
+  .mobile-modules__item:active::before { transform: scaleY(1); }
+  .mobile-modules__item:hover::after,
+  .mobile-modules__item:focus-visible::after,
+  .mobile-modules__item:active::after { color: var(--accent); animation: sys-buzz 560ms cubic-bezier(0.2, 0.8, 0.2, 1); }
   .mobile-modules__meta {
     margin-left: auto;
     font-family: var(--f-mono);

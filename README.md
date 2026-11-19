@@ -245,6 +245,7 @@ También lo usan el botón de volver al Core (←), el de copiar el correo en Co
 - **Flechas (← →):** al pasar el ratón o con el foco hacen un **zumbido doble**: empujan dos veces hacia donde apuntan y vuelven al centro (`.sys-btn__icon--buzz-left` / `--buzz-right`, animación `sys-buzz`).
 - **Copiar:** el icono hace el mismo zumbido doble, en diagonal hacia arriba a la derecha. Al copiar, el icono pasa a ✓, el texto a «Copiado» y el botón a verde durante 1,8 s.
 - **Cerrar (×):** la X gira 90°.
+- **Nodos del Core** (no son botones de control, no llevan caja): al pasar el ratón el punto lanza dos ondas de luz y bajo el título se dibuja una línea de luz desde el lado del punto. En móvil, al tocar una rama aparece una línea de luz a la izquierda y la flecha «→» hace el zumbido doble.
 
 ### Barra de ruta entre páginas
 
