@@ -251,7 +251,7 @@ El resultado queda en **`dist/`**: HTML prerenderizado, `_astro/` (CSS, JS e im�
 
 ## Subir a zula.dev
 
-zula.dev está detrás de Cloudflare y sirve la rama `main` de este repositorio. Con Astro, el proyecto de Cloudflare Pages tiene que compilar antes de publicar (Settings → Builds & deployments):
+zula.dev está detrás de Cloudflare y sirve la rama `main` de este repositorio (proyecto de Cloudflare Pages `zula-portfolio`). Con Astro, el proyecto de Cloudflare Pages tiene que compilar antes de publicar (Settings → Builds & deployments):
 
 - Framework preset: **Astro**
 - Build command: `npm run build`
@@ -309,15 +309,9 @@ server {
 
 Con `try_files $uri $uri/`, Nginx redirige `/about` a `/about/` y sirve su `index.html`.
 
-### El sitio antiguo de GitHub Pages
+### GitHub Pages
 
-El repositorio se llama `Zulaa9.github.io`, así que GitHub Pages puede seguir publicándolo en `https://zulaa9.github.io/`. Esta migración **no cambia esa configuración**. Lo que hay que tener en cuenta:
-
-- Si Pages publica desde la rama `main` sin Actions, al fusionar esta rama publicaría el código fuente de Astro sin compilar y el sitio de github.io se rompería. Antes de fusionar, elige una opción en *Settings → Pages*:
-  - **Desactivar Pages**, si zula.dev es el único sitio.
-  - **Redirigir a zula.dev**: publicar desde otra rama una página mínima que redirija (`<meta http-equiv="refresh" content="0; url=https://zula.dev/">` con `<link rel="canonical" href="https://zula.dev/">`).
-  - **Seguir publicando el portfolio en github.io**: cambiar la fuente a *GitHub Actions* con el workflow oficial de Astro (`withastro/action`). Las canónicas siguen apuntando a zula.dev, así que los buscadores no lo tratan como duplicado.
-- Si zula.dev se sirve con GitHub Pages (dominio personalizado), la opción correcta es la de Actions, con el dominio configurado en *Settings → Pages*.
+El repositorio se llamaba `Zulaa9.github.io` y GitHub Pages lo publicaba en `https://zulaa9.github.io/`. Desde el 19-11-2026 Pages está desactivado y el repositorio se llama `portfolio`: el sitio solo se publica en zula.dev, mediante Cloudflare Pages. No hay que volver a activar Pages, porque publicaría el código fuente sin compilar.
 
 ## Notas
 
