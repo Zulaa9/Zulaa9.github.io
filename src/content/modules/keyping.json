@@ -181,10 +181,8 @@
             "en": "Download v{{keyping.version}}",
             "es": "Descargar v{{keyping.version}}"
           },
-          "url": {
-            "en": "https://keyping.zula.dev/en/download/",
-            "es": "https://keyping.zula.dev/descargar/"
-          }
+          "url": "https://keyping.zula.dev/en/download/",
+          "urlEs": "https://keyping.zula.dev/descargar/"
         },
         {
           "variant": "github",
@@ -335,57 +333,61 @@
           {
             "type": "image",
             "placement": "rail",
-            "src": "../../assets/images/keyping/dashboard.png",
+            "src": "../../assets/images/keyping/panel-en.webp",
+            "srcEs": "../../assets/images/keyping/panel-es.webp",
             "alt": {
-              "en": "KeyPing initial dashboard view",
-              "es": "Vista inicial del panel de KeyPing"
+              "en": "KeyPing dashboard",
+              "es": "Panel de inicio de KeyPing"
             },
             "caption": {
-              "en": "Security overview with strong/medium/weak distribution, 2FA count, folders, duplicates, recent activity and information section.",
-              "es": "Resumen de seguridad con distribución fuerte/media/débil, conteo de 2FA, carpetas, duplicadas, actividad reciente y sección de información."
+              "en": "Dashboard: local-encryption summary, strong/medium/weak counts, 2FA, folders, duplicates and recent activity.",
+              "es": "Panel: resumen del cifrado local, recuento de contraseñas fuertes, medias y débiles, 2FA, carpetas, duplicadas y actividad reciente."
             }
           },
           {
             "type": "image",
             "placement": "rail",
-            "src": "../../assets/images/keyping/password-list.png",
+            "src": "../../assets/images/keyping/salud-en.webp",
+            "srcEs": "../../assets/images/keyping/salud-es.webp",
             "alt": {
-              "en": "KeyPing password list and details panel",
-              "es": "Lista de contraseñas y panel de detalle de KeyPing"
+              "en": "KeyPing Password Health view",
+              "es": "Vista de Salud de contraseñas de KeyPing"
             },
             "caption": {
-              "en": "Operational password list with selected-entry details, letting you inspect records without leaving the vault view.",
-              "es": "Listado operativo de contraseñas con panel de detalle de la entrada seleccionada para revisar registros sin salir de la vista de la bóveda."
+              "en": "Password Health: global score, strength breakdown, alerts (low variety, no 2FA, weak) and a list of problematic passwords sorted by severity.",
+              "es": "Salud de contraseñas: puntuación global, desglose por fortaleza, alertas (poca variedad, sin 2FA, débiles) y lista de contraseñas problemáticas ordenada por gravedad."
             }
           },
           {
             "type": "composite",
             "placement": "rail",
             "caption": {
-              "en": "Complete Password Health view: global score, quality distribution, risk reasons, duplicate detection and extended diagnostics.",
-              "es": "Vista completa de Salud de Contraseñas: puntuación global, distribución de calidad, razones de riesgo, detección de duplicados y diagnóstico ampliado."
+              "en": "Entry detail with a direct “Change password” link, and the full version history of that password.",
+              "es": "Detalle de una entrada con enlace directo «Cambiar contraseña» y el historial completo de versiones de esa contraseña."
             },
             "parts": [
               {
-                "src": "../../assets/images/keyping/password-health.png",
+                "src": "../../assets/images/keyping/detalle-enlace-en.webp",
+                "srcEs": "../../assets/images/keyping/detalle-enlace-es.webp",
                 "alt": {
-                  "en": "KeyPing password health dashboard",
-                  "es": "Panel de salud de contraseñas de KeyPing"
+                  "en": "Entry detail with login and password-change links",
+                  "es": "Detalle de una entrada con enlaces de acceso y de cambio de contraseña"
                 },
                 "caption": {
-                  "en": "Password Health ring with global score plus strong/medium/weak breakdown, reasons and duplicate-risk visibility.",
-                  "es": "Anillo de Salud de Contraseñas con puntuación global y desglose fuerte/media/débil, razones y visibilidad de riesgo por duplicados."
+                  "en": "Entry detail: masked password, login URL and a one-click “Change password” button.",
+                  "es": "Detalle de la entrada: contraseña oculta, URL de acceso y botón «Cambiar contraseña» a un clic."
                 }
               },
               {
-                "src": "../../assets/images/keyping/password-health2.png",
+                "src": "../../assets/images/keyping/historial-en.webp",
+                "srcEs": "../../assets/images/keyping/historial-es.webp",
                 "alt": {
-                  "en": "KeyPing password health secondary panel",
-                  "es": "Panel secundario de salud de contraseñas de KeyPing"
+                  "en": "Password version history dialog",
+                  "es": "Diálogo de historial de versiones de una contraseña"
                 },
                 "caption": {
-                  "en": "Extended health panel that complements the main view with additional diagnostics and actionable context.",
-                  "es": "Panel ampliado de salud que complementa la vista principal con diagnóstico adicional y contexto accionable."
+                  "en": "Version history: every previous password is kept and can be shown, copied or restored.",
+                  "es": "Historial de versiones: cada contraseña anterior se conserva y se puede mostrar, copiar o restaurar."
                 }
               }
             ]
@@ -393,41 +395,43 @@
           {
             "type": "image",
             "placement": "extra",
-            "compact": true,
-            "src": "../../assets/images/keyping/generator.png",
+            "src": "../../assets/images/keyping/lista-en.webp",
+            "srcEs": "../../assets/images/keyping/lista-es.webp",
             "alt": {
-              "en": "KeyPing password generator panel",
-              "es": "Panel del generador de contraseñas de KeyPing"
+              "en": "KeyPing password list grouped by folders",
+              "es": "Lista de contraseñas de KeyPing agrupada por carpetas"
             },
             "caption": {
-              "en": "Password generator with configurable length and toggles for uppercase, lowercase, numbers and symbols.",
-              "es": "Generador de contraseñas con longitud configurable y toggles para mayúsculas, minúsculas, números y símbolos."
+              "en": "Password list grouped by folders, with a key button on each entry that opens its password-change page.",
+              "es": "Lista de contraseñas agrupada por carpetas, con un botón de llave en cada entrada que abre su página de cambio de contraseña."
             }
           },
           {
             "type": "image",
             "placement": "extra",
-            "src": "../../assets/images/keyping/settings.png",
+            "src": "../../assets/images/keyping/generador-en.webp",
+            "srcEs": "../../assets/images/keyping/generador-es.webp",
             "alt": {
-              "en": "KeyPing settings panel",
-              "es": "Panel de ajustes de KeyPing"
+              "en": "KeyPing floating password generator",
+              "es": "Generador de contraseñas flotante de KeyPing"
             },
             "caption": {
-              "en": "Vault protection settings: master password change, inactivity auto-lock timeout, failed attempts and delay policy.",
-              "es": "Ajustes de protección de la bóveda: cambio de contraseña maestra, tiempo de autobloqueo por inactividad, intentos fallidos y política de delay."
+              "en": "Floating password generator with configurable length and uppercase, lowercase, number and symbol options.",
+              "es": "Generador de contraseñas flotante con longitud configurable y opciones de mayúsculas, minúsculas, números y símbolos."
             }
           },
           {
             "type": "image",
             "placement": "extra",
-            "src": "../../assets/images/keyping/settings2.png",
+            "src": "../../assets/images/keyping/busqueda-en.webp",
+            "srcEs": "../../assets/images/keyping/busqueda-es.webp",
             "alt": {
-              "en": "KeyPing advanced settings panel",
-              "es": "Panel de ajustes avanzados de KeyPing"
+              "en": "KeyPing search",
+              "es": "Búsqueda en KeyPing"
             },
             "caption": {
-              "en": "System settings: language, automatic updates, retained vault versions and encrypted import/export options.",
-              "es": "Ajustes de sistema: idioma, actualizaciones automáticas, versiones conservadas de la bóveda y opciones de importación/exportación cifrada."
+              "en": "Instant search by name, user, email, URL or folder.",
+              "es": "Búsqueda instantánea por nombre, usuario, correo, URL o carpeta."
             }
           }
         ]

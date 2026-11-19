@@ -9,6 +9,7 @@ import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { tr, ui, type Locale } from '../../lib/i18n';
 import type { ModuleEntry } from '../../lib/modules';
+import { localizeMedia } from '../../lib/media';
 import PageHeader from '../ui/PageHeader.astro';
 import Sec from '../ui/Sec.astro';
 
@@ -22,7 +23,7 @@ const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.mi
 
 type Item = (typeof f.gallery.items)[number];
 const media = await Promise.all(
-  f.gallery.items.map(async (item: Item) => ({
+  localizeMedia(f.gallery.items, lang).map(async (item: Item) => ({
     item,
     full: item.type === 'image' ? [await full(item.src)] : item.type === 'composite' ? await Promise.all(item.parts.map((x) => full(x.src))) : [],
   })),
@@ -49,7 +50,7 @@ let n = 0;
     {f.actions.length > 0 && (
       <div class="actions">
         {f.actions.map((a) => (
-          <a class={a.variant === 'download' ? 'btn btn--primary' : 'link-arrow'} href={typeof a.url === 'string' ? a.url : a.url[lang]} target="_blank" rel="noopener noreferrer">
+          <a class={a.variant === 'download' ? 'btn btn--primary' : 'link-arrow'} href={lang === 'es' && a.urlEs ? a.urlEs : a.url} target="_blank" rel="noopener noreferrer">
             {tr(a.label, lang)} <span aria-hidden="true">↗</span>
           </a>
         ))}

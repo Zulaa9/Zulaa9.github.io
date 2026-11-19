@@ -99,26 +99,11 @@
       {
         "kind": "external",
         "label": {
-          "en": "Chrome Web Store",
-          "es": "Chrome Web Store"
+          "en": "Install Framewise",
+          "es": "Instalar Framewise"
         },
-        "url": "https://chromewebstore.google.com/detail/mkpljcojmhhmkpamcdecnmjbndbabfae"
-      },
-      {
-        "kind": "external",
-        "label": {
-          "en": "Edge Add-ons",
-          "es": "Edge Add-ons"
-        },
-        "url": "https://microsoftedge.microsoft.com/addons/detail/ppfmagbmfpeldadpbhbknlffhfnnhgee"
-      },
-      {
-        "kind": "external",
-        "label": {
-          "en": "Website",
-          "es": "Web"
-        },
-        "url": "https://framewise.zula.dev"
+        "url": "https://framewise.zula.dev/",
+        "urlEs": "https://framewise.zula.dev/es/"
       },
       {
         "kind": "github",

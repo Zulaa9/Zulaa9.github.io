@@ -11,7 +11,7 @@ const LABELS = {
   meta: 'Subtítulo del nodo', dock: 'Panel de información del Core', copy: 'Texto', mobileLabel: 'Texto en el menú móvil',
   position: 'Posición en escritorio (0–1)', x: 'Horizontal (x)', y: 'Vertical (y)', featured: 'Destacado',
   project: 'Proyecto', layout: 'Diseño', name: 'Nombre', cardEyebrow: 'Antetítulo de la tarjeta', summary: 'Resumen (tarjeta)',
-  enterLabel: 'Texto del botón para abrir', stack: 'Stack', stackTitle: 'Título del stack', cover: 'Portada', src: 'Archivo',
+  enterLabel: 'Texto del botón para abrir', stack: 'Stack', stackTitle: 'Título del stack', cover: 'Portada', src: 'Archivo', srcEs: 'Archivo en español (opcional)', urlEs: 'URL en español (opcional)',
   alt: 'Texto alternativo', fit: 'Encaje', links: 'Enlaces', kind: 'Tipo', label: 'Texto', url: 'URL', status: 'Estado', tone: 'Indicador (neutral / publicado / no publicado)', onCard: 'Mostrar en la tarjeta del índice',
   value: 'Valor', header: 'Cabecera', eyebrow: 'Antetítulo', lead: 'Entradilla', paragraphs: 'Párrafos', sections: 'Listas',
   items: 'Elementos', media: 'Imágenes y vídeos', caption: 'Pie', placement: 'Ubicación', compact: 'Compacta', parts: 'Imágenes',
@@ -256,7 +256,7 @@ function renderScalar(parent, key, value, _path) {
   const span = document.createElement('span');
   span.textContent = label(key);
   let input;
-  const isImage = typeof value === 'string' && (key === 'src' || key === 'logo') && !value.startsWith('/assets/media/') && parent.type !== 'video';
+  const isImage = typeof value === 'string' && (key === 'src' || key === 'srcEs' || key === 'logo') && !value.startsWith('/assets/media/') && parent.type !== 'video';
   const isVideo = key === 'src' && parent.type === 'video';
   if (isImage || isVideo) return renderMedia(parent, key, value, isVideo ? 'video' : 'image');
 

@@ -35,7 +35,7 @@ const projects = all.filter((m) => m.data.visible && m.data.template === 'projec
             <ul class="tech tech--small">{p.stack.map((s) => <li>{tr(s, lang)}</li>)}</ul>
             <div class="actions">
               <a class:list={['btn', { 'btn--primary': p.featured }]} href={href}>{tr(p.enterLabel, lang)} <span aria-hidden="true">→</span></a>
-              {gh && <a class="link-arrow" href={gh.url} target="_blank" rel="noopener noreferrer">{tr(gh.label, lang) || t.projects.github} <span aria-hidden="true">↗</span></a>}
+              {gh && <a class="link-arrow" href={lang === 'es' && gh.urlEs ? gh.urlEs : gh.url} target="_blank" rel="noopener noreferrer">{tr(gh.label, lang) || t.projects.github} <span aria-hidden="true">↗</span></a>}
             </div>
           </div>
         </li>

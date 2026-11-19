@@ -94,9 +94,12 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
     kind: z.enum(['github', 'download', 'external']).default('external'),
     label: localized,
     url: externalUrl,
+    // Opcional: otra URL para las páginas en español (p. ej. la versión /es/ de una web).
+    urlEs: externalUrl.optional(),
   });
 
-  const imageRef = z.strictObject({ src: image(), alt: localized, caption: localized.optional() });
+  // `srcEs` (opcional): la misma captura con la interfaz en español; se usa en las páginas /es/.
+  const imageRef = z.strictObject({ src: image(), srcEs: image().optional(), alt: localized, caption: localized.optional() });
 
   const mediaItem = z.discriminatedUnion('type', [
     z.strictObject({
@@ -104,6 +107,7 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
       placement: z.enum(['hero', 'rail', 'extra']).default('rail'),
       compact: z.boolean().optional(),
       src: image(),
+      srcEs: image().optional(),
       alt: localized,
       caption: localized,
     }),
@@ -133,8 +137,9 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
         variant: z.enum(['download', 'website', 'github']),
         eyebrow: localized,
         label: localized,
-        // Un enlace para todos los idiomas, o uno por idioma ({ en, es }).
-        url: z.union([externalUrl, z.strictObject({ en: externalUrl, es: externalUrl })]),
+        url: externalUrl,
+        // Opcional: otra URL para las páginas en español.
+        urlEs: externalUrl.optional(),
       }),
     ),
     why: z.strictObject({

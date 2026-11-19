@@ -4,6 +4,7 @@ import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { tr, ui, type Locale } from '../../lib/i18n';
 import type { ModuleEntry } from '../../lib/modules';
+import { localizeMedia } from '../../lib/media';
 import PageHeader from '../ui/PageHeader.astro';
 import Sec from '../ui/Sec.astro';
 import StatusTag from '../ui/StatusTag.astro';
@@ -16,7 +17,7 @@ const t = ui(lang);
 // Las imágenes de la galería se abren en el visor a tamaño completo.
 const full = async (src: ImageMetadata) => (await getImage({ src, width: Math.min(1920, src.width), format: 'webp', quality: 85 })).src;
 const media = await Promise.all(
-  p.media.map(async (item) => ({
+  localizeMedia(p.media, lang).map(async (item) => ({
     item,
     full: item.type === 'image' ? [await full(item.src)] : item.type === 'composite' ? await Promise.all(item.parts.map((x) => full(x.src))) : [],
   })),
@@ -28,7 +29,7 @@ let n = 0;
     {p.links.length > 0 && (
       <div class="actions">
         {p.links.map((l, i) => (
-          <a class:list={[i === 0 || l.kind === 'download' ? 'btn btn--primary' : 'link-arrow']} href={l.url} target="_blank" rel="noopener noreferrer">{tr(l.label, lang)} <span aria-hidden="true">↗</span></a>
+          <a class:list={[i === 0 || l.kind === 'download' ? 'btn btn--primary' : 'link-arrow']} href={lang === 'es' && l.urlEs ? l.urlEs : l.url} target="_blank" rel="noopener noreferrer">{tr(l.label, lang)} <span aria-hidden="true">↗</span></a>
         ))}
       </div>
     )}
