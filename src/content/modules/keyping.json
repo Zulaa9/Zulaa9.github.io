@@ -116,13 +116,15 @@
     },
     "status": {
       "label": {
-        "en": "Latest release",
-        "es": "Última versión"
+        "en": "Status",
+        "es": "Estado"
       },
       "value": {
-        "en": "v{{keyping.version}} ({{keyping.date}}) · Stable core · Daily use",
-        "es": "v{{keyping.version}} ({{keyping.date}}) · Core estable · Uso diario"
-      }
+        "en": "Published for Windows and Linux",
+        "es": "Publicado para Windows y Linux"
+      },
+      "tone": "live",
+      "onCard": true
     },
     "header": {
       "eyebrow": {
@@ -156,6 +158,16 @@
     },
     "flagship": {
       "logo": "../../assets/images/keyping-logo.png",
+      "release": {
+        "label": {
+          "en": "Latest release",
+          "es": "Última versión"
+        },
+        "value": {
+          "en": "v{{keyping.version}} ({{keyping.date}}) · Stable core · Daily use",
+          "es": "v{{keyping.version}} ({{keyping.date}}) · Core estable · Uso diario"
+        }
+      },
       "punchline": {
         "en": "Detect weak credentials, enforce hygiene and keep your vault fully offline.",
         "es": "Detecta credenciales débiles, refuerza la higiene y mantiene tu bóveda totalmente offline."
@@ -172,10 +184,6 @@
         {
           "en": "Local encrypted vault",
           "es": "Bóveda local cifrada"
-        },
-        {
-          "en": "Windows / Linux",
-          "es": "Windows / Linux"
         }
       ],
       "actions": [

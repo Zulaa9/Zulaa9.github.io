@@ -131,6 +131,8 @@ export function buildModuleSchema<I extends z.ZodType>(image: () => I, extra?: {
 
   const flagship = z.strictObject({
     logo: image(),
+    /** Fila «Última versión» de la columna derecha (admite marcadores en vivo). */
+    release: z.strictObject({ label: localized, value: localized }).optional(),
     punchline: localized,
     pills: localizedList,
     actions: z.array(

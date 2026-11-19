@@ -15,7 +15,7 @@ const LABELS = {
   alt: 'Texto alternativo', fit: 'Encaje', links: 'Enlaces', kind: 'Tipo', label: 'Texto', url: 'URL', status: 'Estado', tone: 'Indicador (neutral / publicado / no publicado)', onCard: 'Mostrar en la tarjeta del índice',
   value: 'Valor', header: 'Cabecera', eyebrow: 'Antetítulo', lead: 'Entradilla', paragraphs: 'Párrafos', sections: 'Listas',
   items: 'Elementos', media: 'Imágenes y vídeos', caption: 'Pie', placement: 'Ubicación', compact: 'Compacta', parts: 'Imágenes',
-  flagship: 'Vista de producto estrella', logo: 'Logotipo', punchline: 'Frase destacada', pills: 'Etiquetas', actions: 'Botones',
+  flagship: 'Vista de producto estrella', release: 'Última versión (columna derecha)', logo: 'Logotipo', punchline: 'Frase destacada', pills: 'Etiquetas', actions: 'Botones',
   variant: 'Variante', why: 'Por qué existe', subtitle: 'Subtítulo', cards: 'Tarjetas', focus: 'Enfoque', metrics: 'Métricas',
   statement: 'Conclusión', gallery: 'Galería', moreBadge: 'Insignia "+N"', features: 'Funcionalidades', security: 'Seguridad',
   architecture: 'Arquitectura', flow: 'Flujo', integrity: 'Integridad', files: 'Archivos', verifyLabel: 'Texto previo al comando',
@@ -63,6 +63,7 @@ const OPTIONAL = {
   'about.experience.items[]': { highlight: () => ({ label: L(), value: L() }) },
   'section.blocks[]': { title: L },
   'project.flagship.why': { focus: () => ({ title: L(), copy: L() }) },
+  'project.flagship': { release: () => ({ label: L(), value: L() }) },
 };
 const READONLY = new Set(['template', 'type']);
 const HIDDEN_TOP = new Set(['order']);

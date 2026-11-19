@@ -13,6 +13,7 @@ import { localizeMedia } from '../../lib/media';
 import PageHeader from '../ui/PageHeader.astro';
 import Sec from '../ui/Sec.astro';
 import AdoptionFact from '../ui/AdoptionFact.astro';
+import StatusTag from '../ui/StatusTag.astro';
 import { resolveAdoption } from '../../lib/adoption';
 
 interface Props { module: ModuleEntry; lang: Locale }
@@ -60,10 +61,14 @@ let n = 0;
         ))}
       </div>
     )}
+    {p.status && p.status.tone !== 'neutral' && (
+      <StatusTag label={tr(p.status.label, lang)} value={tr(p.status.value, lang)} tone={p.status.tone} />
+    )}
     <ul class="traits traits--inline">{f.pills.map((pill) => <li>{tr(pill, lang)}</li>)}</ul>
     {logo && <Image slot="icon" class="phead__icon" src={p.cover.src} alt={tr(p.cover.alt, lang)} width={192} loading="eager" />}
     <dl class="spec spec--compact" slot="aside">
-      {p.status && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
+      {f.release && <div><dt>{tr(f.release.label, lang)}</dt><dd>{tr(f.release.value, lang)}</dd></div>}
+      {p.status && p.status.tone === 'neutral' && <div><dt>{tr(p.status.label, lang)}</dt><dd>{tr(p.status.value, lang)}</dd></div>}
       <div><dt>{tr(p.stackTitle, lang) || 'Stack'}</dt><dd>{p.stack.map((s) => tr(s, lang)).join(' · ')}</dd></div>
       {adoption && <AdoptionFact adoption={adoption} />}
     </dl>
