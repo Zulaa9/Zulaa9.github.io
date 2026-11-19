@@ -45,11 +45,44 @@ const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
 >
   <Fragment slot="head">
     <link rel="stylesheet" href={coreCss} />
+    <script is:inline>
+      // Si se llega desde una página con la ventana ampliada, el Core empieza ampliado
+      // y se restaura con animación (el Core no tiene botón de ampliar).
+      try {
+        if (sessionStorage.getItem('zula:screen-expanded') === '1') {
+          sessionStorage.removeItem('zula:screen-expanded');
+          if (window.matchMedia('(min-width: 861px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const h = sessionStorage.getItem('zula:topbar-h');
+            if (h) document.documentElement.style.setProperty('--topbar-h', h);
+            document.documentElement.classList.add('core-restoring');
+          }
+        }
+      } catch {}
+    </script>
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
     <script type="application/json" id="core-data" set:html={JSON.stringify(coreData)} />
   </Fragment>
 
   <div class="core-stage" id="core-stage">
+    <script is:inline>
+      // Restaurar tras el primer pintado; la escena 3D se reajusta mientras dura la animación.
+      (function () {
+        var root = document.documentElement;
+        if (!root.classList.contains('core-restoring')) return;
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            root.classList.add('core-restore-anim');
+            root.classList.remove('core-restoring');
+            var start = performance.now();
+            (function step(now) {
+              window.dispatchEvent(new Event('resize'));
+              if (now - start < 520) requestAnimationFrame(step);
+              else root.classList.remove('core-restore-anim');
+            })(start);
+          });
+        });
+      })();
+    </script>
     <section class="startup-gate" id="startup-gate" aria-label={t.core.startup.title}>
       <div class="startup-gate__panel">
         <p class="eyebrow">{t.core.startup.eyebrow}</p>

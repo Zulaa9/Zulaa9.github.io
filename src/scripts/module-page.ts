@@ -90,8 +90,11 @@ function initScreenToggle() {
     measure();
     root.classList.toggle('screen-expanded', expanded);
     try {
-      if (expanded) sessionStorage.setItem(EXPANDED_KEY, '1');
-      else sessionStorage.removeItem(EXPANDED_KEY);
+      if (expanded) {
+        sessionStorage.setItem(EXPANDED_KEY, '1');
+        // El Core lo usa para empezar ampliado y animar la restauración.
+        if (topbar) sessionStorage.setItem('zula:topbar-h', `${topbar.offsetHeight}px`);
+      } else sessionStorage.removeItem(EXPANDED_KEY);
     } catch {
       // Sin almacenamiento solo se pierde el recuerdo entre páginas.
     }

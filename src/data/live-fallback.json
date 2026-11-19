@@ -8,7 +8,8 @@
     "commits": 167,
     "electron": "45",
     "angular": "20",
-    "downloads": 66
+    "downloads": 67,
+    "lines": 19334
   },
   "framewise": {
     "chrome": 40,

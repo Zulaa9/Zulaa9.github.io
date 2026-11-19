@@ -195,6 +195,7 @@ Los textos de los módulos pueden llevar marcadores que se rellenan **al compila
 | `{{keyping.releases}}` | Número de versiones publicadas |
 | `{{keyping.firstVersion}}` | Primera versión publicada |
 | `{{keyping.commits}}` | Commits en `main` |
+| `{{keyping.lines}}` | Líneas de `.ts`, `.html`, `.css` y `.scss` de `keyping-ui` en la última versión (tarball de la etiqueta), redondeadas a centenas |
 | `{{keyping.downloads}}` | Descargas de instaladores (`.exe` y `.AppImage`) de todas las versiones publicadas |
 | `{{framewise.users}}`, `{{framewise.chrome}}`, `{{framewise.edge}}` | Usuarios de Framewise: suma y cifra de cada tienda (ficha de Chrome Web Store y JSON público de Edge Add-ons) |
 | `{{keyping.electron}}`, `{{keyping.angular}}` | Versión principal de Electron y Angular en `keyping-ui/package.json` |

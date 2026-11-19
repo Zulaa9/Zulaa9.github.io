@@ -282,8 +282,8 @@
         },
         "items": [
           {
-            "en": "~16,400 lines of TypeScript, HTML and CSS (v1.1.1, measured 18 Nov 2026)",
-            "es": "~16.400 líneas de TypeScript, HTML y CSS (v1.1.1, medido el 18-11-2026)"
+            "en": "~{{keyping.lines}} lines of TypeScript, HTML and CSS (v{{keyping.version}})",
+            "es": "~{{keyping.lines}} líneas de TypeScript, HTML y CSS (v{{keyping.version}})"
           },
           {
             "en": "{{keyping.commits}} commits on main",

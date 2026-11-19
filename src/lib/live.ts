@@ -7,6 +7,7 @@
  * Cuando sale una versión nueva, el deploy hook de Cloudflare recompila el sitio y los
  * marcadores toman el valor nuevo. Si la API falla, se usa src/data/live-fallback.json.
  */
+import { gunzipSync } from 'node:zlib';
 import fallback from '../data/live-fallback.json';
 
 type KeyPingLive = {
@@ -19,6 +20,8 @@ type KeyPingLive = {
   angular: string;
   /** Descargas de instaladores (.exe y .AppImage) de todas las versiones publicadas. */
   downloads: number;
+  /** Líneas de .ts/.html/.css/.scss de keyping-ui en la última versión publicada. */
+  lines: number;
 };
 /** Usuarios de Framewise según cada tienda (cifra pública de su ficha). */
 type FramewiseLive = { chrome: number; edge: number; users: number };
@@ -67,6 +70,42 @@ export function countInstallerDownloads(releases: { assets?: { name: string; dow
   return releases.flatMap((r) => r.assets ?? []).filter((a) => /\.(exe|AppImage)$/.test(a.name)).reduce((sum, a) => sum + a.download_count, 0);
 }
 
+/** Extensiones y carpetas que cuentan como código de la app (mismo criterio que la cifra manual de v1.1.1). */
+const CODE_EXT = /\.(ts|html|css|scss)$/;
+const SKIP_DIR = /\/(node_modules|dist|release|\.angular)\//;
+
+/** Cuenta líneas de código de keyping-ui dentro de un .tar.gz de GitHub (formato ustar con cabeceras pax). */
+export function countCodeLines(tgz: Uint8Array): number {
+  const tar = gunzipSync(tgz);
+  const text = (b: Uint8Array) => new TextDecoder().decode(b).replace(/\0[\s\S]*$/, '');
+  let off = 0;
+  let paxPath: string | null = null;
+  let lines = 0;
+  while (off + 512 <= tar.length) {
+    const h = tar.subarray(off, off + 512);
+    if (h.every((x) => x === 0)) break;
+    const name = text(h.subarray(0, 100));
+    const size = parseInt(text(h.subarray(124, 136)).trim() || '0', 8);
+    const type = String.fromCharCode(h[156] || 48);
+    const prefix = text(h.subarray(345, 500));
+    const body = tar.subarray(off + 512, off + 512 + size);
+    if (type === 'x') {
+      paxPath = new TextDecoder().decode(body).match(/\d+ path=([^\n]*)\n/)?.[1] ?? null;
+    } else {
+      const path = paxPath ?? (prefix ? `${prefix}/${name}` : name);
+      paxPath = null;
+      if ((type === '0' || type === '\0') && path.includes('/keyping-ui/') && CODE_EXT.test(path) && !SKIP_DIR.test(path)) {
+        let n = 0;
+        for (const byte of body) if (byte === 10) n++;
+        if (body.length && body[body.length - 1] !== 10) n++;
+        lines += n;
+      }
+    }
+    off += 512 + Math.ceil(size / 512) * 512;
+  }
+  return lines;
+}
+
 const major = (range: string | undefined) => range?.match(/(\d+)/)?.[1] ?? '';
 
 async function loadKeyPing(): Promise<KeyPingLive> {
@@ -82,6 +121,8 @@ async function loadKeyPing(): Promise<KeyPingLive> {
     ),
   ]);
   const published = releases.filter((r) => !r.draft && !r.prerelease);
+  // Código de la última versión publicada (tarball de la etiqueta, ~8 MB, solo en el build).
+  const tgz = new Uint8Array(await (await get(`https://codeload.github.com/${REPO}/tar.gz/refs/tags/${latest.tag_name}`, 'application/gzip')).arrayBuffer());
   const deps = { ...pkg.dependencies, ...pkg.devDependencies };
   const data: KeyPingLive = {
     version: latest.tag_name.replace(/^v/, ''),
@@ -92,8 +133,9 @@ async function loadKeyPing(): Promise<KeyPingLive> {
     electron: major(deps.electron),
     angular: major(deps['@angular/core']),
     downloads: countInstallerDownloads(published),
+    lines: countCodeLines(tgz),
   };
-  if (!data.version || !data.releases || !data.electron || !data.angular) throw new Error('datos incompletos');
+  if (!data.version || !data.releases || !data.electron || !data.angular || !data.lines) throw new Error('datos incompletos');
   return data;
 }
 
@@ -134,7 +176,7 @@ async function load(): Promise<LiveData> {
   const base = { keyping: fallback.keyping, framewise: fallback.framewise, fallbackAsOf: fallback.asOf };
   if (process.env.LIVE_DATA_OFFLINE === '1') return { ...base, sources: { keyping: 'fallback', framewise: 'fallback' } };
   const [[keyping, k], [framewise, f]] = await Promise.all([
-    attempt('KeyPing (GitHub)', loadKeyPing, fallback.keyping, (x) => `v${x.version}, ${x.releases} versiones, ${x.commits} commits, ${x.downloads} descargas`),
+    attempt('KeyPing (GitHub)', loadKeyPing, fallback.keyping, (x) => `v${x.version}, ${x.releases} versiones, ${x.commits} commits, ${x.downloads} descargas, ${x.lines} líneas`),
     attempt('Framewise (tiendas)', loadFramewise, fallback.framewise, (x) => `${x.users} usuarios (Chrome ${x.chrome} + Edge ${x.edge})`),
   ]);
   return { ...base, keyping, framewise, sources: { keyping: k, framewise: f } };
@@ -162,6 +204,8 @@ function values(lang: 'en' | 'es', data: LiveData = live): Record<string, string
     'keyping.electron': k.electron,
     'keyping.angular': k.angular,
     'keyping.downloads': nf.format(k.downloads),
+    // Redondeado a centenas: «~19.300».
+    'keyping.lines': nf.format(Math.round(k.lines / 100) * 100),
     'framewise.users': nf.format(data.framewise.users),
     'framewise.chrome': nf.format(data.framewise.chrome),
     'framewise.edge': nf.format(data.framewise.edge),
