@@ -240,6 +240,12 @@ El botón principal de llamada a la acción (`.btn--primary`, por ejemplo «Desc
 
 Ya lo usan el botón de ampliar ventana y el selector de idioma, que en reposo muestra el globo y el idioma actual y, al pasar el ratón o con el foco, se abre en «EN / ES». En pantallas táctiles va siempre abierto. No se meten pastillas dentro de pastillas: dentro del botón, el estado activo se marca con una línea de luz, no con otra caja.
 
+También lo usan el botón de volver al Core (←), el de copiar el correo en Contacto y los controles del visor de imágenes (cerrar, anterior y siguiente).
+
+- **Flechas (← →):** al pasar el ratón o con el foco hacen un **zumbido doble**: empujan dos veces hacia donde apuntan y vuelven al centro (`.sys-btn__icon--buzz-left` / `--buzz-right`, animación `sys-buzz`).
+- **Copiar:** el icono hace el mismo zumbido doble, en diagonal hacia arriba a la derecha. Al copiar, el icono pasa a ✓, el texto a «Copiado» y el botón a verde durante 1,8 s.
+- **Cerrar (×):** la X gira 90°.
+
 ### Barra de ruta entre páginas
 
 - Al entrar en una página desde el Core, la barra de ruta baja y aparece (`html.crumb-enter`).

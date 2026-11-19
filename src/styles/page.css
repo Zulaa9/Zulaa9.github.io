@@ -371,23 +371,19 @@ div.closing p { margin: 0; max-width: 30ch; }
 .link-row__main:hover .link-row__label { color: var(--accent); }
 .link-row__main:hover .link-row__arrow { color: var(--accent); transform: translate(3px, -3px); }
 
-.copy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  margin: -12px 0 22px 4px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--ink-2);
-  font-family: var(--f-mono);
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.copy-btn__state { padding: 3px 8px; border: 1px solid var(--rule-strong); border-radius: 2px; color: var(--muted); transition: color 160ms ease, border-color 160ms ease; }
-.copy-btn:hover .copy-btn__state { color: var(--ink); border-color: var(--ink); }
-.copy-btn.is-copied .copy-btn__state { color: var(--ok); border-color: var(--ok); }
+/* Copiar correo: el correo como texto y al lado un .sys-btn. Al pasar el ratón la hoja de delante
+   da un zumbido doble; al copiar, el icono pasa a ✓ y el botón a verde. */
+.copy-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: -12px 0 22px 4px; }
+.copy-row__value { font-family: var(--f-mono); font-size: 0.8rem; color: var(--ink-2); user-select: all; }
+.sys-btn.copy-btn { padding: 0 11px 0 9px; gap: 8px; }
+.copy-btn__back { opacity: 0.55; }
+.copy-btn__icon--copy { --buzz-x: 1.5px; --buzz-y: -1.5px; }
+.copy-btn:hover .copy-btn__icon--copy,
+.copy-btn:focus-visible .copy-btn__icon--copy { animation: sys-buzz 560ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.copy-btn__icon--done { display: none; }
+.sys-btn.copy-btn.is-copied { border-color: rgba(88, 216, 146, 0.6); color: #a9f0c8; box-shadow: 0 0 0 3px rgba(88, 216, 146, 0.1), 0 0 16px rgba(88, 216, 146, 0.18); }
+.copy-btn.is-copied .copy-btn__icon--copy { display: none; }
+.copy-btn.is-copied .copy-btn__icon--done { display: block; }
 
 /* ---------- Proyectos ---------- */
 .projects { margin: 0; padding: 0; list-style: none; counter-reset: proj; }
@@ -473,24 +469,14 @@ body.is-lightbox-open { overflow: hidden; }
 .lightbox__figure.is-composite #keyping-lightbox-image-secondary { display: block; }
 .lightbox__figure figcaption { grid-column: 1 / -1; max-width: 80ch; text-align: center; font-size: 0.88rem; color: var(--ink-2); }
 
-.lightbox__close, .lightbox__nav {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 1px solid var(--rule-strong);
-  border-radius: 50%;
-  background: rgba(5, 8, 12, 0.6);
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.lightbox__close { position: absolute; top: 12px; right: 16px; }
+/* Controles del visor: .sys-btn más grandes. Flechas con zumbido doble; la X gira. */
+.sys-btn.lightbox__close, .sys-btn.lightbox__nav { width: 42px; height: 42px; padding: 0; border-radius: 10px; }
+.sys-btn.lightbox__close { position: absolute; top: 12px; right: 16px; }
 .lightbox__nav--prev { grid-column: 1; grid-row: 1; }
 .lightbox__nav--next { grid-column: 3; grid-row: 1; }
-.lightbox__close svg, .lightbox__nav svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
-.lightbox__close:hover, .lightbox__nav:hover { border-color: var(--accent); color: var(--accent); }
+.lightbox__close .sys-btn__icon, .lightbox__nav .sys-btn__icon { width: 16px; height: 16px; }
+.lightbox__x { transition: transform 460ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lightbox__close:hover .lightbox__x, .lightbox__close:focus-visible .lightbox__x { transform: rotate(90deg); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 980px) {

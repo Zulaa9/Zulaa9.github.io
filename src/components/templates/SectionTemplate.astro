@@ -83,10 +83,14 @@ let n = 0;
                       <span class="link-row__arrow" aria-hidden="true">{isExternal(l.url) ? '↗' : '→'}</span>
                     </a>
                     {mail && (
-                      <button class="copy-btn" type="button" data-copy={mail} data-copied-label={t.site.copied} aria-label={t.site.copyEmail}>
-                        <span class="copy-btn__value">{mail}</span>
-                        <span class="copy-btn__state" aria-live="polite">{t.site.copy}</span>
-                      </button>
+                      <div class="copy-row">
+                        <span class="copy-row__value">{mail}</span>
+                        <button class="sys-btn copy-btn" type="button" data-copy={mail} data-copied-label={t.site.copied} aria-label={t.site.copyEmail}>
+                          <svg class="sys-btn__icon copy-btn__icon copy-btn__icon--copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8.5" y="8.5" width="11" height="11" rx="2" /><path class="copy-btn__back" d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5" /></svg>
+                          <svg class="sys-btn__icon copy-btn__icon copy-btn__icon--done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                          <span class="copy-btn__state" aria-live="polite">{t.site.copy}</span>
+                        </button>
+                      </div>
                     )}
                   </li>
                 );

@@ -37,8 +37,8 @@ const withFrom = (href: string) => `${href}?from=${currentId}`;
 </script>
 <div class="core-stage screen" id="main-content" tabindex="-1">
   <nav class="crumbbar" aria-label={pathLabel}>
-    <a href={backHref} class="back-button" id="back-to-core-link" aria-label={backLabel}>
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5L8 12L15 19" /></svg>
+    <a href={backHref} class="sys-btn back-button" id="back-to-core-link" aria-label={backLabel}>
+      <svg class="sys-btn__icon sys-btn__icon--buzz-left" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5L8 12L15 19" /></svg>
     </a>
     <ol class="crumbs">
       {crumbs.map((c) => (
