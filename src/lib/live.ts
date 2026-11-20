@@ -67,7 +67,7 @@ async function countPaged(url: string): Promise<number> {
  * automática sí descarga el instalador, así que esto cuenta descargas, no personas.
  */
 export function countInstallerDownloads(releases: { assets?: { name: string; download_count: number }[] }[]): number {
-  return releases.flatMap((r) => r.assets ?? []).filter((a) => /\.(exe|AppImage)$/.test(a.name)).reduce((sum, a) => sum + a.download_count, 0);
+  return releases.flatMap((r) => r.assets ?? []).filter((a) => /\.(exe|AppImage|apk)$/.test(a.name)).reduce((sum, a) => sum + a.download_count, 0);
 }
 
 /** Extensiones y carpetas que cuentan como código de la app (mismo criterio que la cifra manual de v1.1.1). */

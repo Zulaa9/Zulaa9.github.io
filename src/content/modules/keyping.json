@@ -33,8 +33,8 @@
         "es": "KeyPing"
       },
       "copy": {
-        "en": "Flagship product module. Stable release v{{keyping.version}} with a security-focused desktop architecture.",
-        "es": "Módulo principal del producto. Versión estable v{{keyping.version}} con arquitectura de escritorio orientada a seguridad."
+        "en": "Flagship product module. Stable release v{{keyping.version}} for desktop and Android, with a security-focused architecture.",
+        "es": "Módulo principal del producto. Versión estable v{{keyping.version}} para escritorio y Android, con arquitectura orientada a seguridad."
       }
     },
     "position": {
@@ -54,8 +54,8 @@
       "es": "PRODUCTO PRINCIPAL // VERSIÓN DE REFERENCIA"
     },
     "summary": {
-      "en": "Primary desktop product focused on local-first credential security, encrypted vault workflows and practical hardening controls.",
-      "es": "Producto de escritorio principal centrado en seguridad local de credenciales, flujos de bóveda cifrada y controles prácticos de endurecimiento."
+      "en": "Primary product, for desktop and Android, focused on local-first credential security, encrypted vault workflows and practical hardening controls.",
+      "es": "Producto principal, para escritorio y Android, centrado en seguridad local de credenciales, flujos de bóveda cifrada y controles prácticos de endurecimiento."
     },
     "enterLabel": {
       "en": "Open flagship product",
@@ -66,6 +66,10 @@
       {
         "en": "Electron",
         "es": "Electron"
+      },
+      {
+        "en": "Capacitor",
+        "es": "Capacitor"
       },
       {
         "en": "Angular",
@@ -120,8 +124,8 @@
         "es": "Estado"
       },
       "value": {
-        "en": "Published for Windows and Linux",
-        "es": "Publicado para Windows y Linux"
+        "en": "Published for Windows, Linux and Android",
+        "es": "Publicado para Windows, Linux y Android"
       },
       "tone": "live",
       "onCard": true
@@ -136,8 +140,8 @@
         "es": "KeyPing"
       },
       "lead": {
-        "en": "Local-first desktop credential hygiene system.",
-        "es": "Sistema local-first de higiene de credenciales para escritorio."
+        "en": "Local-first credential hygiene system for desktop and Android.",
+        "es": "Sistema local-first de higiene de credenciales para escritorio y Android."
       }
     },
     "description": {
@@ -147,8 +151,8 @@
       },
       "paragraphs": [
         {
-          "en": "KeyPing is a desktop password manager focused on credential hygiene: detecting weak, reused and risky passwords while keeping all data local and offline.",
-          "es": "KeyPing es un gestor de contraseñas de escritorio centrado en higiene de credenciales: detecta contraseñas débiles, reutilizadas y de riesgo manteniendo todos los datos en local y offline."
+          "en": "KeyPing is a password manager for desktop and Android focused on credential hygiene: detecting weak, reused and risky passwords while keeping all data local and offline.",
+          "es": "KeyPing es un gestor de contraseñas para escritorio y Android centrado en higiene de credenciales: detecta contraseñas débiles, reutilizadas y de riesgo manteniendo todos los datos en local y offline."
         },
         {
           "en": "This is not a concept demo. It is a released product with stable core features, versioned releases with checksums and security controls designed for real use.",
@@ -488,6 +492,10 @@
             "es": "Borrado automático del portapapeles y limpieza de su historial (en Windows, en la medida de lo posible)"
           },
           {
+            "en": "Android app with the same encrypted vault and .kpenc export format: move passwords between desktop and phone",
+            "es": "App de Android con la misma bóveda cifrada y el mismo formato de exportación .kpenc: las contraseñas pasan del escritorio al móvil y al revés"
+          },
+          {
             "en": "Offline encrypted import/export",
             "es": "Importación/exportación cifrada en modo offline"
           },
@@ -566,6 +574,10 @@
           {
             "en": "Encrypted export with its own key (PBKDF2-SHA256, 600 000 iterations)",
             "es": "Exportación cifrada con clave propia (PBKDF2-SHA256, 600 000 iteraciones)"
+          },
+          {
+            "en": "Android: no internet permission, screenshots blocked, no system backups, and the vault locks when the app goes to the background",
+            "es": "Android: sin permiso de internet, capturas de pantalla bloqueadas, sin copias de seguridad del sistema y la bóveda se bloquea al pasar la app a segundo plano"
           }
         ]
       },
@@ -613,6 +625,16 @@
             "value": {
               "en": "Encrypted local file managed by the Electron main process",
               "es": "Archivo local cifrado gestionado por el proceso principal de Electron"
+            }
+          },
+          {
+            "label": {
+              "en": "Mobile",
+              "es": "Móvil"
+            },
+            "value": {
+              "en": "Own Android app (Angular + Capacitor) sharing the vault core with desktop",
+              "es": "App Android propia (Angular + Capacitor) que comparte el núcleo de la bóveda con el escritorio"
             }
           }
         ],

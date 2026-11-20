@@ -24,7 +24,7 @@ This approach aims to reflect how real software systems are structured: modular,
 
 ## Flagship Product — KeyPing
 
-**KeyPing** is a local-first desktop credential hygiene system focused on real-world password security practices.
+**KeyPing** is a local-first credential hygiene system for desktop (Windows, Linux) and Android focused on real-world password security practices.
 
 It is not a browser autofill tool, nor a cloud-centric password manager.
 
@@ -196,7 +196,7 @@ Los textos de los módulos pueden llevar marcadores que se rellenan **al compila
 | `{{keyping.firstVersion}}` | Primera versión publicada |
 | `{{keyping.commits}}` | Commits en `main` |
 | `{{keyping.lines}}` | Líneas de `.ts`, `.html`, `.css` y `.scss` de `keyping-ui` en la última versión (tarball de la etiqueta), redondeadas a centenas |
-| `{{keyping.downloads}}` | Descargas de instaladores (`.exe` y `.AppImage`) de todas las versiones publicadas |
+| `{{keyping.downloads}}` | Descargas de instaladores (`.exe`, `.AppImage` y `.apk`) de todas las versiones publicadas |
 | `{{framewise.users}}`, `{{framewise.chrome}}`, `{{framewise.edge}}` | Usuarios de Framewise: suma y cifra de cada tienda (ficha de Chrome Web Store y JSON público de Edge Add-ons) |
 | `{{keyping.electron}}`, `{{keyping.angular}}` | Versión principal de Electron y Angular en `keyping-ui/package.json` |
 
@@ -220,7 +220,7 @@ Casos actuales:
 
 | Proyecto | Unidad | Fuente | Modo |
 |---|---|---|---|
-| KeyPing | descargas | GitHub Releases, solo instaladores (`.exe`, `.AppImage`); no cuentan `.blockmap`, `latest*.yml` ni `SHA256SUMS`. La app no tiene telemetría, así que no hay usuarios. Las autoactualizaciones también descargan el instalador: cuenta descargas, no personas (en la web solo pone «instaladores», decisión del usuario). | Automático (`{{keyping.downloads}}`) |
+| KeyPing | descargas | GitHub Releases, solo instaladores (`.exe`, `.AppImage`, `.apk` de Android); no cuentan `.blockmap`, `latest*.yml` ni `SHA256SUMS`. La app no tiene telemetría, así que no hay usuarios. Las autoactualizaciones también descargan el instalador: cuenta descargas, no personas (en la web solo pone «instaladores», decisión del usuario). | Automático (`{{keyping.downloads}}`) |
 | Framewise | usuarios | Chrome Web Store + Edge Add-ons: «N users» de la ficha de Chrome (HTML, no hay API) y `activeInstallCount` del JSON público de Edge, sumados. Leer el HTML de Chrome es frágil: si Google cambia la ficha, el build avisa en el log y usa el respaldo con su fecha. | Automático (`{{framewise.users}}`) |
 | Nemulo | — | No publicado | Sin bloque |
 

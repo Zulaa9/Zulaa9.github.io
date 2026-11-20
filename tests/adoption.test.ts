@@ -42,11 +42,11 @@ describe('bloque Adopción', () => {
     expect(resolveAdoption({ value: '40', unit: 'users', source: { en: 'x' }, asOf: '2026-11-19', minimum: 50 }, 'en', { data: api })).toBeNull();
   });
 
-  it('solo cuenta instaladores, no blockmap, yml ni SHA256SUMS', () => {
+  it('solo cuenta instaladores (exe, AppImage, apk), no blockmap, yml ni SHA256SUMS', () => {
     const releases = [
       { assets: [{ name: 'KeyPing-Setup-1.3.1.exe', download_count: 4 }, { name: 'KeyPing-1.3.1.AppImage', download_count: 3 }, { name: 'KeyPing-Setup-1.3.1.exe.blockmap', download_count: 2 }, { name: 'latest.yml', download_count: 9 }, { name: 'SHA256SUMS.txt', download_count: 10 }] },
-      { assets: [{ name: 'KeyPing-Setup-1.0.0.exe', download_count: 1 }] },
+      { assets: [{ name: 'KeyPing-Setup-1.0.0.exe', download_count: 1 }, { name: 'KeyPing-1.3.1.apk', download_count: 5 }] },
     ];
-    expect(countInstallerDownloads(releases)).toBe(8);
+    expect(countInstallerDownloads(releases)).toBe(13);
   });
 });
